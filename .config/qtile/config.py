@@ -1,10 +1,11 @@
 # ИМПОРТ БИБЛИОТЕК ----------------------------------------------------------------
 import os
 import subprocess
+import psutil
 
 from pathlib import Path
 
-from libqtile import hook
+from libqtile import hook, qtile
 
 from libqtile import bar, layout, widget
 from libqtile.config import Click, Drag, Group, Key, EzKey, Match, Screen
@@ -15,19 +16,44 @@ from libqtile.utils import guess_terminal
 home_path = os.path.expanduser('~')
 config_path = home_path + '/.config/qtile/'
 
+group_gaps = 7
+around_gaps = 7
+bar_gaps = [0, 0, 7, 0]
+rounded_bar = False
+
+
 
 # АВТОЗАПУСК ----------------------------------------------------------------------
 @hook.subscribe.startup_once
 def autostart():
     subprocess.call([config_path + 'autostart.sh'])
+    
+    
+def is_proces_run(process_name):    
+    for proc in psutil.process_iter():
+        if proc.name() == process_name:
+            return True
+        
+    return False
+    
 
-# @hook.subscribe.startup_complete
-def reconfig():
-    # print(battery_widget.image_padding)
-    battery_widget.image_padding = 5
-    battery_widget.setup_images()
-    subprocess.spawn('alacritty')
-
+@hook.subscribe.startup
+def _startup():
+    global mybar, rounded_bar
+    mybar.window.window.set_property("QTILE_BAR", 1, "CARDINAL", 32)
+    
+    addition_process = ''
+    if is_proces_run('picom'):
+        sleep_time = 0.5
+        addition_process = f'pkill picom; sleep {sleep_time}; '
+        
+    if rounded_bar:
+        subprocess.run(addition_process + 'picom -b', shell=True)
+    else:
+        subprocess.run(
+            addition_process + 'picom -b --rounded-corners-exclude "QTILE_INTERNAL:32c = 1"',
+            shell=True
+        )
 
 # СДЕЛАТЬ ДИАЛОГОВЫЕ ОКНА ПЛАВАЮЩИМИ ----------------------------------------------
 @hook.subscribe.client_new
@@ -37,7 +63,55 @@ def floating_dialogs(window):
     if dialog or transient:
         window.floating = True
 
-    
+
+class StickyManagement:
+    """Класс который реализует возможность закреплять окна на рабочих поверхностях"""
+    def __init__(self):
+        self.window_list = list()
+
+    def _pin_window(self, window):
+        self.window_list.append(window)
+
+    def _unpin_window(self, window):
+        self.window_list.remove(window)
+
+    def toggle_sticky_window(self, qtile):
+        current_window = qtile.current_window
+
+        if current_window in self.window_list:
+            self._unpin_window(current_window)
+        else:
+            self._pin_window(current_window)
+
+    def pin_window(self, qtile):
+        current_window = qtile.current_window
+        
+        if current_window not in self.window_list:
+            self._pin_window(current_window)
+            
+    def unpin_window(self, qtile):
+        current_window = qtile.current_window
+        
+        if current_window in self.window_list:
+            self._unpin_window(current_window)
+            
+    def init_hooks(self):
+        window_list = self.window_list
+        
+        @hook.subscribe.setgroup
+        def _move_sticky_window_to_current_group():
+            for window in window_list:
+                window.togroup(qtile.current_group.name)
+                window.cmd_bring_to_front()
+                
+        @hook.subscribe.client_managed
+        def _display_pined_window_above_other(window_):
+            for window in window_list:
+                window.cmd_bring_to_front()
+
+sticky_management = StickyManagement()
+sticky_management.init_hooks()
+
 
 # КЛАВИША МОДИФИКАТОР -------------------------------------------------------------
 mod = "mod4"
@@ -105,7 +179,16 @@ keys = [
 
     # Раскладка клавиатуры
     #Key([mod], "space", lazy.widget["keyboardlayout"].next_keyboard(), desc="Next keyboard layout."),
-    Key(["mod1"], "Shift_L", lazy.widget["keyboardlayout"].next_keyboard(), desc="Next keyboard layout."),
+    Key([mod], "Shift_L", lazy.widget["keyboardlayout"].next_keyboard(), desc="Next keyboard layout."),
+    
+    
+    
+    # Штука которая позволяет закрепить окно на всех рабочих поверхностях
+    # Т.е. окно будет следовать за вами на всех робочих столах
+    Key([mod], "o", lazy.function(sticky_management.toggle_sticky_window), desc="toggle stick win"),
+
+    
+    
 
     # Яхз что за это, типо все окна на месте одного окна отображаются.
     # Toggle between split and unsplit sides of stack.
@@ -120,7 +203,7 @@ keys = [
     # ),
 
     # Скриешоты
-    # НУжно установить gnome-screenshot
+    # Нужно установить gnome-screenshot
     Key([mod], "Print", lazy.spawn('gnome-screenshot -i')),
 
     
@@ -182,7 +265,6 @@ class GroupCreator:
 
 create_group = GroupCreator()
 create_group.is_subscript = True
-# create_group.format = '{subscript} {label}'
 
 groups = [
     create_group("1", "󰈹", matches=[Match(wm_class=["firefox"])]),
@@ -227,7 +309,7 @@ layouts = [
     # layout.Stack(num_stacks=2), #Какая то фигня
     layout.Bsp(border_focus="#C3C3C3", border_normal="#2E3440",
                border_width=1,
-               margin=5),  # Как в bspwm
+               margin=[0, 0, group_gaps, group_gaps]),  # Как в bspwm
     # layout.Matrix(), # В 2 колонки
     # layout.MonadTall(), # Как в dwm
     # layout.MonadWide(), # Как в dwm только по горизонтали
@@ -253,6 +335,25 @@ class MyBatteryIcon(widget.BatteryIcon):
     offsety = -2
     # offsetx = -0
 
+
+
+rofi_wifi_menu = f'bash {home_path}/.config/rofi-network-manager/rofi-network-manager.sh'
+
+class MyBattery(widget.Battery):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        
+        def get_prep__get_param(func):
+            def _get_param(name):
+                try:
+                    return func(name)
+                except:
+                    return None
+            return _get_param
+        
+        self._battery._get_param = get_prep__get_param(self._battery._get_param)
+        
+
 # /usr/share/icons/breeze-dark/status
 # ВИДЖЕТЫ НА ПАНЕЛИ И ИХ ПАРАМЕТРЫ ------------------------------------------------
 bar_widgets = [
@@ -272,7 +373,7 @@ bar_widgets = [
         margin_x=0,
         margin_y=2,
         # margin=3,
-        pading=0,
+        # hide_unused=True,
     ),
 
     # Виджет выполнения команд
@@ -298,7 +399,10 @@ bar_widgets = [
             widget.TextBox(text="|"),
 
             # WIFI
-            widget.TextBox(text=""),
+            widget.TextBox(
+                text="",
+                mouse_callbacks={'Button1': lazy.spawn(rofi_wifi_menu)},
+            ),
             widget.Wlan(format='{essid}', padding=0),
             widget.Spacer(length=8),
 
@@ -346,10 +450,11 @@ bar_widgets = [
         update_interval=5,
         scale=1,
     ),
-    widget.Battery(
+    MyBattery(
         padding=5,
         format="{percent:2.0%}",
         update_interval=5,
+        hide_threshold=True,
     ),
     widget.Spacer(length=10),
 
@@ -381,19 +486,19 @@ screens = [
     Screen(
         wallpaper='~/Pictures/wallpapers/2.jpg',
         wallpaper_mode='stretch',
-        right=bar.Gap(5),
-        left=bar.Gap(5),
-        bottom=bar.Gap(5),
-        top=bar.Bar(  # Расположение бара
+        right=bar.Gap(around_gaps),
+        left=bar.Gap(around_gaps - group_gaps),
+        bottom=bar.Gap(around_gaps - group_gaps),
+        top=(mybar:=bar.Bar(  # Расположение бара
             bar_widgets,
             20,  # Высота панели
             border_width=[2, 16, 2, 10],  # Толщина рамок панели
             border_color=["2E3440", "2E3440", "2E3440", "2E3440"],  # 777777  C3C3C3   Цвет рамок панели
             # border_color=["2E3440", "2E3440", "2E3440", "2E3440"],  # Цвет рамок панели
-            margin=[5, 10, 10, 10],  # Гапсы бара
+            margin=bar_gaps,  # Гапсы бара
             background="#2E3440"  # Цвет фона панели
             # opacity=0,5 # Прозрачность бара
-        ),
+        )),
         # top=bar.Bar(  # Расположение бара
         #     bar_widgets,
         #     20,  # Высота панели
@@ -424,6 +529,8 @@ screens = [
         ),
     ),
 ]
+
+# base_groupbox.margin_x = 10
 
 
 def battery_widget_configure(battery_widget, setup_images, image_padding=0):

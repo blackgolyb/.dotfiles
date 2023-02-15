@@ -1,5 +1,5 @@
 configuration {
-    display-drun: "App";
+    display-drun: "  ";
     display-window: "Windows";
     drun-display-format: "{icon} {name}";
     modi: "window,drun,ssh,combi";

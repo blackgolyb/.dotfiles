@@ -123,7 +123,7 @@ window:
   opacity: 0.85
 
 scrolling:
-  history: 100
+  history: 1000
 
 
 font:
