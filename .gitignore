@@ -1,0 +1,13 @@
+
+# !.config/qtile/
+# !Documents/lab4/
+# !/**/
+/*
+
+!/.config
+# /.config/
+# !/.config/qtile
+# !.config/glava/*.*
+
+!.gitignore
+# *
