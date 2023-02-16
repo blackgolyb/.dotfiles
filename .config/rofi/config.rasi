@@ -18,14 +18,34 @@ configuration {
     normal-background: @background;
     alternate-normal-background: @background;
 
+	selected-background: #404859;
+	selected-normal-background: @selected-background;
+
     foreground: #ffffff;
     normal-foreground: #cccccc;
     alternate-normal-foreground: #cccccc;
-    selected-active-background: #ff0000;
+
+	active-foreground: #ffffff;
+	active-background: #363c4a;
+	selected-active-background: @selected-background;
+	selected-active-foreground: #ffffff;
 }
 
 window {
     border: 0;
+}
+
+entry {
+	placeholder:"";
+}
+
+element {
+	padding: 4px 4px 4px 15px;
+}
+
+listview {
+	spacing: 0px;
+	fixed-height: false;
 }
 
 
