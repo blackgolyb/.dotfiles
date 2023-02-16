@@ -1,2 +1,3 @@
 #!/bin/sh
 glava &
+dunst &

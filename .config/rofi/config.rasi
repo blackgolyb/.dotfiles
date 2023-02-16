@@ -45,7 +45,6 @@ element {
 
 listview {
 	spacing: 0px;
-	fixed-height: false;
 }
 
 

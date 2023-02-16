@@ -314,7 +314,7 @@ X_AXIS=-40
 WIDTH=10
 # HEIGHT="'max-content'"
 # height:$HEIGHT
-STYLE="element{padding:4px4px4px0px;}"
+STYLE="element{padding:4px4px4px0px;}listview{fixed-height:false;}"
 
 
 # Rofi command to pipe into, can add any options here

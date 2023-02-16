@@ -1,0 +1,28 @@
+#!/bin/bash
+
+function send_notification() {
+	brightness=$(light -G)
+    brightness=${brightness%.*}
+	dunstify -a "changebrightness" -u low -r "9993" -h int:value:"$brightness" -i "brightness-$1" "󰖨 Brightness: ${brightness}%" -t 2000
+}
+
+case $1 in
+up)
+	# Set the brightness on (if it was muted)
+    light -A 5
+	send_notification $1
+	;;
+down)
+    light -U 5
+	send_notification $1
+	;;
+# mute)
+# 	if $(light -G); then
+#         light -I
+# 		dunstify -a "changebrightness" -t 2000 -r 9993 -u low "󰖨 Unmuted"
+# 	else
+#         light -S 0
+# 		dunstify -a "changebrightness" -t 2000 -r 9993 -u low "󰖨 Muted"
+# 	fi
+# 	;;
+esac
