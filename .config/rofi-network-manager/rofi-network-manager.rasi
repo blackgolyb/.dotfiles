@@ -1,0 +1,185 @@
+configuration {
+	show-icons:		false;
+	sidebar-mode: 	false;
+	hover-select: true;
+	me-select-entry: "";
+	me-accept-entry: [MousePrimary];
+}
+
+
+
+@theme "/usr/share/rofi/themes/android_notification.rasi"
+
+
+* {
+    background: #2E3440;
+    normal-background: @background;
+    alternate-normal-background: @background;
+
+	selected-background: #404859;
+	selected-normal-background: @selected-background;
+
+    foreground: #ffffff;
+    normal-foreground: #cccccc;
+    alternate-normal-foreground: #cccccc;
+
+	active-foreground: #ffffff;
+	active-background: #363c4a;
+	selected-active-background: @selected-background;
+	selected-active-foreground: #ffffff;
+
+}
+
+window {
+    border: 0;
+	//padding: 50px;
+}
+
+
+inputbar {
+	children: [textbox-prompt-colon,entry];
+}
+
+textbox-prompt-colon{
+	expand:	false;
+	margin: 0;
+	str:	":";
+}
+
+entry {
+	placeholder:	"";
+}
+
+element {
+	padding: 4px 4px 4px 15px;
+}
+
+listview {
+	spacing: 0px;
+	fixed-height: false;
+}
+
+
+/*
+*{
+	font: "JetBrainsMono Nerd Font 10";			//Font
+	//Colors
+	foreground:#cccccc; 				//Text
+	background:#2E3440; 				//Background
+	accent:#ffffff; 					//Highlight
+	foreground-selection:#ffffff; 	//Selection_fg
+	background-selection:#404859; 		//Selection_bg
+	active-background-color: #363c4a;
+
+	transparent:					#ffffff00;
+	background-color:				@transparent;
+	text-color:						@foreground;
+	selected-normal-foreground:		@foreground-selection;
+	normal-foreground:       		@foreground;
+	alternate-normal-background:	@transparent;
+	selected-urgent-foreground:  	@foreground;
+	urgent-foreground:           	@foreground;
+	alternate-urgent-background: 	@background;
+	active-foreground:           	@accent;
+	selected-active-foreground:  	@foreground-selection;
+	alternate-normal-foreground: 	@foreground;
+	alternate-active-background: 	@background;
+	bordercolor:                 	@background;
+	normal-background:           	@transparent;
+	selected-normal-background:  	@background-selection;
+	separatorcolor:              	@accent;
+	urgent-background:           	@accent;
+	alternate-urgent-foreground: 	@foreground;
+	selected-urgent-background:  	@accent;
+	alternate-active-foreground: 	@foreground;
+	selected-active-background:  	@background-selection;
+	active-background:           	@active-background-color;
+}
+window {
+	text-color:			@foreground;
+	background-color:	@background;
+	border-radius: 		6px;
+	padding: 			10;
+}
+mainbox {
+	border:		0;
+	padding: 	0;
+}
+textbox {
+	text-color: @foreground;
+}
+listview {
+	spacing:		4px;
+	dynamic:		true;
+	fixed-height:	false;
+	border:			0;
+	scrollbar:		false;
+	text-color:		@separatorcolor;
+}
+element {
+	border:			0;
+	padding:		2px;
+	border-radius:	4px;
+}
+element-text {
+	background-color: inherit;
+	text-color:       inherit;
+}
+element.normal.normal {
+	text-color:			@normal-foreground;
+	background-color:	@normal-background;
+}
+element.normal.urgent {
+	text-color:			@urgent-foreground;
+	background-color:	@urgent-background;
+}
+element.normal.active {
+	text-color:			@active-foreground;
+	background-color:	@active-background;
+}
+element.selected.normal {
+	text-color:			@selected-normal-foreground;
+	background-color:	@selected-normal-background;
+}
+element.selected.urgent {
+	text-color:			@selected-urgent-foreground;
+	background-color:	@selected-urgent-background;
+}
+element.selected.active {
+	text-color:			@selected-active-foreground;
+	background-color:	@selected-active-background;
+}
+element.alternate.normal {
+	text-color:			@alternate-normal-foreground;
+	background-color:	@alternate-normal-background;
+}
+element.alternate.urgent {
+	text-color:			@alternate-urgent-foreground;
+	background-color:	@alternate-urgent-background;
+}
+element.alternate.active {
+	text-color:			@alternate-active-foreground;
+	background-color:	@alternate-active-background;
+}
+mode-switcher {
+	border:	0;
+}
+button selected {
+	text-color:			@selected-normal-foreground;
+	background-color:	@selected-normal-background;
+}
+button normal {
+	text-color:	@foreground;
+}
+inputbar {
+	children: [textbox-prompt-colon,entry];
+}
+textbox-prompt-colon{
+	expand:	false;
+	margin: 0;
+	str:	":";
+}
+entry {
+	placeholder:	"";
+}
+*/
