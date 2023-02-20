@@ -1,14 +1,15 @@
 #!/bin/bash
 
+get_brightness_command="light -G"
+
 function send_notification() {
-	brightness=$(light -G)
-    brightness=${brightness%.*}
+	brightness=$( $get_brightness_command )
+    brightness=$( printf "%.*f\n" 0 $brightness )
 	dunstify -a "changebrightness" -u low -r "9993" -h int:value:"$brightness" -i "brightness-$1" "󰖨 Brightness: ${brightness}%" -t 2000
 }
 
 case $1 in
 up)
-	# Set the brightness on (if it was muted)
     light -A 5
 	send_notification $1
 	;;
