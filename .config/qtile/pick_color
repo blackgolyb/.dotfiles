@@ -1,0 +1,3 @@
+#!/bin/bash
+
+xcolor -S 6 -P 255 -s

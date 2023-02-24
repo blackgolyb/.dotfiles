@@ -62,10 +62,23 @@ def animate():
         _amin_id = (_amin_id + 1) % len(target_text)
         
 
-animator = animate()
-try:
-    while True:
-        time.sleep(0.1)
-        print(next(animator))
-except KeyboardInterrupt:
-    quit()
+# animator = animate()
+# try:
+#     while True:
+#         time.sleep(0.1)
+#         print(next(animator))
+# except KeyboardInterrupt:
+#     quit()
+
+
+import requests
+
+url = 'http://localhost:3000/'
+data = {'arg': 'AAAAAAAA))))))))))',}
+response = requests.post(url, json=data)
+
+if response.status_code == 200:
+    result = response.json()
+    print('Result:', result)
+else:
+    print('Error:', response.status_code)

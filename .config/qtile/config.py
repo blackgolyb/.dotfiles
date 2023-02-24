@@ -13,7 +13,6 @@ from libqtile.utils import guess_terminal
 
 from qtile_extras import widget as qe_widget
 
-
 from utils import is_process_run
 # from widgets.yt_music import YTMusicWidget
 
@@ -35,12 +34,19 @@ around_gaps = 7
 bar_gaps = [0, 0, 0, 0]
 rounded_bar = False
 
+# keyboard_layouts = ['us', 'ru', 'ua']
+keyboard_layouts = ['us', 'ru']
+
 
 
 
 
 
 import time
+import json
+import requests
+import threading
+import psutil
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 from libqtile.widget import base
@@ -50,18 +56,179 @@ from pathlib import Path
 
 
 
-yt_music_song_title_file = '/tmp/yt_music_song_name.txt'
+yt_music_song_info_file = '/tmp/yt_music_song_info.json'
 
-class YTMusicTitleFileModifiedHandler(FileSystemEventHandler):
-    def __init__(self, widget):
-        self.widget = widget
+class Callbacks:
+    def __init__(self):
+        self._callbacks = []
+        
+    def add(self, callback):
+        if callback not in self._callbacks:
+            self._callbacks.append(callback)
+            
+    def remove(self, callback):
+        if callback in self._callbacks:
+            self._callbacks.remove(callback)
+            
+    def clear(self):
+        self._callbacks = []
+        
+    def send(self, *args, **kwargs):
+        for callback in self._callbacks:
+            callback(*args, **kwargs)
+
+
+class FileClosedHandler(FileSystemEventHandler):
+    def __init__(self, handled_file):
+        self.handled_file = handled_file
+        self.callbacks = Callbacks()
 
     def on_closed(self, event):
-        if not event.is_directory and event.src_path == self.widget.song_title_file:
-            self.widget.update_song()
-            
+        if not event.is_directory and event.src_path == self.handled_file:
+            self.callbacks.send()
+        
 
-class YTMusicWidget(base.ThreadPoolText):
+DEFAULT_OBSERVER_TIMEOUT = 1
+
+class ProcessObserver(threading.Thread):
+    def __init__(self, process_name, timeout=DEFAULT_OBSERVER_TIMEOUT):
+        threading.Thread.__init__(self)
+        
+        self.process_name = process_name
+        self._timeout = timeout
+        self.running = True
+        
+        self.start_callbacks = Callbacks()
+        self.stop_callbacks = Callbacks()
+        self.update_callbacks = Callbacks()
+        
+        self.previous_status = self.current_process_status
+        
+    def check_is_process_run(self) -> bool:
+        for proc in psutil.process_iter():
+            if proc.name() == self.process_name:
+                return True
+
+        return False
+    
+    @property
+    def current_process_status(self) -> bool:
+        current_status = self.check_is_process_run()
+        self.previous_status = current_status
+        
+        return current_status
+    
+    def _is_process_start_or_stop(self) -> bool | None:
+        previous_status = self.previous_status
+        current_status = self.current_process_status
+        
+        if previous_status == current_status:
+            return None
+        
+        return current_status
+    
+    def run(self):
+        while self.running:
+            time.sleep(self._timeout)
+            
+            current_status = self._is_process_start_or_stop()
+            if current_status is None:
+                continue
+            
+            if current_status:
+                self.start_callbacks.send()
+            else:
+                self.stop_callbacks.send()
+                
+            self.update_callbacks.send(current_status)
+
+
+class YTMusicAPI:
+    song_info_file = '/tmp/yt_music_song_info.json'
+    yt_music_api_version = 1
+    yt_music_api_port = 8128
+    yt_music_api_url = 'http://localhost:{port}/api/v{version}'
+    
+    def __init__(self):       
+        self.yt_music_api_url = self.yt_music_api_url.format(
+            port=self.yt_music_api_port,
+            version=self.yt_music_api_version,
+        )
+        
+        self.yt_music_api_controls_url = f'{self.yt_music_api_url}/control'
+        self.yt_music_api_info_url = f'{self.yt_music_api_url}/song_info'
+        
+        self.info_callbacks = Callbacks()
+        
+        if not Path(self.song_info_file).exists():
+            with open(self.song_info_file, 'w') as f:
+                f.write('{}')
+        
+        handler = FileClosedHandler(self.song_info_file)
+        handler.callbacks.add(self.send_info_callbacks)
+        
+        self.info_observer = Observer()
+        self.info_observer.schedule(
+            handler,
+            path=self.song_info_file,
+        )
+        
+        self.process_observer = ProcessObserver('youtube-music', timeout=10)
+        
+    @property
+    def song_info_from_file(self):
+        with open(self.song_info_file, 'r') as current_info_from_file:
+            parsed_data = json.load(current_info_from_file)
+            logger.warning(parsed_data)
+            return parsed_data
+        
+    def send_info_callbacks(self):
+        self.info_callbacks.send(self.song_info_from_file)
+        
+    def force_send_info_callback(self, callback):
+        callback(self.song_info_from_file)
+        
+    def toggle_pause_play(self):
+        r = requests.post(f'{self.yt_music_api_controls_url}/playPause')
+        
+    def previous_song(self):
+        r = requests.post(f'{self.yt_music_api_controls_url}/previous')
+        
+    def next_song(self):
+        r = requests.post(f'{self.yt_music_api_controls_url}/next')
+        
+    def start_up(self):
+        try:
+            logger.warning('start')
+            self.info_observer.start()
+            self.process_observer.start()
+            logger.warning('start_up')
+        except Exception as e:
+            logger.warning(e)
+        
+    def kill(self):
+        try:
+            logger.warning('stop')
+            self.info_observer.stop()
+            self.info_observer.join()
+            self.process_observer.stop()
+            self.process_observer.join()
+            logger.warning('kill')
+        except Exception as e:
+            logger.warning(e)
+
+yt_music_api = YTMusicAPI()
+
+
+class YTMusicAPIInitMixin():
+    def init_yt_music_api_hooks(self, api):
+        
+        @hook.subscribe.shutdown
+        def on_shutdown_kill_api():
+            api.kill()
+
+
+class YTMusicTitleWidget(base.InLoopPollText, YTMusicAPIInitMixin):
     defaults = [
         (
             "update_interval",
@@ -70,7 +237,7 @@ class YTMusicWidget(base.ThreadPoolText):
         ),
         (
             "fmt",
-            '  {}',
+            '{}',
             "Update interval in seconds, if none, the " "widget updates whenever it's done.",
         ),
         (
@@ -84,8 +251,8 @@ class YTMusicWidget(base.ThreadPoolText):
             "",
         ),
         (
-            "song_title_file",
-            yt_music_song_title_file,
+            "song_info_file",
+            yt_music_song_info_file,
             "",
         ),
         (
@@ -96,50 +263,45 @@ class YTMusicWidget(base.ThreadPoolText):
     ]
     
     def __init__(self, **config):
-        base.ThreadPoolText.__init__(self, text=" ", **config)
-        self.add_defaults(YTMusicWidget.defaults)
+        base.InLoopPollText.__init__(self, default_text=" ", **config)
+        self.add_defaults(YTMusicTitleWidget.defaults)
         
-        # Fix max_chars default bug)
-        for i in range(len(YTMusicWidget.defaults)):
-            if YTMusicWidget.defaults[i][0] == 'max_chars':
-                self.max_chars = YTMusicWidget.defaults[i][1]
+        # Fix max_chars default bug
+        for i in range(len(YTMusicTitleWidget.defaults)):
+            if YTMusicTitleWidget.defaults[i][0] == 'max_chars':
+                self.max_chars = YTMusicTitleWidget.defaults[i][1]
                 break
 
-        self.observer = Observer()
-        self.observer.schedule(
-            YTMusicTitleFileModifiedHandler(self),
-            path=self.song_title_file
-        )
+        self._is_youtube_music_run = False
+        self.yt_music_api = yt_music_api
         
-    def _configure(self, qtile, bar):
-        base.ThreadPoolText._configure(self, qtile, bar)
-        self.song_title = 'No Song'
+    def _configure(self, qtile, bar):           
+        base.InLoopPollText._configure(self, qtile, bar)
         
-        if not Path(self.song_title_file).exists():
-            with open(self.song_title_file, 'w') as f:
-                f.write(' ')
-                
-        if not self._is_youtube_music_run:
-            self.update(self.app_close_msg)
-        else:
-            self.update_song()
+        self.yt_music_api.start_up()
+        self.init_yt_music_api_hooks(self.yt_music_api)
+        
+        self._is_youtube_music_run = self.yt_music_api.process_observer.check_is_process_run()
+        self.update_song()
             
-        self.start()
-
-    @property
-    def _is_youtube_music_run(self):
-        return is_process_run('youtube-music')
+        self.yt_music_api.info_callbacks.add(self.update_song)
+        self.yt_music_api.process_observer.start_callbacks.add(self.on_start_yt_music)
+        self.yt_music_api.process_observer.stop_callbacks.add(self.on_stop_yt_music)
         
-    def update_title(self):
-        with open(self.song_title_file, 'r') as f:
-            self.song_title = f.read()
+    def on_start_yt_music(self):
+        self._is_youtube_music_run = True
+        
+    def on_stop_yt_music(self):
+        self._is_youtube_music_run = False
+        
+    def update_title(self, song_info):
+        self.song_title = song_info['title']
             
-    def update_song(self):
-        self.update_title()
+    def update_song(self, song_info=None):
+        if song_info is None:
+            song_info = {'title': self.app_close_msg}
+        self.update_title(song_info)
         self.animator = self.animate()
-        
-    def toggle_play_pause(self):
-        ...
             
     def animate(self):
         if len(self.song_title) <= self.max_chars:
@@ -157,7 +319,7 @@ class YTMusicWidget(base.ThreadPoolText):
             
             # Часть которая попадает до конца названия 
             first_part = target_text[start_char: min(end_char, len(target_text))]
-            #Часть которая попадает после конца названия
+            # Часть которая попадает после конца названия
             second_part = ''
             if end_char >= len(target_text):
                 second_part = target_text[: max(0, end_char % len(target_text))]
@@ -168,22 +330,198 @@ class YTMusicWidget(base.ThreadPoolText):
             self._amin_id = (self._amin_id + 1) % len(target_text)
 
     def poll(self):
-        if is_run := self._is_youtube_music_run:
-            result = current_text = next(self.animator)
+        if self._is_youtube_music_run:
+            result = next(self.animator)
         else:
             result = self.app_close_msg
         
-        return current_text
+        return result
+    
+
+
+class YTMusicControlWidget(widget.WidgetBox):
+    # TODO: make this widget
+    defaults = [
+        ("foreground", "#ffffff", "Foreground color."),
+        ("text_closed", "as", "Text when box is closed"),
+        ("text_open", "", "Text when box is open"),
+    ]
+    
+    def __init__(self, **config):
+        self.play_pause_widget = widget.TextBox(text='')
+        self.previous_widget = widget.TextBox(text='󰒮')
+        self.next_widget = widget.TextBox(text='󰒭')
         
-    def start(self):
-        self.observer.start()
+        widgets = [
+            self.previous_widget,
+            self.play_pause_widget,
+            self.next_widget,
+        ]
+        
+        widget.WidgetBox.__init__(self, widgets, **config)
+        self.add_defaults(YTMusicControlWidget.defaults)
+        # self.box_is_open = True
+        
+    def _configure(self, qtile, bar):
+        widget.WidgetBox._configure(self, qtile, bar)
+        
+        # if not self.box_is_open:
+        #     self.box_is_open = not self.box_is_open
+        #     self.toggle_widgets()
+        #     # widget.WidgetBox.cmd_toggle(self)
+        
+    # def cmd_toggle(self):
+    #     # disable widget toggling
+    #     ...
+        
 
-    def stop(self):
-        self.observer.stop()
-        self.observer.join()
+class YTMusicPausePlayWidget(base._TextBox, YTMusicAPIInitMixin):
+    def __init__(self, **config):
+        base._TextBox.__init__(self, **config)
+        
+        self.add_callbacks({
+            'Button1': lazy.function(self.toggle_pause_play_qtile)
+        })
+        
+        self.yt_music_api = yt_music_api
+        
+    def _configure(self, qtile, bar):           
+        base._TextBox._configure(self, qtile, bar)
+        
+        self.yt_music_api.start_up()
+        self.init_yt_music_api_hooks(self.yt_music_api)
+        
+        self.update_state()
+            
+        self.yt_music_api.info_callbacks.add(self.update_state)
+        
+    def update_state(self, song_info=None):
+        if song_info is None:
+            song_info = {'isPaused': False}
+        self.is_paused = song_info['isPaused']
+        self.update_label()
+        
+    def update_label(self):
+        if self.is_paused:
+            current_status = ''
+        else:
+            current_status = ''
+            
+        self.update(current_status)
+        
+    def toggle_pause_play(self):
+        self.yt_music_api.toggle_pause_play()
+        
+    def toggle_pause_play_qtile(self, qtile):
+        self.toggle_pause_play()
+        
 
 
+class YTMusicNextSongWidget(base._TextBox):
+    def __init__(self, **config):
+        base._TextBox.__init__(self, **config)
 
+        self.add_callbacks({
+            'Button1': lazy.function(self.next_song_qtile)
+        })
+        
+        self.text = '󰒭'
+        
+        self.yt_music_api = yt_music_api
+        
+    def next_song(self):
+        self.yt_music_api.next_song()
+        
+    def next_song_qtile(self, qtile):
+        self.next_song()
+        
+        
+
+class YTMusicPreviousSongWidget(base._TextBox):
+    def __init__(self, **config):
+        base._TextBox.__init__(self, **config)
+
+        self.add_callbacks({
+            'Button1': lazy.function(self.previous_song_qtile)
+        })
+        
+        self.text = '󰒮'
+        
+        self.yt_music_api = yt_music_api
+        
+    def previous_song(self):
+        self.yt_music_api.previous_song()
+        
+    def previous_song_qtile(self, qtile):
+        self.previous_song()
+        
+
+
+class YTMusicWidget(widget.WidgetBox):
+    defaults = [
+        ("foreground", "#ffffff", "Foreground color."),
+    ]
+    
+    def __init__(self, **config):
+        self.title_widget = YTMusicTitleWidget()
+        self.play_pause_widget = YTMusicPausePlayWidget()
+        self.previous_widget = YTMusicPreviousSongWidget()
+        self.next_widget = YTMusicNextSongWidget()
+        
+        widgets = [
+            self.title_widget,
+            self.previous_widget,
+            self.play_pause_widget,
+            self.next_widget,
+            widget.TextBox(text='|')
+        ]
+        
+        widget.WidgetBox.__init__(self, widgets, **config)
+        self.add_defaults(YTMusicWidget.defaults)
+        
+        self.yt_music_api = yt_music_api
+        
+        self.yt_music_on_icon = '󰝚 '
+        self.yt_music_off_icon = '󰝛 '
+        
+    def _configure(self, qtile, bar):           
+        widget.WidgetBox._configure(self, qtile, bar)
+        
+        self.yt_music_api.start_up()
+        
+        self.update_yt_music_status(
+            self.yt_music_api.process_observer.check_is_process_run()
+        )
+        
+        self.yt_music_api.process_observer.update_callbacks.add(
+            self.update_yt_music_status
+        )
+        
+    def update_yt_music_status(self, yt_music_status):
+        if yt_music_status:
+            current_icon = self.yt_music_on_icon         
+            self._can_toggling = True
+        else:
+            current_icon = self.yt_music_off_icon
+            
+            # close widget if youtube music closed
+            if self.box_is_open:
+                self.cmd_toggle()
+                
+            self._can_toggling = False
+            
+        self.text_open = current_icon
+        self.text_closed = current_icon
+            
+        self.set_box_label()
+        self.bar.draw()
+        
+    def cmd_toggle(self):
+        if self._can_toggling:
+            super().cmd_toggle()
+            
+            
+        
 
 
 
@@ -246,6 +584,20 @@ class ChangeBrightness:
 change_brightness = ChangeBrightness()
 # change_brightness.change_brightness('up')
 
+pick_color_script = str(config_path / 'pick_color')
+logger.warning(f'pick_color_script: {pick_color_script}')
+
+@lazy.function
+def pick_color_qtile(qtile):
+    logger.warning('mouse clicked')
+
+    try:
+        # bash
+        subprocess.call([f'bash {pick_color_script}'], shell=True)
+        logger.warning('subprocess called')
+    except Exception as e:
+        logger.warning(f'meh {e}')
+
 
 # АВТОЗАПУСК ----------------------------------------------------------------------
 @hook.subscribe.startup_once
@@ -271,6 +623,7 @@ def _startup():
             addition_process + picom_command + ' --rounded-corners-exclude "QTILE_INTERNAL:32c = 1"',
             shell=True
         )
+
 
 # СДЕЛАТЬ ДИАЛОГОВЫЕ ОКНА ПЛАВАЮЩИМИ ----------------------------------------------
 @hook.subscribe.client_new
@@ -391,6 +744,7 @@ sticky_management = StickyManagement(
     ],
 )
 
+
 # КЛАВИША МОДИФИКАТОР -------------------------------------------------------------
 mod = "mod4"
 
@@ -422,27 +776,13 @@ keys = [
     Key([mod, "control"], "left", lazy.layout.grow_left(),
         desc="Grow window to the left"),  # Увеличить окно влево
     Key([mod, "control"], "right", lazy.layout.grow_right(),
-        desc="Grow window to the right"),  # Увеличить окно вправо
+        desc="Grow window to the right"),  # Увеличитпапкамиь окно вправо
     Key([mod, "control"], "down", lazy.layout.grow_down(),
         desc="Grow window down"),  # Увеличить окно вниз
     Key([mod, "control"], "up", lazy.layout.grow_up(),
         desc="Grow window up"),  # Увеличить окно вверх
     Key([mod], "n", lazy.layout.normalize(),
         desc="Reset all window sizes"),  # Вернуть все взад
-
-    Key([mod, "control"], "space", lazy.hide_show_bar("top")),
-
-    # Запуск приложений
-    Key([mod], "Return", lazy.spawn("alacritty")),
-    # Key([mod], "f", lazy.spawn("firefox --wayland")), # Это для вайланда
-    Key([mod], "f", lazy.spawn(webbrowser)),  # Для иксов
-    Key([mod], "e", lazy.spawn(file_explorer)),
-    Key([mod], "t", lazy.spawn("telegram-desktop")),
-    Key([mod], "space", lazy.spawn("rofi -show drun")),
-    # Key([mod], "n", lazy.spawn("thunar")),
-    # Key([mod], "i", lazy.spawn("inkscape")),
-    # Key([mod], "b", lazy.spawn("blender")),
-    # Key([mod], "l", lazy.spawn("lutris")),
 
     # Переключение между макетами
     Key([mod], "Tab", lazy.next_layout(), desc="Toggle between layouts"),
@@ -454,12 +794,25 @@ keys = [
     Key([mod, "control"], "q", lazy.shutdown(), desc="Shutdown Qtile"),
     # Выполнить команды (типо встроенное dmenu)
     Key([mod], "d", lazy.spawncmd(), desc="Spawn a command using a prompt widget"),
+    
+    # Скрыть/раскрыть панель
+    Key([mod, "control"], "space", lazy.hide_show_bar("top")),
+
+
+    # Запуск приложений
+    Key([mod], "Return", lazy.spawn("alacritty")),
+    # Key([mod], "f", lazy.spawn("firefox --wayland")), # Это для вайланда
+    Key([mod], "f", lazy.spawn(webbrowser)),  # Для иксов
+    Key([mod], "e", lazy.spawn(file_explorer)),
+    Key([mod], "t", lazy.spawn("telegram-desktop")),
+    Key([mod], "p", pick_color_qtile),
+    Key([mod], "space", lazy.spawn("rofi -show drun")),
+
 
     # Раскладка клавиатуры
     # Key([mod], "space", lazy.widget["keyboardlayout"].next_keyboard(), desc="Next keyboard layout."),
     Key(['mod1'], "Shift_L", lazy.widget["keyboardlayout"].next_keyboard(),
         desc="Next keyboard layout."),
-
 
 
     # Штука которая позволяет закрепить окно на всех рабочих поверхностях
@@ -489,21 +842,6 @@ keys = [
 
 
 # ПЕРЕКЛЮЧЕНИЕ ВОРКСПЕЙСОВ И ПЕРЕМЕЩЕНИЕ ОКОН ПО НИМ ------------------------------
-get_superscript_by_normal = {
-    '0': '⁰',
-    '1': '¹',
-    '2': '²',
-    '3': '³',
-    '4': '⁴',
-    '5': '⁵',
-    '6': '⁶',
-    '7': '⁷',
-    '8': '⁸',
-    '9': '⁹',
-    'w': 'ʷ',
-}
-
-
 class GroupCreator:
     is_description = False
     is_subscript_or_superscript = True
@@ -521,12 +859,17 @@ class GroupCreator:
 
         if add_description:
             if not description:
-                if self.is_subscript_or_superscript:
-                    ...
-                # if key in get_superscript_by_normal:
-                #     description = get_superscript_by_normal[key]
-                else:
-                    description = self.error_text.format(key=key)
+                description = key
+                
+            if self.is_subscript_or_superscript is None:
+                description = description
+            elif self.is_subscript_or_superscript:
+                description = f'<sub> {description}</sub>'
+            else:
+                description = f'<sup>{description}</sup>'
+                    
+                # description = self.error_text.format(key=key)
+                
 
             label = self.format_description(label, description)
 
@@ -535,6 +878,8 @@ class GroupCreator:
 
 create_group = GroupCreator()
 create_group.is_description = True
+create_group.is_subscript_or_superscript = False
+# create_group.fmt = '{label} {description}'
 
 groups = [
     create_group("1", "󰈹", matches=[Match(wm_class=["firefox"])]),
@@ -713,11 +1058,10 @@ bar_widgets = [
         other_screen_border='#3333ff',
         highlight_color=['2E3440', '2E3440'],
         rounded=True,
-        markup=False,
         margin_x=0,
         margin_y=2,
         # margin=3,
-        # hide_unused=True,
+        hide_unused=True,
     ),
 
     # Виджет выполнения команд
@@ -774,14 +1118,24 @@ bar_widgets = [
                 text="",
                 mouse_callbacks={'Button1': lazy.spawn(rofi_bluetooth_menu)},
             ),
+            
+            # Color picker
+            # Нужно установить xcolor
+            widget.TextBox(
+                text="",
+                mouse_callbacks={'Button1': pick_color_qtile},
+                # padding=7
+            ),
+            # widget.Spacer(length=8),
 
             widget.TextBox(text="|"),
             widget.Spacer(length=8),
         ]
     ),
     # widget.Spacer(length=0),
+    widget.Spacer(length=8),
     
-    YTMusicWidget(),
+    # YTMusicWidget(),
     widget.Spacer(length=8),
 
 
@@ -794,11 +1148,13 @@ bar_widgets = [
     # Виджет громкости пульсы
     widget.PulseVolume(limit_max_volume=True, padding=0),
     widget.Spacer(length=15),  # Виджет пробела
-
+ 
     # Keyboard layout
-    widget.KeyboardLayout(configured_keyboards=['us', 'ru', 'ua'],
-                          update_interval=1,
-                          padding=0),
+    widget.KeyboardLayout(
+        configured_keyboards=keyboard_layouts,
+        update_interval=1,
+        padding=0
+    ),
     widget.Spacer(length=15),
 
     # Battery
@@ -861,7 +1217,7 @@ screens = [
         top=bar.Bar(
             [
                 widget.Spacer(length=10),
-                base_groupbox,
+                # base_groupbox,
                 # widget.Spacer(length=20),
             ],
             30,
@@ -961,6 +1317,7 @@ floating_layout = layout.Floating(
         Match(wm_class="viewnior"),
         Match(title="branchdialog"),  # gitk
         Match(title="pinentry"),  # GPG key password entry
+        # Match(title="Picture-in-Picture"),
     ]
 )
 
