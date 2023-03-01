@@ -1,7 +1,11 @@
 #!/bin/bash
 
+function get_volume() {
+	echo $(pamixer --get-volume)
+}
+
 function send_notification() {
-	volume=$(pamixer --get-volume)
+	volume=$(get_volume)
 	dunstify -a "changevolume" -u low -r "9993" -h int:value:"$volume" -i "volume-$1" "󰕾 Volume: ${volume}%" -t 2000
 }
 
@@ -24,5 +28,8 @@ mute)
 	else
 		send_notification up
 	fi
+	;;
+get)
+	get_volume
 	;;
 esac

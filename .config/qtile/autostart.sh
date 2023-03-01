@@ -1,3 +1,3 @@
 #!/bin/sh
-glava &
+# glava &
 dunst &
