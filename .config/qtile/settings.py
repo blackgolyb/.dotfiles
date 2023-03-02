@@ -7,6 +7,7 @@ resources_path = home_path / '.config/qtile/'
 scripts_path = home_path / '.config/qtile/'
 
 text_editor = 'code'
+terminal = 'alacritty'
 webbrowser = 'firefox'
 file_explorer = 'thunar'
 

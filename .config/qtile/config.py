@@ -21,7 +21,7 @@ import hooks
 from layouts import default_layouts
 from widgets import (
     main_bar_widgets, widget_defaults,
-    volume_widget, brightness_widget,
+    volume_widget, brightness_widget, color_picker
 )
 from keys import *
 from settings import *
@@ -54,24 +54,6 @@ from libqtile.widget import Systray
 
 
 
-# class Callbacks:
-#     def __init__(self):
-#         self.clear()
-        
-#     def add(self, callback):
-#         if callback not in self._callbacks:
-#             self._callbacks.append(callback)
-            
-#     def remove(self, callback):
-#         if callback in self._callbacks:
-#             self._callbacks.remove(callback)
-            
-#     def clear(self):
-#         self._callbacks: list = []
-        
-#     def send(self, *args, **kwargs):
-#         for callback in self._callbacks:
-#             callback(*args, **kwargs)
 
 
 # class FileClosedHandler(FileSystemEventHandler):
@@ -540,41 +522,6 @@ from libqtile.widget import Systray
 
 
 
-
-
-class ChangeBrightness:
-    script_path = str(config_path / 'change_brightness')
-    
-    def change_brightness(self, change_type):
-        subprocess.call([f'bash {self.script_path} {change_type}'], shell=True)
-        
-    def up(self, qtile):
-        self.change_brightness('up')
-        
-    def down(self, qtile):
-        self.change_brightness('down')
-        
-        
-change_brightness = ChangeBrightness()
-# change_brightness.change_brightness('up')
-
-pick_color_script = str(config_path / 'pick_color')
-logger.warning(f'pick_color_script: {pick_color_script}')
-
-@lazy.function
-def pick_color_qtile(qtile):
-    logger.warning('mouse clicked')
-
-    try:
-        # bash
-        subprocess.call([f'bash {pick_color_script}'], shell=True)
-        logger.warning('subprocess called')
-    except Exception as e:
-        logger.warning(f'meh {e}')
-
-
-
-
 sticky_manager = StickyWindowManager(
     activate_hooks=True,
     sticky_rules=[
@@ -648,12 +595,11 @@ keys = [
 
 
     # Запуск приложений
-    Key([mod], "Return", lazy.spawn("alacritty")),
+    Key([mod], "Return", lazy.spawn(terminal)),
     # Key([mod], "f", lazy.spawn("firefox --wayland")), # Это для вайланда
     Key([mod], "f", lazy.spawn(webbrowser)),  # Для иксов
     Key([mod], "e", lazy.spawn(file_explorer)),
     Key([mod], "t", lazy.spawn("telegram-desktop")),
-    Key([mod], "p", pick_color_qtile),
     Key([mod], "space", lazy.spawn("rofi -show drun")),
 
 
@@ -671,6 +617,10 @@ keys = [
     # Скриешоты
     # Нужно установить gnome-screenshot
     Key([], "Print", lazy.spawn('flameshot gui')),
+    
+    
+    # Color picker
+    Key([mod], "p", lazy.function(color_picker.dropper.pick_color)),
 
 
     # Контроль звука и яркости

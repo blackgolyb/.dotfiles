@@ -9,29 +9,7 @@ from settings import *
 from .base import WidgetGroup, WidgetBox
 from .volume import Volume
 from .brightness import Brightness
-
-
-widget_defaults = dict(
-    font="JetBrainsMono Nerd Font",
-    fontsize=12,
-    padding=8,
-)
-
-
-pick_color_script = str(scripts_path / 'pick_color')
-logger.warning(f'pick_color_script: {pick_color_script}')
-
-
-@lazy.function
-def pick_color_qtile(qtile):
-    logger.warning('mouse clicked')
-
-    try:
-        # bash
-        subprocess.call([f'bash {pick_color_script}'], shell=True)
-        logger.warning('subprocess called')
-    except Exception as e:
-        logger.warning(f'meh {e}')
+from .color_picker import ColorPicker, ColorPickerDropper, ColorPickerPalette
 
 
 rofi_wifi_menu = f'bash {home_path}/.config/rofi-network-manager/rofi-network-manager.sh'
@@ -56,6 +34,13 @@ class MyBattery(widget.Battery):
 
 
 # ВИДЖЕТЫ НА ПАНЕЛИ И ИХ ПАРАМЕТРЫ ------------------------------------------------
+widget_defaults = dict(
+    font="JetBrainsMono Nerd Font",
+    fontsize=12,
+    padding=8,
+)
+
+
 decor = {
     "decorations": [
         qe_widget.decorations.BorderDecoration(
@@ -67,8 +52,7 @@ decor = {
 
 volume_widget = Volume(
     # limit_max_volume=True,
-    fmt=" {}",
-    mouse_callbacks={'Button1': lazy.spawn("pavucontrol")},
+    mouse_callbacks={'Button3': lazy.spawn("pavucontrol")},
     padding=0,
 )
 
@@ -76,6 +60,9 @@ brightness_widget = Brightness(
     fmt='󰖨 {}',
     padding=0,
 )
+
+color_picker = ColorPicker()
+
 
 main_bar_widgets = [
     # Menu
@@ -91,7 +78,7 @@ main_bar_widgets = [
             widget.TextBox(
                 text=" ",
                 mouse_callbacks={'Button1': lazy.spawn(
-                    "alacritty -e bpython")},
+                    f"{terminal} -e bpython")},
             ),
             widget.Spacer(length=5),
 
@@ -183,7 +170,8 @@ main_bar_widgets = [
                 distro='Arch',
                 display_format=' {updates}',
                 no_update_string=' 0',
-                padding=0
+                padding=0,
+                mouse_callbacks={'Button1': lazy.spawn(f"{terminal} -e sudo pacman -Sy")},
             ),
             widget.Spacer(length=6),
 
@@ -192,14 +180,11 @@ main_bar_widgets = [
                 text="",
                 mouse_callbacks={'Button1': lazy.spawn(rofi_bluetooth_menu)},
             ),
+            widget.Spacer(length=8),
             
             # Color picker
             # Нужно установить xcolor
-            widget.TextBox(
-                text="",
-                mouse_callbacks={'Button1': pick_color_qtile},
-                # padding=7
-            ),
+            color_picker,
             widget.Spacer(length=8),
             
             # Виджет для управления YouTube Music

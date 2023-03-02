@@ -1,5 +1,6 @@
 import psutil
 import typing
+import subprocess
 
 from libqtile import bar
 from libqtile.lazy import lazy
@@ -11,6 +12,26 @@ def lazy_method(method):
         return lazy.function(ref_method(*args, **kwargs))
     
     return wrap
+
+
+def str2bool (val):
+    """Convert a string representation of truth to true (1) or false (0).
+    True values are 'y', 'yes', 't', 'true', 'on', and '1'; false values
+    are 'n', 'no', 'f', 'false', 'off', and '0'.  Raises ValueError if
+    'val' is anything else.
+    """
+    val = val.lower()
+    if val in ('y', 'yes', 't', 'true', 'on', '1'):
+        return 1
+    elif val in ('n', 'no', 'f', 'false', 'off', '0'):
+        return 0
+    else:
+        raise ValueError(f"invalid truth value {val}")
+
+
+def copy_to_clipboard(input_data):
+    p = subprocess.Popen(['xclip', '-selection', 'clipboard', '-f'], stdin=subprocess.PIPE)
+    p.communicate(input=(input_data.encode()))
 
 
 def is_process_run(process_name):

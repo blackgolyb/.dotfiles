@@ -1,6 +1,7 @@
 import subprocess
 
 from libqtile.widget import base
+from libqtile.lazy import lazy
 
 import settings
 
@@ -23,6 +24,11 @@ class Brightness(base.InLoopPollText):
     def __init__(self, **config):
         base.InLoopPollText.__init__(self, default_text=" ", **config)
         self.add_defaults(Brightness.defaults)
+        self.add_callbacks({
+            # 'Button1': lazy.function(self.mute),
+            'Button4': lazy.function(self.up),
+            'Button5': lazy.function(self.down),
+        })
     
     def change_brightness(self, change_type):
         subprocess.call([f'bash {self.script_path} {change_type}'], shell=True)

@@ -31,6 +31,6 @@ down)
 get)
 	brightness=$( get_brightness )
 	brightness=$( printf "%.*f\n" 0 $brightness )
-	echo "${brightness}%"
+	echo "${brightness}"
 	;;
 esac

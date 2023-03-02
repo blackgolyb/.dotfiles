@@ -1,3 +1,8 @@
 #!/bin/bash
 
-xcolor -S 6 -P 255 -s
+# dunstify "pick color 1"
+color=$( xcolor -S 6 -P 255 )
+# dunstify "pick color 2 ${color} c"
+color=${color//$'\n'/}
+echo $color
+# exit 0
