@@ -2,6 +2,7 @@ from libqtile import widget, bar
 from libqtile.widget import base
 from libqtile.log_utils import logger
 from libqtile.widget import Systray
+from libqtile.command.base import expose_command
 
 class WidgetGroup(base._Widget):
     def __init__(self, widgets, **config):
@@ -24,7 +25,6 @@ class WidgetGroup(base._Widget):
             
         for w in self.widgets[::-1]:
             self.bar.widgets.insert(index, w)
-            logger.warning(w)
             
         for idx, w in enumerate(self.widgets):
             self.qtile.register_widget(w)
@@ -67,7 +67,65 @@ class WidgetGroup(base._Widget):
         return 0
 
 
-class WidgetBox(widget.WidgetBox):
+class WidgetBox(base._Widget):
+    """A widget to declutter your bar.
+
+    WidgetBox is a widget that hides widgets by default but shows them when
+    the box is opened.
+
+    Widgets that are hidden will still update etc. as if they were on the main
+    bar.
+
+    Button clicks are passed to widgets when they are visible so callbacks will
+    work.
+
+    Widgets in the box also remain accessible via command interfaces.
+
+    Widgets can only be added to the box via the configuration file. The widget
+    is configured by adding widgets to the "widgets" parameter as follows::
+
+        widget.WidgetBox(widgets=[
+            widget.TextBox(text="This widget is in the box"),
+            widget.Memory()
+            ]
+        ),
+    """
+
+    orientations = base.ORIENTATION_HORIZONTAL
+    defaults = [
+        ("font", "sans", "Text font"),
+        ("fontsize", None, "Font pixel size. Calculated if None."),
+        ("fontshadow", None, "font shadow color, default is None(no shadow)"),
+        ("foreground", "#ffffff", "Foreground colour."),
+        (
+            "close_button_location",
+            "left",
+            "Location of close button when box open ('left' or 'right')",
+        ),
+        ("text_closed", "[<]", "Text when box is closed"),
+        ("text_open", "[>]", "Text when box is open"),
+        ("widgets", list(), "A list of widgets to include in the box"),
+    ]  # type: list[tuple[str, Any, str]]
+    
+    def __init__(self, _widgets: list[base._Widget] | None = None, **config):
+        base._Widget.__init__(self, bar.CALCULATED, **config)
+        self.add_defaults(WidgetBox.defaults)
+        self.box_is_open = False
+        self.add_callbacks({"Button1": self.cmd_toggle})
+
+        if _widgets:
+            logger.warning(
+                "The use of a positional argument in WidgetBox is deprecated. "
+                "Please update your config to use widgets=[...]."
+            )
+            self.widgets = _widgets
+
+        self.close_button_location: str
+        if self.close_button_location not in ["left", "right"]:
+            val = self.close_button_location
+            logger.warning("Invalid value for 'close_button_location': %s", val)
+            self.close_button_location = "left"
+    
     def _configure(self, qtile, bar):
         base._Widget._configure(self, qtile, bar)
 
@@ -157,6 +215,27 @@ class WidgetBox(widget.WidgetBox):
                     widget.show()
                 elif isinstance(widget, WidgetGroup):
                     widget.show()
+    
+    def calculate_length(self):
+        return self.layout.width
+
+    def set_box_label(self):
+        self.layout.text = self.text_open if self.box_is_open else self.text_closed
+        
+    def draw(self):
+        self.drawer.clear(self.background or self.bar.background)
+
+        self.layout.draw(0, int(self.bar.height / 2.0 - self.layout.height / 2.0) + 1)
+
+        self.drawer.draw(offsetx=self.offsetx, offsety=self.offsety, width=self.width)
+
+    @expose_command()
+    def cmd_toggle(self):
+        """Toggle box state"""
+        self.box_is_open = not self.box_is_open
+        self.toggle_widgets()
+        self.set_box_label()
+        self.bar.draw()
 
 
 class BaseWidgetTabGroup(WidgetGroup):
@@ -174,31 +253,13 @@ class BaseWidgetTabGroup(WidgetGroup):
             
             self.hide()
             
-        for i, w in enumerate(self.bar.widgets):
-            logger.warning(f'wtf: {i} {w}')
-        
-        # logger.warning(self.bar.widgets.index(self))
-        # logger.warning(self)
-        # self.configured = False
         self.widgets = self.tabs[0]
         self.show()
-        # self.hide()
-        # self.widgets = self.tabs[1]
-        # self.show()
             
     def switch_tab(self, tab_id):
-        # logger.warning(self.bar.widgets)
         self.hide()
-        # logger.warning(self.bar.widgets)
-        # logger.warning(self.widgets)
         self.widgets = self.tabs[tab_id]
-        for i, w in enumerate(self.bar.widgets):
-            logger.warning(f'wtf: {i} {w}')
         self.show()
-        try:
-            ...
-        except Exception as e:
-            logger.warning(e)
         self.bar.draw()
 
 
@@ -227,21 +288,14 @@ class HoveringWidgetTabGroup(BaseWidgetTabGroup):
                 widget.mouse_leave = f_out
         
     def widget_hover_in_decorator(self, mouse_enter):
-        # logger.warning("widget_hover_in_decorator")
         def mouse_enter_wrap(x, y):
-            # logger.warning("mouse_enter_wrap")
-            # logger.warning(widget)
             self.switch_tab(1)
-            # mouse_enter(x, y)
             
         return mouse_enter_wrap
             
     def widget_hover_out_decorator(self, mouse_leave):
-        # logger.warning("widget_hover_out_decorator")
         def mouse_leave_wrap(x, y):
-            # logger.warning("mouse_leave_wrap")
             self.switch_tab(0)
-            # mouse_leave(x, y)
             
         return mouse_leave_wrap
   

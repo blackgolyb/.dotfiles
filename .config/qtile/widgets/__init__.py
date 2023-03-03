@@ -10,6 +10,9 @@ from .base import WidgetGroup, WidgetBox
 from .volume import Volume
 from .brightness import Brightness
 from .color_picker import ColorPicker, ColorPickerDropper, ColorPickerPalette
+from .yt_music import YTMusicWidget
+
+# import .services as services
 
 
 rofi_wifi_menu = f'bash {home_path}/.config/rofi-network-manager/rofi-network-manager.sh'
@@ -50,6 +53,7 @@ decor = {
     ],
 }
 
+
 volume_widget = Volume(
     # limit_max_volume=True,
     mouse_callbacks={'Button3': lazy.spawn("pavucontrol")},
@@ -61,10 +65,30 @@ brightness_widget = Brightness(
     padding=0,
 )
 
-color_picker = ColorPicker()
+color_picker_widget = ColorPicker()
+
+yt_music_widget = YTMusicWidget()
+
+base_groupbox = widget.GroupBox(
+    borderwidth=1,  # Толщина рамки
+    # ('border', 'block', 'text', 'line') # Метод выделения активного воркспейса
+    highlight_method='line',
+    # '#DDDFE5',  # Цвет текста активного воркспейса
+    block_highlight_text_color='#ffffff',
+    this_current_screen_border='#ffffff',  # C3C3C3  Цвет фона активного воркспейса
+    inactive='#777777',
+    active='#ffffff',
+    other_screen_border='#3333ff',
+    highlight_color=['2E3440', '2E3440'],
+    rounded=True,
+    margin_x=0,
+    margin_y=2,
+    # margin=3,
+    hide_unused=True,
+)
 
 
-main_bar_widgets = [
+default_widgets = [
     # Menu
     WidgetBox(
         text_closed='  ',
@@ -115,23 +139,7 @@ main_bar_widgets = [
     # widget.CurrentLayout(),
     
     # Иконки воркспейсов
-    base_groupbox := widget.GroupBox(
-        borderwidth=1,  # Толщина рамки
-        # ('border', 'block', 'text', 'line') # Метод выделения активного воркспейса
-        highlight_method='line',
-        # '#DDDFE5',  # Цвет текста активного воркспейса
-        block_highlight_text_color='#ffffff',
-        this_current_screen_border='#ffffff',  # C3C3C3  Цвет фона активного воркспейса
-        inactive='#777777',
-        active='#ffffff',
-        other_screen_border='#3333ff',
-        highlight_color=['2E3440', '2E3440'],
-        rounded=True,
-        margin_x=0,
-        margin_y=2,
-        # margin=3,
-        hide_unused=True,
-    ),
+    base_groupbox,
 
     # Виджет выполнения команд
     widget.Prompt(),
@@ -184,11 +192,11 @@ main_bar_widgets = [
             
             # Color picker
             # Нужно установить xcolor
-            color_picker,
+            color_picker_widget,
             widget.Spacer(length=8),
             
             # Виджет для управления YouTube Music
-            # YTMusicWidget(),
+            yt_music_widget,
 
             widget.TextBox(text="|"),
             widget.Spacer(length=8),

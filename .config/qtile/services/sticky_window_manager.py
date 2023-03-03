@@ -12,10 +12,10 @@ class StickyWindowManager:
         self,
         activate_hooks: bool = False,
         sticky_rules: list[Match] | None = None,
-        groups_rules: dict | None = None,
+        groups_rules: list[dict[str, str | Match]] | None = None,
     ) -> typing.NoReturn:
         
-        self.window_list = list()
+        self.window_list: list[libqtile.backend.base.Window] = list()
         
         self.sticky_rules = sticky_rules or []
         

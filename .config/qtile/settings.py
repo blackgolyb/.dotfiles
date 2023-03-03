@@ -1,15 +1,26 @@
 from pathlib import Path
 
+from libqtile.utils import guess_terminal
 
+
+# Paths
 home_path = Path.home()
 config_path = home_path / '.config/qtile/'
-resources_path = home_path / '.config/qtile/'
-scripts_path = home_path / '.config/qtile/'
+resources_path = config_path / 'resources/'
+scripts_path = config_path / 'scripts/'
 
+
+# Keys variables
+mod = "mod4"
+alt = "mod1"
+
+
+# Programs
 text_editor = 'code'
-terminal = 'alacritty'
+terminal = guess_terminal()  # 'alacritty'
 webbrowser = 'firefox'
 file_explorer = 'thunar'
+
 
 group_gaps = 7
 outer_gaps = 7

@@ -5,7 +5,7 @@ import libqtile
 from libqtile import hook
 
 from settings import *
-import utils
+from services import utils
 
 
 def init_hooks(
@@ -15,7 +15,7 @@ def init_hooks(
     # Автозапуск
     @hook.subscribe.startup_once
     def autostart() -> typing.NoReturn:
-        subprocess.call([str(config_path / 'autostart.sh')])
+        subprocess.call([str(scripts_path / 'autostart.sh')])
 
     # При каждом запуске
     # @hook.subscribe.startup

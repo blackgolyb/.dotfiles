@@ -1,7 +1,6 @@
 from libqtile import layout
 
-import utils
-from keys import *
+from services import utils
 from settings import *
 
 layout_margins = utils.configure_layout_margins(outer_gaps, group_gaps)

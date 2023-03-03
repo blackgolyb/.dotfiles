@@ -4,7 +4,7 @@ from libqtile.widget import base
 from libqtile.lazy import lazy
 
 import settings
-from utils import str2bool
+from services.utils import str2bool
 
 
 class Volume(base.InLoopPollText):

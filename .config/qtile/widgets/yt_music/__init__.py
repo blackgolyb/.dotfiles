@@ -1,4 +1,4 @@
-from widgets import (
+from .widgets import (
     YTMusicWidget,
     YTMusicControlWidget,
     YTMusicPreviousSongWidget,

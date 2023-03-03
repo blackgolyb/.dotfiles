@@ -7,8 +7,8 @@ import pyperclip
 
 import settings
 from .base import WidgetGroup
-from .services.callbacks import Callbacks
-from utils import copy_to_clipboard
+from services.callbacks import Callbacks
+from services.utils import copy_to_clipboard
 
 
 class ColorPickerDropper(base._TextBox):
