@@ -3,11 +3,15 @@ from pathlib import Path
 from libqtile.utils import guess_terminal
 
 
+DEBUG = False
+
+
 # Paths
 home_path = Path.home()
 config_path = home_path / '.config/qtile/'
 resources_path = config_path / 'resources/'
 scripts_path = config_path / 'scripts/'
+themes_path = config_path / 'themes/'
 
 
 # Keys variables

@@ -18,8 +18,10 @@ def init_hooks(
         subprocess.call([str(scripts_path / 'autostart.sh')])
 
     # При каждом запуске
-    # @hook.subscribe.startup
+    @hook.subscribe.startup
     def _startup() -> typing.NoReturn:
+        if DEBUG:
+            return
         # global main_bar
         main_bar.window.window.set_property("QTILE_BAR", 1, "CARDINAL", 32)
 

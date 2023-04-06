@@ -17,6 +17,10 @@ class YTMusicAPIInitMixin():
         def on_shutdown_kill_api():
             api.kill()
             
+        # @hook.subscribe.startup
+        # def on_reconfigured_kill_api():
+        #     api.kill()
+            
     def _configure(self, qtile, bar):
         self.yt_music_api.start_up()
         self.init_yt_music_api_hooks(self.yt_music_api)

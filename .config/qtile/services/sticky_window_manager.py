@@ -49,6 +49,8 @@ class StickyWindowManager:
         Key или в mouse_callbacks и т.п."""
         
         current_window = qtile.current_window
+        if current_window is None:
+            return
 
         if current_window in self.window_list:
             self._unpin_window(current_window)

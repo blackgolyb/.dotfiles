@@ -10,7 +10,7 @@ create_group.is_subscript_or_superscript = False
 default_groups = [
     create_group("1", "󰈹", matches=[Match(wm_class="firefox")]),
     create_group("2", ""),
-    create_group("3", ""),
+    create_group("3", ""),
     create_group("4", ""),
     create_group("5", ""),
     create_group("6", ""),

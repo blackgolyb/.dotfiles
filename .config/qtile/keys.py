@@ -7,6 +7,60 @@ from widgets import (
 )
 
 
+en_to_ru = {
+    'q': 'й',
+    'w': 'ц',
+    'e': 'у',
+    'r': 'к',
+    't': 'е',
+    'y': 'н',
+    'u': 'г',
+    'i': 'ш',
+    'o': 'щ',
+    'p': 'з',
+    '[': 'х',
+    ']': 'ъ',
+    'a': 'ф',
+    's': 'ы',
+    'd': 'в',
+    'f': 'а',
+    'g': 'п',
+    'h': 'р',
+    'j': 'о',
+    'k': 'л',
+    'l': 'д',
+    ';': 'ж',
+    "'": 'э',
+    'z': 'я',
+    'x': 'ч',
+    'c': 'с',
+    'v': 'м',
+    'b': 'и',
+    'n': 'т',
+    'm': 'ь',
+    ',': 'б',
+    '.': 'ю',
+    '/': '.'
+}
+
+
+def localize_keys(keys, languages):
+    extended_keys = []
+    for language in languages:
+        for key in keys:
+            if key.key not in en_to_ru:
+                continue
+            
+            extended_keys.append(Key(
+                key.modifiers,
+                en_to_ru.get(key.key),
+                key.commands,
+                desc=key.desc,
+            ))
+            
+    keys.extend(extended_keys) 
+
+
 default_keys = [
     # Управление фокусом
     Key([mod], "left", lazy.layout.left(),
@@ -54,7 +108,7 @@ default_keys = [
     Key([mod, "control"], "q", lazy.shutdown(), desc="Shutdown Qtile"),
     # Выполнить команды (типо встроенное dmenu)
     Key([mod], "d", lazy.spawncmd(), desc="Spawn a command using a prompt widget"),
-    
+
     # Скрыть/раскрыть панель
     Key([mod, "control"], "space", lazy.hide_show_bar(bar_orientation)),
 
@@ -63,6 +117,7 @@ default_keys = [
     Key([mod], "Return", lazy.spawn(terminal)),
     # Key([mod], "f", lazy.spawn("firefox --wayland")), # Это для вайланда
     Key([mod], "f", lazy.spawn(webbrowser)),  # Для иксов
+    Key([mod], "c", lazy.spawn(text_editor)),
     Key([mod], "e", lazy.spawn(file_explorer)),
     Key([mod], "t", lazy.spawn("telegram-desktop")),
     Key([mod], "space", lazy.spawn("rofi -show drun")),
@@ -94,3 +149,7 @@ default_keys = [
     Key([], "XF86MonBrightnessDown", lazy.function(brightness_widget.down)),
     Key([], "XF86MonBrightnessUp", lazy.function(brightness_widget.up)),
 ]
+
+langs = keyboard_layouts.copy()
+langs.remove('us')
+# localize_keys(default_keys, langs)

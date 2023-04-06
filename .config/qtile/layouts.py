@@ -13,6 +13,7 @@ bsp_layout = layout.Bsp(
     border_normal="#2E3440",
     border_width=1,
     margin=layout_margins,
+    grow_amount=5,
 )
 
 # Как в dwm

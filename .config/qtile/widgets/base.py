@@ -2,7 +2,7 @@ from libqtile import widget, bar
 from libqtile.widget import base
 from libqtile.log_utils import logger
 from libqtile.widget import Systray
-from libqtile.command.base import expose_command
+# from libqtile.command.base import expose_command
 
 class WidgetGroup(base._Widget):
     def __init__(self, widgets, **config):
@@ -229,7 +229,7 @@ class WidgetBox(base._Widget):
 
         self.drawer.draw(offsetx=self.offsetx, offsety=self.offsety, width=self.width)
 
-    @expose_command()
+    # @expose_command
     def cmd_toggle(self):
         """Toggle box state"""
         self.box_is_open = not self.box_is_open
@@ -238,7 +238,39 @@ class WidgetBox(base._Widget):
         self.bar.draw()
 
 
+class Animation:
+    update_time: float = 0.1
+    max_iters_count: int = 100
+    
+    def __init__(
+        self,
+        time : float,
+        anim_type : str,
+    ):
+        self._time = time
+        self._anim_type = anim_type
+        
+    def animate(self, anim_func, **kwargs):
+        anim_start_time = 0
+        anim_iters = self._time / self.update_time
+        iter_delta = self.max_iters_count / anim_iters
+        
+        for i in range(anim_iters):
+            anim_func(iteration=int(iter_delta * i), **kwargs)
+            time.sleep(update_time)
+            
+    def __call__(self, anim_func, **kwargs):
+        self.animate(anim_func, **kwargs)
+    
+
 class BaseWidgetTabGroup(WidgetGroup):
+    defaults = [
+        ("switch_tab_animation", Animation(1, 'line')),
+    ]
+    
+    def __init__(self, _widgets: list[base._Widget] | None = None, **config):
+        base._Widget.__init__(self, bar.CALCULATED, **config)
+        self.add_defaults(WidgetBox.defaults)
     def __init__(self, tabs : list[list], **config):
         self.tabs = tabs
 
@@ -255,13 +287,34 @@ class BaseWidgetTabGroup(WidgetGroup):
             
         self.widgets = self.tabs[0]
         self.show()
+        
+    def switch_tab_frame(self, iteration: int, from_tab, to_tab):
+        ...
             
     def switch_tab(self, tab_id):
+        from_tab = self.widgets
+        to_tab = self.tabs[tab_id]
+        
+        # self.widgets = to_tab
+        # self.show()
+        
+        # self.switch_tab_animation(
+        #     self.switch_tab_frame,
+        #     from_tab=self.widgets,
+        #     to_tab=self.tabs[tab_id],
+        # )
+        
+        # self.widgets = from_tab
+        # self.hide()
+        
+        # self.widgets = to_tab
+        
         self.hide()
-        self.widgets = self.tabs[tab_id]
+        self.widgets = to_tab
         self.show()
+        
         self.bar.draw()
-
+        
 
 class HoveringWidgetTabGroup(BaseWidgetTabGroup):
     def __init__(self, hover_out_widgets, hover_in_widgets, **config):

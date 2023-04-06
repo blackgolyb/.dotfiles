@@ -196,7 +196,7 @@ default_widgets = [
             widget.Spacer(length=8),
             
             # Виджет для управления YouTube Music
-            yt_music_widget,
+            # yt_music_widget,
 
             widget.TextBox(text="|"),
             widget.Spacer(length=8),
