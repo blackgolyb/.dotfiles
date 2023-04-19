@@ -14,8 +14,8 @@ from widgets import widget_defaults
 import hooks
 
 import locale
-locale.setlocale(locale.LC_TIME, 'ru_RU.UTF-8')
 
+locale.setlocale(locale.LC_TIME, "ru_RU.UTF-8")
 
 
 # Настройка WM
@@ -26,8 +26,8 @@ sticky_manager = StickyWindowManager(
     ],
     groups_rules=[
         {
-            'match': Match(title="Picture-in-Picture"),
-            'groups': '__all__',
+            "match": Match(title="Picture-in-Picture"),
+            "groups": "__all__",
             # 'groups': ('0', '1', '2'),
             # 'exclude_groups': ('0', '1', '2'),
         },
@@ -50,7 +50,7 @@ floating_layout = layout.Floating(
         Match(title="branchdialog"),  # gitk
         Match(title="pinentry"),  # GPG key password entry
         Match(title="Picture-in-Picture"),
-    ]
+    ],
 )
 
 # Яхз
@@ -87,7 +87,6 @@ wl_input_rules = None
 wmname = "LG3D"
 
 
-
 # Мои настройки WM
 # Настройки групп
 groups = default_groups
@@ -104,16 +103,19 @@ mouse = default_mouse
 # Хоткеи
 keys = default_keys
 
-# Расширения для хотеев 
+# Расширения для хотеев
 keys.append(
     # Штука которая позволяет закрепить окно на всех рабочих поверхностях
     # Т.е. окно будет следовать за вами на всех робочих столах
-    Key([mod], "o", lazy.function(
-        sticky_manager.toggle_sticky_window), desc="toggle stick window"),
+    Key(
+        [mod],
+        "o",
+        lazy.function(sticky_manager.toggle_sticky_window),
+        desc="toggle stick window",
+    ),
 )
 
 keys.extend(groups_keys)
-
 
 
 hooks.init_hooks(main_bar, is_bar_rounded)

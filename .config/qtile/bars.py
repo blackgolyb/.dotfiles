@@ -2,17 +2,18 @@ from libqtile import bar, widget
 
 from settings import *
 from services import utils
-from widgets import (
-    default_widgets, base_groupbox
-)
+from widgets import default_widgets, base_groupbox
 
+
+background_color = "#2E3440"
+border_color = "#2E3440"
 
 bar_defaults = {
     "size": 20,  # Высота панели
     "border_width": [2, 16, 2, 10],
-    "border_color": ["#2E3440", "#2E3440", "#2E3440", "#2E3440"],
+    "border_color": [border_color, border_color, border_color, border_color],
     "margin": bar_gaps,  # Гапсы бара
-    "background": "#2E3440",  # Цвет фона панели
+    "background": background_color,  # Цвет фона панели
     "opacity": 1,  # Прозрачность бара
 }
 
@@ -34,7 +35,7 @@ second_bar = bar.Bar(
 )
 
 
-def init_bars(bar, bar_orientation='top'):
+def init_bars(bar, bar_orientation="top"):
     bars = utils.configure_bars(outer_gaps, group_gaps, bar)
     bars = utils.rotate_matrix_by_bar_orientation(bars, bar_orientation)
     bars = utils.make_2d_matrix_flat(bars)

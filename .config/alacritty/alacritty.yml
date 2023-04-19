@@ -4,7 +4,7 @@
 #   primary:
 #     background: '0x1e2127'
 #     foreground: '0xabb2bf'
-#
+
 #     # Bright and dim foreground colors
 #     #
 #     # The dimmed foreground color is calculated automatically if it is not present.
@@ -12,7 +12,7 @@
 #     # is `false`, the normal foreground color will be used.
 #     #dim_foreground: '0x9a9a9a'
 #     bright_foreground: '0xe6efff'
-#
+
 #   # Cursor colors
 #   #
 #   # Colors which should be used to draw the terminal cursor. If these are unset,
@@ -20,7 +20,7 @@
 #   #cursor:
 #   #  text: '0x000000'
 #   #  cursor: '0xffffff'
-#
+
 #   # Normal colors
 #   normal:
 #     black:   '0x1e2127'
@@ -31,7 +31,7 @@
 #     magenta: '0xc678dd'
 #     cyan:    '0x56b6c2'
 #     white:   '0x828791'
-#
+
 #   # Bright colors
 #   bright:
 #     black:   '0x5c6370'
@@ -42,7 +42,7 @@
 #     magenta: '0xc678dd'
 #     cyan:    '0x56b6c2'
 #     white:   '0xe6efff'
-#
+
 #   # Dim colors
 #   #
 #   # If the dim colors are not set, they will be calculated automatically based
@@ -56,14 +56,14 @@
 #     magenta: '0xc678dd'
 #     cyan:    '0x56b6c2'
 #     white:   '0x828791'
-#
+
 #   # Indexed Colors
 #   #
 #   # The indexed colors include all colors from 16 to 256.
 #   # When these are not set, they're filled with sensible defaults.
 #   #indexed_colors:
 #   #  - { index: 16, color: '0x000000' }
-#
+
 #
 #
 #

@@ -2,3 +2,5 @@
 
 !/.config
 !.gitignore
+!README.md
+!/public

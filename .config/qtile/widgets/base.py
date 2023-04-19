@@ -2,30 +2,32 @@ from libqtile import widget, bar
 from libqtile.widget import base
 from libqtile.log_utils import logger
 from libqtile.widget import Systray
+
 # from libqtile.command.base import expose_command
+
 
 class WidgetGroup(base._Widget):
     def __init__(self, widgets, **config):
         base._Widget.__init__(self, bar.CALCULATED, **config)
-        
+
         self.widgets = widgets
-        
+
     def _configure(self, qtile, bar):
         base._Widget._configure(self, qtile, bar)
-        
+
         self._configure_inner_widgets()
-            
+
     def _configure_inner_widgets(self):
         index = self.bar.widgets.index(self)
-        
+
         for idx, w in enumerate(self.widgets):
             if w.configured:
                 w = w.create_mirror()
                 self.widgets[idx] = w
-            
+
         for w in self.widgets[::-1]:
             self.bar.widgets.insert(index, w)
-            
+
         for idx, w in enumerate(self.widgets):
             self.qtile.register_widget(w)
             w._configure(self.qtile, self.bar)
@@ -36,30 +38,29 @@ class WidgetGroup(base._Widget):
 
             # w.drawer.enable()
             # w.configured = True
-            
+
     def show(self):
         index = self.bar.widgets.index(self) + 1
-        
+
         for widget in self.widgets[::-1]:
             self.bar.widgets.insert(index, widget)
             widget.drawer.enable()
-            
+
             if isinstance(widget, WidgetBox):
                 widget.show()
             elif isinstance(widget, WidgetGroup):
                 widget.show()
-        
+
     def hide(self):
         for widget in self.widgets:
-
             self.bar.widgets.remove(widget)
             widget.drawer.disable()
-            
+
             if isinstance(widget, WidgetBox):
                 widget.hide()
             elif isinstance(widget, WidgetGroup):
                 widget.hide()
-                
+
     def draw(self):
         ...
 
@@ -106,7 +107,7 @@ class WidgetBox(base._Widget):
         ("text_open", "[>]", "Text when box is open"),
         ("widgets", list(), "A list of widgets to include in the box"),
     ]  # type: list[tuple[str, Any, str]]
-    
+
     def __init__(self, _widgets: list[base._Widget] | None = None, **config):
         base._Widget.__init__(self, bar.CALCULATED, **config)
         self.add_defaults(WidgetBox.defaults)
@@ -125,7 +126,7 @@ class WidgetBox(base._Widget):
             val = self.close_button_location
             logger.warning("Invalid value for 'close_button_location': %s", val)
             self.close_button_location = "left"
-    
+
     def _configure(self, qtile, bar):
         base._Widget._configure(self, qtile, bar)
 
@@ -140,17 +141,17 @@ class WidgetBox(base._Widget):
 
         if self.configured:
             return
-        
+
         self._configure_inner_widgets()
-        
+
     def _configure_inner_widgets(self):
         index = self.bar.widgets.index(self)
-        
+
         for idx, w in enumerate(self.widgets):
             if w.configured:
                 w = w.create_mirror()
                 self.widgets[idx] = w
-                
+
             self.bar.widgets.insert(index, w)
             self.qtile.register_widget(w)
             w._configure(self.qtile, self.bar)
@@ -167,14 +168,14 @@ class WidgetBox(base._Widget):
 
         self.box_is_open = False
         self.toggle_widgets()
-        
+
     def show(self):
         ...
-            
+
     def hide(self):
         if self.box_is_open:
             self.cmd_toggle()
-            
+
     def toggle_widgets(self):
         for widget in self.widgets:
             try:
@@ -188,10 +189,10 @@ class WidgetBox(base._Widget):
                 if isinstance(widget, Systray):
                     for icon in widget.tray_icons:
                         icon.hide()
-                        
+
                 elif isinstance(widget, WidgetBox):
                     widget.hide()
-                    
+
                 elif isinstance(widget, WidgetGroup):
                     widget.hide()
 
@@ -204,24 +205,23 @@ class WidgetBox(base._Widget):
             index += 1
 
         if self.box_is_open:
-
             # Need to reverse list as widgets get added in front of eachother.
             for widget in self.widgets[::-1]:
                 # enable drawing again
                 widget.drawer.enable()
                 self.bar.widgets.insert(index, widget)
-                
+
                 if isinstance(widget, WidgetBox):
                     widget.show()
                 elif isinstance(widget, WidgetGroup):
                     widget.show()
-    
+
     def calculate_length(self):
         return self.layout.width
 
     def set_box_label(self):
         self.layout.text = self.text_open if self.box_is_open else self.text_closed
-        
+
     def draw(self):
         self.drawer.clear(self.background or self.bar.background)
 
@@ -241,80 +241,81 @@ class WidgetBox(base._Widget):
 class Animation:
     update_time: float = 0.1
     max_iters_count: int = 100
-    
+
     def __init__(
         self,
-        time : float,
-        anim_type : str,
+        time: float,
+        anim_type: str,
     ):
         self._time = time
         self._anim_type = anim_type
-        
+
     def animate(self, anim_func, **kwargs):
         anim_start_time = 0
         anim_iters = self._time / self.update_time
         iter_delta = self.max_iters_count / anim_iters
-        
+
         for i in range(anim_iters):
             anim_func(iteration=int(iter_delta * i), **kwargs)
             time.sleep(update_time)
-            
+
     def __call__(self, anim_func, **kwargs):
         self.animate(anim_func, **kwargs)
-    
+
 
 class BaseWidgetTabGroup(WidgetGroup):
     defaults = [
-        ("switch_tab_animation", Animation(1, 'line')),
+        ("switch_tab_animation", Animation(1, "line")),
     ]
-    
+
     def __init__(self, _widgets: list[base._Widget] | None = None, **config):
         base._Widget.__init__(self, bar.CALCULATED, **config)
         self.add_defaults(WidgetBox.defaults)
-    def __init__(self, tabs : list[list], **config):
+
+    def __init__(self, tabs: list[list], **config):
         self.tabs = tabs
 
         WidgetGroup.__init__(self, widgets=tabs[0], **config)
-        
+
     def _configure(self, qtile, bar):
         base._Widget._configure(self, qtile, bar)
-        
+
         for widgets in self.tabs:
             self.widgets = widgets
             self._configure_inner_widgets()
-            
+
             self.hide()
-            
+
         self.widgets = self.tabs[0]
         self.show()
-        
+
     def switch_tab_frame(self, iteration: int, from_tab, to_tab):
         ...
-            
+
     def switch_tab(self, tab_id):
         from_tab = self.widgets
         to_tab = self.tabs[tab_id]
-        
+
         # self.widgets = to_tab
         # self.show()
-        
+
         # self.switch_tab_animation(
         #     self.switch_tab_frame,
         #     from_tab=self.widgets,
         #     to_tab=self.tabs[tab_id],
         # )
-        
+
         # self.widgets = from_tab
         # self.hide()
-        
+
         # self.widgets = to_tab
-        
+
         self.hide()
         self.widgets = to_tab
         self.show()
-        
+
         self.bar.draw()
-        
+
 
 class HoveringWidgetTabGroup(BaseWidgetTabGroup):
     def __init__(self, hover_out_widgets, hover_in_widgets, **config):
@@ -322,12 +323,12 @@ class HoveringWidgetTabGroup(BaseWidgetTabGroup):
             hover_out_widgets,
             hover_in_widgets,
         ]
-        
+
         self.init_hovering(hover_out_widgets)
         self.init_hovering(hover_in_widgets)
-        
+
         BaseWidgetTabGroup.__init__(self, tabs=tabs, **config)
-        
+
     def init_hovering(self, tab):
         for widget in tab:
             if isinstance(widget, WidgetBox):
@@ -339,16 +340,15 @@ class HoveringWidgetTabGroup(BaseWidgetTabGroup):
                 widget.mouse_enter = f_in
                 f_out = self.widget_hover_out_decorator(widget.mouse_leave)
                 widget.mouse_leave = f_out
-        
+
     def widget_hover_in_decorator(self, mouse_enter):
         def mouse_enter_wrap(x, y):
             self.switch_tab(1)
-            
+
         return mouse_enter_wrap
-            
+
     def widget_hover_out_decorator(self, mouse_leave):
         def mouse_leave_wrap(x, y):
             self.switch_tab(0)
-            
+
         return mouse_leave_wrap
-  

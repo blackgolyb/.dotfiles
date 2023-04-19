@@ -29,7 +29,7 @@ dwm_layout = layout.Tile(
 # Фуллскрин
 max_layout = layout.Max(margin=layout_margins)
 
-default_layouts = [  
+default_layouts = [
     bsp_layout,
     max_layout,
 ]
