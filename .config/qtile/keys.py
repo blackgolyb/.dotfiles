@@ -133,6 +133,7 @@ default_keys = [
     Key([mod], "e", lazy.spawn(file_explorer)),
     Key([mod], "t", lazy.spawn("telegram-desktop")),
     Key([mod], "space", lazy.spawn("rofi -show drun")),
+    Key([mod], "l", lazy.spawn("betterlockscreen --lock")),
     # Раскладка клавиатуры
     Key(
         [alt],

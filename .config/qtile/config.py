@@ -4,6 +4,7 @@ from libqtile.lazy import lazy
 
 from settings import *
 from services.sticky_window_manager import StickyWindowManager
+from services.wallpaper_manager import WallpaperManager
 from layouts import default_layouts
 from keys import default_keys
 from groups import default_groups, groups_keys
@@ -14,6 +15,8 @@ from widgets import widget_defaults
 import hooks
 
 import locale
+from pathlib import Path
+
 
 locale.setlocale(locale.LC_TIME, "ru_RU.UTF-8")
 
@@ -96,6 +99,15 @@ layouts = default_layouts
 
 # Настройки экранов
 screens = default_screens
+
+wallpaper_managers = [
+    WallpaperManager(
+        screen=screens[0],
+        wallpaper=resources_path / "wallpapers/screen_1",
+        wallpaper_mode="stretch",
+        activate_hooks=True,
+    ),
+]
 
 # Настройки мыши
 mouse = default_mouse

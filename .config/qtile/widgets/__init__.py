@@ -11,8 +11,7 @@ from .volume import Volume
 from .brightness import Brightness
 from .color_picker import ColorPicker, ColorPickerDropper, ColorPickerPalette
 from .yt_music import YTMusicWidget
-
-# import .services as services
+from themes import color_theme
 
 
 rofi_wifi_menu = (
@@ -49,7 +48,7 @@ widget_defaults = dict(
 decor = {
     "decorations": [
         qe_widget.decorations.BorderDecoration(
-            colour="#ffffff",
+            colour=color_theme["bar_foreground_color"],
             border_width=1,
         )
     ],
@@ -81,10 +80,11 @@ base_groupbox = widget.GroupBox(
     inactive="#777777",
     active="#ffffff",
     other_screen_border="#3333ff",
-    highlight_color=["2E3440", "2E3440"],
+    highlight_color=["#2E3440", "#2E3440"],
     rounded=True,
     margin_x=0,
     margin_y=2,
+    markup=True,
     # margin=3,
     hide_unused=True,
 )
@@ -186,8 +186,8 @@ default_widgets = [
     ),
     widget.Spacer(length=8),
     # Виджет для управления YouTube Music
-    yt_music_widget,
-    widget.Spacer(length=8),
+    # yt_music_widget,
+    # widget.Spacer(length=8),
     # WidgetBox(
     #     text_closed='  ',
     #     text_open='  ',

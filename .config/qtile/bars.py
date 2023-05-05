@@ -3,10 +3,11 @@ from libqtile import bar, widget
 from settings import *
 from services import utils
 from widgets import default_widgets, base_groupbox
+from themes import color_theme
 
 
-background_color = "#2E3440"
-border_color = "#2E3440"
+background_color = color_theme["bar_background_color"]
+border_color = color_theme["bar_border_color"]
 
 bar_defaults = {
     "size": 20,  # Высота панели

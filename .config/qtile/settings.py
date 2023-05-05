@@ -1,6 +1,7 @@
 from pathlib import Path
 
 from libqtile.utils import guess_terminal
+# from themes import default_theme, themes
 
 
 DEBUG = False
@@ -12,6 +13,10 @@ config_path = home_path / ".config/qtile/"
 resources_path = config_path / "resources/"
 scripts_path = config_path / "scripts/"
 themes_path = config_path / "themes/"
+
+
+# Theme
+theme = "asd"
 
 
 # Keys variables
