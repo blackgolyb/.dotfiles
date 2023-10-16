@@ -2,21 +2,21 @@
 /* Center line thickness (pixels) */
 #define C_LINE 0
 /* Width (in pixels) of each bar */
-#define BAR_WIDTH 5
+#define BAR_WIDTH 10
 /* Width (in pixels) of each bar gap */
-#define BAR_GAP 5
+#define BAR_GAP 0
 /* Outline color */
 #define BAR_OUTLINE #e3dbe2
 /* Outline width (in pixels, set to 0 to disable outline drawing) */
 #define BAR_OUTLINE_WIDTH 0
 /* Amplify magnitude of the results each bar displays */
-#define AMPLIFY 110
+#define AMPLIFY 150
 /* Whether the current settings use the alpha channel;
    enabling this is required for alpha to function
    correctly on X11 with `"native"` transparency. */
 #define USE_ALPHA 70
 /* How strong the gradient changes */
-#define GRADIENT_POWER 60
+#define GRADIENT_POWER 70
 /* Bar color changes with height */
 #define GRADIENT (d / GRADIENT_POWER + 1)
 /* Bar color */

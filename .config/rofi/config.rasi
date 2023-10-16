@@ -3,8 +3,8 @@ configuration {
     display-window: "Windows";
     drun-display-format: "{icon} {name}";
     modi: "window,drun,ssh,combi";
-    font: "JetBrainsMono Nerd Font 12";
-    modi: "window,run,drun,ssh,emoji,calc";
+    font: "Hack Nerd Font Mono 18";
+    modi: "drun,calc,window,run,ssh,emoji";
     show-icons: true;
 }
 
@@ -46,6 +46,8 @@ element {
 listview {
 	spacing: 0px;
 }
+
+element-icon { size: 2ch ; } 
 
 
 

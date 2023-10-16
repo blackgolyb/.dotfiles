@@ -2,6 +2,7 @@ import typing
 
 import libqtile
 from libqtile import hook, qtile
+from libqtile.log_utils import logger
 from libqtile.config import Match
 
 

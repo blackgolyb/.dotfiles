@@ -29,7 +29,7 @@ class Volume(base.InLoopPollText):
         ),
         (
             "volume_icons",
-            ["󰕾", "󰖀", "󰕿", "󰝟"],
+            ["󰕾", "󰖀", "", "󰝟"],
         ),
         (
             "script_path",

@@ -79,7 +79,7 @@ ZSH_THEME="powerlevel10k/powerlevel10k"
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(git poetry zsh-navigation-tools zsh-autosuggestions zsh-syntax-highlighting)
 
-colorscript random
+# colorscript random
 
 source $ZSH/oh-my-zsh.sh
 
@@ -112,7 +112,8 @@ source $ZSH/oh-my-zsh.sh
 # My settings
 bindkey '^H' backward-kill-word
 bindkey '5~' kill-word
-alias dotfiles='/usr/bin/git -C $HOME/.dotfiles/ --work-tree=$HOME'
+alias dotfiles='/usr/bin/git -C $HOME/dotfiles/ --work-tree=$HOME'
+alias tlpui='cd ~/TLPUI && python3 -m tlpui'
 
 # colorscript -r
 typeset -g POWERLEVEL9K_INSTANT_PROMPT=quiet

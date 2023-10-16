@@ -2,7 +2,13 @@ from libqtile import bar, widget
 
 from settings import *
 from services import utils
-from widgets import default_widgets, base_groupbox
+from widgets import (
+    default_widgets,
+    base_groupbox,
+    battery_pack_widget,
+    clock_widget,
+    kb_layout_widget,
+)
 from themes import color_theme
 
 
@@ -26,9 +32,16 @@ main_bar = bar.Bar(
 second_bar = bar.Bar(
     [
         widget.Spacer(length=10),
+        kb_layout_widget,
+        # widget.Spacer(length=15),
         widget.Spacer(),
         base_groupbox,
         widget.Spacer(),
+        # widget.Spacer(length=15),
+        # battery_pack_widget,
+        # widget.Spacer(length=15),
+        widget.Clock(format="%H:%M", padding=0),
+        # widget.Spacer(length=20),
         widget.Spacer(length=20),
     ],
     **bar_defaults,

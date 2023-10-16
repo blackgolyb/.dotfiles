@@ -18,3 +18,18 @@ def get_color_theme(name):
     return default_theme
 
 color_theme = get_color_theme(theme)
+
+# {
+#     "bar": {
+#         "background_color": "#2E3440",
+#         "border_color": "#2E3440",
+#         "foreground_color": "#ffffff"
+#     },
+#     "screen": {
+#         "wallpaper": "",
+#         "wallpapers": ""
+#     },
+#     "apps": {
+#         "glava": ""
+#     }
+# }

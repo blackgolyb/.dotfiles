@@ -9,7 +9,9 @@ from settings import *
 from .base import WidgetGroup, WidgetBox
 from .volume import Volume
 from .brightness import Brightness
+from .multi_monitor import MultiMonitor
 from .color_picker import ColorPicker, ColorPickerDropper, ColorPickerPalette
+from .keyboard_layout import KeyboardLayout
 from .yt_music import YTMusicWidget
 from themes import color_theme
 
@@ -39,8 +41,8 @@ class MyBattery(widget.Battery):
 
 # ВИДЖЕТЫ НА ПАНЕЛИ И ИХ ПАРАМЕТРЫ ------------------------------------------------
 widget_defaults = dict(
-    font="JetBrainsMono Nerd Font",
-    fontsize=12,
+    font=font,
+    fontsize=fontsize,
     padding=8,
 )
 
@@ -66,6 +68,10 @@ brightness_widget = Brightness(
     padding=0,
 )
 
+multi_monitor_widget = MultiMonitor(
+    padding=0,
+)
+
 color_picker_widget = ColorPicker()
 
 yt_music_widget = YTMusicWidget()
@@ -87,6 +93,57 @@ base_groupbox = widget.GroupBox(
     markup=True,
     # margin=3,
     hide_unused=True,
+)
+
+battery_pack_widget = WidgetGroup(
+    widgets=[
+        widget.BatteryIcon(
+            theme_path=str(resources_path / "battery_icons"),
+            battery=0,
+            padding=3,
+            update_interval=5,
+            scale=1,
+        ),
+        MyBattery(
+            battery=0,
+            padding=3,
+            format="{percent:2.0%}",
+            update_interval=5,
+            hide_threshold=True,
+        ),
+        widget.Spacer(length=5),
+        widget.BatteryIcon(
+            theme_path=str(resources_path / "battery_icons"),
+            battery=1,
+            padding=3,
+            update_interval=5,
+            scale=1,
+        ),
+        MyBattery(
+            battery=1,
+            padding=3,
+            format="{percent:2.0%}",
+            update_interval=5,
+            hide_threshold=True,
+        ),
+    ]
+)
+
+
+clock_widget = widget.WidgetBox(
+    text_closed=" ",
+    text_open=" ",
+    padding=0,
+    widgets=[
+        # Дата
+        widget.Clock(format="[%d %B %Y | %A]", padding=0),
+        widget.Spacer(length=5),
+    ],
+)
+
+
+kb_layout_widget = widget.KeyboardLayout(
+    configured_keyboards=keyboard_layouts, update_interval=1, padding=0
 )
 
 
@@ -154,6 +211,7 @@ default_widgets = [
                 format="{essid}",
                 padding=0,
                 mouse_callbacks={"Button1": lazy.spawn(rofi_wifi_menu)},
+                interface="wlp3s0",
             ),
             widget.Spacer(length=15),
             # Яркость
@@ -176,6 +234,8 @@ default_widgets = [
                 mouse_callbacks={"Button1": lazy.spawn(rofi_bluetooth_menu)},
             ),
             widget.Spacer(length=8),
+            multi_monitor_widget,
+            widget.Spacer(length=15),
             # Color picker
             # Нужно установить xcolor
             color_picker_widget,
@@ -199,35 +259,14 @@ default_widgets = [
     volume_widget,
     widget.Spacer(length=15),
     # Keyboard layout
-    widget.KeyboardLayout(
-        configured_keyboards=keyboard_layouts, update_interval=1, padding=0
-    ),
+    # KeyboardLayout(configured_keyboards=keyboard_layouts, update_interval=1, padding=0),
+    kb_layout_widget,
     widget.Spacer(length=15),
     # Battery
-    battery_widget := widget.BatteryIcon(
-        theme_path=str(resources_path / "battery_icons"),
-        padding=3,
-        update_interval=5,
-        scale=1,
-    ),
-    MyBattery(
-        padding=3,
-        format="{percent:2.0%}",
-        update_interval=5,
-        hide_threshold=True,
-    ),
+    battery_pack_widget,
     widget.Spacer(length=12),
     # Clock
-    widget.WidgetBox(
-        text_closed=" ",
-        text_open=" ",
-        padding=0,
-        widgets=[
-            # Дата
-            widget.Clock(format="[%d %B %Y | %A]", padding=0),
-            widget.Spacer(length=5),
-        ],
-    ),
+    clock_widget,
     widget.Spacer(length=5),
     # Время и дата
     widget.Clock(format="%H:%M", padding=0),

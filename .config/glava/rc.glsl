@@ -14,7 +14,8 @@
    
    See documentation for more details. */
 //#request mod bars
-#request mod radial
+// #request mod radial
+#request mod bars
 
 /* Window hints */
 #request setfloating  false
@@ -51,7 +52,9 @@
 /* Window geometry (x, y, width, height) */
 // for  1366x768
 //#request setgeometry 383 700 600 68
-#request setgeometry 0 0 1366 768
+// #request setgeometry 0 0 1920 1080
+#request setgeometry 480 580 960 500
+// #request setgeometry 480 0 960 500
 /* Window background color (RGB format).
    Does not work with `setopacity "xroot"` */
 #request setbg 00000000

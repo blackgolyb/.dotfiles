@@ -2,7 +2,12 @@ from libqtile.config import Click, Drag, Group, Key, EzKey, Match, Screen
 from libqtile.lazy import lazy
 
 from settings import *
-from widgets import volume_widget, brightness_widget, color_picker_widget
+from widgets import (
+    volume_widget,
+    brightness_widget,
+    color_picker_widget,
+    multi_monitor_widget,
+)
 
 
 en_to_ru = {
@@ -115,6 +120,8 @@ default_keys = [
     ),  # Вернуть все взад
     # Переключение между макетами
     Key([mod], "Tab", lazy.next_layout(), desc="Toggle between layouts"),
+    # Переключение между макетами
+    Key([mod, "shift"], "Tab", lazy.prev_layout(), desc="Toggle between layouts"),
     # Закрыть окно
     Key([mod], "q", lazy.window.kill(), desc="Kill focused window"),
     # Перезагрузить конфиг
@@ -144,6 +151,12 @@ default_keys = [
     # Скриешоты
     # Нужно установить gnome-screenshot
     Key([], "Print", lazy.spawn("flameshot gui")),
+    Key(
+        [mod],
+        "s",
+        lazy.function(multi_monitor_widget.open_rofi_menu),
+        desc="multi monitors",
+    ),
     # Color picker
     Key([mod], "p", lazy.function(color_picker_widget.dropper.pick_color)),
     # Контроль звука и яркости

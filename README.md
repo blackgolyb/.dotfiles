@@ -27,9 +27,15 @@ List of my widgets:
 
 List of dependencies: 
  - Qtile == 0.22.1
- - Alactity
+ - alacritty
  - qtile-extras
  - glava
+ - dunst
+ - rofi
+ - rofi-calc
+ - rofi-emoji
+ - picom
+ - python-iwlib
 
 
 ## Examples

@@ -25,14 +25,20 @@ locale.setlocale(locale.LC_TIME, "ru_RU.UTF-8")
 sticky_manager = StickyWindowManager(
     activate_hooks=True,
     sticky_rules=[
-        Match(title="Picture-in-Picture"),
+        Match(role="PictureInPicture"),
+        Match(title="Kolo-Face"),
     ],
     groups_rules=[
         {
-            "match": Match(title="Picture-in-Picture"),
+            # "match": Match(title="Picture-in-Picture"),
+            "match": Match(role="PictureInPicture"),
             "groups": "__all__",
             # 'groups': ('0', '1', '2'),
             # 'exclude_groups': ('0', '1', '2'),
+        },
+        {
+            "match": Match(role="Kolo-Face"),
+            "groups": "__all__",
         },
     ],
 )
@@ -53,6 +59,7 @@ floating_layout = layout.Floating(
         Match(title="branchdialog"),  # gitk
         Match(title="pinentry"),  # GPG key password entry
         Match(title="Picture-in-Picture"),
+        Match(title="Kolo-Face"),
     ],
 )
 
@@ -103,7 +110,13 @@ screens = default_screens
 wallpaper_managers = [
     WallpaperManager(
         screen=screens[0],
-        wallpaper=resources_path / "wallpapers/screen_1",
+        wallpaper=resources_path / "wallpapers",
+        wallpaper_mode="stretch",
+        activate_hooks=True,
+    ),
+    WallpaperManager(
+        screen=screens[1],
+        wallpaper=resources_path / "wallpapers",
         wallpaper_mode="stretch",
         activate_hooks=True,
     ),
