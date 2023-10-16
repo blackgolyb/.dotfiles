@@ -1,0 +1,12 @@
+/*
+
+!.gitignore
+!qtile/
+!rofi-network-manager/
+!rofi-bluetooth/
+!rofi/
+!picom/
+!glava/
+!dunst/
+!alacritty/
+!eww/
