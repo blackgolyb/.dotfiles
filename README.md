@@ -3,45 +3,46 @@
 My WM and other programs config. Qtile config with some own widgets.
 
 List of my widgets:
- - YT Music widget based on my [YT Music API plugin](https://github.com/AndrewOmelnitsky/youtube-music).
 
- - WidgetGroup - widget for grouping other widgets.
+-   YT Music widget based on my [YT Music API plugin](https://github.com/AndrewOmelnitsky/youtube-music).
 
- - WidgetBox - remake of base `WidgetBox` for better usage.
+-   WidgetGroup - widget for grouping other widgets.
 
- - BaseWidgetTabGroup - base widget for switching between some widgets. Usage of this widget you can see in `HoveringWidgetTabGroup`.
+-   WidgetBox - remake of base `WidgetBox` for better usage.
 
- - HoveringWidgetTabGroup - widget that changes one widget to another and back on hover.
+-   BaseWidgetTabGroup - base widget for switching between some widgets. Usage of this widget you can see in `HoveringWidgetTabGroup`.
 
- - Brightness - own widget for changing brightness.
+-   HoveringWidgetTabGroup - widget that changes one widget to another and back on hover.
 
- - Volume - own widget for changing volume.
+-   Brightness - own widget for changing brightness.
 
- - ColorPicker - widget that contains 2 other widgets:
-    - ColorPickerDropper - widget for picking color with `xcolor`.
+-   Volume - own widget for changing volume.
 
-    - ColorPickerPalette - widget for displaying picked color.
+-   ColorPicker - widget that contains 2 other widgets:
 
+    -   ColorPickerDropper - widget for picking color with `xcolor`.
+
+    -   ColorPickerPalette - widget for displaying picked color.
 
 ## Dependencies
 
-List of dependencies: 
- - Qtile == 0.22.1
- - alacritty
- - qtile-extras
- - glava
- - dunst
- - rofi
- - rofi-calc
- - rofi-emoji
- - picom
- - python-iwlib
+List of dependencies:
 
+-   Qtile == 0.22.1
+-   alacritty
+-   qtile-extras
+-   glava
+-   dunst
+-   rofi
+-   rofi-calc
+-   rofi-emoji
+-   picom
+-   python-iwlib
 
 ## Examples
 
-![ex1](./public/config_images/1.png)
+![ex1](./Public/config_images/1.png)
 
-![ex2](./public/config_images/2.png)
+![ex2](./Public/config_images/2.png)
 
-![ex with glava](./public/config_images/3.png)
+![ex with glava](./Public/config_images/3.png)
