@@ -175,13 +175,15 @@ default_widgets = [
                 margin=6,
                 padding=3,
                 mouse_callbacks={
-                    "Button1": lazy.spawn(f"{webbrowser} https://anifap.me/")
+                    "Button1": lazy.spawn(f"{webbrowser} https://anifap.top/")
                 },
                 **decor,
             ),
             widget.Image(
                 filename=str(resources_path / "menu_images/1.jpg"),
-                mouse_callbacks={"Button1": lazy.spawn("alacritty -e bpython")},
+                mouse_callbacks={
+                    "Button1": lazy.spawn(f"{webbrowser} https://anifap.top/")
+                },
             ),
             widget.Spacer(length=5),
             widget.TextBox(text="|"),

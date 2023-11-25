@@ -6,6 +6,16 @@ configuration {
     font: "Hack Nerd Font Mono 18";
     modi: "drun,calc,window,run,ssh,emoji";
     show-icons: true;
+    terminal: "alacritty";
+    ssh-client: "ssh";
+    ssh-command: "{terminal} -e {ssh-client} {host}";
+    run-command: "{cmd}";
+    run-shell-command: "{terminal} -e {cmd}";
+    disable-history: false;
+    levenshtein-sort: false;
+    case-sensitive: false;
+    auto-select: false;
+    parse-hosts: false;
 }
 
 

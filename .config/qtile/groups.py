@@ -11,14 +11,22 @@ default_groups = [
     create_group("1", "󰈹", screen=0, matches=[Match(wm_class="firefox")]),
     create_group("2", "", screen=0),
     create_group("3", "", screen=0),
-    create_group("4", "", screen=0),
+    create_group("4", "󱞁", screen=0, matches=[Match(wm_class="Logseq")]),
     create_group("5", "", screen=0),
     create_group("6", "", screen=1),
     create_group("7", "", screen=1),
     create_group("8", "", screen=1),
-    create_group("9", "󰋋", screen=1),
-    create_group("0", "", screen=1),
-    create_group("w", ""),
+    create_group(
+        "9",
+        "󰋋",
+        screen=1,
+        matches=[
+            Match(wm_class="discord"),
+            Match(wm_class="YouTube Music"),
+        ],
+    ),
+    create_group("0", "", screen=1, matches=[Match(wm_class="telegram-desktop")]),
+    create_group("w", "", screen=1),
 ]
 
 groups_keys: list[Key] = []

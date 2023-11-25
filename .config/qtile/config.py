@@ -111,6 +111,9 @@ wallpaper_managers = [
     WallpaperManager(
         screen=screens[0],
         wallpaper=resources_path / "wallpapers",
+        wallpaper_priority=[
+            ("10.png", 5),
+        ],
         wallpaper_mode="stretch",
         activate_hooks=True,
     ),

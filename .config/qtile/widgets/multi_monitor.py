@@ -1,11 +1,12 @@
 import subprocess
 import re
+from pathlib import Path
 
 from libqtile.widget import base
 from libqtile.lazy import lazy
 from libqtile.log_utils import logger
+from libqtile import hook
 from libqtile import qtile
-from screeninfo import get_monitors
 
 import settings
 
@@ -22,6 +23,11 @@ class MultiMonitor(base.InLoopPollText):
             "script_path",
             str(settings.scripts_path / "multi_monitor"),
             "Path to brightness control script",
+        ),
+        (
+            "displays_folder",
+            Path("/sys/class/drm/"),
+            "Path to folder with monitor devices",
         ),
         (
             "extern_monitor",
@@ -44,7 +50,31 @@ class MultiMonitor(base.InLoopPollText):
             }
         )
 
+        self.extern_monitor_folder = None
+        for item in self.displays_folder.iterdir():
+            formatted_name = re.findall(r"card\d+-([\w\-]+)", item.name)
+            if not formatted_name:
+                continue
+
+            formatted_name = formatted_name[0]
+            for part_of_name in self.extern_monitor.split("-"):
+                if part_of_name not in formatted_name:
+                    break
+            else:
+                self.extern_monitor_folder = item
+                break
+
+        self.prev_is_connected = self.is_monitor_connected()
         self._connected_monitors = []
+
+        self.init_setup()
+
+    def init_setup(self):
+        @hook.subscribe.startup_once
+        def setup():
+            self.prev_is_connected = self.is_monitor_connected()
+            if self.prev_is_connected:
+                self.call_script(self.extern_monitor_default_option)
 
     def call_script(self, argument):
         subprocess.call([f"bash {self.script_path} {argument}"], shell=True)
@@ -53,37 +83,23 @@ class MultiMonitor(base.InLoopPollText):
     def open_rofi_menu(self, qtile):
         self.call_script("menu")
 
-    def get_monitors(self):
-        # raw_result = subprocess.run(
-        #     ["xrandr", "--query"],
-        #     capture_output=True,
-        #     text=True,
-        # )
+    def is_monitor_connected(self):
+        status_file: Path = self.extern_monitor_folder / "status"
+        status = status_file.read_text().strip()
 
-        # result = re.findall(r"(\w+-\w) connected", raw_result.stdout)
-        result = list(map(lambda monitor: monitor.name, get_monitors()))
-        logger.error(result)
-
-        return result
+        return status == "connected"
 
     def update_monitors(self):
-        connected_monitors = self.get_monitors()
+        is_connected = self.is_monitor_connected()
 
-        if (self.extern_monitor in connected_monitors) and (
-            self.extern_monitor not in self._connected_monitors
-        ):
-            # extern monitor connected
+        if self.prev_is_connected and not is_connected:
+            self.call_script("disconnect")
+        elif not self.prev_is_connected and is_connected:
             self.call_script(self.extern_monitor_default_option)
 
-        elif (self.extern_monitor not in connected_monitors) and (
-            self.extern_monitor in self._connected_monitors
-        ):
-            # extern monitor disconnected
-            self.call_script("disconnect")
-
-        self._connected_monitors = connected_monitors
+        self.prev_is_connected = is_connected
 
     def poll(self):
-        # self.update_monitors()
+        self.update_monitors()
 
         return "󰍹"
