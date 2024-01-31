@@ -8,7 +8,15 @@ create_group.is_description = True
 create_group.is_subscript_or_superscript = False
 
 default_groups = [
-    create_group("1", "󰈹", screen=0, matches=[Match(wm_class="firefox")]),
+    create_group(
+        "1",
+        "󰈹",
+        screen=0,
+        matches=[
+            Match(wm_class="firefox"),
+            Match(wm_class="floorp"),
+        ],
+    ),
     create_group("2", "", screen=0),
     create_group("3", "", screen=0),
     create_group("4", "󱞁", screen=0, matches=[Match(wm_class="Logseq")]),

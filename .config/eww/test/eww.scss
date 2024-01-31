@@ -1,0 +1,23 @@
+$bar-bg: rgba($color: #2e3440, $alpha: 1);
+
+* {
+    all: unset;
+    font-family: 'JetBrainsMono Nerd Font Mono';
+    font-size: 18;
+}
+
+
+.bar {
+    background-color: $bar-bg;
+    padding: 0 25px;
+}
+
+.workspaces {
+    .workspace{
+        padding: 0 6px;
+
+        &.active{
+            border-bottom: 1px solid #fff;
+        }
+    }
+}

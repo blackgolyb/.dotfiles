@@ -63,7 +63,7 @@ def rotate_matrix_by_bar_orientation(
         repeats = 3
 
     for _ in range(repeats):
-        matrix = utils.rot90(matrix)
+        matrix = rot90(matrix)
 
     return matrix
 
@@ -105,6 +105,9 @@ def configure_bars(
     #     [N, E],
     #     [W, S],
     # ]
+    if main_bar is None:
+        main_bar = bar.Gap(outer_gaps - group_gaps)
+        
     bars = [
         [main_bar, bar.Gap(outer_gaps)],
         [bar.Gap(outer_gaps - group_gaps), bar.Gap(2 * outer_gaps - group_gaps)],

@@ -1,0 +1,68 @@
+#!/bin/bash
+
+intern="eDP-1"
+extern="HDMI-2"
+
+function configure_extern_monitor() {
+    xrandr --output "$extern" --set audio force-dvi --mode 1920x1080
+}
+
+function configure_extern_monitor_location() {
+    xrandr --output "$intern" --auto --output "$extern" $1 "$intern"
+}
+
+function disconnect_extern_monitor() {
+    xrandr --output "$extern" --off --output "$intern" --auto
+}
+
+LOCATION=0
+#X, Y Offset
+#This sets the distance of the window from the edge of the screen on the X and Y axis.
+Y_AXIS=0
+X_AXIS=0
+WIDTH=10
+# HEIGHT="'max-content'"
+# height:$HEIGHT
+STYLE="element{padding:4px4px4px0px;}listview{fixed-height:false;}"
+
+# Rofi command to pipe into, can add any options here
+rofi_command_add="-location $LOCATION -yoffset $Y_AXIS -xoffset $X_AXIS -theme-str window{width:"$WIDTH"em;}$STYLE"
+rofi_command="rofi $rofi_command_add -dmenu $* -p"
+
+function configure () {
+    case $1 in
+        "disconnect")
+            disconnect_extern_monitor
+            ;;
+        "extend_left")
+            configure_extern_monitor && configure_extern_monitor_location --left-of
+            ;;
+        "extend_right")
+            configure_extern_monitor && configure_extern_monitor_location --right-of
+            ;;
+        "duplicate")
+            configure_extern_monitor && configure_extern_monitor_location --same-as
+            ;;
+        *)
+            ;;
+    esac
+}
+
+show_menu() {
+    options="disconnect\nextend_left\nextend_right\nduplicate"
+
+    # echo "$options"
+    chosen="$(echo -e "$options" | $rofi_command "󰍹" )"
+
+    configure $chosen
+}
+
+
+case $1 in
+    "menu")
+        show_menu
+        ;;
+    *)
+        configure $1
+        ;;
+esac

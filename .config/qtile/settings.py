@@ -30,7 +30,8 @@ alt = "mod1"
 # Programs
 text_editor = "code"
 terminal = guess_terminal()  # 'alacritty'
-webbrowser = "firefox"
+# webbrowser = "firefox"
+webbrowser = "floorp"
 file_explorer = "thunar"
 
 

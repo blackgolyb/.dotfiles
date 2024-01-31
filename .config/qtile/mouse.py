@@ -1,14 +1,17 @@
 from libqtile.config import Click, Drag
 from libqtile.lazy import lazy
 
-from settings import *
+
+from services.floating_window_utils import set_position_floating_with_sticking
+from settings import mod
 
 
 default_mouse = [
     Drag(
         [mod],
         "Button1",
-        lazy.window.set_position_floating(),
+        lazy.function(set_position_floating_with_sticking),
+        # lazy.window.set_position_floating,
         start=lazy.window.get_position(),
     ),
     Drag(

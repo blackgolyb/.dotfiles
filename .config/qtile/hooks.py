@@ -22,7 +22,7 @@ def init_hooks(
         if DEBUG:
             return
         # global main_bar
-        main_bar.window.window.set_property("QTILE_BAR", 1, "CARDINAL", 32)
+        # main_bar.window.window.set_property("QTILE_BAR", 1, "CARDINAL", 32)
 
         addition_process = ""
         if utils.is_process_run("picom"):

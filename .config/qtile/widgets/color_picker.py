@@ -42,12 +42,12 @@ class ColorPickerDropper(base._TextBox):
         logger.warning(f"{self.script_path=}")
         try:
             result = subprocess.run(
-                ["bash", self.script_path],
+                ["bash", self.script_path, "&"],
                 capture_output=True,
                 text=True,
             )
         except Exception as e:
-            logger.warning(f"{e=}")
+            logger.warning(f"_pick_color {e=}")
         logger.warning("end pick")
         result = result.stdout.replace("\n", "")
         logger.warning(result)

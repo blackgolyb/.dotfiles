@@ -48,6 +48,8 @@ second_bar = bar.Bar(
     # size=30,
 )
 
+# main_bar = None
+# second_bar = None
 
 def init_bars(bar, bar_orientation="top"):
     bars = utils.configure_bars(outer_gaps, group_gaps, bar)

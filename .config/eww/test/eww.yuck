@@ -1,0 +1,162 @@
+(deflisten workspaces_data "python ./workspaces.py")
+
+;; Time
+(defpoll HOUR :interval "5s" 'date +"%H"')
+(defpoll MIN :interval "5s" 'date +"%M"')
+(defvar battery_icons_path "./battery_icons")
+(defpoll volume_poll :interval "1s" "scripts/volume_control get")
+(defpoll keyboard_layout_data :interval "1s" "setxkbmap -query | grep 'layout' | awk '{print $2}'")
+; (defpoll MER :interval "5s" 'date +"%p"')
+; (defpoll DAY :interval "5s" 'date +"%A"')
+
+(defwidget workspace [label is_active]
+    (button :onclick "rofi" :class "workspace ${is_active? 'active' : ''}"
+        (label :class "workspace__label" :markup label)
+    )
+)
+
+(defwidget workspaces []
+    (box :halign "start" :class "workspaces" :orientation "h" :spacing 5 :space-evenly "false"
+        (for workspace_data in workspaces_data
+            (workspace :label {workspace_data.label} :is_active {workspace_data.is_active})
+        )
+    )
+)
+
+(defwidget launcher []
+    (button :onclick "" :class "menu" "")
+)
+
+(defwidget date_time []
+    (box
+        (button :onclick "${EWW_CMD} open calendar_popup --toggle" "")
+        (label :text "${HOUR}:${MIN}" :class "content")
+    )
+)
+
+(defwidget power_menu []
+    (button :onclick "" :class "power_menu" "")
+)
+
+(defwidget volume []
+    (box
+        (label
+            :text {
+                volume_poll == 0?
+                    "󰝟"
+                :
+                    volume_poll <= 33?
+                        ""
+                    :
+                        volume_poll <= 66?
+                            "󰖀" 
+                        :
+                            "󰕾"
+            }
+            :class "volume_icon"
+        )
+        (label :text volume_poll :class "volume")
+    )
+)
+
+(defwidget battery_icon [capacity status]
+    (image
+        :path {
+            status == "Charging"?
+                "${battery_icons_path}/battery-${(capacity - capacity%100)/100}${(capacity - capacity%10)%100/10}0-charging.svg"
+            :
+                "${battery_icons_path}/battery-${(capacity - capacity%100)/100}${(capacity - capacity%10)%100/10}0.svg"
+        }
+    )
+)
+
+(defwidget battery [battery_name]
+    (box
+        (battery_icon
+            :capacity {EWW_BATTERY[battery_name].capacity}
+            :status {EWW_BATTERY[battery_name].status}
+        )
+        (label :text "${EWW_BATTERY[battery_name].capacity}%")
+    )
+)
+
+(defwidget batterys []
+    (box
+        (battery :battery_name "BAT0")
+        (battery :battery_name "BAT1")
+    )
+)
+
+(defwidget keyboard_layout []
+    (label :text keyboard_layout_data)
+)
+
+(defvar picked_color false)
+(defwidget color_picker []
+    (box
+        (eventbox
+            :timeout "3000"
+            ; :onclick "${EWW_CMD} update picked_color=`xcolor -S 6 -P 255 &` &"
+            ; :onclick "${EWW_CMD} update picked_color=`scripts/pick_color` &"
+            :onclick "xcolor &"
+            ; :onclick "python color_picker.py '${EWW_CMD}' &"
+            ; :onhover "alacritty &"
+            ""
+        )
+        (label :text {picked_color != false? "" : ""} :style "color: ${picked_color != false? picked_color : '#ffffff'}")
+        
+    )
+    ; (revealer
+    ;     :transition "slideright"
+    ;     :reveal true
+        
+    ; )
+    ; (color-chooser)
+)
+
+(defwidget bar []
+    (box :class "bar"
+        (box :class "bar__left-content" :halign "start" :spacing 25 :space-evenly false
+            (launcher)
+            (workspaces)
+        )
+        (box :class "bar__right-content" :halign "end" :spacing 25 :space-evenly false
+            (color_picker)
+            (volume)
+            (keyboard_layout)
+            (batterys)
+            (date_time)
+            (power_menu)
+        )
+    )
+)
+
+(defwindow bar
+    :monitor 0
+    :geometry (geometry
+        :x "0"
+        :y "0"
+        :width "100%"
+        :height "20px"
+        :anchor "top center"
+    )
+    :stacking "fg"
+    :reserve (struts :distance "26px" :side "top")
+    :windowtype "dock"
+    :wm-ignore false
+
+    (bar)
+)
+
+(defwindow calendar_popup
+    :monitor 0
+    :geometry (geometry
+        :x "0"
+        :y "40px"
+        :anchor "top right"
+    )
+    :stacking "overlay"
+    :exclusive "false"
+
+    (calendar)
+)

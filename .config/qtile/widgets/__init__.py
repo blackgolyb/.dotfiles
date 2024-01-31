@@ -13,6 +13,7 @@ from .multi_monitor import MultiMonitor
 from .color_picker import ColorPicker, ColorPickerDropper, ColorPickerPalette
 from .keyboard_layout import KeyboardLayout
 from .yt_music import YTMusicWidget
+from .bluetooth import Bluetooth
 from themes import color_theme
 
 
@@ -146,6 +147,11 @@ kb_layout_widget = widget.KeyboardLayout(
     configured_keyboards=keyboard_layouts, update_interval=1, padding=0
 )
 
+bluetooth = Bluetooth(
+    icon="",
+    mouse_callbacks={"Button1": lazy.spawn(rofi_bluetooth_menu)},
+)
+
 
 default_widgets = [
     # Menu
@@ -231,10 +237,7 @@ default_widgets = [
             ),
             widget.Spacer(length=6),
             # Bluetooth
-            widget.TextBox(
-                text="",
-                mouse_callbacks={"Button1": lazy.spawn(rofi_bluetooth_menu)},
-            ),
+            bluetooth,
             widget.Spacer(length=8),
             multi_monitor_widget,
             widget.Spacer(length=15),
