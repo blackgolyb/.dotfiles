@@ -5,7 +5,7 @@
 (defpoll MIN :interval "5s" 'date +"%M"')
 (defvar battery_icons_path "./battery_icons")
 (defpoll volume_poll :interval "1s" "scripts/volume_control get")
-(defpoll keyboard_layout_data :interval "1s" "setxkbmap -query | grep 'layout' | awk '{print $2}'")
+(defpoll keyboard_layout_data :interval "1s" "setxkbmap -query | grep 'layout' | awk '{print toupper($2)}'")
 ; (defpoll MER :interval "5s" 'date +"%p"')
 ; (defpoll DAY :interval "5s" 'date +"%A"')
 
@@ -29,6 +29,7 @@
 
 (defwidget date_time []
     (box
+        :spacing 0
         (button :onclick "${EWW_CMD} open calendar_popup --toggle" "")
         (label :text "${HOUR}:${MIN}" :class "content")
     )
@@ -40,6 +41,7 @@
 
 (defwidget volume []
     (box
+        :spacing 5
         (label
             :text {
                 volume_poll == 0?
@@ -72,6 +74,7 @@
 
 (defwidget battery [battery_name]
     (box
+        :spacing 0
         (battery_icon
             :capacity {EWW_BATTERY[battery_name].capacity}
             :status {EWW_BATTERY[battery_name].status}
@@ -82,6 +85,7 @@
 
 (defwidget batterys []
     (box
+        :spacing 5
         (battery :battery_name "BAT0")
         (battery :battery_name "BAT1")
     )
@@ -116,12 +120,13 @@
 
 (defwidget bar []
     (box :class "bar"
-        (box :class "bar__left-content" :halign "start" :spacing 25 :space-evenly false
+        (box :class "bar__left-content" :halign "start" :spacing 15 :space-evenly false
             (launcher)
             (workspaces)
         )
-        (box :class "bar__right-content" :halign "end" :spacing 25 :space-evenly false
-            (color_picker)
+        (box :class "bar__right-content" :halign "end" :spacing 15 :space-evenly false
+            ; (color_picker)
+            (systray :icon-size 18)
             (volume)
             (keyboard_layout)
             (batterys)

@@ -3,7 +3,7 @@ from libqtile.widget import base
 from libqtile.log_utils import logger
 from libqtile.widget import Systray
 
-# from libqtile.command.base import expose_command
+from libqtile.command.base import expose_command
 
 
 class WidgetGroup(base._Widget):
@@ -229,7 +229,7 @@ class WidgetBox(base._Widget):
 
         self.drawer.draw(offsetx=self.offsetx, offsety=self.offsety, width=self.width)
 
-    # @expose_command
+    @expose_command
     def cmd_toggle(self):
         """Toggle box state"""
         self.box_is_open = not self.box_is_open

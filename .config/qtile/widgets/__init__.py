@@ -1,6 +1,7 @@
 import subprocess
 
 from libqtile import widget
+from libqtile.widget.battery import BatteryState
 from libqtile.lazy import lazy
 from libqtile.log_utils import logger
 from qtile_extras import widget as qe_widget
@@ -27,6 +28,10 @@ class MyBattery(widget.Battery):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
+        self.state: BatteryState = None
+        self.state_change_events = []
+        logger.error("Init")
+
         def get_prep__get_param(func):
             def _get_param(name):
                 try:
@@ -36,8 +41,28 @@ class MyBattery(widget.Battery):
                     return None
 
             return _get_param
-
+        self._battery_update_status = self._battery.update_status
         self._battery._get_param = get_prep__get_param(self._battery._get_param)
+        self._battery.update_status = self.update_status
+
+    def track_status_changed(self, status):
+        if self.state is None or status.state == self.state.state:
+            return
+
+        for event, callback in self.state_change_events:
+            if isinstance(event, tuple) and event == (self.state.state, status.state):
+                callback()
+            if isinstance(event, BatteryState) and event == status.state:
+                callback()
+
+    def add_event(self, event, callback):
+        self.state_change_events.append((event, callback))
+
+    def update_status(self):
+        state = self._battery_update_status()
+        self.track_status_changed(state)
+        self.state = state
+        return state
 
 
 # ВИДЖЕТЫ НА ПАНЕЛИ И ИХ ПАРАМЕТРЫ ------------------------------------------------
@@ -96,6 +121,22 @@ base_groupbox = widget.GroupBox(
     hide_unused=True,
 )
 
+bat1 = MyBattery(
+    battery=0,
+    padding=3,
+    format="{percent:2.0%}",
+    update_interval=1,
+    hide_threshold=True,
+)
+
+bat2 = MyBattery(
+    battery=1,
+    padding=3,
+    format="{percent:2.0%}",
+    update_interval=1,
+    hide_threshold=True,
+)
+
 battery_pack_widget = WidgetGroup(
     widgets=[
         widget.BatteryIcon(
@@ -105,13 +146,7 @@ battery_pack_widget = WidgetGroup(
             update_interval=5,
             scale=1,
         ),
-        MyBattery(
-            battery=0,
-            padding=3,
-            format="{percent:2.0%}",
-            update_interval=5,
-            hide_threshold=True,
-        ),
+        bat1,
         widget.Spacer(length=5),
         widget.BatteryIcon(
             theme_path=str(resources_path / "battery_icons"),
@@ -120,13 +155,7 @@ battery_pack_widget = WidgetGroup(
             update_interval=5,
             scale=1,
         ),
-        MyBattery(
-            battery=1,
-            padding=3,
-            format="{percent:2.0%}",
-            update_interval=5,
-            hide_threshold=True,
-        ),
+        bat2,
     ]
 )
 
@@ -206,6 +235,21 @@ default_widgets = [
     widget.Spacer(),
     # Трэй, не работает в вялом, нужно будет юзать widget.StatusNotifier
     widget.Systray(),
+    # widget.Spacer(length=15),
+    # WidgetBox(
+    #     text_closed="  ",
+    #     text_open="  ",
+    #     padding=0,
+    #     widgets=[
+    #         widget.TextBox(text="|"),
+    #         widget.WindowTabs(
+    #             # parse_text=lambda x: x.split()[0],
+    #             # scroll=True,
+    #         ),
+    #         widget.TextBox(text="|"),
+    #         widget.Spacer(length=8),
+    #     ],
+    # ),
     widget.Spacer(length=15),
     WidgetBox(
         text_closed="  ",

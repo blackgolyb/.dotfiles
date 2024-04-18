@@ -114,6 +114,9 @@ bindkey '^H' backward-kill-word
 bindkey '5~' kill-word
 alias dotfiles='/usr/bin/git -C $HOME/dotfiles/ --work-tree=$HOME'
 alias tlpui='cd ~/TLPUI && python3 -m tlpui'
+alias ls='exa'
+alias c='code .'
+eval "$(zoxide init zsh)"
 
 # colorscript -r
 typeset -g POWERLEVEL9K_INSTANT_PROMPT=quiet

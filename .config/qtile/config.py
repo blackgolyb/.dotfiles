@@ -1,6 +1,8 @@
 from libqtile import layout
 from libqtile.config import Key, Match
 from libqtile.lazy import lazy
+from libqtile.widget.battery import BatteryState
+from playsound import playsound
 
 from settings import is_bar_rounded, resources_path, mod
 from services.sticky_window_manager import StickyWindowManager
@@ -11,7 +13,7 @@ from groups import default_groups, groups_keys
 from screens import default_screens
 from bars import main_bar
 from mouse import default_mouse
-from widgets import widget_defaults
+from widgets import widget_defaults, bat1, bat2
 import hooks
 
 import locale
@@ -62,6 +64,15 @@ floating_layout = layout.Floating(
     ],
 )
 
+bat1.add_event(
+    BatteryState.CHARGING,
+    lambda: playsound(str(resources_path / "sounds" / "poweron.mp3")),
+)
+bat2.add_event(
+    BatteryState.CHARGING,
+    lambda: playsound(str(resources_path / "sounds" / "poweron.mp3")),
+)
+
 # Яхз
 dgroups_key_binder = None
 
@@ -107,7 +118,8 @@ layouts = default_layouts
 screens = default_screens
 
 wallpaper_priority = [
-    ("10.png", 5),
+    ("8.jpg", 7),
+    ("10.png", 7),
 ]
 
 wallpaper_managers = [
