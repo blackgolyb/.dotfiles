@@ -117,6 +117,7 @@ alias tlpui='cd ~/TLPUI && python3 -m tlpui'
 alias ls='exa'
 alias c='code .'
 eval "$(zoxide init zsh)"
+eval "$(pyenv init -)"
 
 # colorscript -r
 typeset -g POWERLEVEL9K_INSTANT_PROMPT=quiet

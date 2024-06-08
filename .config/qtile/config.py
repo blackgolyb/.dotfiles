@@ -64,14 +64,14 @@ floating_layout = layout.Floating(
     ],
 )
 
-bat1.add_event(
-    BatteryState.CHARGING,
-    lambda: playsound(str(resources_path / "sounds" / "poweron.mp3")),
-)
-bat2.add_event(
-    BatteryState.CHARGING,
-    lambda: playsound(str(resources_path / "sounds" / "poweron.mp3")),
-)
+# bat1.add_event(
+#     BatteryState.CHARGING,
+#     lambda: playsound(str(resources_path / "sounds" / "poweron.mp3")),
+# )
+# bat2.add_event(
+#     BatteryState.CHARGING,
+#     lambda: playsound(str(resources_path / "sounds" / "poweron.mp3")),
+# )
 
 # Яхз
 dgroups_key_binder = None

@@ -201,7 +201,7 @@ default_widgets = [
             widget.TextBox(
                 text=" ",
                 mouse_callbacks={
-                    "Button1": lazy.spawn(f"{text_editor} {config_path / 'config.py'}")
+                    "Button1": lazy.spawn(f"{text_editor} {config_path}")
                 },
             ),
             widget.Spacer(length=5),
