@@ -116,6 +116,13 @@ alias dotfiles='/usr/bin/git -C $HOME/dotfiles/ --work-tree=$HOME'
 alias tlpui='cd ~/TLPUI && python3 -m tlpui'
 alias ls='exa'
 alias c='code .'
+alias p='poetry'
+alias pe='poetry shell' # pe -- python environment
+alias pa='poetry add'
+alias pi='poetry install'
+alias pt='poetry show --tree'
+alias pp='python -m poetry'
+alias py='python'
 eval "$(zoxide init zsh)"
 eval "$(pyenv init -)"
 
