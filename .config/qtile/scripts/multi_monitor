@@ -20,7 +20,8 @@ function disconnect_main_monitor() {
 }
 
 function set_primary_monitor() {
-   xrandr --output $1 --primary
+    echo $1 > /tmp/__WM__CURRENT_MONITOR__
+    xrandr --output $1 --primary
 }
 
 LOCATION=0
@@ -37,32 +38,6 @@ STYLE="element{padding:4px4px4px0px;}listview{fixed-height:false;}"
 rofi_command_add="-location $LOCATION -yoffset $Y_AXIS -xoffset $X_AXIS -theme-str window{width:"$WIDTH"em;}$STYLE"
 rofi_command="rofi $rofi_command_add -dmenu $* -p"
 
-
-
-function configure () {
-    case $1 in
-        "disconnect")
-            disconnect_extern_monitor
-            ;;
-        "extend_left")
-            configure_extern_monitor && configure_extern_monitor_location --left-of
-            ;;
-        "extend_right")
-            configure_extern_monitor && configure_extern_monitor_location --right-of
-            ;;
-        "only_extend")
-            disconnect_main_monitor
-            ;;
-        "duplicate")
-            configure_extern_monitor && configure_extern_monitor_location --same-as
-            ;;
-        "show_menu_primary")
-            show_menu_primary
-            ;;
-        *)
-            ;;
-    esac
-}
 
 function chose_primary () {
     case $1 in
@@ -85,13 +60,61 @@ function show_menu_primary() {
     chose_primary $chosen
 }
 
-function show_menu() {
-    options="disconnect\nextend_left\nextend_right\nonly_extend\nduplicate\nshow_menu_primary"
+
+
+function chose_location () {
+    case $1 in
+        "disconnect")
+            disconnect_extern_monitor
+            ;;
+        "extend_left")
+            configure_extern_monitor && configure_extern_monitor_location --left-of
+            ;;
+        "extend_right")
+            configure_extern_monitor && configure_extern_monitor_location --right-of
+            ;;
+        "only_extend")
+            disconnect_main_monitor
+            ;;
+        "duplicate")
+            configure_extern_monitor && configure_extern_monitor_location --same-as
+            ;;
+        *)
+            ;;
+    esac
+}
+
+function show_menu_location() {
+    options="disconnect\nextend_left\nextend_right\nonly_extend\nduplicate"
 
     chosen="$(echo -e "$options" | $rofi_command "󰍹" )"
 
-    configure $chosen
+    chose_location $chosen
 }
+
+
+
+function chose_menu () {
+    case $1 in
+        "Location_menu")
+            show_menu_location
+            ;;
+        "Priority_menu")
+            show_menu_primary
+            ;;
+        *)
+            ;;
+    esac
+}
+
+function show_menu() {
+    options="Location_menu\nPriority_menu"
+
+    chosen="$(echo -e "$options" | $rofi_command "󰍹" )"
+
+    chose_menu $chosen
+}
+
 
 
 case $1 in
@@ -99,6 +122,6 @@ case $1 in
         show_menu
         ;;
     *)
-        configure $1
+        chose_location $1
         ;;
 esac

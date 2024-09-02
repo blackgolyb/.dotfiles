@@ -61,8 +61,8 @@ class GroupCreator:
 
 def go_to_group(group: ScreenGroup):
     def f(qtile: libqtile.core.manager.Qtile):
-        qtile.cmd_to_screen(group.screen)
-        qtile.groups_map[group.name].cmd_toscreen()
+        qtile.to_screen(group.screen)
+        qtile.groups_map[group.name].toscreen()
         # qtile.groups[group.name].toscreen()
         # group.toscreen()
 
@@ -72,8 +72,8 @@ def go_to_group(group: ScreenGroup):
 def move_to_group(group: ScreenGroup):
     def f(qtile: libqtile.core.manager.Qtile):
         qtile.current_window.togroup(group.name)
-        qtile.cmd_to_screen(group.screen)
-        qtile.groups_map[group.name].cmd_toscreen()
+        qtile.to_screen(group.screen)
+        qtile.groups_map[group.name].toscreen()
 
     return f
 

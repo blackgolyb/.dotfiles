@@ -32,7 +32,6 @@ class WidgetGroup(base._Widget):
             self.qtile.register_widget(w)
             w._configure(self.qtile, self.bar)
             w.offsety = self.bar.border_width[0]
-
             w.offsetx = self.bar.width
             self.qtile.call_soon(w.draw)
 
@@ -42,27 +41,26 @@ class WidgetGroup(base._Widget):
     def show(self):
         index = self.bar.widgets.index(self) + 1
 
-        for widget in self.widgets[::-1]:
-            self.bar.widgets.insert(index, widget)
-            widget.drawer.enable()
+        for w in self.widgets[::-1]:
+            self.bar.widgets.insert(index, w)
+            w.drawer.enable()
 
-            if isinstance(widget, WidgetBox):
-                widget.show()
-            elif isinstance(widget, WidgetGroup):
-                widget.show()
+            if isinstance(w, WidgetBox):
+                w.show()
+            elif isinstance(w, WidgetGroup):
+                w.show()
 
     def hide(self):
-        for widget in self.widgets:
-            self.bar.widgets.remove(widget)
-            widget.drawer.disable()
+        for w in self.widgets:
+            self.bar.widgets.remove(w)
+            w.drawer.disable()
 
-            if isinstance(widget, WidgetBox):
-                widget.hide()
-            elif isinstance(widget, WidgetGroup):
-                widget.hide()
+            if isinstance(w, WidgetBox):
+                w.hide()
+            elif isinstance(w, WidgetGroup):
+                w.hide()
 
-    def draw(self):
-        ...
+    def draw(self): ...
 
     def calculate_length(self):
         return 0
@@ -169,8 +167,7 @@ class WidgetBox(base._Widget):
         self.box_is_open = False
         self.toggle_widgets()
 
-    def show(self):
-        ...
+    def show(self): ...
 
     def hide(self):
         if self.box_is_open:
@@ -238,6 +235,95 @@ class WidgetBox(base._Widget):
         self.bar.draw()
 
 
+class WidgetBoxTest(WidgetGroup):
+    """A widget to declutter your bar.
+
+    WidgetBox is a widget that hides widgets by default but shows them when
+    the box is opened.
+
+    Widgets that are hidden will still update etc. as if they were on the main
+    bar.
+
+    Button clicks are passed to widgets when they are visible so callbacks will
+    work.
+
+    Widgets in the box also remain accessible via command interfaces.
+
+    Widgets can only be added to the box via the configuration file. The widget
+    is configured by adding widgets to the "widgets" parameter as follows::
+
+        widget.WidgetBox(widgets=[
+            widget.TextBox(text="This widget is in the box"),
+            widget.Memory()
+            ]
+        ),
+    """
+
+    orientations = base.ORIENTATION_HORIZONTAL
+    defaults = [
+        (
+            "close_button_location",
+            "left",
+            "Location of close button when box open ('left' or 'right')",
+        ),
+        ("open_button_type", "Button1", "button type for open widget"),
+        ("widget_button", None, "Widget that trigger "),
+        ("widgets", list(), "A list of widgets to include in the box"),
+    ]  # type: list[tuple[str, Any, str]]
+
+    def __init__(self, widgets, **config):
+        group = WidgetGroup(widgets=widgets)
+        super().__init__([None, None], **config)
+        self.add_defaults(WidgetBoxTest.defaults)
+
+        if self.widget_button is None:
+            logger.warning("No widget_button provided. Defaulting to a Button widget")
+            self.widget_button = widget.TextBox(text="[toggle]")
+
+        self._add_interceptor_to_widget_button()
+        self.box_is_open = False
+
+        self.close_button_location: str
+        if self.close_button_location not in ["left", "right"]:
+            val = self.close_button_location
+            logger.warning("Invalid value for 'close_button_location': %s", val)
+            self.close_button_location = "left"
+            
+        self.button_idx = 0 if self.close_button_location == "left" else 1
+        self.widgets[self.button_idx] = self.widget_button
+        self.widgets[not self.button_idx] = group
+
+    def _add_interceptor_to_widget_button(self):
+        callback = self.widget_button.mouse_callbacks.get(
+            self.open_button_type, lambda *args, **kwargs: None
+        )
+
+        def wrapped_callback(*args, **kwargs):
+            self.cmd_toggle()
+            callback(*args, **kwargs)
+
+        self.widget_button.add_callbacks({self.open_button_type: wrapped_callback})
+        
+    def _configure(self, qtile, bar):
+        WidgetGroup._configure(self, qtile, bar)
+        # self.toggle_widgets(False)
+
+
+    def toggle_widgets(self, state):
+        if state:
+            self.widgets[not self.button_idx].show()
+        else:
+            self.widgets[not self.button_idx].hide()
+
+    @expose_command
+    def cmd_toggle(self):
+        """Toggle box state"""
+        self.box_is_open = not self.box_is_open
+        logger.warning(f"Toggle box state {self.box_is_open}")
+        self.toggle_widgets(self.box_is_open)
+        self.bar.draw()
+
+
 class Animation:
     update_time: float = 0.1
     max_iters_count: int = 100
@@ -289,8 +375,7 @@ class BaseWidgetTabGroup(WidgetGroup):
         self.widgets = self.tabs[0]
         self.show()
 
-    def switch_tab_frame(self, iteration: int, from_tab, to_tab):
-        ...
+    def switch_tab_frame(self, iteration: int, from_tab, to_tab): ...
 
     def switch_tab(self, tab_id):
         from_tab = self.widgets

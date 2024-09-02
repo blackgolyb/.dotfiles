@@ -7,7 +7,7 @@ from libqtile.log_utils import logger
 from qtile_extras import widget as qe_widget
 
 from settings import *
-from .base import WidgetGroup, WidgetBox
+from .base import WidgetGroup, WidgetBox, WidgetBoxTest
 from .volume import Volume
 from .brightness import Brightness
 from .multi_monitor import MultiMonitor
@@ -41,6 +41,7 @@ class MyBattery(widget.Battery):
                     return None
 
             return _get_param
+
         self._battery_update_status = self._battery.update_status
         self._battery._get_param = get_prep__get_param(self._battery._get_param)
         self._battery.update_status = self.update_status
@@ -181,49 +182,55 @@ bluetooth = Bluetooth(
     mouse_callbacks={"Button1": lazy.spawn(rofi_bluetooth_menu)},
 )
 
+main_menu = WidgetBox(
+    text_open="",
+    text_closed="",
+    padding=3,
+    widgets=[
+        widget.TextBox(text="|"),
+        widget.Spacer(length=5),
+        # Запуск bpython
+        widget.TextBox(
+            text=" ",
+            mouse_callbacks={"Button1": lazy.spawn(f"{terminal} -e bpython")},
+        ),
+        widget.Spacer(length=5),
+        # Открытие конфига qtile в редакторе кода
+        widget.TextBox(
+            text=" ",
+            mouse_callbacks={"Button1": lazy.spawn(f"{text_editor} {config_path}")},
+        ),
+        widget.Spacer(length=5),
+        qe_widget.TextBox(
+            text="SEMPAI",
+            margin=6,
+            padding=3,
+            mouse_callbacks={
+                "Button1": lazy.spawn(f"{webbrowser} https://anifap.top/")
+            },
+            **decor,
+        ),
+        widget.Image(
+            filename=str(resources_path / "menu_images" / "hent.jpg"),
+            mouse_callbacks={
+                "Button1": lazy.spawn(f"{webbrowser} https://anifap.top/")
+            },
+        ),
+        widget.Spacer(length=5),
+        widget.TextBox(text="|"),
+    ],
+)
+
 
 default_widgets = [
     # Menu
-    WidgetBox(
-        text_closed="  ",
-        text_open="  ",
-        padding=3,
-        widgets=[
-            widget.TextBox(text="|"),
-            widget.Spacer(length=5),
-            # Запуск bpython
-            widget.TextBox(
-                text=" ",
-                mouse_callbacks={"Button1": lazy.spawn(f"{terminal} -e bpython")},
-            ),
-            widget.Spacer(length=5),
-            # Открытие конфига qtile в редакторе кода
-            widget.TextBox(
-                text=" ",
-                mouse_callbacks={
-                    "Button1": lazy.spawn(f"{text_editor} {config_path}")
-                },
-            ),
-            widget.Spacer(length=5),
-            qe_widget.TextBox(
-                text="SEMPAI",
-                margin=6,
-                padding=3,
-                mouse_callbacks={
-                    "Button1": lazy.spawn(f"{webbrowser} https://anifap.top/")
-                },
-                **decor,
-            ),
-            widget.Image(
-                filename=str(resources_path / "menu_images/1.jpg"),
-                mouse_callbacks={
-                    "Button1": lazy.spawn(f"{webbrowser} https://anifap.top/")
-                },
-            ),
-            widget.Spacer(length=5),
-            widget.TextBox(text="|"),
-        ],
+    widget.Spacer(length=20),
+    widget.Image(
+        filename=str(resources_path / "menu_images" / "logo.png"),
+        mouse_callbacks={"Button1": main_menu.cmd_toggle},
+        margin=4,
     ),
+    main_menu,
     widget.Spacer(length=20),
     # Текущий макет
     # widget.CurrentLayout(),
@@ -323,5 +330,6 @@ default_widgets = [
     #     ],
     # ),
     # Кнопка выключения
-    widget.QuickExit(default_text="", padding=6),
+    widget.QuickExit(default_text=""),
+    widget.Spacer(length=10),
 ]

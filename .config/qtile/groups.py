@@ -34,7 +34,6 @@ default_groups = [
         ],
     ),
     create_group("0", "", screen=1, matches=[Match(wm_class="telegram-desktop")]),
-    create_group("w", "", screen=1),
 ]
 
 groups_keys: list[Key] = []

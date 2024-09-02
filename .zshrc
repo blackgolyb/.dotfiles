@@ -123,6 +123,8 @@ alias pi='poetry install'
 alias pt='poetry show --tree'
 alias pp='python -m poetry'
 alias py='python'
+alias alembic='python -m alembic'
+alias tttg='make -f /home/blackgolyb/Documents/tic_tac_toe_api/MakefileDocker serveo_restart'
 eval "$(zoxide init zsh)"
 eval "$(pyenv init -)"
 

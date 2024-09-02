@@ -66,6 +66,8 @@ def localize_keys(keys, languages):
     keys.extend(extended_keys)
 
 
+wp = (scripts_path / "video_wallpaper").resolve()
+
 default_keys = [
     # Управление фокусом
     Key([mod], "left", lazy.layout.left(), desc="Move focus to left"),  # Фокус влево
@@ -74,9 +76,6 @@ default_keys = [
     ),  # Фокус вправо
     Key([mod], "down", lazy.layout.down(), desc="Move focus down"),  # Фокус вниз
     Key([mod], "up", lazy.layout.up(), desc="Move focus up"),  # Фокус вверх
-    Key(
-        [mod], "space", lazy.layout.next(), desc="Move window focus to other window"
-    ),  # Переключить фокус
     # Перемещение окон
     Key(
         [mod, "shift"],
@@ -140,6 +139,9 @@ default_keys = [
     Key([mod], "e", lazy.spawn(file_explorer)),
     Key([mod], "t", lazy.spawn("telegram-desktop")),
     Key([mod], "space", lazy.spawn("rofi -show drun")),
+    Key(
+        [mod], "v", lazy.spawn('rofi -modi "clipboard:greenclip print" -show clipboard')
+    ),
     Key([mod], "l", lazy.spawn("betterlockscreen --lock")),
     # Раскладка клавиатуры
     Key(
@@ -151,6 +153,7 @@ default_keys = [
     # Скриешоты
     # Нужно установить gnome-screenshot
     Key([], "Print", lazy.spawn("flameshot gui")),
+    Key([mod], "w", lazy.spawn(f"{wp} start")),
     Key(
         [mod],
         "s",
@@ -170,6 +173,6 @@ default_keys = [
     Key([], "XF86MonBrightnessUp", lazy.function(brightness_widget.up)),
 ]
 
-langs = keyboard_layouts.copy()
-langs.remove("us")
+# langs = keyboard_layouts.copy()
+# langs.remove("us")
 # localize_keys(default_keys, langs)

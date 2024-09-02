@@ -17,8 +17,12 @@ $bar-bg: rgba($color: #2e3440, $alpha: 1);
     .workspace{
         padding: 0 6px;
 
-        &.active{
+        &.active {
             border-bottom: 1px solid #fff;
+        }
+
+        &.unused {
+            color: #777;
         }
     }
 }
