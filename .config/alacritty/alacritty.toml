@@ -66,6 +66,7 @@ program = "/bin/zsh"
 
 [window]
 opacity = 0.85
+# opacity = 1
 
 [window.padding]
 x = 15

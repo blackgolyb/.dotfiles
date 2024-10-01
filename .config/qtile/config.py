@@ -19,7 +19,7 @@ import hooks
 import locale
 
 
-locale.setlocale(locale.LC_TIME, "ru_RU.UTF-8")
+locale.setlocale(locale.LC_TIME, "uk_UA.UTF-8")
 
 
 # Настройка WM

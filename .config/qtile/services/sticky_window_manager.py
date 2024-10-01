@@ -102,14 +102,14 @@ class StickyWindowManager:
             for window in self.window_list:
                 if self._check_translate_available(window, current_group_name):
                     window.togroup(qtile.current_group.name)
-                    window.cmd_bring_to_front()
+                    window.bring_to_front()
 
         @hook.subscribe.client_managed
         def _display_pined_window_above_other(
             managed_window: libqtile.backend.base.Window,
         ) -> typing.NoReturn:
             for window in self.window_list:
-                window.cmd_bring_to_front()
+                window.bring_to_front()
 
         @hook.subscribe.client_killed
         def _unpin_window_when_its_kill(
@@ -129,4 +129,4 @@ class StickyWindowManager:
                     break
 
             for window in self.window_list:
-                window.cmd_bring_to_front()
+                window.bring_to_front()

@@ -21,7 +21,7 @@ class MultiMonitor(base.InLoopPollText):
         ),
         (
             "script_path",
-            str(settings.scripts_path / "multi_monitor"),
+            settings.scripts_path / "multi_monitor",
             "Path to brightness control script",
         ),
         (
@@ -78,7 +78,7 @@ class MultiMonitor(base.InLoopPollText):
 
     def call_script(self, argument):
         subprocess.call([f"bash {self.script_path} {argument}"], shell=True)
-        qtile.cmd_reload_config()
+        qtile.reload_config()
 
     def open_rofi_menu(self, qtile):
         self.call_script("menu")

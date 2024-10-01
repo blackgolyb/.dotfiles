@@ -31,7 +31,7 @@ alt = "mod1"
 text_editor = "code"
 terminal = guess_terminal()  # 'alacritty'
 # webbrowser = "firefox"
-webbrowser = "floorp"
+webbrowser = "firefox"
 file_explorer = "thunar"
 
 
