@@ -29,9 +29,9 @@ alt = "mod1"
 
 # Programs
 text_editor = "code"
-terminal = guess_terminal()  # 'alacritty'
+terminal = "wezterm"# guess_terminal()  # 'alacritty'
 # webbrowser = "firefox"
-webbrowser = "firefox"
+webbrowser = "zen-browser"
 file_explorer = "thunar"
 
 

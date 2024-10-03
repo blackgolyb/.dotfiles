@@ -15,6 +15,7 @@ default_groups = [
         matches=[
             Match(wm_class="firefox"),
             Match(wm_class="floorp"),
+            Match(wm_class="zen-alpha"),
         ],
     ),
     create_group("2", "", screen=0),
