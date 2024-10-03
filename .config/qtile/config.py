@@ -120,6 +120,7 @@ screens = default_screens
 wallpaper_priority = [
     ("8.jpg", 7),
     ("10.png", 7),
+    ("13.jpeg", 14),
 ]
 
 wallpaper_managers = [
