@@ -46,8 +46,4 @@ List of dependencies:
 
 ## Examples
 
-![ex1](./Public/1.png)
-
-![ex2](./Public/2.png)
-
-![ex with glava](./Public/3.png)
+![ex1](./public/1.png)
