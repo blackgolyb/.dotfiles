@@ -225,10 +225,12 @@ class YTMusicWidget(YTMusicAPIInitMixin, WidgetBox):
         (
             "yt_music_on_icon",
             "󰝚 ",
+            ""
         ),
         (
             "yt_music_off_icon",
             "󰝛 ",
+            ""
         ),
     ]
 
