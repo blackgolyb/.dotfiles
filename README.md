@@ -24,6 +24,11 @@ List of my widgets:
 
     -   ColorPickerPalette - widget for displaying picked color.
 
+## Install
+```sh
+curl -f https://raw.githubusercontent.com/blackgolyb/.dotfiles/refs/heads/main/install.sh | sh
+```
+
 ## Dependencies
 
 List of dependencies:
@@ -41,8 +46,8 @@ List of dependencies:
 
 ## Examples
 
-![ex1](./Public/config_images/1.png)
+![ex1](./Public/1.png)
 
-![ex2](./Public/config_images/2.png)
+![ex2](./Public/2.png)
 
-![ex with glava](./Public/config_images/3.png)
+![ex with glava](./Public/3.png)
