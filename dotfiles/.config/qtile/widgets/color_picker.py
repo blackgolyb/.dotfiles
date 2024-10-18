@@ -1,9 +1,7 @@
 import subprocess
 
 from libqtile.widget import base
-from libqtile.lazy import lazy
 from libqtile.log_utils import logger
-import pyperclip
 
 import settings
 from .base import WidgetGroup
@@ -38,21 +36,21 @@ class ColorPickerDropper(base._TextBox):
         self.pick_color_callbacks = Callbacks()
 
     def _pick_color(self):
-        logger.warning("start pick")
-        logger.warning(f"{self.script_path=}")
         try:
-            result = subprocess.run(
+            output = subprocess.run(
                 ["bash", self.script_path, "&"],
                 capture_output=True,
                 text=True,
             )
         except Exception as e:
             logger.warning(f"_pick_color {e=}")
-        logger.warning("end pick")
-        result = result.stdout.replace("\n", "")
-        logger.warning(result)
-        copy_to_clipboard(result)
-        self.pick_color_callbacks.send(result)
+            return
+
+        color = output.stdout.replace("\n", "")
+        if not color:
+            return
+
+        self.pick_color_callbacks.send(color)
 
     def pick_color(self, qtile):
         self._pick_color()
@@ -70,7 +68,7 @@ class ColorPickerPalette(base._TextBox):
         ),
     ]
 
-    def __init__(self, picker_widget: ColorPickerDropper, **config):
+    def __init__(self, **config):
         base._TextBox.__init__(self, **config)
         self.add_defaults(ColorPickerPalette.defaults)
         self.add_callbacks(
@@ -81,11 +79,7 @@ class ColorPickerPalette(base._TextBox):
         )
 
         self.text = self.empty_icon
-
         self._picked_color = ""
-
-        self.picker_widget = picker_widget
-        self.picker_widget.pick_color_callbacks.add(self.update_color)
 
     def copy_color(self):
         copy_to_clipboard(self._picked_color)
@@ -116,7 +110,9 @@ class ColorPicker(WidgetGroup):
         palette_config.update(default_palette_config)
 
         self.dropper = ColorPickerDropper(**dropper_config)
-        self.palette = ColorPickerPalette(self.dropper, **palette_config)
+        self.palette = ColorPickerPalette(**palette_config)
+        self.dropper.pick_color_callbacks.add(copy_to_clipboard)
+        self.dropper.pick_color_callbacks.add(self.palette.update_color)
 
         widgets = [
             self.dropper,

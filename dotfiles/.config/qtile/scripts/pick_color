@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # dunstify "pick color 1"
+sleep 0.2
 color=$( xcolor -S 6 -P 255 )
 # dunstify "pick color 2 ${color} c"
 color=${color//$'\n'/}
