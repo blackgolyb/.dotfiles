@@ -112,10 +112,10 @@ source $ZSH/oh-my-zsh.sh
 # My settings
 bindkey '^H' backward-kill-word
 bindkey '5~' kill-word
-alias dotfiles='/usr/bin/git -C $HOME/dotfiles/ --work-tree=$HOME'
-alias tlpui='cd ~/TLPUI && python3 -m tlpui'
+alias dotfiles='sh $HOME/.dotfiles/scripts/dotfiles.sh'
 alias ls='exa'
-alias c='code .'
+alias cd='z'
+alias c='zed .'
 alias p='poetry'
 alias pe='poetry shell' # pe -- python environment
 alias pa='poetry add'
