@@ -128,7 +128,6 @@ alias tttg='make -f /home/blackgolyb/Documents/tic_tac_toe_api/MakefileDocker se
 eval "$(zoxide init zsh)"
 eval "$(pyenv init -)"
 # eval "$(ssh-agent -s)"
-# ssh-add ~/autocode
 
 # colorscript -r
 typeset -g POWERLEVEL9K_INSTANT_PROMPT=quiet
