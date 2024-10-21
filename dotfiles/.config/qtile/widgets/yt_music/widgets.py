@@ -6,7 +6,7 @@ from libqtile import hook
 
 # from pathlib import Path
 
-from .api import YTMusicAPI, yt_music_api
+from .api import YTMusicAPI
 from widgets.base import WidgetBox, WidgetGroup, HoveringWidgetTabGroup
 
 
@@ -16,16 +16,43 @@ class YTMusicAPIInitMixin:
     def init_yt_music_api_hooks(self, api):
         @hook.subscribe.shutdown
         def on_shutdown_kill_api():
-            api.kill()
+            api.stop()
 
         # @hook.subscribe.startup
         # def on_reconfigured_kill_api():
         #     api.kill()
 
     def _configure(self, qtile, bar):
-        self.yt_music_api.start_up()
+        self.yt_music_api.start()
         self.init_yt_music_api_hooks(self.yt_music_api)
         super()._configure(qtile, bar)
+
+
+def animate_line(title: str, title_fmt: str, max_chars: int):
+    if len(title) <= max_chars:
+        # Будем раздавать название песни без анимации
+        while True:
+            yield title
+
+    # В ином случае будем раздавать уже с анимацией прокрутки
+    target_text = title_fmt.format(title)
+    anim_id = 0
+
+    while True:
+        start_char = anim_id
+        end_char = anim_id + max_chars
+
+        # Часть которая попадает до конца названия
+        first_part = target_text[start_char : min(end_char, len(target_text))]
+        # Часть которая попадает после конца названия
+        second_part = ""
+        if end_char >= len(target_text):
+            second_part = target_text[: max(0, end_char % len(target_text))]
+
+        current_animated_text = first_part + second_part
+
+        yield current_animated_text
+        anim_id = (anim_id + 1) % len(target_text)
 
 
 class YTMusicTitleWidget(YTMusicAPIInitMixin, base.InLoopPollText):
@@ -49,17 +76,13 @@ class YTMusicTitleWidget(YTMusicAPIInitMixin, base.InLoopPollText):
             "",
         ),
         (
-            "song_info_file",
-            "/tmp/yt_music_song_info.json",
-            "",
-        ),
-        (
             "animate_format",
-            "{}  " "",
+            "{}  ",
+            "",
         ),
     ]
 
-    def __init__(self, **config):
+    def __init__(self, api: YTMusicAPI | None = None, animate=None, **config):
         base.InLoopPollText.__init__(self, default_text=" ", **config)
         self.add_defaults(YTMusicTitleWidget.defaults)
 
@@ -69,64 +92,30 @@ class YTMusicTitleWidget(YTMusicAPIInitMixin, base.InLoopPollText):
                 self.max_chars = YTMusicTitleWidget.defaults[i][1]
                 break
 
-        self._is_youtube_music_run = False
-        self.yt_music_api = yt_music_api
+        self.yt_music_api = api or YTMusicAPI()
+        self.animate = animate or animate_line
+        self.song_title = ""
 
     def _configure(self, qtile, bar):
         super()._configure(qtile, bar)
 
-        self._is_youtube_music_run = (
-            self.yt_music_api.process_observer.check_is_process_run()
-        )
-        self.update_song()
-
         self.yt_music_api.info_callbacks.add(self.update_song)
-        self.yt_music_api.process_observer.start_callbacks.add(self.on_start_yt_music)
-        self.yt_music_api.process_observer.stop_callbacks.add(self.on_stop_yt_music)
-
-    def on_start_yt_music(self):
-        self._is_youtube_music_run = True
-
-    def on_stop_yt_music(self):
-        self._is_youtube_music_run = False
-
-    def update_title(self, song_info):
-        self.song_title = song_info["title"]
+        self.update_song()
 
     def update_song(self, song_info=None):
         if song_info is None:
-            song_info = {"title": self.app_close_msg}
-        self.update_title(song_info)
-        self.animator = self.animate()
+            title = self.app_close_msg
+        else:
+            title = song_info.title
 
-    def animate(self):
-        if len(self.song_title) <= self.max_chars:
-            # Будем раздавать название песни без анимации
-            while True:
-                yield self.song_title
+        if self.song_title == title:
+            return
 
-        # В ином случае будем раздавать уже с анимацией прокрутки
-        target_text = self.animate_format.format(self.song_title)
-        self._amin_id = 0
-
-        while True:
-            start_char = self._amin_id
-            end_char = self._amin_id + self.max_chars
-
-            # Часть которая попадает до конца названия
-            first_part = target_text[start_char : min(end_char, len(target_text))]
-            # Часть которая попадает после конца названия
-            second_part = ""
-            if end_char >= len(target_text):
-                second_part = target_text[: max(0, end_char % len(target_text))]
-
-            current_animated_text = first_part + second_part
-
-            yield current_animated_text
-            self._amin_id = (self._amin_id + 1) % len(target_text)
+        self.song_title = title
+        self.animator = self.animate(self.song_title, self.animate_format, self.max_chars)
 
     def poll(self):
-        if self._is_youtube_music_run:
+        if self.yt_music_api.is_alive():
             result = next(self.animator)
         else:
             result = self.app_close_msg
@@ -135,24 +124,30 @@ class YTMusicTitleWidget(YTMusicAPIInitMixin, base.InLoopPollText):
 
 
 class YTMusicPausePlayWidget(YTMusicAPIInitMixin, base._TextBox):
-    def __init__(self, **config):
+    def __init__(self, api: YTMusicAPI | None = None, **config):
         base._TextBox.__init__(self, **config)
 
         self.add_callbacks({"Button1": lazy.function(self.toggle_pause_play_qtile)})
 
-        self.yt_music_api = yt_music_api
+        self.yt_music_api = api or YTMusicAPI()
+        self.is_paused = True
 
     def _configure(self, qtile, bar):
         super()._configure(qtile, bar)
 
-        self.update_state()
-
         self.yt_music_api.info_callbacks.add(self.update_state)
+        self.update_state()
 
     def update_state(self, song_info=None):
         if song_info is None:
-            song_info = {"isPaused": False}
-        self.is_paused = song_info["isPaused"]
+            is_paused = False
+        else:
+            is_paused = song_info.is_paused
+
+        if self.is_paused == is_paused:
+            return
+
+        self.is_paused = is_paused
         self.update_label()
 
     def update_label(self):
@@ -171,44 +166,37 @@ class YTMusicPausePlayWidget(YTMusicAPIInitMixin, base._TextBox):
 
 
 class YTMusicNextSongWidget(base._TextBox):
-    def __init__(self, **config):
+    def __init__(self, api: YTMusicAPI | None = None, **config):
         base._TextBox.__init__(self, **config)
 
-        self.add_callbacks({"Button1": lazy.function(self.next_song_qtile)})
+        self.add_callbacks({"Button1": lazy.function(self.next_song)})
 
         self.text = "󰒭"
+        self.yt_music_api = api or YTMusicAPI()
 
-        self.yt_music_api = yt_music_api
-
-    def next_song(self):
+    def next_song(self, qtile=None):
         self.yt_music_api.next_song()
-
-    def next_song_qtile(self, qtile):
-        self.next_song()
 
 
 class YTMusicPreviousSongWidget(base._TextBox):
-    def __init__(self, **config):
+    def __init__(self, api: YTMusicAPI | None = None, **config):
         base._TextBox.__init__(self, **config)
 
-        self.add_callbacks({"Button1": lazy.function(self.previous_song_qtile)})
+        self.add_callbacks({"Button1": lazy.function(self.previous_song)})
 
         self.text = "󰒮"
+        self.yt_music_api = api or YTMusicAPI()
 
-        self.yt_music_api = yt_music_api
-
-    def previous_song(self):
+    def previous_song(self, qtile=None):
         self.yt_music_api.previous_song()
-
-    def previous_song_qtile(self, qtile):
-        self.previous_song()
 
 
 class YTMusicControlWidget(WidgetGroup):
-    def __init__(self, **config):
-        self.play_pause_widget = YTMusicPausePlayWidget()
-        self.previous_widget = YTMusicPreviousSongWidget()
-        self.next_widget = YTMusicNextSongWidget()
+    def __init__(self, api: YTMusicAPI | None = None, **config):
+        api = api or YTMusicAPI()
+        self.play_pause_widget = YTMusicPausePlayWidget(api)
+        self.previous_widget = YTMusicPreviousSongWidget(api)
+        self.next_widget = YTMusicNextSongWidget(api)
 
         widgets = [
             self.previous_widget,
@@ -234,9 +222,10 @@ class YTMusicWidget(YTMusicAPIInitMixin, WidgetBox):
         ),
     ]
 
-    def __init__(self, **config):
-        self.title_widget = YTMusicTitleWidget()
-        self.control_widget = YTMusicControlWidget()
+    def __init__(self, api: YTMusicAPI | None = None, **config):
+        api = api or YTMusicAPI()
+        self.title_widget = YTMusicTitleWidget(api)
+        self.control_widget = YTMusicControlWidget(api)
 
         widgets = [
             HoveringWidgetTabGroup(
@@ -252,20 +241,21 @@ class YTMusicWidget(YTMusicAPIInitMixin, WidgetBox):
         WidgetBox.__init__(self, widgets=widgets, **config)
         self.add_defaults(YTMusicWidget.defaults)
 
-        self.yt_music_api = yt_music_api
+        self.yt_music_api = api
+        self.yt_music_status = None
 
     def _configure(self, qtile, bar):
         super()._configure(qtile, bar)
 
-        self.update_yt_music_status(
-            self.yt_music_api.process_observer.check_is_process_run()
-        )
-
-        self.yt_music_api.process_observer.update_callbacks.add(
-            self.update_yt_music_status
-        )
+        self.update_yt_music_status(self.yt_music_api.is_alive())
+        self.yt_music_api.is_alive_callbacks.add(self.update_yt_music_status)
 
     def update_yt_music_status(self, yt_music_status):
+        if self.yt_music_status == yt_music_status:
+            return
+
+        self.yt_music_status = yt_music_status
+
         if yt_music_status:
             current_icon = self.yt_music_on_icon
             self._can_toggling = True

@@ -14,6 +14,7 @@ from .multi_monitor import MultiMonitor
 from .color_picker import ColorPicker, ColorPickerDropper, ColorPickerPalette
 from .keyboard_layout import KeyboardLayout
 from .yt_music import YTMusicWidget
+from .yt_music.api import api as yt_music_api
 from .bluetooth import Bluetooth
 from themes import color_theme
 
@@ -101,7 +102,7 @@ multi_monitor_widget = MultiMonitor(
 
 color_picker_widget = ColorPicker()
 
-yt_music_widget = YTMusicWidget()
+yt_music_widget = YTMusicWidget(yt_music_api)
 
 base_groupbox = widget.GroupBox(
     borderwidth=1,  # Толщина рамки
@@ -302,8 +303,8 @@ default_widgets = [
     ),
     widget.Spacer(length=8),
     # Виджет для управления YouTube Music
-    # yt_music_widget,
-    # widget.Spacer(length=8),
+    yt_music_widget,
+    widget.Spacer(length=8),
     # WidgetBox(
     #     text_closed='  ',
     #     text_open='  ',
