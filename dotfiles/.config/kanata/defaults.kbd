@@ -1,0 +1,17 @@
+(deftemplate tap-dance (actions)
+  (tap-dance $td $actions)
+)
+
+(deftemplate tap-hold (tap hold)
+  (tap-hold $tt $ht $tap $hold)
+)
+
+(defvar
+  tap-timeout 100
+  hold-timeout 200
+  tap-dance-timeout 200
+
+  tt $tap-timeout
+  ht $hold-timeout
+  td $tap-dance-timeout
+)

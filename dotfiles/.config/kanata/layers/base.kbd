@@ -1,0 +1,32 @@
+(defalias
+  super-caps   (t! tap-hold esc lctl)
+  grv-settings (t! tap-hold grv (layer-while-held settings))
+  ;; spc-vim      (t! tap-dance (spc (layer-switch vim-normal)))
+  spc-vim      (t! tap-hold spc (layer-while-held vim-normal))
+)
+
+(deflayermap (with-vim)
+  caps  @super-caps
+  esc   caps
+
+  up    XX
+  down  XX
+  left  XX
+  rght  XX
+
+  grv   @grv-settings
+  spc   @spc-vim
+)
+
+(deflayermap (settings)
+  r lrld                    ;; reload config
+  1 (layer-switch with-vim) ;; with vim
+  2 (layer-switch normal)
+)
+
+(deflayermap (normal)
+  caps  @super-caps
+  esc   caps
+
+  grv   @grv-settings
+)
