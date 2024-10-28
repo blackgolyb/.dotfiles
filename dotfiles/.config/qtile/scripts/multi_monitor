@@ -123,5 +123,6 @@ case $1 in
         ;;
     *)
         chose_location $1
+        chose_primary $2
         ;;
 esac

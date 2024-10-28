@@ -36,7 +36,7 @@ class MultiMonitor(base.InLoopPollText):
         ),
         (
             "extern_monitor_default_option",
-            "extend_right",
+            "extend_right HDMI-2",
             "Path to brightness control script",
         ),
     ]
