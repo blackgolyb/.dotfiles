@@ -1,4 +1,3 @@
-import typing
 import subprocess
 
 import libqtile
@@ -10,15 +9,15 @@ from services import utils
 
 def init_hooks(
     main_bar: libqtile.bar.Bar | libqtile.bar.Gap, is_bar_rounded: bool
-) -> typing.NoReturn:
+) -> None:
     # Автозапуск
     @hook.subscribe.startup_once
-    def autostart() -> typing.NoReturn:
+    def autostart() -> None:
         subprocess.call([str(scripts_path / "autostart.sh")])
 
     # При каждом запуске
     @hook.subscribe.startup
-    def _startup() -> typing.NoReturn:
+    def _startup() -> None:
         if DEBUG:
             return
         # global main_bar
@@ -39,7 +38,7 @@ def init_hooks(
 
     # Сделать диалоговые окна плавающими
     @hook.subscribe.client_new
-    def floating_dialogs(window: libqtile.backend.base.Window) -> typing.NoReturn:
+    def floating_dialogs(window: libqtile.backend.base.Window) -> None:
         dialog = window.window.get_wm_type() == "dialog"
         transient = window.window.get_wm_transient_for()
         if dialog or transient:

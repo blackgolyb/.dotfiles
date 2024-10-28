@@ -1,7 +1,8 @@
 from libqtile import layout
+from libqtile.config import Match
 
 from services import utils
-from settings import *
+from settings import outer_gaps, group_gaps, bar_orientation
 
 layout_margins = utils.configure_layout_margins(outer_gaps, group_gaps)
 layout_margins = utils.rotate_matrix_by_bar_orientation(layout_margins, bar_orientation)
@@ -35,3 +36,22 @@ default_layouts = [
     max_layout,
     # max_center_layout,
 ]
+
+default_floating_layout = layout.Floating(
+    border_width=0,
+    float_rules=[
+        # Run the utility of `xprop` to see the wm class and name of an X client.
+        *layout.Floating.default_float_rules,
+        Match(wm_class="confirmreset"),  # gitk
+        Match(wm_class="makebranch"),  # gitk
+        Match(wm_class="maketag"),  # gitk
+        Match(wm_class="ssh-askpass"),  # ssh-askpass
+        Match(wm_class="imv"),
+        Match(wm_class="mpv"),
+        Match(wm_class="viewnior"),
+        Match(title="branchdialog"),  # gitk
+        Match(title="pinentry"),  # GPG key password entry
+        Match(title="Picture-in-Picture"),
+        Match(title="Kolo-Face"),
+    ],
+)

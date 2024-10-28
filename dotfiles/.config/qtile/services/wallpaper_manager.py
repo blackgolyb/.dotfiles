@@ -5,12 +5,12 @@ from libqtile import hook
 from libqtile.log_utils import logger
 
 
-class WallpaperManager(object):
+class WallpaperManager:
     def __init__(
         self,
         screen,
         wallpaper: Path | list[Path],
-        wallpaper_priority: list[str] | None = None,
+        wallpaper_priority: list[tuple[str, int]] | None = None,
         wallpaper_mode: str | None = None,
         activate_hooks: bool = False,
     ):

@@ -1,70 +1,16 @@
-from libqtile.config import Click, Drag, Group, Key, EzKey, Match, Screen
+# Click, Drag, Group, Key, EzKey, Match, Screen
+from libqtile.config import Key
 from libqtile.lazy import lazy
 
-from settings import *
+from settings import scripts_path, mod, alt, bar_orientation, terminal, webbrowser, text_editor, file_explorer
 from widgets import (
     volume_widget,
     brightness_widget,
     color_picker_widget,
     multi_monitor_widget,
 )
-
-
-en_to_ru = {
-    "q": "й",
-    "w": "ц",
-    "e": "у",
-    "r": "к",
-    "t": "е",
-    "y": "н",
-    "u": "г",
-    "i": "ш",
-    "o": "щ",
-    "p": "з",
-    "[": "х",
-    "]": "ъ",
-    "a": "ф",
-    "s": "ы",
-    "d": "в",
-    "f": "а",
-    "g": "п",
-    "h": "р",
-    "j": "о",
-    "k": "л",
-    "l": "д",
-    ";": "ж",
-    "'": "э",
-    "z": "я",
-    "x": "ч",
-    "c": "с",
-    "v": "м",
-    "b": "и",
-    "n": "т",
-    "m": "ь",
-    ",": "б",
-    ".": "ю",
-    "/": ".",
-}
-
-
-def localize_keys(keys, languages):
-    extended_keys = []
-    for language in languages:
-        for key in keys:
-            if key.key not in en_to_ru:
-                continue
-
-            extended_keys.append(
-                Key(
-                    key.modifiers,
-                    en_to_ru.get(key.key),
-                    key.commands,
-                    desc=key.desc,
-                )
-            )
-
-    keys.extend(extended_keys)
-
+from sticky_manager import sticky_manager
+from groups import groups_keys
 
 wp = (scripts_path / "video_wallpaper").resolve()
 
@@ -160,6 +106,14 @@ default_keys = [
         lazy.function(multi_monitor_widget.open_rofi_menu),
         desc="multi monitors",
     ),
+    # Штука которая позволяет закрепить окно на всех рабочих поверхностях
+    # Т.е. окно будет следовать за вами на всех робочих столах
+    Key(
+        [mod],
+        "o",
+        lazy.function(sticky_manager.toggle_sticky_window),
+        desc="toggle stick window",
+    ),
     # Color picker
     Key([mod], "p", lazy.function(color_picker_widget.dropper.pick_color)),
     # Контроль звука и яркости
@@ -167,12 +121,8 @@ default_keys = [
     Key([], "XF86AudioRaiseVolume", lazy.function(volume_widget.up)),
     Key([], "XF86AudioMute", lazy.function(volume_widget.mute)),
     Key([], "XF86AudioMicMute", lazy.spawn("amixer set Capture togglemute")),
-    # Яркость нужно установить light
-    # sudo chmod +s /usr/bin/light для работы утилиты light
+    # Яркость нужно установить brightnessctl
     Key([], "XF86MonBrightnessDown", lazy.function(brightness_widget.down)),
     Key([], "XF86MonBrightnessUp", lazy.function(brightness_widget.up)),
+    *groups_keys,
 ]
-
-# langs = keyboard_layouts.copy()
-# langs.remove("us")
-# localize_keys(default_keys, langs)

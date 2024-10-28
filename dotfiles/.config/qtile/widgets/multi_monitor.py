@@ -50,6 +50,10 @@ class MultiMonitor(base.InLoopPollText):
             }
         )
 
+        self.__init_extern_monitor()
+        self.init_setup()
+
+    def __init_extern_monitor(self):
         self.extern_monitor_folder = None
         for item in self.displays_folder.iterdir():
             formatted_name = re.findall(r"card\d+-([\w\-]+)", item.name)
@@ -65,20 +69,18 @@ class MultiMonitor(base.InLoopPollText):
                 break
 
         self.prev_is_connected = self.is_monitor_connected()
-        self._connected_monitors = []
-
-        self.init_setup()
 
     def init_setup(self):
         @hook.subscribe.startup_once
         def setup():
             self.prev_is_connected = self.is_monitor_connected()
             if self.prev_is_connected:
-                self.call_script(self.extern_monitor_default_option)
+                self.call_script(self.extern_monitor_default_option, reload=False)
 
-    def call_script(self, argument):
+    def call_script(self, argument, reload=True):
         subprocess.call([f"bash {self.script_path} {argument}"], shell=True)
-        qtile.reload_config()
+        if reload:
+            qtile.reload_config()
 
     def open_rofi_menu(self, qtile):
         self.call_script("menu")
@@ -91,15 +93,14 @@ class MultiMonitor(base.InLoopPollText):
 
     def update_monitors(self):
         is_connected = self.is_monitor_connected()
-
-        if self.prev_is_connected and not is_connected:
-            self.call_script("disconnect")
-        elif not self.prev_is_connected and is_connected:
-            self.call_script(self.extern_monitor_default_option)
-
+        prev = self.prev_is_connected
         self.prev_is_connected = is_connected
+
+        if prev and not is_connected:
+            self.call_script("disconnect")
+        elif not prev and is_connected:
+            self.call_script(self.extern_monitor_default_option)
 
     def poll(self):
         self.update_monitors()
-
         return "󰍹"

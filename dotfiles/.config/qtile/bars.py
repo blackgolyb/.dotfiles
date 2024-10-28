@@ -1,12 +1,10 @@
 from libqtile import bar, widget
 
-from settings import *
+from settings import bar_gaps, bar_orientation, outer_gaps, group_gaps
 from services import utils
 from widgets import (
     default_widgets,
     base_groupbox,
-    battery_pack_widget,
-    clock_widget,
     kb_layout_widget,
 )
 from themes import color_theme
