@@ -1,7 +1,0 @@
-;; template https://github.com/jtroo/kanata/blob/main/cfg_samples/kanata.kbd
-;; template https://gist.github.com/sysraccoon/8a28d59d28c65dafceabb6376d379f46
-
-(include src_keys.kbd)
-(include defaults.kbd)
-(include layers/base.kbd)
-(include layers/vim.kbd)

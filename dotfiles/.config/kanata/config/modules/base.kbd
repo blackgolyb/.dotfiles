@@ -1,0 +1,8 @@
+(defalias
+  caps  (t! tap-hold esc lctl)
+  esc   caps
+  up    XX
+  down  XX
+  left  XX
+  rght  XX
+)

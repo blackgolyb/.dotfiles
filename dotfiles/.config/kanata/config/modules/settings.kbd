@@ -1,0 +1,9 @@
+(defalias
+  grv   (t! tap-hold grv (layer-while-held settings))
+)
+
+(deflayermap (settings)
+  r     lrld                    ;; reload config
+  1     (layer-switch base)     ;; with vim
+  2     (layer-switch normal)
+)

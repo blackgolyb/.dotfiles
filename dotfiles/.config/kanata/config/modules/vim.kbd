@@ -1,10 +1,11 @@
 (defalias
-  shift-and-vim-normal (multi lsft (layer-while-held shifted-vim-normal))
-  ;; shift-and-vim-normal (t! tap-hold lsft (layer-while-held shifted-vim-normal))
+  spc                       (t! tap-hold spc (layer-while-held vim-normal))
+  shift-and-vim-normal      (multi lsft (layer-while-held shifted-vim-normal))
+  ;; shift-and-vim-normal   (t! tap-hold lsft (layer-while-held shifted-vim-normal))
 )
 
 (deflayermap (vim-normal)
-  caps  (layer-switch with-vim)
+  caps  (layer-switch base)
 
   h     left
   j     down
@@ -27,11 +28,11 @@
 )
 
 (deflayermap (shifted-vim-normal)
-  g    (unshift lctl end)   ;; go to bottom
+  g     (unshift lctl end)   ;; go to bottom
 )
 
 (deflayermap (vim-visual)
-  caps  (layer-switch with-vim)
+  caps  (layer-switch base)
 
   h     S-left
   j     S-down

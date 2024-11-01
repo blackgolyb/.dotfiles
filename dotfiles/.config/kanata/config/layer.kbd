@@ -1,0 +1,111 @@
+;; THIS FILE GENERATES build.py, PLEASE DO NOT MANUALLY CHANGE IT
+;; IF YOU DON'T WANT TO ADD SOMETHING, CREATE A NEW MODULE
+
+(deflayer base
+  @esc  @f1   @f2   @f3   @f4   @f5   @f6   @f7   @f8   @f9   @f10  @f11  @f12        @ssrq @slck @pause
+  @grv  @1    @2    @3    @4    @5    @6    @7    @8    @9    @0    @-    @=    @bspc  @ins  @home @pgup   @nlck @kp/  @kp*  @kp-
+  @tab  @q    @w    @e    @r    @t    @y    @u    @i    @o    @p    @[    @]    @\     @del  @end  @pgdn   @kp7  @kp8  @kp9  @kp+
+  @caps @a    @s    @d    @f    @g    @h    @j    @k    @l    @;    @'    @ret                         @kp4  @kp5  @kp6
+  @lsft @z    @x    @c    @v    @b    @n    @m    @,    @.    @/    @rsft                @up           @kp1  @kp2  @kp3  @kprt
+  @lctl @lmet @lalt           @spc            @ralt @rmet @cmp  @rctl            @left @down @rght   @kp0  @kp.
+)
+
+
+(defalias
+  f1  f1
+  f2  f2
+  f3  f3
+  f4  f4
+  f5  f5
+  f6  f6
+  f7  f7
+  f8  f8
+  f9  f9
+  f10  f10
+  f11  f11
+  f12  f12
+  ssrq  ssrq
+  slck  slck
+  pause  pause
+  1  1
+  2  2
+  3  3
+  4  4
+  5  5
+  6  6
+  7  7
+  8  8
+  9  9
+  0  0
+  -  -
+  =  =
+  bspc  bspc
+  ins  ins
+  home  home
+  pgup  pgup
+  nlck  nlck
+  kp/  kp/
+  kp*  kp*
+  kp-  kp-
+  tab  tab
+  q  q
+  w  w
+  e  e
+  r  r
+  t  t
+  y  y
+  u  u
+  i  i
+  o  o
+  p  p
+  [  [
+  ]  ]
+  \  \
+  del  del
+  end  end
+  pgdn  pgdn
+  kp7  kp7
+  kp8  kp8
+  kp9  kp9
+  kp+  kp+
+  a  a
+  s  s
+  d  d
+  f  f
+  g  g
+  h  h
+  j  j
+  k  k
+  l  l
+  ;  ;
+  '  '
+  ret  ret
+  kp4  kp4
+  kp5  kp5
+  kp6  kp6
+  lsft  lsft
+  z  z
+  x  x
+  c  c
+  v  v
+  b  b
+  n  n
+  m  m
+  ,  ,
+  .  .
+  /  /
+  rsft  rsft
+  kp1  kp1
+  kp2  kp2
+  kp3  kp3
+  kprt  kprt
+  lctl  lctl
+  lmet  lmet
+  lalt  lalt
+  ralt  ralt
+  rmet  rmet
+  cmp  cmp
+  rctl  rctl
+  kp0  kp0
+  kp.  kp.
+)
