@@ -1,5 +1,5 @@
 #!/bin/sh
-# gamma correction
+# gamma correction for ThinkPad t480 yellow screen
 xgamma -rgamma 0.95 -ggamma 0.95 -bgamma 1.1 &
 
 # glava &
@@ -7,6 +7,9 @@ xgamma -rgamma 0.95 -ggamma 0.95 -bgamma 1.1 &
 dunst &
 greenclip daemon &
 tmux start &
+
+zen-browser &
+telegram-desktop &
 
 # setxkbmap -option ctrl:swapcaps
 # /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1 &

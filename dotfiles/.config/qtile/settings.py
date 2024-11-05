@@ -25,6 +25,12 @@ fontsize = 18
 # Keys variables
 mod = "mod4"
 alt = "mod1"
+arrows = {
+    "up": "k",
+    "down": "j",
+    "right": "l",
+    "left": "h",
+}
 
 
 # Programs

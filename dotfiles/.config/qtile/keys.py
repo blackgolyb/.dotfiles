@@ -2,7 +2,7 @@
 from libqtile.config import Key
 from libqtile.lazy import lazy
 
-from settings import scripts_path, mod, alt, bar_orientation, terminal, webbrowser, text_editor, file_explorer
+from settings import scripts_path, mod, alt, bar_orientation, terminal, webbrowser, text_editor, file_explorer, arrows
 from widgets import (
     volume_widget,
     brightness_widget,
@@ -16,49 +16,49 @@ wp = (scripts_path / "video_wallpaper").resolve()
 
 default_keys = [
     # Управление фокусом
-    Key([mod], "left", lazy.layout.left(), desc="Move focus to left"),  # Фокус влево
+    Key([mod], arrows["left"], lazy.layout.left(), desc="Move focus to left"),  # Фокус влево
     Key(
-        [mod], "right", lazy.layout.right(), desc="Move focus to right"
+        [mod], arrows["right"], lazy.layout.right(), desc="Move focus to right"
     ),  # Фокус вправо
-    Key([mod], "down", lazy.layout.down(), desc="Move focus down"),  # Фокус вниз
-    Key([mod], "up", lazy.layout.up(), desc="Move focus up"),  # Фокус вверх
+    Key([mod], arrows["down"], lazy.layout.down(), desc="Move focus down"),  # Фокус вниз
+    Key([mod], arrows["up"], lazy.layout.up(), desc="Move focus up"),  # Фокус вверх
     # Перемещение окон
     Key(
         [mod, "shift"],
-        "left",
+        arrows["left"],
         lazy.layout.shuffle_left(),
         desc="Move window to the left",
     ),  # Переместить окно влево
     Key(
         [mod, "shift"],
-        "right",
+        arrows["right"],
         lazy.layout.shuffle_right(),
         desc="Move window to the right",
     ),  # Переместить окно вправо
     Key(
-        [mod, "shift"], "down", lazy.layout.shuffle_down(), desc="Move window down"
+        [mod, "shift"], arrows["down"], lazy.layout.shuffle_down(), desc="Move window down"
     ),  # Переместить окно вниз
     Key(
-        [mod, "shift"], "up", lazy.layout.shuffle_up(), desc="Move window up"
+        [mod, "shift"], arrows["up"], lazy.layout.shuffle_up(), desc="Move window up"
     ),  # Переместить окно вверх
     # Изменение размера окна
     Key(
         [mod, "control"],
-        "left",
+        arrows["left"],
         lazy.layout.grow_left(),
         desc="Grow window to the left",
     ),  # Увеличить окно влево
     Key(
         [mod, "control"],
-        "right",
+        arrows["right"],
         lazy.layout.grow_right(),
         desc="Grow window to the right",
     ),  # Увеличитпапкамиь окно вправо
     Key(
-        [mod, "control"], "down", lazy.layout.grow_down(), desc="Grow window down"
+        [mod, "control"], arrows["down"], lazy.layout.grow_down(), desc="Grow window down"
     ),  # Увеличить окно вниз
     Key(
-        [mod, "control"], "up", lazy.layout.grow_up(), desc="Grow window up"
+        [mod, "control"], arrows["up"], lazy.layout.grow_up(), desc="Grow window up"
     ),  # Увеличить окно вверх
     Key(
         [mod], "n", lazy.layout.normalize(), desc="Reset all window sizes"
@@ -88,7 +88,7 @@ default_keys = [
     Key(
         [mod], "v", lazy.spawn('rofi -modi "clipboard:greenclip print" -show clipboard')
     ),
-    Key([mod], "l", lazy.spawn("betterlockscreen --lock")),
+    Key([mod], "home", lazy.spawn("betterlockscreen --lock")),
     # Раскладка клавиатуры
     Key(
         [alt],
