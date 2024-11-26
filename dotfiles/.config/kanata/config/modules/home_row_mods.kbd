@@ -2,8 +2,6 @@
   ;; Note: consider using different time values for your different fingers.
   ;; For example, your pinkies might be slower to release keys and index
   ;; fingers faster.
-  tap-time 200
-  hold-time 150
 
   left-hand-keys (
     q w e r t
@@ -18,18 +16,25 @@
 )
 
 (deflayermap (nomods)
-  a  a
-  s  s
-  d  d
-  f  f
-  j  j
-  k  k
-  l  l
-  ;  ;
+  a a
+  s s
+  d d
+  f f
+  j j
+  k k
+  l l
+  ; ;
 )
 
 (deffakekeys
   to-base (layer-switch base)
+)
+
+(deftemplate hrm-l (hrm-key hrm-mod tt th)
+  (tap-hold-release-keys $tt $th (multi $hrm-key @tap) $hrm-mod $left-hand-keys)
+)
+(deftemplate hrm-r (hrm-key hrm-mod tt th)
+  (tap-hold-release-keys $tt $th (multi $hrm-key @tap) $hrm-mod $right-hand-keys)
 )
 
 (defalias
@@ -38,12 +43,12 @@
     (on-idle-fakekey to-base tap 20)
   )
 
-  a (tap-hold-release-keys $tap-time $hold-time (multi a @tap) lmet $left-hand-keys)
-  s (tap-hold-release-keys $tap-time $hold-time (multi s @tap) lalt $left-hand-keys)
-  d (tap-hold-release-keys $tap-time $hold-time (multi d @tap) lctl $left-hand-keys)
-  f (tap-hold-release-keys $tap-time $hold-time (multi f @tap) lsft $left-hand-keys)
-  j (tap-hold-release-keys $tap-time $hold-time (multi j @tap) rsft $right-hand-keys)
-  k (tap-hold-release-keys $tap-time $hold-time (multi k @tap) rctl $right-hand-keys)
-  l (tap-hold-release-keys $tap-time $hold-time (multi l @tap) ralt $right-hand-keys)
-  ; (tap-hold-release-keys $tap-time $hold-time (multi ; @tap) rmet $right-hand-keys)
+  a (t! hrm-l a lmet 200 150)
+  s (t! hrm-l s lalt 200 150)
+  d (t! hrm-l d lctl 200 150)
+  f (t! hrm-l f lsft 200 150)
+  j (t! hrm-r j lsft 200 150)
+  k (t! hrm-r k lctl 200 150)
+  l (t! hrm-r l lalt 200 150)
+  ; (t! hrm-r ; lmet 200 150)
 )

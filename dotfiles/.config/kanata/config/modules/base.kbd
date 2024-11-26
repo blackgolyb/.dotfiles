@@ -1,5 +1,5 @@
 (defalias
-  caps  (t! tap-hold esc lctl)
+  caps  esc
   esc   caps
   up    XX
   down  XX
