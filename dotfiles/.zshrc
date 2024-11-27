@@ -123,11 +123,17 @@ alias pi='poetry install'
 alias pt='poetry show --tree'
 alias pp='python -m poetry'
 alias py='python'
+alias rr='cargo run'
 alias alembic='python -m alembic'
 alias tttg='make -f /home/blackgolyb/Documents/tic_tac_toe_api/MakefileDocker serveo_restart'
+alias gitssh='ssh-add ~/.ssh/github'
 eval "$(zoxide init zsh)"
 eval "$(pyenv init -)"
-# eval "$(ssh-agent -s)"
+
+if [[ -z "${SSH_CONNECTION}" ]]; then
+  export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/ssh-agent.socket"
+fi
+
 
 # colorscript -r
 typeset -g POWERLEVEL9K_INSTANT_PROMPT=quiet
