@@ -7,7 +7,7 @@
 (include layer.kbd)
 
 ;; Inclued modules
-;; NOTE: if you change this you should re run build script
+;; NOTE: if you change this you should re-run build script
 (include modules/base.kbd)
 (include modules/normal.kbd)
 (include modules/settings.kbd)

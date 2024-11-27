@@ -1,6 +1,3 @@
 (deflayermap (normal)
-  caps  @caps
-  esc   caps
-  spc   spc
   grv   @grv
 )

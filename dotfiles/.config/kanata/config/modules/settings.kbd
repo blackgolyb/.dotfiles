@@ -4,6 +4,6 @@
 
 (deflayermap (settings)
   r     lrld                    ;; reload config
-  1     (layer-switch base)     ;; with vim
+  1     (layer-switch base)     ;; with all plugins
   2     (layer-switch normal)
 )
