@@ -1,0 +1,70 @@
+// Zed settings
+// For information on how to configure Zed, see the Zed
+// documentation: https://zed.dev/docs/configuring-zed
+//
+// To see all of Zed's default settings without changing your
+// custom settings, run the `open default settings` command
+// from the command palette or from `Zed` application menu.
+{
+    "tab_bar": {
+        "show": true
+    },
+    "show_inline_completions": false,
+    "features": {
+        "inline_completion_provider": "supermaven"
+    },
+    "vim_mode": true,
+    "vim": {
+        "use_multiline_find": true,
+        "use_smartcase_find": true
+    },
+    "relative_line_numbers": true,
+    "tab_size": 4,
+    "preferred_line_length": 80,
+    "vertical_scroll_margin": 10,
+    "ui_font_size": 16,
+    "buffer_font_size": 16,
+    "buffer_font_family": "FiraCode Nerd Font Mono",
+    "project_panel": {
+        "auto_fold_dirs": false
+    },
+    "theme": {
+        "mode": "system",
+        "light": "One Dark Pro",
+        "dark": "One Dark Pro"
+    },
+    // "experimental.theme_overrides": {
+    //     "background": "#23272ef6",
+    //     // #1e2227
+    //     // "elevated_surface.background": "#0000",
+    //     // "surface.background": "#0000",
+    //     // "element.background": "#0000",
+    //     // "tab_bar.background": "#1e2227",
+    //     // "tab.inactive_background": "#0000",
+    //     // "tab.active_background": "#282c33ff",
+    //     // "panel.background": "#0000",
+    //     "editor.background": "#0000"
+    // }
+    "lsp": {
+        "texlab": {
+            "settings": {
+                "texlab": {
+                    "build": {
+                        "onSave": false
+                        // // "forwardSearchAfter": true,
+                        // "executable": "tectonic",
+                        // "args": [
+                        //     "-X",
+                        //     "compile",
+                        //     "%f",
+                        //     "--untrusted",
+                        //     "--synctex",
+                        //     "--keep-logs",
+                        //     "--keep-intermediates"
+                        // ]
+                    }
+                }
+            }
+        }
+    }
+}
