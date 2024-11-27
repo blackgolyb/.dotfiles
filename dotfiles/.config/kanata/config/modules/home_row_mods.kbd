@@ -1,8 +1,6 @@
-(defvar
-  ;; Note: consider using different time values for your different fingers.
-  ;; For example, your pinkies might be slower to release keys and index
-  ;; fingers faster.
+;; HRM setting in the bottom of the file
 
+(defvar
   left-hand-keys (
     q w e r t
     a s d f g
@@ -13,6 +11,28 @@
     h j k l ;
     n m , . /
   )
+)
+
+(deflayermap (hrm-left)
+  a @a
+  s @s
+  d @d
+  f @f
+  j j
+  k k
+  l l
+  ; ;
+)
+
+(deflayermap (hrm-right)
+  a a
+  s s
+  d d
+  f f
+  j @j
+  k @k
+  l @l
+  ; @;
 )
 
 (deflayermap (nomods)
@@ -31,10 +51,10 @@
 )
 
 (deftemplate hrm-l (hrm-key hrm-mod tt th)
-  (tap-hold-release-keys $tt $th (multi $hrm-key @tap) $hrm-mod $left-hand-keys)
+  (tap-hold-release-keys $tt $th (multi $hrm-key @tap) (multi $hrm-mod @hrm-left-hold) $left-hand-keys)
 )
 (deftemplate hrm-r (hrm-key hrm-mod tt th)
-  (tap-hold-release-keys $tt $th (multi $hrm-key @tap) $hrm-mod $right-hand-keys)
+  (tap-hold-release-keys $tt $th (multi $hrm-key @tap) (multi $hrm-mod @hrm-right-hold) $right-hand-keys)
 )
 
 (defalias
@@ -42,13 +62,26 @@
     (layer-switch nomods)
     (on-idle-fakekey to-base tap 20)
   )
+  hrm-left-hold (multi
+    (layer-switch hrm-left)
+    (on-idle-fakekey to-base tap 20)
+  )
+  hrm-right-hold (multi
+    (layer-switch hrm-right)
+    (on-idle-fakekey to-base tap 20)
+  )
+)
 
-  a (t! hrm-l a lmet 200 150)
-  s (t! hrm-l s lalt 200 150)
-  d (t! hrm-l d lctl 200 150)
-  f (t! hrm-l f lsft 200 150)
-  j (t! hrm-r j lsft 200 150)
-  k (t! hrm-r k lctl 200 150)
-  l (t! hrm-r l lalt 200 150)
-  ; (t! hrm-r ; lmet 200 150)
+(defalias
+  ;; HRM settings
+  ;; Heare you can change timeouts and modifiers bindings for each finger
+  ;;           key  mod     tap and hold timeouts
+  a (t! hrm-l   a   lmet    200     150)
+  s (t! hrm-l   s   lalt    200     150)
+  d (t! hrm-l   d   lctl    200     150)
+  f (t! hrm-l   f   lsft    200     150)
+  j (t! hrm-r   j   rsft    200     150)
+  k (t! hrm-r   k   rctl    200     150)
+  l (t! hrm-r   l   ralt    200     150)
+  ; (t! hrm-r   ;   rmet    200     150)
 )
