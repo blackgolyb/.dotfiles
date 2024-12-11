@@ -4,7 +4,7 @@ from pathlib import Path
 from pyparsing import OneOrMore, nestedExpr
 
 
-CONFIG_DIR = Path(__file__).parent / "config"
+CONFIG_DIR = Path(__file__).parent.parent / "config"
 CONFIG = CONFIG_DIR / "config.kbd"
 KEYS_SRC = CONFIG_DIR / "src.kbd"
 MODULES = CONFIG_DIR / "modules"
