@@ -6,13 +6,88 @@
 // To see the default key bindings run `zed: open default keymap`
 // from the command palette.
 [
+    // {
+    //     "context": "VimControl && !menu && vim_mode != operator",
+    //     "bindings": {
+    //         "w": "vim::NextSubwordStart",
+    //         "b": "vim::PreviousSubwordStart",
+    //         "e": "vim::NextSubwordEnd",
+    //         "g e": "vim::PreviousSubwordEnd"
+    //     }
+    // },
     {
-        "context": "vim_mode == normal",
+        "context": "Editor && vim_mode == visual && !VimWaiting && !VimObject",
         "bindings": {
-            "cmd-k cmd-s": "zed::OpenKeymap",
-            "space e": "file_finder::Toggle",
+            "shift-s": [
+                "vim::PushOperator",
+                {
+                    "AddSurrounds": {}
+                }
+            ]
+        }
+    },
+    {
+        "context": "vim_mode == normal && !menu",
+        "bindings": {
+            "shift-y": ["workspace::SendKeystrokes", "y $"]
+        }
+    },
+    {
+        "context": "Editor && vim_mode == visual",
+        "bindings": {
+            "space p": ["workspace::SendKeystrokes", "\" t d shift-p"]
+        }
+    },
+    {
+        "context": "vim_mode == normal || ProjectPanel || EmptyPane",
+        "bindings": {
+            "space f": "file_finder::Toggle",
             "space t": "tab_switcher::Toggle",
-            "space b": "workspace::ToggleLeftDock"
+            "space e": "project_panel::ToggleFocus",
+            "space b": "workspace::ToggleLeftDock",
+            "space o": "outline::Toggle",
+            "space d": "diagnostics::Deploy",
+            "space z": "workspace::ToggleCenteredLayout",
+            // For AI auto inline complete (but using by trigger)
+            // NOTE: no ways to disable it ;(
+            "space a i": "editor::ToggleInlineCompletions",
+            "space a n": "editor::NextInlineCompletion",
+            "space a shift-n": "editor::PreviousInlineCompletion",
+            "space a a": [
+                "editor::AcceptInlineCompletion",
+                "editor::ToggleInlineCompletions"
+            ]
+        }
+    },
+    {
+        "context": "Editor && inline_completion && !showing_completions",
+        "bindings": {
+            "esc": ["editor::ToggleInlineCompletions", "false"]
+        }
+    },
+    {
+        "context": "Editor && vim_mode == insert && inline_completion && !showing_completions",
+        "bindings": {
+            "tab": "editor::Tab"
+            // "enter": "vim::Enter"
+        }
+    },
+    {
+        "context": "ProjectPanel",
+        "bindings": {
+            "space e": "buffer_search::FocusEditor"
+        }
+    },
+    {
+        "context": "TabSwitcher",
+        "bindings": {
+            "d": "tab_switcher::CloseSelectedItem",
+            "j": ["workspace::SendKeystrokes", "down"],
+            "k": ["workspace::SendKeystrokes", "up"]
         }
     }
+    // {
+    //     "context": "Editor && mode == full",
+    //     "bindings": {}
+    // }
 ]
