@@ -1,4 +1,20 @@
-;; HRM setting in the bottom of the file
+;; HRM settings
+;; Heare you can change timeouts and modifiers bindings for each finger
+
+(defvar
+;;key    mod        tap          hold
+  a-mod  lmet   a-tap  300   a-hold  150
+  s-mod  lalt   s-tap  300   s-hold  150
+  d-mod  lctl   d-tap  300   d-hold  150
+  f-mod  lsft   f-tap  300   f-hold  150
+  j-mod  rsft   j-tap  300   j-hold  150
+  k-mod  rctl   k-tap  300   k-hold  150
+  l-mod  ralt   l-tap  300   l-hold  150
+  ;-mod  rmet   ;-tap  300   ;-hold  150
+)
+
+
+
 
 (defvar
   left-hand-keys (
@@ -14,10 +30,11 @@
 )
 
 (deflayermap (hrm-left)
-  a @a
-  s @s
-  d @d
-  f @f
+  caps @caps
+  a $a-mod
+  s $s-mod
+  d $d-mod
+  f $f-mod
   j j
   k k
   l l
@@ -25,17 +42,19 @@
 )
 
 (deflayermap (hrm-right)
+  caps @caps
   a a
   s s
   d d
   f f
-  j @j
-  k @k
-  l @l
-  ; @;
+  j $j-mod
+  k $k-mod
+  l $l-mod
+  ; $;-mod
 )
 
 (deflayermap (nomods)
+  caps @caps
   a a
   s s
   d d
@@ -70,18 +89,15 @@
     (layer-switch hrm-right)
     (on-idle-fakekey to-base tap 20)
   )
-)
 
-(defalias
-  ;; HRM settings
-  ;; Heare you can change timeouts and modifiers bindings for each finger
-  ;;           key  mod     tap and hold timeouts
-  a (t! hrm-l   a   lmet    200     150)
-  s (t! hrm-l   s   lalt    200     150)
-  d (t! hrm-l   d   lctl    200     150)
-  f (t! hrm-l   f   lsft    200     150)
-  j (t! hrm-r   j   rsft    200     150)
-  k (t! hrm-r   k   rctl    200     150)
-  l (t! hrm-r   l   ralt    200     150)
-  ; (t! hrm-r   ;   rmet    200     150)
+
+  ;;           key   mod      tap  and hold   timeouts
+  a (t! hrm-l  a     $a-mod   $a-tap   $a-hold)
+  s (t! hrm-l  s     $s-mod   $s-tap   $s-hold)
+  d (t! hrm-l  d     $d-mod   $d-tap   $d-hold)
+  f (t! hrm-l  f     $f-mod   $f-tap   $f-hold)
+  j (t! hrm-r  j     $j-mod   $j-tap   $j-hold)
+  k (t! hrm-r  k     $k-mod   $k-tap   $k-hold)
+  l (t! hrm-r  l     $l-mod   $l-tap   $l-hold)
+  ; (t! hrm-r  ;     $;-mod   $;-tap   $;-hold)
 )
