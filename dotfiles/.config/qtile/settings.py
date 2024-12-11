@@ -34,7 +34,7 @@ arrows = {
 
 
 # Programs
-text_editor = "code"
+text_editor = "zed"
 terminal = "wezterm"# guess_terminal()  # 'alacritty'
 # webbrowser = "firefox"
 webbrowser = "zen-browser"
