@@ -9,7 +9,7 @@ create_group.is_subscript_or_superscript = False
 
 default_groups = [
     create_group(
-        "1",
+        "f",
         "󰈹",
         screen=0,
         matches=[
@@ -18,15 +18,13 @@ default_groups = [
             Match(wm_class="zen-alpha"),
         ],
     ),
-    create_group("2", "", screen=0),
-    create_group("3", "", screen=0),
-    create_group("4", "󱞁", screen=0, matches=[Match(wm_class="Logseq")]),
-    create_group("5", "", screen=0),
-    create_group("6", "", screen=1),
-    create_group("7", "", screen=1),
-    create_group("8", "", screen=1),
+    create_group("d", "", screen=0),
+    create_group("s", "", screen=0),
+    create_group("a", "󱞁", screen=0, matches=[Match(wm_class="Logseq")]),
+    create_group("v", "", screen=1),
+    create_group("c", "", screen=1),
     create_group(
-        "9",
+        "x",
         "󰋋",
         screen=1,
         matches=[
@@ -34,7 +32,7 @@ default_groups = [
             Match(wm_class="YouTube Music"),
         ],
     ),
-    create_group("0", "", screen=1, matches=[Match(wm_class="telegram-desktop")]),
+    create_group("z", "", screen=1, matches=[Match(wm_class="telegram-desktop")]),
 ]
 
 groups_keys: list[Key] = []
