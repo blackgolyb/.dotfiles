@@ -1,15 +1,12 @@
-import subprocess
-
 from libqtile import widget
 from libqtile.widget.battery import BatteryState
 from libqtile.lazy import lazy
 from libqtile.log_utils import logger
 from qtile_extras import widget as qe_widget
-from playsound import playsound
 
 from settings import *
 from .base import WidgetGroup, WidgetBox, WidgetBoxTest
-from .battery import Battery
+from .battery import Batteries, BatteriesIcon
 from .volume import Volume
 from .brightness import Brightness
 from .multi_monitor import MultiMonitor
@@ -47,7 +44,6 @@ decor = {
 
 
 volume_widget = Volume(
-    # limit_max_volume=True,
     mouse_callbacks={"Button3": lazy.spawn("pavucontrol")},
     padding=0,
 )
@@ -67,9 +63,7 @@ yt_music_widget = YTMusicWidget(yt_music_api)
 
 base_groupbox = widget.GroupBox(
     borderwidth=1,  # Толщина рамки
-    # ('border', 'block', 'text', 'line') # Метод выделения активного воркспейса
     highlight_method="line",
-    # '#DDDFE5',  # Цвет текста активного воркспейса
     block_highlight_text_color="#ffffff",
     this_current_screen_border="#ffffff",  # C3C3C3  Цвет фона активного воркспейса
     inactive="#777777",
@@ -80,62 +74,32 @@ base_groupbox = widget.GroupBox(
     margin_x=0,
     margin_y=2,
     markup=True,
-    # margin=3,
     hide_unused=True,
 )
 
-bat1 = Battery(
-    battery=0,
-    padding=3,
-    format="{percent:2.0%}",
-    update_interval=1,
-    hide_threshold=True,
-)
-
-bat2 = Battery(
-    battery=1,
-    padding=3,
-    format="{percent:2.0%}",
-    update_interval=1,
-    hide_threshold=True,
-)
-
-# bat1.add_event(
-#     BatteryState.CHARGING,
-#     lambda: playsound(str(resources_path / "sounds" / "poweron.mp3")),
-# )
-#
-# bat2.add_event(
-#     BatteryState.CHARGING,
-#     lambda: playsound(str(resources_path / "sounds" / "poweron.mp3")),
-# )
-
 battery_pack_widget = WidgetGroup(
     widgets=[
-        widget.BatteryIcon(
+        BatteriesIcon(
             theme_path=str(resources_path / "battery_icons"),
-            battery=0,
+            batteries=[0, 1],
             padding=3,
             update_interval=5,
             scale=1,
         ),
-        bat1,
-        widget.Spacer(length=5),
-        widget.BatteryIcon(
-            theme_path=str(resources_path / "battery_icons"),
-            battery=1,
+        Batteries(
+            batteries=[0, 1],
             padding=3,
-            update_interval=5,
-            scale=1,
+            format="{percent:2.0%}",
+            update_interval=1,
+            notify_below=10,
+            hide_threshold=True,
         ),
-        bat2,
     ]
 )
 
-
-clock_widget = widget.WidgetBox(
-    text_closed=" ",
-    text_open=" ",
+clock_widget = WidgetBox(
+    text_closed="",
+    text_open="",
     padding=0,
     widgets=[
         # Дата
@@ -143,7 +107,6 @@ clock_widget = widget.WidgetBox(
         widget.Spacer(length=5),
     ],
 )
-
 
 kb_layout_widget = widget.KeyboardLayout(
     configured_keyboards=keyboard_layouts, update_interval=1, padding=0
@@ -204,8 +167,6 @@ default_widgets = [
     ),
     main_menu,
     widget.Spacer(length=20),
-    # Текущий макет
-    # widget.CurrentLayout(),
     # Иконки воркспейсов
     base_groupbox,
     # Виджет выполнения команд
@@ -214,21 +175,6 @@ default_widgets = [
     widget.Spacer(),
     # Трэй, не работает в вялом, нужно будет юзать widget.StatusNotifier
     widget.Systray(),
-    # widget.Spacer(length=15),
-    # WidgetBox(
-    #     text_closed="  ",
-    #     text_open="  ",
-    #     padding=0,
-    #     widgets=[
-    #         widget.TextBox(text="|"),
-    #         widget.WindowTabs(
-    #             # parse_text=lambda x: x.split()[0],
-    #             # scroll=True,
-    #         ),
-    #         widget.TextBox(text="|"),
-    #         widget.Spacer(length=8),
-    #     ],
-    # ),
     widget.Spacer(length=15),
     WidgetBox(
         text_closed="  ",
@@ -274,33 +220,21 @@ default_widgets = [
     ),
     widget.Spacer(length=8),
     # Виджет для управления YouTube Music
-    yt_music_widget,
-    widget.Spacer(length=8),
-    # WidgetBox(
-    #     text_closed='  ',
-    #     text_open='  ',
-    #     padding=0,
-    #     widgets=[
-    widget.TextBox(text="", padding=7),
+    # yt_music_widget,
+    # widget.Spacer(length=8),
     # Виджет громкости пульсы
     # Нужно установить pavucontrol
     volume_widget,
     widget.Spacer(length=15),
     # Keyboard layout
-    # KeyboardLayout(configured_keyboards=keyboard_layouts, update_interval=1, padding=0),
     kb_layout_widget,
     widget.Spacer(length=15),
-    # Battery
     battery_pack_widget,
     widget.Spacer(length=12),
-    # Clock
-    clock_widget,
-    widget.Spacer(length=5),
     # Время и дата
-    widget.Clock(format="%H:%M", padding=0),
+    clock_widget,
+    widget.Clock(format="%H:%M", padding=0, mouse_callbacks={"Button1": clock_widget.cmd_toggle}),
     widget.Spacer(length=20),
-    #     ],
-    # ),
     # Кнопка выключения
     widget.TextBox(
         text="",
