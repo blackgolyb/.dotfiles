@@ -127,6 +127,7 @@ alias rr='cargo run'
 alias alembic='python -m alembic'
 alias tttg='make -f /home/blackgolyb/Documents/tic_tac_toe_api/MakefileDocker serveo_restart'
 alias gitssh='ssh-add ~/.ssh/github'
+alias lg='lazygit'
 eval "$(zoxide init zsh)"
 eval "$(pyenv init -)"
 
