@@ -13,3 +13,4 @@
 (include modules/settings.kbd)
 (include modules/vim.kbd)
 (include modules/home_row_mods.kbd)
+(include modules/numbers.kbd)
