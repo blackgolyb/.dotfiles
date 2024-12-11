@@ -13,6 +13,7 @@ from sticky_manager import sticky_manager
 from groups import groups_keys
 
 wp = (scripts_path / "video_wallpaper").resolve()
+secondary_mod = "mod1"
 
 default_keys = [
     # Управление фокусом
@@ -43,51 +44,59 @@ default_keys = [
     ),  # Переместить окно вверх
     # Изменение размера окна
     Key(
-        [mod, "control"],
+        [mod, secondary_mod],
         arrows["left"],
         lazy.layout.grow_left(),
         desc="Grow window to the left",
     ),  # Увеличить окно влево
     Key(
-        [mod, "control"],
+        [mod, secondary_mod],
         arrows["right"],
         lazy.layout.grow_right(),
         desc="Grow window to the right",
     ),  # Увеличитпапкамиь окно вправо
     Key(
-        [mod, "control"], arrows["down"], lazy.layout.grow_down(), desc="Grow window down"
+        [mod, secondary_mod], arrows["down"], lazy.layout.grow_down(), desc="Grow window down"
     ),  # Увеличить окно вниз
     Key(
-        [mod, "control"], arrows["up"], lazy.layout.grow_up(), desc="Grow window up"
+        [mod, secondary_mod], arrows["up"], lazy.layout.grow_up(), desc="Grow window up"
     ),  # Увеличить окно вверх
-    Key(
-        [mod], "n", lazy.layout.normalize(), desc="Reset all window sizes"
-    ),  # Вернуть все взад
     # Переключение между макетами
-    Key([mod], "Tab", lazy.next_layout(), desc="Toggle between layouts"),
-    # Переключение между макетами
-    Key([mod, "shift"], "Tab", lazy.prev_layout(), desc="Toggle between layouts"),
+    Key([mod], "m", lazy.next_layout(), desc="Toggle between layouts"),
     # Закрыть окно
-    Key([mod], "q", lazy.window.kill(), desc="Kill focused window"),
+    Key([mod], "u", lazy.window.kill(), desc="Kill focused window"),
     # Перезагрузить конфиг
-    Key([mod, "control"], "r", lazy.reload_config(), desc="Reload the config"),
-    # Выйти из Qtile
-    Key([mod, "control"], "q", lazy.shutdown(), desc="Shutdown Qtile"),
-    # Выполнить команды (типо встроенное dmenu)
-    Key([mod], "d", lazy.spawncmd(), desc="Spawn a command using a prompt widget"),
+    Key([mod, secondary_mod], "r", lazy.reload_config(), desc="Reload the config"),
     # Скрыть/раскрыть панель
-    Key([mod, "control"], "space", lazy.hide_show_bar(bar_orientation)),
+    Key([mod, secondary_mod], "space", lazy.hide_show_bar(bar_orientation)),
     # Запуск приложений
     Key([mod], "Return", lazy.spawn(terminal)),
     # Key([mod], "f", lazy.spawn("firefox --wayland")), # Это для вайланда
-    Key([mod], "f", lazy.spawn(webbrowser)),  # Для иксов
-    Key([mod], "c", lazy.spawn(text_editor)),
-    Key([mod], "e", lazy.spawn(file_explorer)),
-    Key([mod], "t", lazy.spawn("telegram-desktop")),
-    Key([mod], "space", lazy.spawn("rofi -show drun")),
+    Key([mod, secondary_mod], "f", lazy.spawn(webbrowser)),  # Для иксов
+    Key([mod, secondary_mod], "c", lazy.spawn(text_editor)),
+    Key([mod, secondary_mod], "e", lazy.spawn(file_explorer)),
+    Key([mod, secondary_mod], "t", lazy.spawn("telegram-desktop")),
+    Key([mod, secondary_mod], "w", lazy.spawn(f"{wp} start")),
     Key(
-        [mod], "v", lazy.spawn('rofi -modi "clipboard:greenclip print" -show clipboard')
+        [mod, secondary_mod],
+        "s",
+        lazy.function(multi_monitor_widget.open_rofi_menu),
+        desc="multi monitors",
     ),
+    # Color picker
+    Key([mod, secondary_mod], "p", lazy.function(color_picker_widget.dropper.pick_color)),
+    # Штука которая позволяет закрепить окно на всех рабочих поверхностях
+    # Т.е. окно будет следовать за вами на всех робочих столах
+    Key(
+        [mod, secondary_mod], "v", lazy.spawn('rofi -modi "clipboard:greenclip print" -show clipboard')
+    ),
+    Key(
+        [mod],
+        "o",
+        lazy.function(sticky_manager.toggle_sticky_window),
+        desc="toggle stick window",
+    ),
+    Key([mod], "space", lazy.spawn("rofi -show drun")),
     Key([mod], "home", lazy.spawn("betterlockscreen --lock")),
     # Раскладка клавиатуры
     Key(
@@ -99,23 +108,6 @@ default_keys = [
     # Скриешоты
     # Нужно установить gnome-screenshot
     Key([], "Print", lazy.spawn("flameshot gui")),
-    Key([mod], "w", lazy.spawn(f"{wp} start")),
-    Key(
-        [mod],
-        "s",
-        lazy.function(multi_monitor_widget.open_rofi_menu),
-        desc="multi monitors",
-    ),
-    # Штука которая позволяет закрепить окно на всех рабочих поверхностях
-    # Т.е. окно будет следовать за вами на всех робочих столах
-    Key(
-        [mod],
-        "o",
-        lazy.function(sticky_manager.toggle_sticky_window),
-        desc="toggle stick window",
-    ),
-    # Color picker
-    Key([mod], "p", lazy.function(color_picker_widget.dropper.pick_color)),
     # Контроль звука и яркости
     Key([], "XF86AudioLowerVolume", lazy.function(volume_widget.down)),
     Key([], "XF86AudioRaiseVolume", lazy.function(volume_widget.up)),
