@@ -39,7 +39,7 @@
         }
     },
     {
-        "context": "vim_mode == normal || ProjectPanel || EmptyPane",
+        "context": "vim_mode == normal || EmptyPane",
         "bindings": {
             "space f": "file_finder::Toggle",
             "space t": "tab_switcher::Toggle",
@@ -73,21 +73,36 @@
         }
     },
     {
-        "context": "ProjectPanel",
-        "bindings": {
-            "space e": "buffer_search::FocusEditor"
-        }
-    },
-    {
         "context": "TabSwitcher",
         "bindings": {
             "d": "tab_switcher::CloseSelectedItem",
             "j": ["workspace::SendKeystrokes", "down"],
             "k": ["workspace::SendKeystrokes", "up"]
         }
+    },
+    {
+        "bindings": {
+            "j": "menu::SelectNext",
+            "k": "menu::SelectPrev",
+            "y": "menu::Confirm"
+        }
+    },
+    {
+        "context": "ProjectPanel && not_editing",
+        "bindings": {
+            "h": "project_panel::CollapseSelectedEntry",
+            "l": "project_panel::ExpandSelectedEntry",
+            "r": "project_panel::Rename",
+            "o": "project_panel::RevealInFileManager",
+            "x": "project_panel::Cut",
+            "y": "project_panel::Copy",
+            "p": "project_panel::Paste",
+            "d": "project_panel::Delete",
+            "n": "project_panel::NewFile",
+            "shift-n": "project_panel::NewDirectory",
+            "ctrl-n": "project_panel::Duplicate",
+            "g y": "project_panel::CopyRelativePath",
+            "g shift-y": "project_panel::CopyPath"
+        }
     }
-    // {
-    //     "context": "Editor && mode == full",
-    //     "bindings": {}
-    // }
 ]
