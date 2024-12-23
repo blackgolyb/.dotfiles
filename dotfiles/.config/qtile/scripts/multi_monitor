@@ -73,6 +73,12 @@ function chose_location () {
         "extend_right")
             configure_extern_monitor && configure_extern_monitor_location --right-of
             ;;
+        "extend_top")
+            configure_extern_monitor && configure_extern_monitor_location --above
+            ;;
+        "extend_bottom")
+            configure_extern_monitor && configure_extern_monitor_location --below
+            ;;
         "only_extend")
             disconnect_main_monitor
             ;;
@@ -85,7 +91,7 @@ function chose_location () {
 }
 
 function show_menu_location() {
-    options="disconnect\nextend_left\nextend_right\nonly_extend\nduplicate"
+    options="disconnect\nextend_left\nextend_right\nextend_top\nextend_bottom\nonly_extend\nduplicate"
 
     chosen="$(echo -e "$options" | $rofi_command "󰍹" )"
 
