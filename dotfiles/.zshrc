@@ -114,7 +114,7 @@ bindkey '^H' backward-kill-word
 bindkey '5~' kill-word
 alias dotfiles='sh $HOME/.dotfiles/scripts/dotfiles.sh'
 alias ls='exa'
-alias cd='z'
+# alias cd='z'
 alias c='zed .'
 alias p='poetry'
 alias pe='poetry shell' # pe -- python environment
@@ -128,17 +128,23 @@ alias alembic='python -m alembic'
 alias tttg='make -f /home/blackgolyb/Documents/tic_tac_toe_api/MakefileDocker serveo_restart'
 alias gitssh='ssh-add ~/.ssh/github'
 alias lg='lazygit'
+alias e='yazi'
+alias cht='sh ~/.config/cht/cht.sh'
+alias waifu='sh ~/.config/waifu/waifu.sh'
 eval "$(zoxide init zsh)"
 eval "$(pyenv init -)"
+
+export EDITOR=zed
+export VISUAL=zed
 
 if [[ -z "${SSH_CONNECTION}" ]]; then
   export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/ssh-agent.socket"
 fi
 
 
-# colorscript -r
-typeset -g POWERLEVEL9K_INSTANT_PROMPT=quiet
-# colorscript random
+waifu random
+# NOTE: add this to .p10k.zsh if use console output while init
+# typeset -g POWERLEVEL9K_INSTANT_PROMPT=quiet
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
