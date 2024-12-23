@@ -65,6 +65,10 @@
     },
     "relative_line_numbers": true,
     "tab_size": 4,
+    "inlay_hints": {
+        "enabled": false,
+        "show_background": true
+    },
     "preferred_line_length": 80,
     "vertical_scroll_margin": 10,
     "ui_font_size": 16,
