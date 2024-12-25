@@ -103,6 +103,7 @@ class StickyWindowManager:
                 if self._check_translate_available(window, current_group_name):
                     window.togroup(qtile.current_group.name)
                     window.bring_to_front()
+                    qtile.current_group.focus_back()
 
         @hook.subscribe.client_managed
         def _display_pined_window_above_other(
