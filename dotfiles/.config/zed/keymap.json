@@ -39,6 +39,13 @@
         }
     },
     {
+        "context": "Editor && vim_mode == normal",
+        "bindings": {
+            "g k": "editor::AddSelectionAbove",
+            "g j": "editor::AddSelectionBelow"
+        }
+    },
+    {
         "context": "vim_mode == normal || EmptyPane",
         "bindings": {
             "space f": "file_finder::Toggle",
