@@ -12,8 +12,11 @@ from widgets import (
 from sticky_manager import sticky_manager
 from groups import groups_keys
 
-wp = (scripts_path / "video_wallpaper").resolve()
 secondary_mod = "mod1"
+
+# Scripts:
+wp = (scripts_path / "video_wallpaper").resolve()
+touchpad_script = (scripts_path / "touchpad").resolve()
 
 default_keys = [
     # Управление фокусом
@@ -83,6 +86,8 @@ default_keys = [
         lazy.function(multi_monitor_widget.open_rofi_menu),
         desc="multi monitors",
     ),
+    # Touchpad
+    Key([mod], "t", lazy.spawn(f"{touchpad_script}")),
     # Color picker
     Key([mod, secondary_mod], "p", lazy.function(color_picker_widget.dropper.pick_color)),
     # Штука которая позволяет закрепить окно на всех рабочих поверхностях
