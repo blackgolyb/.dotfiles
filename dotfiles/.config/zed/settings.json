@@ -116,6 +116,32 @@
                     }
                 }
             ]
+        },
+        "JavaScript": {
+            "formatter": {
+                "external": {
+                    "command": "npx",
+                    "arguments": [
+                        "prettier",
+                        "--ignore-unknown",
+                        "--stdin-filepath",
+                        "{buffer_path}"
+                    ]
+                }
+            }
+        },
+        "TypeScript": {
+            "formatter": {
+                "external": {
+                    "command": "npx",
+                    "arguments": [
+                        "prettier",
+                        "--ignore-unknown",
+                        "--stdin-filepath",
+                        "{buffer_path}"
+                    ]
+                }
+            }
         }
     },
     "lsp": {
@@ -147,22 +173,16 @@
                 }
             }
         },
+        "tailwindcss-language-server": {
+            "settings": {
+                "classAttributes": ["class", "className", "ngClass", "styles"]
+            }
+        },
         "texlab": {
             "settings": {
                 "texlab": {
                     "build": {
                         "onSave": false
-                        // // "forwardSearchAfter": true,
-                        // "executable": "tectonic",
-                        // "args": [
-                        //     "-X",
-                        //     "compile",
-                        //     "%f",
-                        //     "--untrusted",
-                        //     "--synctex",
-                        //     "--keep-logs",
-                        //     "--keep-intermediates"
-                        // ]
                     }
                 }
             }
