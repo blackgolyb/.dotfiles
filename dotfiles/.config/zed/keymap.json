@@ -69,7 +69,7 @@
     {
         "context": "Editor && inline_completion && !showing_completions",
         "bindings": {
-            "esc": ["editor::ToggleInlineCompletions", "false"]
+            "escape": ["editor::ToggleInlineCompletions", "false"]
         }
     },
     {
@@ -98,6 +98,12 @@
     {
         "context": "ProjectPanel && not_editing",
         "bindings": {
+            "escape": "workspace::ToggleLeftDock",
+            "enter": ["workspace::SendKeystrokes", "shift-enter escape"],
+            "shift-enter": "project_panel::OpenPermanent",
+            "shift-space": ["workspace::SendKeystrokes", "space escape"],
+            "space": "project_panel::Open",
+            "e": "project_panel::ToggleFocus",
             "h": "project_panel::CollapseSelectedEntry",
             "l": "project_panel::ExpandSelectedEntry",
             "r": "project_panel::Rename",
