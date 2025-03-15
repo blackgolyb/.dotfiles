@@ -38,8 +38,7 @@ text_editor = "zed"
 terminal = "wezterm"# guess_terminal()  # 'alacritty'
 # webbrowser = "firefox"
 webbrowser = "zen-browser"
-file_explorer = "thunar"
-
+file_explorer = "wezterm -e yazi"
 
 group_gaps = 10
 outer_gaps = 10
