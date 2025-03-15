@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+
+SCRIPT=$(realpath ./main.py)
+
+echo "\
+[Unit]
+Description=Nice Sleep
+After=default.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/python3 ${SCRIPT}
+Restart=always
+RemainAfterExit=true
+
+[Install]
+WantedBy=default.target
+" > ./nice_sleep.service
+
+mkdir -p ~/.config/systemd/user
+ln -s -f ~/.config/sleep/nice_sleep.service ~/.config/systemd/user
