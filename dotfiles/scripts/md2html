@@ -1,0 +1,9 @@
+#!/usr/bin/env sh
+
+TMPDIR=`dirname $(mktemp -u -t tmp.XXXXXXXXXX)`
+out_file="$TMPDIR/tmp_md2html.html"
+~/.local/bin/_md2html/.venv/bin/python3 ~/.local/bin/_md2html/main.py -i $1 -o $out_file
+
+if [[ $* == *-o* ]]; then
+$($BROWSER $out_file)
+fi

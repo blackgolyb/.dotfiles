@@ -1,0 +1,26 @@
+#!/usr/bin/env sh
+
+function to_link() {
+    echo "file://$(realpath $1)"
+}
+
+function main() {
+    COPY_FILES=""
+
+    if [[ $# -ne 1 ]]; then
+        COPY_FILES="$(to_link $2)"
+        echo $(to_link $2)
+
+        for i in $(seq 3 $#);
+        do
+            f=$(eval echo \${$i})
+            echo $(to_link $f)
+            COPY_FILES="$COPY_FILES\n$(to_link $f)"
+        done
+    else
+        COPY_FILES="$(to_link $1)"
+        echo $(to_link $1)
+    fi
+}
+
+main "$@" | xclip -selection clipboard -t text/uri-list
