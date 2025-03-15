@@ -2,7 +2,7 @@
 # Initialization code that may require console input (password prompts, [y/n]
 # confirmations, etc.) must go above this block; everything else may go below.
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+    source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
 # If you come from bash you might have to change your $PATH.
@@ -108,6 +108,34 @@ source $ZSH/oh-my-zsh.sh
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
+function yazi_cwd() {
+    local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
+    yazi "$@" --cwd-file="$tmp"
+    if cwd="$(command cat -- "$tmp")" && [ -n "$cwd" ] && [ "$cwd" != "$PWD" ]; then
+    	builtin cd -- "$cwd"
+    fi
+    rm -f -- "$tmp"
+}
+
+function yazi_zed() {
+    local tmp="$(mktemp -t "yazi-chooser.XXXXX")"
+    yazi "$@" --chooser-file="$tmp"
+
+    local opened_file="$(cat -- "$tmp" | head -n 1)"
+    zed -a -- "$opened_file"
+
+    rm -f -- "$tmp"
+    exit
+}
+
+function lazygit_zed() {
+    lazygit
+    exit
+}
+
+function  wtf_yazi() {
+    echo "lol"
+}
 
 # My settings
 bindkey '^H' backward-kill-word
@@ -116,6 +144,9 @@ alias dotfiles='sh $HOME/.dotfiles/scripts/dotfiles.sh'
 alias ls='exa'
 # alias cd='z'
 alias c='zed .'
+alias e='yazi_cwd'
+alias g='lazygit'
+alias m='md2html'
 alias p='poetry'
 alias pe='poetry shell' # pe -- python environment
 alias pa='poetry add'
@@ -127,8 +158,8 @@ alias rr='cargo run'
 alias alembic='python -m alembic'
 alias tttg='make -f /home/blackgolyb/Documents/tic_tac_toe_api/MakefileDocker serveo_restart'
 alias gitssh='ssh-add ~/.ssh/github'
-alias lg='lazygit'
-alias e='yazi'
+alias epamssh='ssh-add ~/.ssh/autocode'
+alias tfssh='ssh-add ~/.ssh/tf'
 alias cht='sh ~/.config/cht/cht.sh'
 alias waifu='sh ~/.config/waifu/waifu.sh'
 eval "$(zoxide init zsh)"
@@ -136,13 +167,14 @@ eval "$(pyenv init -)"
 
 export EDITOR=zed
 export VISUAL=zed
+export BROWSER=zen-browser
 
 if [[ -z "${SSH_CONNECTION}" ]]; then
   export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/ssh-agent.socket"
 fi
 
 
-waifu random
+# waifu nsfw
 # NOTE: add this to .p10k.zsh if use console output while init
 # typeset -g POWERLEVEL9K_INSTANT_PROMPT=quiet
 
