@@ -1,0 +1,30 @@
+#!/usr/bin/env sh
+
+DOTFILES_DIR=".dotfiles"
+DOTFILES_PATH="$HOME/$DOTFILES_DIR"
+
+cd $HOME
+
+if [[ -d $DOTFILES_PATH ]]; then
+    cd .dotfiles
+    git pull
+else
+    echo "Select type of connection:"
+    select connection in ssh http; do
+        case $connection in
+            ssh)
+                git clone git@github.com:blackgolyb/.dotfiles.git $DOTFILES_DIR
+                break
+            ;;
+            http)
+                git clone https://github.com/blackgolyb/.dotfiles.git $DOTFILES_DIR
+                break
+            ;;
+        esac
+    done
+    cd $DOTFILES_DIR
+fi
+
+export DOTFILES_PATH=$DOTFILES_PATH
+
+sh $DOTFILES_PATH/scripts/install.sh
