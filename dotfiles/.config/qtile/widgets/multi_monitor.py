@@ -1,14 +1,12 @@
-import subprocess
 import re
+import subprocess
 from pathlib import Path
 
-from libqtile.widget import base
+import settings
+from libqtile import hook, qtile
 from libqtile.lazy import lazy
 from libqtile.log_utils import logger
-from libqtile import hook
-from libqtile import qtile
-
-import settings
+from libqtile.widget import base
 
 
 class MultiMonitor(base.InLoopPollText):
@@ -16,8 +14,7 @@ class MultiMonitor(base.InLoopPollText):
         (
             "update_interval",
             5,
-            "Update interval in seconds, if none, the "
-            "widget updates whenever it's done.",
+            "Update interval in seconds, if none, the widget updates whenever it's done.",
         ),
         (
             "script_path",
@@ -36,7 +33,7 @@ class MultiMonitor(base.InLoopPollText):
         ),
         (
             "extern_monitor_default_option",
-            "extend_top HDMI-2",
+            "only_extend HDMI-2",
             "Path to brightness control script",
         ),
     ]

@@ -9,8 +9,6 @@ from pathlib import Path
 from dataclasses import dataclass
 
 from libqtile.log_utils import logger
-from watchdog.observers import Observer
-from watchdog.events import FileSystemEventHandler
 
 from services.callbacks import Callbacks
 

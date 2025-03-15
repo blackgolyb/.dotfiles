@@ -173,6 +173,8 @@ default_widgets = [
     widget.Prompt(),
     # Виджет пробела который заполняет всё доступное место
     widget.Spacer(),
+    # widget.WindowName(),
+    # widget.Spacer(),
     # Трэй, не работает в вялом, нужно будет юзать widget.StatusNotifier
     widget.Systray(),
     widget.Spacer(length=15),
