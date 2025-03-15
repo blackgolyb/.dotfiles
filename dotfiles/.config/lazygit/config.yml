@@ -1,0 +1,3 @@
+os:
+    open: "zed {{filename}}"
+    editPreset: "zed"
