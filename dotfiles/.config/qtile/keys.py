@@ -1,29 +1,36 @@
 # Click, Drag, Group, Key, EzKey, Match, Screen
+from groups import groups_keys
 from libqtile.config import Key
 from libqtile.lazy import lazy
-
-from settings import scripts_path, mod, alt, bar_orientation, terminal, webbrowser, text_editor, file_explorer, arrows
+from settings import (
+    alt,
+    arrows,
+    bar_orientation,
+    file_explorer,
+    mod,
+    scripts_path,
+    terminal,
+    text_editor,
+    webbrowser,
+)
+from sticky_manager import sticky_manager
 from widgets import (
-    volume_widget,
     brightness_widget,
     color_picker_widget,
     multi_monitor_widget,
+    volume_widget,
 )
-from sticky_manager import sticky_manager
-from groups import groups_keys
 
 secondary_mod = "mod1"
 
 # Scripts:
 wp = (scripts_path / "video_wallpaper").resolve()
-touchpad_script = (scripts_path / "touchpad").resolve()
+device_manager_script = (scripts_path / "device_manager").resolve()
 
 default_keys = [
     # Управление фокусом
     Key([mod], arrows["left"], lazy.layout.left(), desc="Move focus to left"),  # Фокус влево
-    Key(
-        [mod], arrows["right"], lazy.layout.right(), desc="Move focus to right"
-    ),  # Фокус вправо
+    Key([mod], arrows["right"], lazy.layout.right(), desc="Move focus to right"),  # Фокус вправо
     Key([mod], arrows["down"], lazy.layout.down(), desc="Move focus down"),  # Фокус вниз
     Key([mod], arrows["up"], lazy.layout.up(), desc="Move focus up"),  # Фокус вверх
     # Перемещение окон
@@ -87,13 +94,17 @@ default_keys = [
         desc="multi monitors",
     ),
     # Touchpad
-    Key([mod], "t", lazy.spawn(f"{touchpad_script}")),
+    Key([mod], "t", lazy.spawn(f"{device_manager_script} touchpad")),
+    # Touchscreen
+    Key([mod, "shift"], "t", lazy.spawn(f"{device_manager_script} touchscreen")),
     # Color picker
     Key([mod, secondary_mod], "p", lazy.function(color_picker_widget.dropper.pick_color)),
     # Штука которая позволяет закрепить окно на всех рабочих поверхностях
     # Т.е. окно будет следовать за вами на всех робочих столах
     Key(
-        [mod, secondary_mod], "v", lazy.spawn('rofi -modi "clipboard:greenclip print" -show clipboard')
+        [mod, secondary_mod],
+        "v",
+        lazy.spawn('rofi -modi "clipboard:greenclip print" -show clipboard'),
     ),
     Key(
         [mod],
