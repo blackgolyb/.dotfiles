@@ -18,12 +18,7 @@
     {
         "context": "Editor && vim_mode == visual && !VimWaiting && !VimObject",
         "bindings": {
-            "shift-s": [
-                "vim::PushOperator",
-                {
-                    "AddSurrounds": {}
-                }
-            ]
+            "shift-s": ["vim::PushAddSurrounds", {}]
         }
     },
     {
@@ -51,31 +46,50 @@
             "space f": "file_finder::Toggle",
             "space t": "tab_switcher::Toggle",
             "space e": "project_panel::ToggleFocus",
-            "space b": "workspace::ToggleLeftDock",
-            "space o": "outline::Toggle",
+            "space b": "workspace::ToggleRightDock",
             "space d": "diagnostics::Deploy",
             "space z": "workspace::ToggleCenteredLayout",
+            "space shift-l t": "workspace::ToggleTitleBar",
+            "space shift-l s": "workspace::ToggleStatusBar",
+            "space l": [
+                "workspace::SendKeystrokes",
+                "space shift-l t space shift-l s"
+            ],
+            "space g": ["task::Spawn", { "task_name": "start_lazygit" }],
+            "space shift-e": [
+                "task::Spawn",
+                { "task_name": "file_navigation" }
+            ],
+            "space space": "workspace::NewCenterTerminal"
             // For AI auto inline complete (but using by trigger)
             // NOTE: no ways to disable it ;(
-            "space a i": "editor::ToggleInlineCompletions",
-            "space a n": "editor::NextInlineCompletion",
-            "space a shift-n": "editor::PreviousInlineCompletion",
-            "space a a": [
-                "editor::AcceptInlineCompletion",
-                "editor::ToggleInlineCompletions"
-            ]
+            // "space a i": "editor::ToggleEditPrediction",
+            // "space a n": "editor::NextEditPrediction",
+            // "space a shift-n": "editor::PreviousEditPrediction"
+            // "space shift-a 0": "editor::AcceptInlineCompletion",
+            // "space shift-a 1": "editor::ToggleInlineCompletions",
+            // "space a a": [
+            //     "workspace::SendKeystrokes",
+            //     "space shift-a 0 space shift-a 1"
+            // ]
         }
     },
     {
-        "context": "Editor && inline_completion && !showing_completions",
+        "context": "Terminal",
         "bindings": {
-            "escape": ["editor::ToggleInlineCompletions", "false"]
+            "ctrl-w": "pane::CloseActiveItem"
         }
     },
     {
-        "context": "Editor && vim_mode == insert && inline_completion && !showing_completions",
+        "context": "Editor && edit_prediction && !showing_completions",
         "bindings": {
-            "tab": "editor::Tab"
+            // "escape": "editor::ToggleInlineCompletions"
+        }
+    },
+    {
+        "context": "Editor && vim_mode == insert && edit_prediction && !showing_completions",
+        "bindings": {
+            // "tab": "editor::Tab"
             // "enter": "vim::Enter"
         }
     },
@@ -98,7 +112,7 @@
     {
         "context": "ProjectPanel && not_editing",
         "bindings": {
-            "escape": "workspace::ToggleLeftDock",
+            "escape": "workspace::ToggleRightDock",
             "enter": ["workspace::SendKeystrokes", "shift-enter escape"],
             "shift-enter": "project_panel::OpenPermanent",
             "shift-space": ["workspace::SendKeystrokes", "space escape"],

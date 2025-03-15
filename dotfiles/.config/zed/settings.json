@@ -11,16 +11,22 @@
         "show_nav_history_buttons": false
     },
     "toolbar": {
-        "breadcrumbs": false,
+        "breadcrumbs": true,
         "quick_actions": false,
         "selections_menu": false
     },
     "terminal": {
-        "button": false
+        "button": false,
+        "font_size": 20,
+        "font_family": "JetBrainsMono Nerd Font",
+        "line_height": {
+            "custom": 1.3
+        }
     },
     "assistant": {
         "button": false,
-        "version": "2"
+        "version": "2",
+        "enabled": false
     },
     "collaboration_panel": {
         "button": false
@@ -30,10 +36,11 @@
     },
     "project_panel": {
         "auto_fold_dirs": false,
-        "button": false
+        "button": false,
+        "dock": "right"
     },
     "chat_panel": {
-        "button": false
+        "button": "never"
     },
     "notification_panel": {
         "button": false
@@ -48,9 +55,9 @@
         "left_padding": 0.2,
         "right_padding": 0.2
     },
-    "show_inline_completions": false,
+    "show_edit_predictions": false,
     "features": {
-        "inline_completion_provider": "none",
+        "edit_prediction_provider": "none",
         "copilot": false
     },
     "vim_mode": true,
@@ -69,37 +76,61 @@
         "enabled": false,
         "show_background": true
     },
+    "title_bar": {
+        "show": false
+    },
+    "status_bar": {
+        "show": false
+    },
     "preferred_line_length": 80,
     "vertical_scroll_margin": 10,
     "ui_font_size": 16,
-    "buffer_font_size": 16,
+    "buffer_font_size": 18.0,
     "buffer_font_family": "FiraCode Nerd Font Mono",
     "theme": {
         "mode": "system",
-        "light": "One Dark Pro",
+        "light": "Mono Dark",
         "dark": "One Dark Pro"
     },
     "experimental.theme_overrides": {
-        "background.appearance": "blurred",
-        "background": "#23272efc", // main bg color and opacity
-        "surface.background": "#0000",
-        "element.background": "#0000",
-        "title_bar.background": "#1e2227f6",
-        "status_bar.background": "#1e2227f6",
-        "tab_bar.background": "#1e2227",
-        "tab.inactive_background": "#0000",
-        "tab.active_background": "#282c33ff",
-        "panel.background": "#0000",
-        "editor.background": "#0000",
-        "editor.gutter.background": "#0000",
-        // "scrollbar.track.background": "#1e2227aa",
-        "scrollbar.track.background": "#0000",
-        "scrollbar.thumb.background": "#4e5666f6"
+        // "background.appearance": "blurred",
+        // "background": "#23272efc", // main bg color and opacity
+        // "surface.background": "#0000",
+        // "element.background": "#0000",
+        // "title_bar.background": "#1e2227f6",
+        // "status_bar.background": "#1e2227f6",
+        // "tab_bar.background": "#1e2227",
+        // "tab.inactive_background": "#0000",
+        // "tab.active_background": "#282c33ff",
+        // "panel.background": "#0000",
+        // "editor.background": "#0000",
+        // "terminal.background": "#0000",
+        // "editor.gutter.background": "#0000",
+        // // "scrollbar.track.background": "#1e2227aa",
+        // "scrollbar.track.background": "#0000",
+        // "scrollbar.thumb.background": "#4e5666f6",
+        // // Terminal colors
+        // "terminal.ansi.black": "#232627",
+        // "terminal.ansi.red": "#ed1515",
+        // "terminal.ansi.green": "#11d116",
+        // "terminal.ansi.yellow": "#f67400",
+        // "terminal.ansi.blue": "#1d99f3",
+        // "terminal.ansi.magenta": "#9b59b6",
+        // "terminal.ansi.cyan": "#1abc9c",
+        // "terminal.ansi.white": "#fcfcfc",
+        // "terminal.ansi.bright_black": "#7f8c8d",
+        // "terminal.ansi.bright_red": "#c0392b",
+        // "terminal.ansi.bright_green": "#1cdc9a",
+        // "terminal.ansi.bright_yellow": "#fdbc4b",
+        // "terminal.ansi.bright_blue": "#3daee9",
+        // "terminal.ansi.bright_magenta": "#8e44ad",
+        // "terminal.ansi.bright_cyan": "#16a085",
+        // "terminal.ansi.bright_white": "#ffffff"
     },
     "languages": {
         "Python": {
-            // "language_servers": ["pyright", "ruff"],
-            "language_servers": ["pyright"],
+            "language_servers": ["pyright", "ruff"],
+            // "language_servers": ["pyright"],
             "format_on_save": "on",
             "formatter": [
                 {
@@ -142,6 +173,10 @@
                     ]
                 }
             }
+        },
+        "Markdown": {
+            "format_on_save": "on",
+            "remove_trailing_whitespace_on_save": false
         }
     },
     "lsp": {
