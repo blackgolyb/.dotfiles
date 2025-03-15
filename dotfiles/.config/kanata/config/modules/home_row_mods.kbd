@@ -70,10 +70,18 @@
 )
 
 (deftemplate hrm-l (hrm-key hrm-mod tt th)
-  (tap-hold-release-keys $tt $th (multi $hrm-key @tap) (multi $hrm-mod @hrm-left-hold) $left-hand-keys)
+  (tap-hold-release-keys $tt $th
+    (multi $hrm-key @tap)
+    (multi $hrm-mod @hrm-left-hold)
+    $left-hand-keys
+  )
 )
 (deftemplate hrm-r (hrm-key hrm-mod tt th)
-  (tap-hold-release-keys $tt $th (multi $hrm-key @tap) (multi $hrm-mod @hrm-right-hold) $right-hand-keys)
+  (tap-hold-release-keys $tt $th
+    (multi $hrm-key @tap)
+    (multi $hrm-mod @hrm-right-hold)
+    $right-hand-keys
+  )
 )
 
 (defalias
@@ -91,7 +99,8 @@
   )
 
 
-  ;;           key   mod      tap  and hold   timeouts
+  ;;                             timeouts
+  ;;           key   mod      tap      hold
   a (t! hrm-l  a     $a-mod   $a-tap   $a-hold)
   s (t! hrm-l  s     $s-mod   $s-tap   $s-hold)
   d (t! hrm-l  d     $d-mod   $d-tap   $d-hold)
