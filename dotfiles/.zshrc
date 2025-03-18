@@ -140,9 +140,9 @@ function  wtf_yazi() {
 # My settings
 bindkey '^H' backward-kill-word
 bindkey '5~' kill-word
-alias dotfiles='sh $HOME/.dotfiles/scripts/dotfiles.sh'
 alias ls='exa'
-# alias cd='z'
+alias h='htop'
+alias hz='history | fzf'
 alias c='zed .'
 alias e='yazi_cwd'
 alias g='lazygit'
