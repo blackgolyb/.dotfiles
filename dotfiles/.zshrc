@@ -1,10 +1,3 @@
-# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
-# Initialization code that may require console input (password prompts, [y/n]
-# confirmations, etc.) must go above this block; everything else may go below.
-if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-    source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
-fi
-
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
@@ -15,7 +8,7 @@ export ZSH="$HOME/.oh-my-zsh"
 # load a random theme each time oh-my-zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
 # See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
-ZSH_THEME="powerlevel10k/powerlevel10k"
+ZSH_THEME=""
 
 # Set list of themes to pick from when loading at random
 # Setting this variable when ZSH_THEME=random will cause zsh to load
@@ -82,6 +75,7 @@ plugins=(git poetry zsh-navigation-tools zsh-autosuggestions zsh-syntax-highligh
 # colorscript random
 
 source $ZSH/oh-my-zsh.sh
+eval "$(starship init zsh)"
 
 # User configuration
 
@@ -108,6 +102,25 @@ source $ZSH/oh-my-zsh.sh
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
+
+
+###########:STARSHIP:###########
+PROMPT_NEEDS_NEWLINE=false
+
+precmd() {
+  if [[ "$PROMPT_NEEDS_NEWLINE" == true ]]; then
+    echo
+  fi
+  PROMPT_NEEDS_NEWLINE=true
+}
+
+clear() {
+  PROMPT_NEEDS_NEWLINE=false
+  command clear
+}
+
+
+###########:YAZI:###########
 function yazi_cwd() {
     local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
     yazi "$@" --cwd-file="$tmp"
@@ -128,25 +141,29 @@ function yazi_zed() {
     exit
 }
 
+
+###########:LAZYGIT:###########
 function lazygit_zed() {
     lazygit
     exit
 }
 
-function  wtf_yazi() {
-    echo "lol"
-}
 
-# My settings
+###########:MY SETTING:###########
 bindkey '^H' backward-kill-word
 bindkey '5~' kill-word
 alias ls='exa'
-alias h='htop'
+alias rm='rmt'
+alias df='duf'
+alias h='btop'
 alias hz='history | fzf'
 alias c='zed .'
 alias e='yazi_cwd'
 alias g='lazygit'
+alias t='zellij'
+alias cl='clear'
 alias m='md2html'
+alias d='source $(which dotfiles)'
 alias p='poetry'
 alias pe='poetry shell' # pe -- python environment
 alias pa='poetry add'
@@ -158,16 +175,21 @@ alias rr='cargo run'
 alias alembic='python -m alembic'
 alias tttg='make -f /home/blackgolyb/Documents/tic_tac_toe_api/MakefileDocker serveo_restart'
 alias gitssh='ssh-add ~/.ssh/github'
+alias visossh='ssh-add ~/.ssh/kytas999'
+alias viso-setup='git config user.name "kytas999" & git config user.email "kytasevichvlad@gmail.com"'
 alias epamssh='ssh-add ~/.ssh/autocode'
 alias tfssh='ssh-add ~/.ssh/tf'
 alias cht='sh ~/.config/cht/cht.sh'
 alias waifu='sh ~/.config/waifu/waifu.sh'
-eval "$(zoxide init zsh)"
-eval "$(pyenv init -)"
 
 export EDITOR=zed
 export VISUAL=zed
 export BROWSER=zen-browser
+
+source ~/.phpbrew/bashrc
+eval "$(pyenv init -)"
+
+eval "$(zoxide init zsh)"
 
 if [[ -z "${SSH_CONNECTION}" ]]; then
   export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/ssh-agent.socket"
@@ -175,8 +197,3 @@ fi
 
 
 # waifu nsfw
-# NOTE: add this to .p10k.zsh if use console output while init
-# typeset -g POWERLEVEL9K_INSTANT_PROMPT=quiet
-
-# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
-[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
