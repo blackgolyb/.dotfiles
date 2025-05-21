@@ -68,7 +68,9 @@
     "command_aliases": {
         "W": "w",
         "Wq": "wq",
-        "Q": "q"
+        "Q": "q",
+        "we": "save without format",
+        "We": "save without format"
     },
     "relative_line_numbers": true,
     "tab_size": 4,
@@ -85,7 +87,7 @@
     "preferred_line_length": 80,
     "vertical_scroll_margin": 10,
     "ui_font_size": 16,
-    "buffer_font_size": 18.0,
+    "buffer_font_size": 21.0,
     "buffer_font_family": "FiraCode Nerd Font Mono",
     "theme": {
         "mode": "system",
@@ -128,6 +130,9 @@
         // "terminal.ansi.bright_white": "#ffffff"
     },
     "languages": {
+        "JSON": {
+            "tab_size": 2
+        },
         "Python": {
             "language_servers": ["pyright", "ruff"],
             // "language_servers": ["pyright"],
