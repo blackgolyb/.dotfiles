@@ -9,6 +9,7 @@ from settings import (
     file_explorer,
     mod,
     scripts_path,
+    secondary_mod,
     terminal,
     text_editor,
     webbrowser,
@@ -20,8 +21,6 @@ from widgets import (
     multi_monitor_widget,
     volume_widget,
 )
-
-secondary_mod = "mod1"
 
 # Scripts:
 wp = (scripts_path / "video_wallpaper").resolve()

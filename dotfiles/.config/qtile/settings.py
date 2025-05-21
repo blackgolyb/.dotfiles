@@ -25,6 +25,7 @@ fontsize = 18
 # Keys variables
 mod = "mod4"
 alt = "mod1"
+secondary_mod = "mod1"
 arrows = {
     "up": "k",
     "down": "j",
@@ -35,7 +36,7 @@ arrows = {
 
 # Programs
 text_editor = "zed"
-terminal = "wezterm"# guess_terminal()  # 'alacritty'
+terminal = "wezterm"  # guess_terminal()  # 'alacritty'
 # webbrowser = "firefox"
 webbrowser = "zen-browser"
 file_explorer = "wezterm -e yazi"
