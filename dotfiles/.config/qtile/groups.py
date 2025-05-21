@@ -1,7 +1,5 @@
 from libqtile.config import Key, Match
-
 from services.groups_utils import GroupCreator, extend_keys
-
 
 create_group = GroupCreator()
 create_group.is_description = True
@@ -15,13 +13,13 @@ default_groups = [
         matches=[
             Match(wm_class="firefox"),
             Match(wm_class="floorp"),
-            Match(wm_class="zen-beta"),
+            Match(wm_class="zen"),
         ],
     ),
     create_group("d", "", screen=0),
-    create_group("s", "", screen=0),
-    create_group("a", "󱞁", screen=0, matches=[Match(wm_class="Logseq")]),
-    create_group("v", "", screen=1),
+    create_group("s", "", screen=0),
+    create_group("a", "", screen=0),
+    create_group("v", "󱞁", screen=1, matches=[Match(wm_class="Logseq")]),
     create_group("c", "", screen=1),
     create_group(
         "x",
