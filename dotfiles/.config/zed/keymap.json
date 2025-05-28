@@ -125,7 +125,7 @@
             "x": "project_panel::Cut",
             "y": "project_panel::Copy",
             "p": "project_panel::Paste",
-            "d": "project_panel::Delete",
+            "d": "project_panel::Trash",
             "n": "project_panel::NewFile",
             "shift-n": "project_panel::NewDirectory",
             "ctrl-n": "project_panel::Duplicate",
