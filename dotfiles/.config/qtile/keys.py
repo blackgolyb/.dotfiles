@@ -84,7 +84,7 @@ default_keys = [
     Key([mod, secondary_mod], "f", lazy.spawn(webbrowser)),  # Для иксов
     Key([mod, secondary_mod], "c", lazy.spawn(text_editor)),
     Key([mod, secondary_mod], "e", lazy.spawn(file_explorer)),
-    Key([mod, secondary_mod], "t", lazy.spawn("telegram-desktop")),
+    Key([mod, secondary_mod], "t", lazy.spawn("Telegram")),
     Key([mod, secondary_mod], "w", lazy.spawn(f"{wp} start")),
     Key(
         [mod, secondary_mod],

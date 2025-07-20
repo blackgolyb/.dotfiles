@@ -30,7 +30,7 @@ default_groups = [
             Match(wm_class="YouTube Music"),
         ],
     ),
-    create_group("z", "", screen=1, matches=[Match(wm_class="telegram-desktop")]),
+    create_group("z", "", screen=1, matches=[Match(wm_class="Telegram")]),
 ]
 
 groups_keys: list[Key] = []
