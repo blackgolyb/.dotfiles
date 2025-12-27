@@ -1,13 +1,12 @@
-from libqtile.widget import base, Systray
+from libqtile import hook, widget
 from libqtile.lazy import lazy
 from libqtile.log_utils import logger
-from libqtile import widget
-from libqtile import hook
+from libqtile.widget import Systray, base
+
+from widgets.base import HoveringWidgetTabGroup, WidgetBox, WidgetGroup
 
 # from pathlib import Path
-
 from .api import YTMusicAPI
-from widgets.base import WidgetBox, WidgetGroup, HoveringWidgetTabGroup
 
 
 class YTMusicAPIInitMixin:
@@ -60,14 +59,12 @@ class YTMusicTitleWidget(YTMusicAPIInitMixin, base.InLoopPollText):
         (
             "update_interval",
             1,
-            "Update interval in seconds, if none, the "
-            "widget updates whenever it's done.",
+            "Update interval in seconds, if none, the widget updates whenever it's done.",
         ),
         (
             "fmt",
             "{}",
-            "Update interval in seconds, if none, the "
-            "widget updates whenever it's done.",
+            "Update interval in seconds, if none, the widget updates whenever it's done.",
         ),
         ("max_chars", 12, "Maximum number of characters to display in widget."),
         (
@@ -210,16 +207,6 @@ class YTMusicControlWidget(WidgetGroup):
 class YTMusicWidget(YTMusicAPIInitMixin, WidgetBox):
     defaults = [
         ("foreground", "#ffffff", "Foreground color."),
-        (
-            "yt_music_on_icon",
-            "󰝚 ",
-            ""
-        ),
-        (
-            "yt_music_off_icon",
-            "󰝛 ",
-            ""
-        ),
     ]
 
     def __init__(self, api: YTMusicAPI | None = None, **config):
@@ -277,3 +264,32 @@ class YTMusicWidget(YTMusicAPIInitMixin, WidgetBox):
     def cmd_toggle(self):
         if self._can_toggling:
             WidgetBox.cmd_toggle(self)
+
+
+class YTMusicIndicator(base.InLoopPollText):
+    defaults = [
+        (
+            "update_interval",
+            5,
+            "Update interval in seconds, if none, the widget updates whenever it's done.",
+        ),
+        ("yt_music_on_icon", "󰝚", ""),
+        ("yt_music_off_icon", "󰝛", ""),
+    ]
+
+    def __init__(self, api: YTMusicAPI | None = None, **config):
+        base.InLoopPollText.__init__(self, default_text="", **config)
+        self.add_defaults(YTMusicIndicator.defaults)
+        self.yt_music_api = api or YTMusicAPI()
+        self.yt_music_status = None
+
+    def update_status(self):
+        self.yt_music_status = self.yt_music_api.is_alive(force=True)
+
+    def _configure(self, qtile, bar):
+        super()._configure(qtile, bar)
+        self.update_status()
+
+    def poll(self) -> str:
+        self.update_status()
+        return self.yt_music_on_icon if self.yt_music_status else self.yt_music_off_icon

@@ -1,8 +1,9 @@
 from .widgets import (
-    YTMusicWidget,
     YTMusicControlWidget,
-    YTMusicPreviousSongWidget,
+    YTMusicIndicator,
     YTMusicNextSongWidget,
     YTMusicPausePlayWidget,
+    YTMusicPreviousSongWidget,
     YTMusicTitleWidget,
+    YTMusicWidget,
 )
