@@ -1,19 +1,19 @@
-[[manager.prepend_keymap]]
+[[mgr.prepend_keymap]]
 on   = [ "c", "f" ]
 run  = "shell 'copyfile_url $0 $@'"
 desc = "Copy file"
 
-[[manager.prepend_keymap]]
+[[mgr.prepend_keymap]]
 on   = [ "c", "n" ]
 run  = "copy filename"
 desc = "Copy the file"
 
-[[manager.prepend_keymap]]
+[[mgr.prepend_keymap]]
 on   = [ "l" ]
 run = "plugin fuse-archive mount"
 desc = "Enter or Mount selected archive"
 
-[[manager.prepend_keymap]]
+[[mgr.prepend_keymap]]
 on   = [ "h" ]
 run = "plugin fuse-archive unmount"
 desc = "Leave or Unmount selected archive"
