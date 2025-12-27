@@ -87,6 +87,7 @@
   .  .
   /  /
   rsft  rsft
+  up  up
   kp1  kp1
   kp2  kp2
   kp3  kp3
@@ -96,6 +97,9 @@
   rmet  rmet
   cmp  cmp
   rctl  rctl
+  left  left
+  down  down
+  rght  rght
   kp0  kp0
   kp.  kp.
 )

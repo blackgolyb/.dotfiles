@@ -1,8 +1,4 @@
 (defalias
   caps  esc
   esc   caps
-  up    XX
-  down  XX
-  left  XX
-  rght  XX
 )

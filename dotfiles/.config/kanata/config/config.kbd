@@ -9,6 +9,7 @@
 ;; Inclued modules
 ;; NOTE: if you change this you should re-run build script
 (include modules/base.kbd)
+(include modules/split.kbd)
 (include modules/normal.kbd)
 (include modules/settings.kbd)
 (include modules/vim.kbd)
