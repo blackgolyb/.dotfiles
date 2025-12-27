@@ -1,0 +1,75 @@
+[Default Applications]
+# =====================
+# Browsers / links
+# =====================
+x-scheme-handler/http=zen.desktop
+x-scheme-handler/https=zen.desktop
+x-scheme-handler/chrome=zen.desktop
+text/html=zen.desktop
+application/xhtml+xml=zen.desktop
+
+# =====================
+# PDF
+# =====================
+application/pdf=zen.desktop
+
+# =====================
+# Text & Programming
+# =====================
+text/plain=dev.zed.Zed.desktop
+text/markdown=dev.zed.Zed.desktop
+text/x-python=dev.zed.Zed.desktop
+text/x-rust=dev.zed.Zed.desktop
+text/x-go=dev.zed.Zed.desktop
+text/x-java=dev.zed.Zed.desktop
+text/x-csrc=dev.zed.Zed.desktop
+text/x-c++src=dev.zed.Zed.desktop
+text/x-shellscript=dev.zed.Zed.desktop
+application/json=dev.zed.Zed.desktop
+application/javascript=dev.zed.Zed.desktop
+application/xml=dev.zed.Zed.desktop
+application/toml=dev.zed.Zed.desktop
+text/x-yaml=dev.zed.Zed.desktop
+text/x-toml=dev.zed.Zed.desktop
+
+# =====================
+# Images (feh)
+# =====================
+image/png=feh.desktop
+image/jpeg=feh.desktop
+image/jpg=feh.desktop
+image/webp=feh.desktop
+image/gif=feh.desktop
+image/bmp=feh.desktop
+image/tiff=feh.desktop
+image/svg+xml=feh.desktop
+
+# =====================
+# Video (VLC)
+# =====================
+video/mp4=vlc.desktop
+video/x-matroska=vlc.desktop
+video/webm=vlc.desktop
+video/x-msvideo=vlc.desktop
+video/mpeg=vlc.desktop
+video/quicktime=vlc.desktop
+
+# =====================
+# Audio (VLC)
+# =====================
+audio/mpeg=vlc.desktop
+audio/ogg=vlc.desktop
+audio/wav=vlc.desktop
+audio/flac=vlc.desktop
+audio/mp4=vlc.desktop
+audio/webm=vlc.desktop
+
+# =====================
+# App handlers
+# =====================
+x-scheme-handler/discord-460807638964371468=discord-460807638964371468.desktop
+x-scheme-handler/logseq=appimagekit_2a075694443c9c5171715b2bed6c78ff-Logseq.desktop
+x-scheme-handler/heroic=appimagekit_7cb80d23dba01b376900f1d73526cb66-Heroic_Games_Launcher.desktop
+x-scheme-handler/youtubemusic=YouTube Music.desktop
+x-scheme-handler/tonsite=org.telegram.desktop.desktop
+modrinth=modrinth-app-handler.desktop
