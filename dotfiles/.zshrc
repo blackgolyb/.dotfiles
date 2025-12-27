@@ -70,7 +70,10 @@ ZSH_THEME=""
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git poetry zsh-navigation-tools zsh-autosuggestions zsh-syntax-highlighting)
+# plugins=(git poetry zsh-navigation-tools zsh-autosuggestions zsh-syntax-highlighting zsh-vi-mode fzf-zsh-plugin)
+ZVM_INIT_MODE=sourcing
+plugins=(git poetry zsh-navigation-tools zsh-autosuggestions zsh-syntax-highlighting zsh-vi-mode fzf-zsh-plugin)
+
 
 # colorscript random
 
@@ -153,17 +156,21 @@ function lazygit_zed() {
 bindkey '^H' backward-kill-word
 bindkey '5~' kill-word
 alias ls='exa'
-alias rm='rmt'
 alias df='duf'
 alias h='btop'
 alias hz='history | fzf'
 alias c='zed .'
 alias e='yazi_cwd'
 alias g='lazygit'
+alias d='lazydocker'
 alias t='zellij'
+alias ai='gemini'
+alias oi='sudo pacman -S'
+alias or='sudo pacman -R'
+alias ou='sudo pacman -Syu'
 alias cl='clear'
 alias m='md2html'
-alias d='source $(which dotfiles)'
+alias dot='source $(which dotfiles)'
 alias p='poetry'
 alias pe='poetry shell' # pe -- python environment
 alias pa='poetry add'
@@ -174,26 +181,59 @@ alias py='python'
 alias rr='cargo run'
 alias alembic='python -m alembic'
 alias tttg='make -f /home/blackgolyb/Documents/tic_tac_toe_api/MakefileDocker serveo_restart'
-alias gitssh='ssh-add ~/.ssh/github'
-alias visossh='ssh-add ~/.ssh/kytas999'
-alias viso-setup='git config user.name "kytas999" & git config user.email "kytasevichvlad@gmail.com"'
-alias epamssh='ssh-add ~/.ssh/autocode'
-alias tfssh='ssh-add ~/.ssh/tf'
-alias cht='sh ~/.config/cht/cht.sh'
-alias waifu='sh ~/.config/waifu/waifu.sh'
+alias gitssh='activate-ssh-key github'
+alias epamssh='activate-ssh-key autocode'
+alias vladssh='activate-ssh-key kytas999'
+alias revssh='activate-ssh-key revscale'
+alias tarasssh='activate-ssh-key taras'
+alias tfssh='activate-ssh-key tf'
+
+
+function activate-ssh-key() {
+    eval "$(ssh-agent -s)" > /dev/null
+    ssh-add ~/.ssh/$1 > /dev/null
+}
+
+function my-setup() {
+    git config --local user.name "Blackgolyb"
+    git config --local user.email "andrejomelnickij@gmail.com"
+}
+
+function kytas-setup() {
+    git config --local user.name "kytas999"
+    git config --local user.email "kytasevichvlad@gmail.com"
+}
+
+function tarasw-setup() {
+    git config --local user.name "TarasVoievoda"
+    git config --local user.email "taras.v.working@gmail.com"
+}
+
+function revscale-setup() {
+    git config --local user.name "Andrii Omelnitsky"
+    git config --local user.email "aomelnitsky@getrevscale.com"
+}
+
+
 
 export EDITOR=zed
 export VISUAL=zed
 export BROWSER=zen-browser
+export GOOGLE_CLOUD_PROJECT=ace-bot-441819
+
+export PATH=$HOME/.npm-global/bin:$PATH
 
 source ~/.phpbrew/bashrc
 eval "$(pyenv init -)"
 
 eval "$(zoxide init zsh)"
 
+[[ -f "$HOME/.ghcup/env" ]] && source "$HOME/.ghcup/env"
+
 if [[ -z "${SSH_CONNECTION}" ]]; then
   export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/ssh-agent.socket"
 fi
 
-
-# waifu nsfw
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
