@@ -19,7 +19,15 @@ default_groups = [
     create_group("d", "", screen=0),
     create_group("s", "", screen=0),
     create_group("a", "", screen=0),
-    create_group("v", "󱞁", screen=1, matches=[Match(wm_class="Logseq")]),
+    create_group(
+        "v",
+        "󱞁",
+        screen=1,
+        matches=[
+            Match(wm_class="Logseq"),
+            Match(wm_class="superproductivity"),
+        ],
+    ),
     create_group("c", "", screen=1),
     create_group(
         "x",
