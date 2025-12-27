@@ -1,14 +1,37 @@
 #!/bin/bash
 
 function start_wallpapers() {
-    if [ "$2" == "right" ]
-    then
-        pos=1920+0
+    # Get screen resolution for the specified monitor
+    if [ "$2" == "right" ]; then
+        # Get resolution of the right monitor (assuming it's the second one)
+        resolution=$(xrandr --query | grep " connected" | sed -n '2p' | grep -oP '\d+x\d+' | head -n1)
+        if [ -z "$resolution" ]; then
+            # Fallback: get primary monitor resolution
+            resolution=$(xrandr --query | grep " connected primary" | grep -oP '\d+x\d+' | head -n1)
+        fi
+        width=$(echo $resolution | cut -d'x' -f1)
+        height=$(echo $resolution | cut -d'x' -f2)
+        pos="${width}+0"
     else
-        pos=0+0
+        # Get resolution of the left/primary monitor
+        resolution=$(xrandr --query | grep " connected primary" | grep -oP '\d+x\d+' | head -n1)
+        if [ -z "$resolution" ]; then
+            # Fallback: get first connected monitor
+            resolution=$(xrandr --query | grep " connected" | head -n1 | grep -oP '\d+x\d+' | head -n1)
+        fi
+        width=$(echo $resolution | cut -d'x' -f1)
+        height=$(echo $resolution | cut -d'x' -f2)
+        pos="0+0"
     fi
 
-    xwinwrap -g 1920x1080+$pos -ni -ov -s -b -nf -debug -- mpv $1 $3 -wid WID
+    # Fallback to 1920x1200 (16:10) if detection fails
+    if [ -z "$width" ] || [ -z "$height" ]; then
+        width=1920
+        height=1200
+    fi
+
+    echo "Starting video wallpaper with resolution: ${width}x${height} at position: $pos"
+    xwinwrap -g ${width}x${height}+$pos -ni -ov -s -b -nf -debug -- mpv $1 $3 -wid WID --no-audio --hwdec=auto
 }
 
 
@@ -37,7 +60,7 @@ function play() {
             ;;
     esac
     url="$($rofi_command "URL" )"
-    
+
     # current_monitor=$"(cat /tmp/__WM__CURRENT_MONITOR__)"
 
     if [ ! -z "$url" ]
