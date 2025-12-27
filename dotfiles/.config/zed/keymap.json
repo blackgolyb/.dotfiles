@@ -6,19 +6,11 @@
 // To see the default key bindings run `zed: open default keymap`
 // from the command palette.
 [
-    // {
-    //     "context": "VimControl && !menu && vim_mode != operator",
-    //     "bindings": {
-    //         "w": "vim::NextSubwordStart",
-    //         "b": "vim::PreviousSubwordStart",
-    //         "e": "vim::NextSubwordEnd",
-    //         "g e": "vim::PreviousSubwordEnd"
-    //     }
-    // },
     {
         "context": "Editor && vim_mode == visual && !VimWaiting && !VimObject",
         "bindings": {
-            "shift-s": ["vim::PushAddSurrounds", {}]
+            "shift-s": "vim::PushAddSurrounds",
+            "space a a": "agent::AddSelectionToThread"
         }
     },
     {
@@ -41,6 +33,12 @@
         }
     },
     {
+        "context": "MessageEditor && vim_mode == normal",
+        "bindings": {
+            "space space": "workspace::ToggleLeftDock"
+        }
+    },
+    {
         "context": "vim_mode == normal || EmptyPane",
         "bindings": {
             "space f": "file_finder::Toggle",
@@ -49,22 +47,22 @@
             "space b": "workspace::ToggleRightDock",
             "space d": "diagnostics::Deploy",
             "space z": "workspace::ToggleCenteredLayout",
-            "space shift-l t": "workspace::ToggleTitleBar",
-            "space shift-l s": "workspace::ToggleStatusBar",
-            "space l": [
-                "workspace::SendKeystrokes",
-                "space shift-l t space shift-l s"
-            ],
+            // "space shift-l t": "workspace::ToggleTitleBar",
+            // "space shift-l s": "workspace::ToggleStatusBar",
+            // "space l": [
+            //     "workspace::SendKeystrokes",
+            //     "space shift-l t space shift-l s"
+            // ],
             "space g": ["task::Spawn", { "task_name": "start_lazygit" }],
             "space shift-e": [
                 "task::Spawn",
                 { "task_name": "file_navigation" }
             ],
-            "space space": "workspace::NewCenterTerminal"
+            "space space": "agent::ToggleFocus",
             // For AI auto inline complete (but using by trigger)
             // NOTE: no ways to disable it ;(
-            // "space a i": "editor::ToggleEditPrediction",
-            // "space a n": "editor::NextEditPrediction",
+            "space a i": "editor::ToggleEditPrediction",
+            "space a n": "editor::NextEditPrediction"
             // "space a shift-n": "editor::PreviousEditPrediction"
             // "space shift-a 0": "editor::AcceptInlineCompletion",
             // "space shift-a 1": "editor::ToggleInlineCompletions",
@@ -81,19 +79,6 @@
         }
     },
     {
-        "context": "Editor && edit_prediction && !showing_completions",
-        "bindings": {
-            // "escape": "editor::ToggleInlineCompletions"
-        }
-    },
-    {
-        "context": "Editor && vim_mode == insert && edit_prediction && !showing_completions",
-        "bindings": {
-            // "tab": "editor::Tab"
-            // "enter": "vim::Enter"
-        }
-    },
-    {
         "context": "TabSwitcher",
         "bindings": {
             "d": "tab_switcher::CloseSelectedItem",
@@ -105,7 +90,7 @@
         "context": "not_editing",
         "bindings": {
             "j": "menu::SelectNext",
-            "k": "menu::SelectPrev",
+            "k": "menu::SelectPrevious",
             "y": "menu::Confirm"
         }
     },
@@ -129,8 +114,8 @@
             "n": "project_panel::NewFile",
             "shift-n": "project_panel::NewDirectory",
             "ctrl-n": "project_panel::Duplicate",
-            "g y": "project_panel::CopyRelativePath",
-            "g shift-y": "project_panel::CopyPath"
+            "g y": "workspace::CopyRelativePath",
+            "g shift-y": "workspace::CopyPath"
         }
     }
 ]
