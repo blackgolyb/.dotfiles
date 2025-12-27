@@ -1,0 +1,12 @@
+[package]
+name = "workspaces"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+itertools = "0.13.0"
+x11 = "2.21.0"
+
+[build-dependencies]
+pkg-config = "0.3.30"
+
