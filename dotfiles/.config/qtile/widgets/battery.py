@@ -225,7 +225,6 @@ class BatteriesIcon(base._Widget):
         "battery-caution-charging",
         "battery-low-charging",
         "battery-good-charging",
-        "battery-good-charged",
         "battery-full-charging",
         "battery-full-charged",
     )
