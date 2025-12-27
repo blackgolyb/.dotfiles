@@ -2,21 +2,121 @@ local wezterm = require 'wezterm'
 
 local config = wezterm.config_builder()
 
--- config.color_scheme = 'custom'
-config.color_scheme = 'Breeze (Gogh)'
-config.window_background_opacity = 0.85
+config.color_scheme = 'custom'
+-- config.color_scheme = 'Breeze (Gogh)'
+config.window_background_opacity = 0.975
 config.window_padding = {
-    left = 25,
-    right = 25,
-    top = 25,
-    bottom = 25,
+    left = 15,
+    right = 15,
+    top = 15,
+    bottom = 15,
 }
-config.enable_tab_bar = false
+config.enable_tab_bar = true
+
 
 config.font = wezterm.font 'FiraCode Nerd Font Mono'
-config.font_size = 15.0
+config.font_size = 16.0
 config.bold_brightens_ansi_colors = false
 
+config.colors = {
+    tab_bar = {
+        -- The color of the strip that goes along the top of the window
+        -- (does not apply when fancy tab bar is in use)
+        background = '#1d2126',
+
+        -- The active tab is the one that has focus in the window
+        active_tab = {
+
+            -- The color of the background area for the tab
+            bg_color = '#2c313a',
+            -- The color of the text for the tab
+            fg_color = '#fcfcfc',
+
+            -- Specify whether you want "Half", "Normal" or "Bold" intensity for the
+            -- label shown for this tab.
+            -- The default is "Normal"
+            intensity = 'Normal',
+
+            -- Specify whether you want "None", "Single" or "Double" underline for
+            -- label shown for this tab.
+            -- The default is "None"
+            underline = 'None',
+
+            -- Specify whether you want the text to be italic (true) or not (false)
+            -- for this tab.  The default is false.
+            italic = false,
+
+            -- Specify whether you want the text to be rendered with strikethrough (true)
+            -- or not for this tab.  The default is false.
+            strikethrough = false,
+        },
+
+        -- Inactive tabs are the tabs that do not have focus
+        inactive_tab = {
+            bg_color = '#1d2126',
+            fg_color = '#b3b1ab',
+
+            -- The same options that were listed under the `active_tab` section above
+            -- can also be used for `inactive_tab`.
+        },
+
+        -- You can configure some alternate styling when the mouse pointer
+        -- moves over inactive tabs
+        inactive_tab_hover = {
+            bg_color = '#3b3052',
+            fg_color = '#909090',
+            italic = true,
+
+            -- The same options that were listed under the `active_tab` section above
+            -- can also be used for `inactive_tab_hover`.
+        },
+
+        -- You can configure some alternate styling when the mouse pointer
+        -- moves over the new tab button
+        new_tab_hover = {
+            bg_color = '#3b3052',
+            fg_color = '#909090',
+            italic = true,
+
+            -- The same options that were listed under the `active_tab` section above
+            -- can also be used for `new_tab_hover`.
+        },
+    },
+}
+config.show_new_tab_button_in_tab_bar = false
+
+config.keys = {
+    {
+        key = 't',
+        mods = 'ALT',
+        action = wezterm.action.SpawnTab 'CurrentPaneDomain',
+    },
+    {
+        key = 'w',
+        mods = 'ALT',
+        action = wezterm.action.CloseCurrentTab { confirm = false },
+    },
+    {
+        key = 'f',
+        mods = 'ALT',
+        action = wezterm.action.ActivateTab(0),
+    },
+    {
+        key = 'd',
+        mods = 'ALT',
+        action = wezterm.action.ActivateTab(1),
+    },
+    {
+        key = 's',
+        mods = 'ALT',
+        action = wezterm.action.ActivateTab(2),
+    },
+    {
+        key = 'a',
+        mods = 'ALT',
+        action = wezterm.action.ActivateTab(3),
+    },
+}
 
 -- -- Use some simple heuristics to determine if we should open it
 -- -- with a text editor in the terminal.
@@ -132,5 +232,23 @@ config.bold_brightens_ansi_colors = false
 --         format = "$EDITOR:$0"
 --     },
 -- };
+
+wezterm.plugin
+    .require('https://github.com/yriveiro/wezterm-tabs')
+    .apply_to_config(config, {
+        tabs = {
+            -- Position the tab bar at the bottom of the window
+            tab_bar_at_bottom = false,
+
+            -- Controls visibility of the tab bar when only one tab exists
+            hide_tab_bar_if_only_one_tab = false,
+
+            -- Maximum width of each tab in cells
+            tab_max_width = 32,
+
+            -- Whether to restore zoom level when switching panes
+            unzoom_on_switch_pane = true,
+        }
+    })
 
 return config
