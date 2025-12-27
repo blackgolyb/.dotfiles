@@ -83,13 +83,15 @@ class MultiMonitor(base.InLoopPollText):
         self.call_script("menu")
 
     def is_monitor_connected(self):
+        if self.extern_monitor_folder is None:
+            return False
         status_file: Path = self.extern_monitor_folder / "status"
         status = status_file.read_text().strip()
 
         return status == "connected"
 
     def update_monitors(self):
-        is_connected = self.is_monitor_connected()
+        is_connected = self.i_monitor_connected()
         prev = self.prev_is_connected
         self.prev_is_connected = is_connected
 
