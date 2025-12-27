@@ -1,0 +1,13 @@
+LOCK_FILE_POPUP="$HOME/.cache/eww-audio.lock"
+LOCK_FILE_CENTER_POPUP="$HOME/.cache/eww-audio.lock"
+
+EWW_BIN="/usr/bin/eww"
+EWW="${EWW_BIN} -c $HOME/.config/eww/music"
+
+if [[ ! -f "$LOCK_FILE_POPUP" ]]; then
+    ${EWW} open music_win
+    touch "$LOCK_FILE_POPUP" && exho "opened"
+else
+    ${EWW} close music_win
+    rm "$LOCK_FILE_POPUP" && echo "closed"
+fi
