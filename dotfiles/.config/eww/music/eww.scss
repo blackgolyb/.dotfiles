@@ -1,0 +1,63 @@
+.music_pop {
+    background-color: #1d2126;
+    border-radius: 16px;
+    padding: 25px 20px;
+}
+.music_cover_art {
+    background-size: cover;
+    background-position: center;
+    box-shadow: 0px 0px 5px #21262f;
+    border-radius: 20px;
+}
+
+.music {
+    color: #ff0033;
+    font-size: 20px;
+    font-weight: normal;
+}
+
+.music_content {
+    padding: 12px 0px;
+}
+
+.music_btn {
+    all: unset;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.music_btn.pause {
+    all: unset;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+scale trough highlight {
+    all: unset;
+    background-image: linear-gradient(to right, #ff0033 0, #ff2791 100%);
+    border-radius: 999px;
+}
+
+scale.vertical trough highlight {
+    background-image: linear-gradient(to top, #ff0033 0, #ff2791 100%);
+}
+
+scale trough slider {
+    all: unset;
+}
+
+scale {
+    all: unset;
+}
+
+scale trough {
+    all: unset;
+    background-color: #21262f;
+    box-shadow: 0 0px 2px #21262f;
+    border-radius: 999px;
+    min-height: 3px;
+}
+
+scale.vertical trough {
+    min-width: 3px;
+}

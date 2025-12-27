@@ -1,0 +1,135 @@
+(defvar eww "$HOME/.local/bin/eww/eww -c $HOME/.config/eww/music")
+
+
+(defvar music_app "$HOME/.config/eww/music/yt_music/target/debug/yt_music")
+(defpoll song_info :interval "1s" "$HOME/.config/eww/music/yt_music/target/debug/yt_music song-info")
+
+(defwidget time [seconds]
+    {seconds % 60  < 10 ?
+        "${floor(seconds / 60)}:0${seconds % 60}"
+    :
+        "${floor(seconds / 60)}:${seconds % 60}"})
+
+
+(defwidget volume_icon [volume]
+      {volume == 0?
+        "󰝟"
+      :
+      volume <= 33?
+        ""
+      :
+      volume <= 66?
+        "󰖀"
+      :
+        "󰕾"
+      })
+
+(defwidget music_pop []
+    (box
+        :class "music_pop"
+        :orientation "horizontal"
+        :space-evenly "false"
+        :spacing 20
+        (box
+            :height 180
+            :space-evenly "false"
+            :spacing 0
+            (box
+                :class "music_cover_art"
+                :height 180
+                :width 180
+                :valign "center"
+                :halign "center"
+                :style "background-image: url('${song_info.cover_art}');")
+        ;;     (box
+        ;;         :orientation "vertical"
+        ;;         :space-evenly "false"
+        ;;         (scale
+        ;;             :class "vertical"
+        ;;             :valign "end"
+    				;; :active true
+    				;; :orientation "vertical"
+    				;; :flipped true
+        ;;        	    :min 0
+    				;; :max 100
+    				;; :value {song_info.volume}
+    				;; :onchange "$HOME/.config/eww/music/yt_music/target/debug/yt_music set-volume {}")
+        ;;         (box
+        ;;             :valign "end"
+        ;;             (volume_icon :valign "end" :volume {song_info.volume})))
+            )
+        (box
+            :class "music_content"
+		    :orientation "vertical"
+			:height 180
+			:width 250
+			(box
+                :orientation "vertical"
+				:spacing 0
+				:space-evenly "false"
+				:valign "start"
+    			(label
+    			    :halign "center"
+    				:class "music"
+    				:wrap "true"
+    				:limit-width 18
+    				:text {song_info.name})
+    			(label
+         			:halign "center"
+                    :class "music_artist"
+                    :wrap "true"
+                    :limit-width 25
+                    :text {song_info.author}))
+			(box
+    			:orientation "vertical"
+                :space-evenly "false"
+                :spacing 12
+                :valign "end"
+    			(box
+         			:orientation "horizontal"
+                    :spacing 20
+                    :halign "center"
+                    :space-evenly "false"
+    				(button
+        				:class "music_btn"
+                        :onclick "$HOME/.config/eww/music/yt_music/target/debug/yt_music prev"
+                        "󰒮")
+    				(button
+    				    :class "music_btn pause"
+    					:onclick "$HOME/.config/eww/music/yt_music/target/debug/yt_music toggle"
+    					{song_info.is_paused? "󰐊" : ""})
+    				(button
+    				    :class "music_btn"
+    					:onclick "$HOME/.config/eww/music/yt_music/target/debug/yt_music next"
+    					"󰒭"))
+    			(box
+         			:class "music_bar"
+         			:halign "center"
+         			:orientation "vertical"
+         			:space-evenly "false"
+                    :spacing 4
+    				(scale
+    				    :min 0
+    					:active true
+    					:width 250
+    					:height 3
+    					:max {song_info.duration.secs}
+    					:value {song_info.elapsed.secs}
+    					:onchange "$HOME/.config/eww/music/yt_music/target/debug/yt_music set-time {}")
+                    (box
+    					:spacing 4
+    					:space-evenly "false"
+    					:halign "center"
+    					(time :seconds {song_info.elapsed.secs})
+    					"/"
+    					(time :seconds {song_info.duration.secs})))))))
+
+
+(defwindow music_win :stacking "fg" :focusable "none"
+    :geometry (geometry :x "-10px" :y "35px" :anchor "top right")
+    (music_pop))
+
+
+(defwindow music_center_win :stacking "fg" :focusable "none"
+    :geometry (geometry :x "0" :y "0" :anchor "center center")
+    (music_pop))
