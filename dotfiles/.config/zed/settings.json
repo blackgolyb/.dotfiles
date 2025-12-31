@@ -107,11 +107,7 @@
     "ui_font_size": 10,
     "buffer_font_size": 12,
     "buffer_font_family": "FiraCode Nerd Font Mono",
-    "theme": {
-        "mode": "system",
-        "light": "Mono Dark",
-        "dark": "One Dark Pro"
-    },
+    "theme": "Mono Dark",
     "experimental.theme_overrides": {
         // "background.appearance": "blurred",
         // "background": "#23272efc", // main bg color and opacity
