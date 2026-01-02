@@ -1,0 +1,50 @@
+(defalias
+  spc                       (t! tap-hold spc (layer-while-held vim-normal))
+  shift-and-vim-normal      (multi lsft (layer-while-held shifted-vim-normal))
+  ;; shift-and-vim-normal   (t! tap-hold lsft (layer-while-held shifted-vim-normal))
+)
+
+(deflayermap (vim-normal)
+  caps  (layer-switch base)
+
+  h     left
+  j     down
+  k     up
+  l     rght
+
+  b     C-left      ;; back word
+  w     C-rght      ;; word
+
+  p     C-v         ;; past
+  y     C-c         ;; yank/copy
+  u     C-z         ;; undo
+  r     C-y         ;; redo
+  g     C-home      ;; go to top
+
+  v     (layer-switch vim-visual)
+
+  lsft  @shift-and-vim-normal
+  rsft  @shift-and-vim-normal
+)
+
+(deflayermap (shifted-vim-normal)
+  g     (unshift lctl end)   ;; go to bottom
+)
+
+(deflayermap (vim-visual)
+  caps  (layer-switch base)
+
+  h     S-left
+  j     S-down
+  k     S-up
+  l     S-rght
+
+  b     C-S-left    ;; back word
+  w     C-S-rght    ;; word
+
+  p     C-v         ;; past
+  y     C-c         ;; yank/copy
+  u     C-z         ;; undo
+  r     C-y         ;; redo
+  g     C-home      ;; go to top
+)

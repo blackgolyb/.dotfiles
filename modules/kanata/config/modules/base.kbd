@@ -1,0 +1,4 @@
+(defalias
+  caps  esc
+  esc   caps
+)

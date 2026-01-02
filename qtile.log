@@ -1,0 +1,233 @@
+2025-10-28 01:01:55,820 WARNING libqtile lifecycle.py:_atexit():L38 Qtile will now terminate
+2025-10-28 02:00:02,867 WARNING libqtile core.py:graceful_shutdown():L905 Server disconnected, couldn't close windows gracefully.
+2025-10-28 02:00:02,867 WARNING libqtile core.py:graceful_shutdown():L905 Server disconnected, couldn't close windows gracefully.
+2025-10-28 02:00:02,867 WARNING libqtile core.py:_xpoll():L358 Shutting down due to disconnection from X server
+2025-10-28 02:00:02,867 WARNING libqtile core.py:graceful_shutdown():L905 Server disconnected, couldn't close windows gracefully.
+2025-10-28 02:00:02,869 WARNING libqtile lifecycle.py:_atexit():L38 Qtile will now terminate
+2025-11-01 02:54:25,834 WARNING libqtile core.py:graceful_shutdown():L905 Server disconnected, couldn't close windows gracefully.
+2025-11-01 02:54:25,835 WARNING libqtile core.py:graceful_shutdown():L905 Server disconnected, couldn't close windows gracefully.
+2025-11-01 02:54:25,835 WARNING libqtile core.py:_xpoll():L358 Shutting down due to disconnection from X server
+2025-11-01 02:54:25,835 WARNING libqtile core.py:graceful_shutdown():L905 Server disconnected, couldn't close windows gracefully.
+2025-12-27 16:00:47,453 ERROR libqtile manager.py:spawn():L1315 couldn't find `zen`
+2025-12-27 17:15:35,836 WARNING libqtile core.py:graceful_shutdown():L905 Server disconnected, couldn't close windows gracefully.
+2025-12-27 17:15:35,836 WARNING libqtile core.py:graceful_shutdown():L905 Server disconnected, couldn't close windows gracefully.
+2025-12-27 17:15:35,836 WARNING libqtile core.py:_xpoll():L358 Shutting down due to disconnection from X server
+2025-12-27 17:15:35,837 WARNING libqtile core.py:graceful_shutdown():L905 Server disconnected, couldn't close windows gracefully.
+2025-12-27 17:15:35,839 WARNING libqtile lifecycle.py:_atexit():L38 Qtile will now terminate
+2025-12-28 13:07:33,008 ERROR libqtile manager.py:spawn():L1315 couldn't find `thunar`
+2025-12-28 16:24:47,105 WARNING libqtile core.py:_xpoll():L358 Shutting down due to disconnection from X server
+2025-12-28 16:24:47,105 WARNING libqtile core.py:graceful_shutdown():L905 Server disconnected, couldn't close windows gracefully.
+2025-12-28 16:24:47,106 WARNING libqtile core.py:graceful_shutdown():L905 Server disconnected, couldn't close windows gracefully.
+2025-12-28 16:24:47,106 WARNING libqtile core.py:graceful_shutdown():L905 Server disconnected, couldn't close windows gracefully.
+2025-12-28 16:24:47,107 WARNING libqtile lifecycle.py:_atexit():L38 Qtile will now terminate
+2025-12-31 18:39:41,501 WARNING libqtile start.py:start():L89 Starting Qtile 0.34.0 from /nix/store/sgqfrrz3fpbda3sj26iz3656j90kyaz1-python3.13-qtile-0.34.0/lib/python3.13/site-packages
+2025-12-31 20:20:44,897 WARNING libqtile start.py:start():L89 Starting Qtile 0.34.0 from /nix/store/sgqfrrz3fpbda3sj26iz3656j90kyaz1-python3.13-qtile-0.34.0/lib/python3.13/site-packages
+2025-12-31 20:20:45,072 ERROR libqtile core.py:__init__():L101 not starting; existing window manager LG3D
+2025-12-31 20:25:55,994 ERROR libqtile start.py:start():L99 Qtile crashed
+Traceback (most recent call last):
+  File "/nix/store/dwas2ag6k343fvnlcizppdnnalyqrs70-python3.13-xcffib-1.9.0/lib/python3.13/site-packages/xcffib/__init__.py", line 608, in wrapper
+    return f(*args)
+  File "/nix/store/dwas2ag6k343fvnlcizppdnnalyqrs70-python3.13-xcffib-1.9.0/lib/python3.13/site-packages/xcffib/__init__.py", line 696, in wait_for_reply
+    self._process_error(error_p[0])
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "/nix/store/dwas2ag6k343fvnlcizppdnnalyqrs70-python3.13-xcffib-1.9.0/lib/python3.13/site-packages/xcffib/__init__.py", line 683, in _process_error
+    self.invalid()
+    ~~~~~~~~~~~~^^
+  File "/nix/store/dwas2ag6k343fvnlcizppdnnalyqrs70-python3.13-xcffib-1.9.0/lib/python3.13/site-packages/xcffib/__init__.py", line 595, in invalid
+    raise ConnectionException(err)
+xcffib.ConnectionException: xcb connection errors because of socket, pipe and other stream errors.
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/nix/store/sgqfrrz3fpbda3sj26iz3656j90kyaz1-python3.13-qtile-0.34.0/lib/python3.13/site-packages/libqtile/scripts/start.py", line 97, in start
+    q.loop()
+    ~~~~~~^^
+  File "/nix/store/sgqfrrz3fpbda3sj26iz3656j90kyaz1-python3.13-qtile-0.34.0/lib/python3.13/site-packages/libqtile/core/manager.py", line 206, in loop
+    asyncio.run(self.async_loop(), loop_factory=lambda: libqtile.event_loop)
+    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/nix/store/3lll9y925zz9393sa59h653xik66srjb-python3-3.13.9/lib/python3.13/asyncio/runners.py", line 195, in run
+    return runner.run(main)
+           ~~~~~~~~~~^^^^^^
+  File "/nix/store/3lll9y925zz9393sa59h653xik66srjb-python3-3.13.9/lib/python3.13/asyncio/runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/nix/store/3lll9y925zz9393sa59h653xik66srjb-python3-3.13.9/lib/python3.13/asyncio/base_events.py", line 725, in run_until_complete
+    return future.result()
+           ~~~~~~~~~~~~~^^
+  File "/nix/store/sgqfrrz3fpbda3sj26iz3656j90kyaz1-python3.13-qtile-0.34.0/lib/python3.13/site-packages/libqtile/core/manager.py", line 243, in async_loop
+    await self.graceful_shutdown()
+  File "/nix/store/sgqfrrz3fpbda3sj26iz3656j90kyaz1-python3.13-qtile-0.34.0/lib/python3.13/site-packages/libqtile/core/manager.py", line 263, in graceful_shutdown
+    win.kill()
+    ~~~~~~~~^^
+  File "/nix/store/sgqfrrz3fpbda3sj26iz3656j90kyaz1-python3.13-qtile-0.34.0/lib/python3.13/site-packages/libqtile/backend/x11/window.py", line 732, in kill
+    if "WM_DELETE_WINDOW" in self.window.get_wm_protocols():
+                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/nix/store/sgqfrrz3fpbda3sj26iz3656j90kyaz1-python3.13-qtile-0.34.0/lib/python3.13/site-packages/libqtile/backend/x11/window.py", line 209, in get_wm_protocols
+    wm_protocols = self.get_property("WM_PROTOCOLS", "ATOM", unpack=int)
+  File "/nix/store/sgqfrrz3fpbda3sj26iz3656j90kyaz1-python3.13-qtile-0.34.0/lib/python3.13/site-packages/libqtile/backend/x11/window.py", line 374, in get_property
+    ).reply()
+      ~~~~~^^
+  File "/nix/store/dwas2ag6k343fvnlcizppdnnalyqrs70-python3.13-xcffib-1.9.0/lib/python3.13/site-packages/xcffib/__init__.py", line 338, in reply
+    data = self.conn.wait_for_reply(self.sequence)
+  File "/nix/store/dwas2ag6k343fvnlcizppdnnalyqrs70-python3.13-xcffib-1.9.0/lib/python3.13/site-packages/xcffib/__init__.py", line 610, in wrapper
+    self.invalid()
+    ~~~~~~~~~~~~^^
+  File "/nix/store/dwas2ag6k343fvnlcizppdnnalyqrs70-python3.13-xcffib-1.9.0/lib/python3.13/site-packages/xcffib/__init__.py", line 595, in invalid
+    raise ConnectionException(err)
+xcffib.ConnectionException: xcb connection errors because of socket, pipe and other stream errors.
+2025-12-31 20:26:26,679 WARNING libqtile start.py:start():L89 Starting Qtile 0.34.0 from /nix/store/sgqfrrz3fpbda3sj26iz3656j90kyaz1-python3.13-qtile-0.34.0/lib/python3.13/site-packages
+2025-12-31 20:26:26,925 ERROR libqtile manager.py:load_config():L117 Configuration error:
+Traceback (most recent call last):
+  File "/nix/store/sgqfrrz3fpbda3sj26iz3656j90kyaz1-python3.13-qtile-0.34.0/lib/python3.13/site-packages/libqtile/core/manager.py", line 114, in load_config
+    self.config.load()
+    ~~~~~~~~~~~~~~~~^^
+  File "/nix/store/sgqfrrz3fpbda3sj26iz3656j90kyaz1-python3.13-qtile-0.34.0/lib/python3.13/site-packages/libqtile/confreader.py", line 113, in load
+    config = importlib.import_module(name)
+  File "/nix/store/3lll9y925zz9393sa59h653xik66srjb-python3-3.13.9/lib/python3.13/importlib/__init__.py", line 88, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib._bootstrap>", line 1387, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1360, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1331, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 935, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 1027, in exec_module
+  File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed
+  File "/home/blackgolyb/.config/qtile/config.py", line 3, in <module>
+    from keys import default_keys
+  File "/home/blackgolyb/.config/qtile/keys.py", line 18, in <module>
+    from widgets import (
+    ...<4 lines>...
+    )
+  File "/home/blackgolyb/.config/qtile/widgets/__init__.py", line 5, in <module>
+    from qtile_extras import widget as qe_widget
+ModuleNotFoundError: No module named 'qtile_extras'
+2025-12-31 20:26:27,054 WARNING libqtile utils.py:_notify():L320 Unable to send notification. Is a notification server running?
+2025-12-31 20:52:20,963 WARNING libqtile core.py:_xpoll():L362 Shutting down due to disconnection from X server
+2025-12-31 20:52:20,970 ERROR libqtile start.py:start():L99 Qtile crashed
+Traceback (most recent call last):
+  File "/nix/store/sgqfrrz3fpbda3sj26iz3656j90kyaz1-python3.13-qtile-0.34.0/lib/python3.13/site-packages/libqtile/scripts/start.py", line 97, in start
+    q.loop()
+    ~~~~~~^^
+  File "/nix/store/sgqfrrz3fpbda3sj26iz3656j90kyaz1-python3.13-qtile-0.34.0/lib/python3.13/site-packages/libqtile/core/manager.py", line 206, in loop
+    asyncio.run(self.async_loop(), loop_factory=lambda: libqtile.event_loop)
+    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/nix/store/3lll9y925zz9393sa59h653xik66srjb-python3-3.13.9/lib/python3.13/asyncio/runners.py", line 195, in run
+    return runner.run(main)
+           ~~~~~~~~~~^^^^^^
+  File "/nix/store/3lll9y925zz9393sa59h653xik66srjb-python3-3.13.9/lib/python3.13/asyncio/runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/nix/store/3lll9y925zz9393sa59h653xik66srjb-python3-3.13.9/lib/python3.13/asyncio/base_events.py", line 725, in run_until_complete
+    return future.result()
+           ~~~~~~~~~~~~~^^
+  File "/nix/store/sgqfrrz3fpbda3sj26iz3656j90kyaz1-python3.13-qtile-0.34.0/lib/python3.13/site-packages/libqtile/core/manager.py", line 243, in async_loop
+    await self.graceful_shutdown()
+  File "/nix/store/sgqfrrz3fpbda3sj26iz3656j90kyaz1-python3.13-qtile-0.34.0/lib/python3.13/site-packages/libqtile/core/manager.py", line 263, in graceful_shutdown
+    win.kill()
+    ~~~~~~~~^^
+  File "/nix/store/sgqfrrz3fpbda3sj26iz3656j90kyaz1-python3.13-qtile-0.34.0/lib/python3.13/site-packages/libqtile/backend/x11/window.py", line 732, in kill
+    if "WM_DELETE_WINDOW" in self.window.get_wm_protocols():
+                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/nix/store/sgqfrrz3fpbda3sj26iz3656j90kyaz1-python3.13-qtile-0.34.0/lib/python3.13/site-packages/libqtile/backend/x11/window.py", line 209, in get_wm_protocols
+    wm_protocols = self.get_property("WM_PROTOCOLS", "ATOM", unpack=int)
+  File "/nix/store/sgqfrrz3fpbda3sj26iz3656j90kyaz1-python3.13-qtile-0.34.0/lib/python3.13/site-packages/libqtile/backend/x11/window.py", line 370, in get_property
+    self.conn.atoms[prop] if isinstance(prop, str) else prop,
+    ~~~~~~~~~~~~~~~^^^^^^
+  File "/nix/store/sgqfrrz3fpbda3sj26iz3656j90kyaz1-python3.13-qtile-0.34.0/lib/python3.13/site-packages/libqtile/backend/x11/xcbq.py", line 265, in __getitem__
+    self.insert(name=key)
+    ~~~~~~~~~~~^^^^^^^^^^
+  File "/nix/store/sgqfrrz3fpbda3sj26iz3656j90kyaz1-python3.13-qtile-0.34.0/lib/python3.13/site-packages/libqtile/backend/x11/xcbq.py", line 250, in insert
+    c = self.conn.conn.core.InternAtom(False, len(name), name)
+  File "/nix/store/dwas2ag6k343fvnlcizppdnnalyqrs70-python3.13-xcffib-1.9.0/lib/python3.13/site-packages/xcffib/xproto.py", line 4597, in InternAtom
+    return self.send_request(16, buf, InternAtomCookie, is_checked=is_checked)
+           ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/nix/store/dwas2ag6k343fvnlcizppdnnalyqrs70-python3.13-xcffib-1.9.0/lib/python3.13/site-packages/xcffib/__init__.py", line 395, in send_request
+    seq = self.conn.send_request(flags, xcb_parts + 2, xcb_req)
+  File "/nix/store/dwas2ag6k343fvnlcizppdnnalyqrs70-python3.13-xcffib-1.9.0/lib/python3.13/site-packages/xcffib/__init__.py", line 606, in wrapper
+    self.invalid()
+    ~~~~~~~~~~~~^^
+  File "/nix/store/dwas2ag6k343fvnlcizppdnnalyqrs70-python3.13-xcffib-1.9.0/lib/python3.13/site-packages/xcffib/__init__.py", line 595, in invalid
+    raise ConnectionException(err)
+xcffib.ConnectionException: xcb connection errors because of socket, pipe and other stream errors.
+2025-12-31 20:52:20,974 WARNING libqtile lifecycle.py:_atexit():L38 Qtile will now terminate
+2025-12-31 20:52:44,613 WARNING libqtile start.py:start():L89 Starting Qtile 0.34.0 from /nix/store/sgqfrrz3fpbda3sj26iz3656j90kyaz1-python3.13-qtile-0.34.0/lib/python3.13/site-packages
+2025-12-31 20:52:44,865 ERROR libqtile manager.py:load_config():L117 Configuration error:
+Traceback (most recent call last):
+  File "/nix/store/sgqfrrz3fpbda3sj26iz3656j90kyaz1-python3.13-qtile-0.34.0/lib/python3.13/site-packages/libqtile/core/manager.py", line 114, in load_config
+    self.config.load()
+    ~~~~~~~~~~~~~~~~^^
+  File "/nix/store/sgqfrrz3fpbda3sj26iz3656j90kyaz1-python3.13-qtile-0.34.0/lib/python3.13/site-packages/libqtile/confreader.py", line 113, in load
+    config = importlib.import_module(name)
+  File "/nix/store/3lll9y925zz9393sa59h653xik66srjb-python3-3.13.9/lib/python3.13/importlib/__init__.py", line 88, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib._bootstrap>", line 1387, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1360, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1331, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 935, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 1027, in exec_module
+  File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed
+  File "/home/blackgolyb/.config/qtile/config.py", line 3, in <module>
+    from keys import default_keys
+  File "/home/blackgolyb/.config/qtile/keys.py", line 18, in <module>
+    from widgets import (
+    ...<4 lines>...
+    )
+  File "/home/blackgolyb/.config/qtile/widgets/__init__.py", line 5, in <module>
+    from qtile_extras import widget as qe_widget
+ModuleNotFoundError: No module named 'qtile_extras'
+2025-12-31 20:52:44,990 WARNING libqtile utils.py:_notify():L320 Unable to send notification. Is a notification server running?
+2025-12-31 21:03:56,742 ERROR libqtile manager.py:spawn():L1338 couldn't find `zed`
+2025-12-31 21:10:35,024 ERROR libqtile manager.py:reload_config():L318 Configuration error:
+Traceback (most recent call last):
+  File "/nix/store/sgqfrrz3fpbda3sj26iz3656j90kyaz1-python3.13-qtile-0.34.0/lib/python3.13/site-packages/libqtile/core/manager.py", line 316, in reload_config
+    self.config.load()
+    ~~~~~~~~~~~~~~~~^^
+  File "/nix/store/sgqfrrz3fpbda3sj26iz3656j90kyaz1-python3.13-qtile-0.34.0/lib/python3.13/site-packages/libqtile/confreader.py", line 113, in load
+    config = importlib.import_module(name)
+  File "/nix/store/3lll9y925zz9393sa59h653xik66srjb-python3-3.13.9/lib/python3.13/importlib/__init__.py", line 88, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib._bootstrap>", line 1387, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1360, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1331, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 935, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 1027, in exec_module
+  File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed
+  File "/home/blackgolyb/.config/qtile/config.py", line 3, in <module>
+    from keys import default_keys
+  File "/home/blackgolyb/.config/qtile/keys.py", line 18, in <module>
+    from widgets import (
+    ...<4 lines>...
+    )
+  File "/home/blackgolyb/.config/qtile/widgets/__init__.py", line 5, in <module>
+    from qtile_extras import widget as qe_widget
+ModuleNotFoundError: No module named 'qtile_extras'
+2025-12-31 21:10:35,026 WARNING libqtile utils.py:_notify():L320 Unable to send notification. Is a notification server running?
+2025-12-31 21:10:38,675 ERROR libqtile manager.py:reload_config():L318 Configuration error:
+Traceback (most recent call last):
+  File "/nix/store/sgqfrrz3fpbda3sj26iz3656j90kyaz1-python3.13-qtile-0.34.0/lib/python3.13/site-packages/libqtile/core/manager.py", line 316, in reload_config
+    self.config.load()
+    ~~~~~~~~~~~~~~~~^^
+  File "/nix/store/sgqfrrz3fpbda3sj26iz3656j90kyaz1-python3.13-qtile-0.34.0/lib/python3.13/site-packages/libqtile/confreader.py", line 113, in load
+    config = importlib.import_module(name)
+  File "/nix/store/3lll9y925zz9393sa59h653xik66srjb-python3-3.13.9/lib/python3.13/importlib/__init__.py", line 88, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib._bootstrap>", line 1387, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1360, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1331, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 935, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 1027, in exec_module
+  File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed
+  File "/home/blackgolyb/.config/qtile/config.py", line 3, in <module>
+    from keys import default_keys
+  File "/home/blackgolyb/.config/qtile/keys.py", line 18, in <module>
+    from widgets import (
+    ...<4 lines>...
+    )
+  File "/home/blackgolyb/.config/qtile/widgets/__init__.py", line 5, in <module>
+    from qtile_extras import widget as qe_widget
+ModuleNotFoundError: No module named 'qtile_extras'
+2025-12-31 21:10:38,677 WARNING libqtile utils.py:_notify():L320 Unable to send notification. Is a notification server running?

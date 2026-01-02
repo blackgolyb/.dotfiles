@@ -1,0 +1,42 @@
+#!/bin/bash
+
+function get_volume() {
+	echo $(pamixer --get-volume)
+}
+
+function is_muted() {
+	echo $(pamixer --get-mute)
+}
+
+function send_notification() {
+	volume=$(get_volume)
+	dunstify -a "changevolume" -u low -r "9993" -h int:value:"$volume" -i "volume-$1" "󰕾 Volume: ${volume}%" -t 2000
+}
+
+case $1 in
+up)
+	# Set the volume on (if it was muted)
+	pamixer -u
+	pamixer -i 5 --allow-boost
+	send_notification $1
+	;;
+down)
+	pamixer -u
+	pamixer -d 5 --allow-boost
+	send_notification $1
+	;;
+mute)
+	pamixer -t
+	if $(is_muted); then
+		dunstify -a "changevolume" -t 2000 -r 9993 -u low "󰝟 Muted"
+	else
+		send_notification up
+	fi
+	;;
+get)
+	get_volume
+	;;
+is_muted)
+	is_muted
+	;;
+esac

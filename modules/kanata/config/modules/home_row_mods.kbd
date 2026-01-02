@@ -1,0 +1,112 @@
+;; HRM settings
+;; Heare you can change timeouts and modifiers bindings for each finger
+
+(defvar
+;;key    mod        tap          hold
+  a-mod  lmet   a-tap  300   a-hold  150
+  s-mod  lalt   s-tap  300   s-hold  150
+  d-mod  lctl   d-tap  300   d-hold  150
+  f-mod  lsft   f-tap  300   f-hold  150
+  j-mod  rsft   j-tap  300   j-hold  150
+  k-mod  rctl   k-tap  300   k-hold  150
+  l-mod  ralt   l-tap  300   l-hold  150
+  ;-mod  rmet   ;-tap  300   ;-hold  150
+)
+
+
+
+
+(defvar
+  left-hand-keys (
+    q w e r t
+    a s d f g
+    z x c v b
+  )
+  right-hand-keys (
+    y u i o p
+    h j k l ;
+    n m , . /
+  )
+)
+
+(deflayermap (hrm-left)
+  caps @caps
+  a $a-mod
+  s $s-mod
+  d $d-mod
+  f $f-mod
+  j j
+  k k
+  l l
+  ; ;
+)
+
+(deflayermap (hrm-right)
+  caps @caps
+  a a
+  s s
+  d d
+  f f
+  j $j-mod
+  k $k-mod
+  l $l-mod
+  ; $;-mod
+)
+
+(deflayermap (nomods)
+  caps @caps
+  a a
+  s s
+  d d
+  f f
+  j j
+  k k
+  l l
+  ; ;
+)
+
+(deffakekeys
+  to-base (layer-switch base)
+)
+
+(deftemplate hrm-l (hrm-key hrm-mod tt th)
+  (tap-hold-release-keys $tt $th
+    (multi $hrm-key @tap)
+    (multi $hrm-mod @hrm-left-hold)
+    $left-hand-keys
+  )
+)
+(deftemplate hrm-r (hrm-key hrm-mod tt th)
+  (tap-hold-release-keys $tt $th
+    (multi $hrm-key @tap)
+    (multi $hrm-mod @hrm-right-hold)
+    $right-hand-keys
+  )
+)
+
+(defalias
+  tap (multi
+    (layer-switch nomods)
+    (on-idle-fakekey to-base tap 20)
+  )
+  hrm-left-hold (multi
+    (layer-switch hrm-left)
+    (on-idle-fakekey to-base tap 20)
+  )
+  hrm-right-hold (multi
+    (layer-switch hrm-right)
+    (on-idle-fakekey to-base tap 20)
+  )
+
+
+  ;;                             timeouts
+  ;;           key   mod      tap      hold
+  a (t! hrm-l  a     $a-mod   $a-tap   $a-hold)
+  s (t! hrm-l  s     $s-mod   $s-tap   $s-hold)
+  d (t! hrm-l  d     $d-mod   $d-tap   $d-hold)
+  f (t! hrm-l  f     $f-mod   $f-tap   $f-hold)
+  j (t! hrm-r  j     $j-mod   $j-tap   $j-hold)
+  k (t! hrm-r  k     $k-mod   $k-tap   $k-hold)
+  l (t! hrm-r  l     $l-mod   $l-tap   $l-hold)
+  ; (t! hrm-r  ;     $;-mod   $;-tap   $;-hold)
+)

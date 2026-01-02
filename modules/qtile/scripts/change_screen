@@ -1,0 +1,6 @@
+#!/bin/bash
+
+rofi_command="rofi -dmenu $* -p"
+echo $($rofi_command "")
+
+# echo $color

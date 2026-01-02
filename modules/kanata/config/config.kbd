@@ -1,0 +1,17 @@
+;; template https://github.com/jtroo/kanata/blob/main/cfg_samples/kanata.kbd
+;; template https://gist.github.com/sysraccoon/8a28d59d28c65dafceabb6376d379f46
+(defcfg)
+
+(include src.kbd)
+(include defaults.kbd)
+(include layer.kbd)
+
+;; Inclued modules
+;; NOTE: if you change this you should re-run build script
+(include modules/base.kbd)
+(include modules/split.kbd)
+(include modules/normal.kbd)
+(include modules/settings.kbd)
+(include modules/vim.kbd)
+(include modules/home_row_mods.kbd)
+(include modules/numbers.kbd)
