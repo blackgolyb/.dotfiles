@@ -1,5 +1,4 @@
 { config, pkgs, system, inputs, ... }:
-
 {
   imports = [
     ./modules/qtile/qtile.nix
@@ -23,6 +22,7 @@
 
   # The home.packages option allows you to install Nix packages into your
   # environment.
+  nixpkgs.config.allowUnfree = true;
   home.packages = with pkgs; [
     # # Adds the 'hello' command to your environment. It prints a friendly
     # # "Hello, world!" when run.
@@ -41,7 +41,7 @@
     #   echo "Hello, ${config.home.username}!"
     # '')
 
-    # CLI 
+    # CLI
     pass
     pinentry-curses # gnupg
     gnupg
@@ -52,6 +52,10 @@
     ripgrep
     brightnessctl # qtile
     pamixer # qtile
+    uv
+    cloc
+    docker
+    duf
 
     # TUI
     neovim
@@ -61,6 +65,7 @@
     lazydocker
     btop
     aider-chat
+    wezterm
 
     # Programs
     xfce.thunar
@@ -69,6 +74,22 @@
     pavucontrol # qtile
     rofi # qtile
     zathura
+    anki
+    chromium
+    logseq
+    prismlauncher
+    super-productivity
+    firefox-devedition
+    mongodb-compass
+    ytmdesktop
+    onlyoffice-desktopeditors
+    vokoscreen-ng
+    vlc
+    flameshot
+    baobab
+
+    # Games
+    heroic
   ];
 
   # Home Manager is pretty good at managing dotfiles. The primary way to manage
