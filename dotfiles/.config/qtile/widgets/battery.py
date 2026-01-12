@@ -35,7 +35,7 @@ def marge_statuses(statuses: list[BatteryStatus]) -> BatteryStatus:
     )
 
 
-class Batteries(base.ThreadPoolText):
+class Batteries(base.BackgroundPoll):
     defaults = [
         ("charge_char", "^", "Character to indicate the battery is charging"),
         ("discharge_char", "V", "Character to indicate the battery is discharging"),
@@ -76,7 +76,7 @@ class Batteries(base.ThreadPoolText):
     ]
 
     def __init__(self, **config) -> None:
-        base.ThreadPoolText.__init__(self, "", **config)
+        base.BackgroundPoll.__init__(self, "", **config)
         self.add_defaults(self.defaults)
 
         self._batteries = self._load_batteries(**config)
@@ -88,7 +88,7 @@ class Batteries(base.ThreadPoolText):
             self.low_background = self.background
         self.normal_background = self.background
 
-        base.ThreadPoolText._configure(self, qtile, bar)
+        base.BackgroundPoll._configure(self, qtile, bar)
 
     @expose_command()
     def charge_to_full(self):
