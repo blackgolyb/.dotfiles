@@ -1,0 +1,8 @@
+[Plymouth Theme]
+Name=anime_girl
+Description=Custom boot splash with my background
+ModuleName=script
+
+[script]
+ImageDir=/usr/share/plymouth/themes/anime_girl/images
+ScriptFile=/usr/share/plymouth/themes/anime_girl/anime_girl.script

@@ -1,0 +1,8 @@
+wallpaper_image = Image("background.png")
+wallpaper_image.Show()
+
+spinner = Image("spinner.jpg")
+spinner.SetX(ScreenWidth()/2 - spinner.Width()/2)
+spinner.SetY(ScreenHeight()/2 + 100)
+spinner.Show()
+spinner.StartLoop(10)  # 10 кадрів на секунду

@@ -9,6 +9,7 @@
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
       ./modules/kanata/kanata.nix
+      ./modules/plymouth/plymouth.nix
     ];
 
   nix.settings.experimental-features = ["nix-command" "flakes"];
@@ -67,6 +68,29 @@
 
   services.displayManager.ly.enable = true;
 
+  stylix = {
+    enable = true;
+
+    base16Scheme = "${pkgs.base16-schemes}/share/themes/onedark-dark.yaml";
+
+    icons = {
+      enable = true;
+      package = pkgs.dracula-icon-theme;
+      dark = "Dracula";
+      light = "Dracula";
+    };
+
+    cursor = {
+        name = "Nordzy-cursors";
+        package = pkgs.nordzy-cursor-theme;
+        size = 24;
+      };
+
+    polarity = "dark";
+
+    targets.plymouth.enable = false;
+  };
+
   programs.zsh.enable = true;
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.blackgolyb = {
@@ -87,6 +111,8 @@
      git
      zsh
      wget
+     dracula-icon-theme
+     nordzy-cursor-theme
   ];
 
   programs.steam = {
