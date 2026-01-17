@@ -4,6 +4,7 @@
     ./modules/qtile/qtile.nix
     ./modules/zsh/zsh.nix
     ./modules/wezterm/wezterm.nix
+    ./modules/nvim/nvim.nix
     inputs.zen-browser.homeModules.twilight
   ];
   # Home Manager needs a bit of information about you and the paths it should
@@ -58,7 +59,6 @@
     duf
 
     # TUI
-    neovim
     yazi
     zellij
     lazygit
