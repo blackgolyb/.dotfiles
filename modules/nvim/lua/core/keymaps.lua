@@ -21,6 +21,8 @@ vim.keymap.set('n', '<C-k>', '<C-w>k', { desc = 'Move to top window' })
 vim.keymap.set('n', '<C-l>', '<C-w>l', { desc = 'Move to right window' })
 
 
+vim.keymap.set({"o", "x"}, "ie", ":<C-u>normal! ggVG<CR>", { silent = true, desc = "Text object for entire buffer" })
+
 -- Filetree
 vim.keymap.set("n", "<leader>e", ":Neotree toggle<CR>", { desc = "Toggle Filetree", silent = true })
 
