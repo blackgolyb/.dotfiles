@@ -87,6 +87,7 @@
     vlc
     flameshot
     baobab
+    krita
 
     # Games
     heroic
