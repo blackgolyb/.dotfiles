@@ -5,16 +5,13 @@
       force = true;
     };
 
+    xdg.configFile."picom/picom.conf" = {
+      source = ./picom.conf;
+      force = true;
+    };
+
     services.picom = {
       enable = true;
-      vSync = true;
-      backend = "xr_glx_hybrid";
-      settings = {
-        glx-no-stencil = true;
-        glx-no-rebind-pixmap = true;
-        unredir-if-possible = true;
-        xrender-sync-fence = true;
-      };
     };
 
     services.unclutter = {
