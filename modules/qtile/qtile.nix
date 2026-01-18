@@ -2,7 +2,13 @@
 {
     home.packages = with pkgs; [
        haskellPackages.greenclip
+       librsvg
+       adwaita-icon-theme
     ];
+
+    home.sessionVariables = {
+      GDK_PIXBUF_MODULE_FILE = "${pkgs.librsvg}/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache";
+    };
 
     xdg.configFile.qtile = {
       source = ./.;
