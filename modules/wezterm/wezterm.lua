@@ -4,7 +4,7 @@ local config = wezterm.config_builder()
 
 config.color_scheme = 'custom'
 -- config.color_scheme = 'Breeze (Gogh)'
-config.window_background_opacity = 0.975
+config.window_background_opacity = 0.985
 config.window_padding = {
     left = 15,
     right = 15,
