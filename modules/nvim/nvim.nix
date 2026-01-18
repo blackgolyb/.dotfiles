@@ -13,6 +13,8 @@
     gcc
     gnumake
     python3
+    rustc
+    cargo
     wget
     curl
 
