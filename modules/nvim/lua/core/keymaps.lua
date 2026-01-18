@@ -26,9 +26,6 @@ vim.keymap.set({"o", "x"}, "ie", ":<C-u>normal! ggVG<CR>", { silent = true, desc
 -- Filetree
 vim.keymap.set("n", "<leader>e", ":Neotree toggle<CR>", { desc = "Toggle Filetree", silent = true })
 
--- File Finder
-vim.keymap.set("n", "<leader>f", ":FFFFind<CR>", { desc = "Toggle File Finder", silent = true })
-
 -- Statusbar
 local function toggle_status_bar()
   vim.opt.laststatus = vim.opt.laststatus:get() > 0 and 0 or 3
