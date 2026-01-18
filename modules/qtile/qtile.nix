@@ -1,5 +1,9 @@
-{ config, lib, impurity, ... }:
+{ config, lib, pkgs, ... }:
 {
+    home.packages = with pkgs; [
+       haskellPackages.greenclip
+    ];
+
     xdg.configFile.qtile = {
       source = ./.;
       force = true;
