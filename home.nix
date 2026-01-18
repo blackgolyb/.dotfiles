@@ -128,6 +128,10 @@
     # EDITOR = "emacs";
   };
 
+  stylix.targets = {
+	  zen-browser.enable = false;
+	  };
+
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
   programs.gpg.enable = true;

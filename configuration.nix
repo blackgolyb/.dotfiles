@@ -88,7 +88,9 @@
 
     polarity = "dark";
 
-    targets.plymouth.enable = false;
+    targets = {
+	    plymouth.enable = false;
+    };
   };
 
   programs.zsh.enable = true;
@@ -126,6 +128,7 @@
   home-manager = {
     # also pass inputs to home-manager modules
     extraSpecialArgs = {inherit inputs;};
+    backupFileExtension = "backup";
     users = {
       "blackgolyb" = import ./home.nix;
     };
