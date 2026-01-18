@@ -1,0 +1,17 @@
+[
+    {
+        "label": "start_lazygit",
+        "command": "lazygit",
+        "hide": "always",
+        "reveal_target": "center",
+        "use_new_terminal": true
+    },
+    {
+        "label": "file_navigation",
+        "command": "yazi_zed $ZED_FILE",
+        "hide": "always",
+        "reveal_target": "center",
+        "allow_concurrent_runs": true,
+        "use_new_terminal": true
+    }
+]

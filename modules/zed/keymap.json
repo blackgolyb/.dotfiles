@@ -1,0 +1,121 @@
+// Zed keymap
+//
+// For information on binding keys, see the Zed
+// documentation: https://zed.dev/docs/key-bindings
+//
+// To see the default key bindings run `zed: open default keymap`
+// from the command palette.
+[
+    {
+        "context": "Editor && vim_mode == visual && !VimWaiting && !VimObject",
+        "bindings": {
+            "shift-s": "vim::PushAddSurrounds",
+            "space a a": "agent::AddSelectionToThread"
+        }
+    },
+    {
+        "context": "vim_mode == normal && !menu",
+        "bindings": {
+            "shift-y": ["workspace::SendKeystrokes", "y $"]
+        }
+    },
+    {
+        "context": "Editor && vim_mode == visual",
+        "bindings": {
+            "space p": ["workspace::SendKeystrokes", "\" t d shift-p"]
+        }
+    },
+    {
+        "context": "Editor && vim_mode == normal",
+        "bindings": {
+            "g k": "editor::AddSelectionAbove",
+            "g j": "editor::AddSelectionBelow"
+        }
+    },
+    {
+        "context": "MessageEditor && vim_mode == normal",
+        "bindings": {
+            "space space": "workspace::ToggleLeftDock"
+        }
+    },
+    {
+        "context": "vim_mode == normal || EmptyPane",
+        "bindings": {
+            "space f": "file_finder::Toggle",
+            "space t": "tab_switcher::Toggle",
+            "space e": "project_panel::ToggleFocus",
+            "space b": "workspace::ToggleRightDock",
+            "space d": "diagnostics::Deploy",
+            "space z": "workspace::ToggleCenteredLayout",
+            // "space shift-l t": "workspace::ToggleTitleBar",
+            // "space shift-l s": "workspace::ToggleStatusBar",
+            // "space l": [
+            //     "workspace::SendKeystrokes",
+            //     "space shift-l t space shift-l s"
+            // ],
+            "space g": ["task::Spawn", { "task_name": "start_lazygit" }],
+            "space shift-e": [
+                "task::Spawn",
+                { "task_name": "file_navigation" }
+            ],
+            "space space": "agent::ToggleFocus",
+            // For AI auto inline complete (but using by trigger)
+            // NOTE: no ways to disable it ;(
+            "space a i": "editor::ToggleEditPrediction",
+            "space a n": "editor::NextEditPrediction"
+            // "space a shift-n": "editor::PreviousEditPrediction"
+            // "space shift-a 0": "editor::AcceptInlineCompletion",
+            // "space shift-a 1": "editor::ToggleInlineCompletions",
+            // "space a a": [
+            //     "workspace::SendKeystrokes",
+            //     "space shift-a 0 space shift-a 1"
+            // ]
+        }
+    },
+    {
+        "context": "Terminal",
+        "bindings": {
+            "ctrl-w": "pane::CloseActiveItem"
+        }
+    },
+    {
+        "context": "TabSwitcher",
+        "bindings": {
+            "d": "tab_switcher::CloseSelectedItem",
+            "j": ["workspace::SendKeystrokes", "down"],
+            "k": ["workspace::SendKeystrokes", "up"]
+        }
+    },
+    {
+        "context": "not_editing",
+        "bindings": {
+            "j": "menu::SelectNext",
+            "k": "menu::SelectPrevious",
+            "y": "menu::Confirm"
+        }
+    },
+    {
+        "context": "ProjectPanel && not_editing",
+        "bindings": {
+            "escape": "workspace::ToggleRightDock",
+            "enter": ["workspace::SendKeystrokes", "shift-enter escape"],
+            "shift-enter": "project_panel::OpenPermanent",
+            "shift-space": ["workspace::SendKeystrokes", "space escape"],
+            "space": "project_panel::Open",
+            "e": "project_panel::ToggleFocus",
+            "h": "project_panel::CollapseSelectedEntry",
+            "l": "project_panel::ExpandSelectedEntry",
+            "r": "project_panel::Rename",
+            "o": "project_panel::RevealInFileManager",
+            "x": "project_panel::Cut",
+            "y": "project_panel::Copy",
+            "p": "project_panel::Paste",
+            "d": "project_panel::Trash",
+            "n": "project_panel::NewFile",
+            "shift-n": "project_panel::NewDirectory",
+            "ctrl-n": "project_panel::Duplicate",
+            "g y": "workspace::CopyRelativePath",
+            "g shift-y": "workspace::CopyPath"
+        }
+    }
+]

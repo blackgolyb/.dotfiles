@@ -5,6 +5,7 @@
     ./modules/zsh/zsh.nix
     ./modules/wezterm/wezterm.nix
     ./modules/nvim/nvim.nix
+    ./modules/zed/zed.nix
     inputs.zen-browser.homeModules.twilight
   ];
   # Home Manager needs a bit of information about you and the paths it should
@@ -69,7 +70,6 @@
 
     # Programs
     xfce.thunar
-    zed-editor
     telegram-desktop
     pavucontrol # qtile
     rofi # qtile

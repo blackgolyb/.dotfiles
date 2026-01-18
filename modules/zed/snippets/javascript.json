@@ -1,0 +1,54 @@
+{
+    "Arrow function": {
+        "prefix": "ar",
+        "body": ["($1) => $2", "$0"]
+    },
+    "Arrow function ()": {
+        "prefix": "a",
+        "body": ["($1) => ($2)", "$0"]
+    },
+    "Arrow function {}": {
+        "prefix": "arb",
+        "body": ["($1) => {", "$2", "}", "$0"]
+    },
+    "function": {
+        "prefix": "fun",
+        "body": ["function $1($2) {", "$3", "}", "$0"]
+    },
+    "for": {
+        "prefix": "for",
+        "body": ["for ($1) {", "$2", "}", "$0"]
+    },
+    "for with counter": {
+        "prefix": "fl",
+        "body": ["for (let i = 0; i < $1; i++) {", "$2", "}", "$0"]
+    },
+    "for in": {
+        "prefix": "fi",
+        "body": ["for (let $1 in $2) {", "$3", "}", "$0"]
+    },
+    "for of": {
+        "prefix": "fo",
+        "body": ["for (let $1 of $2) {", "$3", "}", "$0"]
+    },
+    "Log to the console": {
+        "prefix": "log",
+        "body": ["console.log($1);", "$0"],
+        "description": "Log to the console"
+    },
+    "Log warning to console": {
+        "prefix": "warn",
+        "body": ["console.warn($1);", "$0"],
+        "description": "Log warning to the console"
+    },
+    "Log error to console": {
+        "prefix": "error",
+        "body": ["console.error($1);", "$0"],
+        "description": "Log error to the console"
+    },
+    "Throw Exception": {
+        "prefix": "throw",
+        "body": ["throw new Error(\"$1\");", "$0"],
+        "description": "Throw Exception"
+    }
+}
