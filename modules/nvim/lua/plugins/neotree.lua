@@ -13,6 +13,7 @@ return {
                 position = "right",
                 width = 30,
                 mappings = {
+                    ["<esc>"] = "close_window",
                     ["h"] = "close_node",
                     ["l"] = function(state)
                         local node = state.tree:get_node()
@@ -27,6 +28,7 @@ return {
                     end,
                 }
             },
+            close_if_last_window = true,
             filesystem = {
                 hijack_netrw_behavior = "disabled",
                 follow_current_file = {
@@ -37,6 +39,15 @@ return {
                     hide_gitignored = false,
                 },
             },
+            event_handlers = {
+                {
+                    event = "file_opened",
+                    handler = function(file_path)
+                        -- Закриваємо Neo-tree одразу після відкриття файлу
+                        require("neo-tree.command").execute({ action = "close" })
+                    end
+                },
+            }
         }
     }
 }
