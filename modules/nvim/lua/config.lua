@@ -1,3 +1,2 @@
 require("core")
-require("plugins")
-require("themes")
+require("lazy_setup")
