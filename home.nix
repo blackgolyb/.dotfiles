@@ -72,6 +72,7 @@
     wezterm
 
     # Programs
+    xcolor
     xfce.thunar
     telegram-desktop
     pavucontrol # qtile
