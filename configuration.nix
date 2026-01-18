@@ -68,6 +68,10 @@
 
   services.displayManager.ly.enable = true;
 
+  security.pam.services.ly.enableGnomeKeyring = true;
+  services.gnome.gnome-keyring.enable = true;
+  services.dbus.packages = [ pkgs.gcr ];
+
   stylix = {
     enable = true;
 
