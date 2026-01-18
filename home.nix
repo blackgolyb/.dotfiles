@@ -6,6 +6,9 @@
     ./modules/wezterm/wezterm.nix
     ./modules/nvim/nvim.nix
     ./modules/zed/zed.nix
+    ./modules/rofi/rofi.nix
+    ./modules/rofi-bluetooth/rofi-bluetooth.nix
+    ./modules/rofi-network-manager/rofi-network-manager.nix
     inputs.zen-browser.homeModules.twilight
   ];
   # Home Manager needs a bit of information about you and the paths it should
@@ -72,12 +75,10 @@
     xfce.thunar
     telegram-desktop
     pavucontrol # qtile
-    rofi # qtile
     zathura
     anki
     chromium
     logseq
-    prismlauncher
     super-productivity
     firefox-devedition
     mongodb-compass
@@ -91,6 +92,7 @@
 
     # Games
     heroic
+    prismlauncher
   ];
 
   # Home Manager is pretty good at managing dotfiles. The primary way to manage
