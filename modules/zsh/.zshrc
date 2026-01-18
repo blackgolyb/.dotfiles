@@ -160,7 +160,7 @@ alias df='duf'
 alias h='btop'
 alias hz='history | fzf'
 alias c='zeditor .'
-alias v='_nvim_alias'
+alias v='nvim'
 alias e='yazi_cwd'
 alias g='lazygit'
 alias d='lazydocker'
@@ -190,7 +190,6 @@ alias revssh='activate-ssh-key revscale'
 alias tarasssh='activate-ssh-key taras'
 alias tfssh='activate-ssh-key tf'
 
-_nvim_alias() { nvim "${@:-.}"; }
 
 function activate-ssh-key() {
     eval "$(ssh-agent -s)" > /dev/null
