@@ -8,9 +8,7 @@ dunst &
 greenclip daemon &
 tmux start &
 
-zen-browser &
-telegram-desktop &
+zen &
+super-productivity &
 
-# setxkbmap -option ctrl:swapcaps
-# /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1 &
-/usr/lib/polkit-kde-authentication-agent-1 &
+gnome-keyring-daemon --start --components=pkcs11,secrets,ssh &
