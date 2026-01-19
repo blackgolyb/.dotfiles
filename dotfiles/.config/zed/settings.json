@@ -9,25 +9,25 @@
     "context_servers": {
         "shadcn-mcp-server": {
             "enabled": false,
-            "settings": {}
+            "settings": {},
         },
         "mcp-server-github": {
             "enabled": false,
-            "settings": {}
+            "settings": {},
         },
         "mcp-server-context7": {
             "enabled": false,
-            "settings": {}
-        }
+            "settings": {},
+        },
     },
     "tab_bar": {
         "show": false,
-        "show_nav_history_buttons": false
+        "show_nav_history_buttons": false,
     },
     "toolbar": {
         "breadcrumbs": true,
         "quick_actions": false,
-        "selections_menu": false
+        "selections_menu": false,
     },
     "terminal": {
         "button": false,
@@ -35,70 +35,77 @@
         "font_size": 10,
         "font_family": "JetBrainsMono Nerd Font",
         "line_height": {
-            "custom": 1.3
-        }
+            "custom": 1.3,
+        },
     },
     "agent": {
         "default_model": {
             "provider": "copilot_chat",
-            "model": "claude-sonnet-4.5"
+            "model": "claude-sonnet-4.5",
         },
-        "model_parameters": []
+        "model_parameters": [],
     },
     "edit_predictions": {
-        "mode": "eager" // or "subtle"
+        "mode": "eager", // or "subtle"
     },
     "collaboration_panel": {
-        "button": false
+        "button": false,
     },
     "outline_panel": {
-        "button": false
+        "button": false,
     },
     "project_panel": {
         "auto_fold_dirs": false,
         "sticky_scroll": false,
         "button": false,
-        "dock": "right"
+        "dock": "right",
     },
     "notification_panel": {
-        "button": false
+        "button": false,
     },
     "gutter": {
         // штука там де номера ліній
         "folds": false,
         "runnables": false,
-        "breakpoints": false
+        "breakpoints": false,
     },
     "centered_layout": {
         "left_padding": 0.1,
-        "right_padding": 0.1
+        "right_padding": 0.1,
     },
     "show_edit_predictions": true,
     "features": {
-        "edit_prediction_provider": "copilot"
+        "edit_prediction_provider": "copilot",
     },
     "vim_mode": true,
     "vim": {
-        "use_smartcase_find": false
+        "use_smartcase_find": false,
     },
     "command_aliases": {
         "W": "w",
         "Wq": "wq",
         "Q": "q",
         "we": "save without format",
-        "We": "save without format"
+        "We": "save without format",
     },
-    "relative_line_numbers": true,
+    "relative_line_numbers": "wrapped",
     "tab_size": 4,
     "inlay_hints": {
         "enabled": false,
-        "show_background": true
+        "show_background": true,
     },
     "title_bar": {
-        // "show": false
+        "show_branch_icon": false,
+        "show_menus": false,
+        "show_branch_name": false,
+        "show_project_items": false,
+        "show_onboarding_banner": false,
+        "show_sign_in": false,
+        "show_user_menu": false,
+        "show_user_picture": false,
     },
     "status_bar": {
-        // "show": false
+        "experimental.show": false,
     },
     "preferred_line_length": 80,
     "vertical_scroll_margin": 10,
@@ -144,11 +151,11 @@
         // "terminal.ansi.bright_white": "#ffffff"
     },
     "file_types": {
-        "Clojure": ["yuck"]
+        "Clojure": ["yuck"],
     },
     "languages": {
         "JSON": {
-            "tab_size": 2
+            "tab_size": 2,
         },
         "Python": {
             "language_servers": ["pyright", "ruff"],
@@ -157,18 +164,18 @@
             "formatter": [
                 {
                     "language_server": {
-                        "name": "ruff"
-                    }
+                        "name": "ruff",
+                    },
                 },
                 {
                     "code_actions": {
                         // Fix all auto-fixable lint violations
                         // "source.fixAll.ruff": true,
                         // Organize imports
-                        "source.organizeImports.ruff": true
-                    }
-                }
-            ]
+                        "source.organizeImports.ruff": true,
+                    },
+                },
+            ],
         },
         "JavaScript": {
             "formatter": {
@@ -178,10 +185,10 @@
                         "prettier",
                         "--ignore-unknown",
                         "--stdin-filepath",
-                        "{buffer_path}"
-                    ]
-                }
-            }
+                        "{buffer_path}",
+                    ],
+                },
+            },
         },
         "TypeScript": {
             "formatter": {
@@ -191,23 +198,23 @@
                         "prettier",
                         "--ignore-unknown",
                         "--stdin-filepath",
-                        "{buffer_path}"
-                    ]
-                }
-            }
+                        "{buffer_path}",
+                    ],
+                },
+            },
         },
         "Markdown": {
             "format_on_save": "on",
-            "remove_trailing_whitespace_on_save": false
-        }
+            "remove_trailing_whitespace_on_save": false,
+        },
     },
     "lsp": {
         "typos": {
             "initialization_options": {
                 // Diagnostic severity within Zed. "Error" by default, can be:
                 // "Error", "Hint", "Information", "Warning"
-                "diagnosticSeverity": "Warning"
-            }
+                "diagnosticSeverity": "Warning",
+            },
         },
         "ruff": {
             "initialization_options": {
@@ -215,34 +222,34 @@
                     // Ruff server settings goes here
                     "lineLength": 100,
                     "lint": {
-                        "extendSelect": ["I"]
-                    }
-                }
-            }
+                        "extendSelect": ["I"],
+                    },
+                },
+            },
         },
         "pyright": {
             "settings": {
                 "python.analysis": {
-                    "typeCheckingMode": "off"
+                    "typeCheckingMode": "off",
                 },
                 "python": {
-                    "pythonPath": ".venv/bin/python"
-                }
-            }
+                    "pythonPath": ".venv/bin/python",
+                },
+            },
         },
         "tailwindcss-language-server": {
             "settings": {
-                "classAttributes": ["class", "className", "ngClass", "styles"]
-            }
+                "classAttributes": ["class", "className", "ngClass", "styles"],
+            },
         },
         "texlab": {
             "settings": {
                 "texlab": {
                     "build": {
-                        "onSave": false
-                    }
-                }
-            }
-        }
-    }
+                        "onSave": false,
+                    },
+                },
+            },
+        },
+    },
 }

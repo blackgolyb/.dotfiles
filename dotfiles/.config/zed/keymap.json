@@ -10,33 +10,39 @@
         "context": "Editor && vim_mode == visual && !VimWaiting && !VimObject",
         "bindings": {
             "shift-s": "vim::PushAddSurrounds",
-            "space a a": "agent::AddSelectionToThread"
-        }
+            "space a a": "agent::AddSelectionToThread",
+        },
     },
     {
         "context": "vim_mode == normal && !menu",
         "bindings": {
-            "shift-y": ["workspace::SendKeystrokes", "y $"]
-        }
+            "shift-y": ["workspace::SendKeystrokes", "y $"],
+        },
     },
     {
         "context": "Editor && vim_mode == visual",
         "bindings": {
-            "space p": ["workspace::SendKeystrokes", "\" t d shift-p"]
-        }
+            "space p": ["workspace::SendKeystrokes", "\" t d shift-p"],
+        },
     },
     {
         "context": "Editor && vim_mode == normal",
         "bindings": {
             "g k": "editor::AddSelectionAbove",
-            "g j": "editor::AddSelectionBelow"
-        }
+            "g j": "editor::AddSelectionBelow",
+        },
     },
     {
         "context": "MessageEditor && vim_mode == normal",
         "bindings": {
-            "space space": "workspace::ToggleLeftDock"
-        }
+            "space space": "workspace::ToggleLeftDock",
+        },
+    },
+    {
+        "context": "Editor && (vim_mode == normal || vim_mode == visual)",
+        "bindings": {
+            "space i": "assistant::InlineAssist",
+        },
     },
     {
         "context": "vim_mode == normal || EmptyPane",
@@ -56,13 +62,12 @@
             "space g": ["task::Spawn", { "task_name": "start_lazygit" }],
             "space shift-e": [
                 "task::Spawn",
-                { "task_name": "file_navigation" }
+                { "task_name": "file_navigation" },
             ],
             "space space": "agent::ToggleFocus",
             // For AI auto inline complete (but using by trigger)
             // NOTE: no ways to disable it ;(
-            "space a i": "editor::ToggleEditPrediction",
-            "space a n": "editor::NextEditPrediction"
+            // "space a n": "editor::NextEditPrediction"
             // "space a shift-n": "editor::PreviousEditPrediction"
             // "space shift-a 0": "editor::AcceptInlineCompletion",
             // "space shift-a 1": "editor::ToggleInlineCompletions",
@@ -70,29 +75,29 @@
             //     "workspace::SendKeystrokes",
             //     "space shift-a 0 space shift-a 1"
             // ]
-        }
+        },
     },
     {
         "context": "Terminal",
         "bindings": {
-            "ctrl-w": "pane::CloseActiveItem"
-        }
+            "ctrl-w": "pane::CloseActiveItem",
+        },
     },
     {
         "context": "TabSwitcher",
         "bindings": {
             "d": "tab_switcher::CloseSelectedItem",
             "j": ["workspace::SendKeystrokes", "down"],
-            "k": ["workspace::SendKeystrokes", "up"]
-        }
+            "k": ["workspace::SendKeystrokes", "up"],
+        },
     },
     {
         "context": "not_editing",
         "bindings": {
             "j": "menu::SelectNext",
             "k": "menu::SelectPrevious",
-            "y": "menu::Confirm"
-        }
+            "y": "menu::Confirm",
+        },
     },
     {
         "context": "ProjectPanel && not_editing",
@@ -115,7 +120,7 @@
             "shift-n": "project_panel::NewDirectory",
             "ctrl-n": "project_panel::Duplicate",
             "g y": "workspace::CopyRelativePath",
-            "g shift-y": "workspace::CopyPath"
-        }
-    }
+            "g shift-y": "workspace::CopyPath",
+        },
+    },
 ]
