@@ -79,13 +79,13 @@ base_groupbox = widget.GroupBox(
 
 battery_pack_widget = WidgetGroup(
     widgets=[
-       widget.BatteryIcon(
-           theme_path=str(resources_path / "battery_icons"),
-           battery=0,
-           padding=3,
-           update_interval=5,
-           scale=1,
-       ),
+       # widget.BatteryIcon(
+       #     theme_path=str(resources_path / "battery_icons"),
+       #     battery=0,
+       #     padding=3,
+       #     update_interval=5,
+       #     scale=1,
+       # ),
         Batteries(
             batteries=[0, ],
             padding=3,
