@@ -37,7 +37,7 @@ arrows = {
 # Programs
 text_editor = "zed"
 terminal = "wezterm"  # guess_terminal()  # 'alacritty'
-webbrowser = "zen"
+webbrowser = "zen -P \"Default (twilight)\""
 file_explorer = "wezterm -e yazi"
 
 group_gaps = 10

@@ -12,5 +12,5 @@ dunst &
 greenclip daemon &
 tmux start &
 
-zen &
+zen -P "Default (twilight)" &
 super-productivity &
