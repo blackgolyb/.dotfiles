@@ -66,11 +66,12 @@
     ];
   };
 
-  services.displayManager.ly.enable = true;
+  services.xserver.displayManager.lightdm.enable = true;
 
-  security.pam.services.ly.enableGnomeKeyring = true;
   services.gnome.gnome-keyring.enable = true;
-  services.dbus.packages = [ pkgs.gcr ];
+  security.pam.services.lightdm.enableGnomeKeyring = true;
+
+  services.dbus.enable = true;
 
   stylix = {
     enable = true;
@@ -113,6 +114,9 @@
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
+     gnome-keyring # сам демон
+     libsecret     # бібліотека для програм (Zed, VS Code, Discord)
+     # 
      vim
      git
      zsh

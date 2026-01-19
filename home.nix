@@ -25,6 +25,7 @@
 # release notes.
   home.stateVersion = "24.11"; # Please read the comment before changing.
 
+  services.gnome-keyring.enable = true;
 # The home.packages option allows you to install Nix packages into your
 # environment.
     nixpkgs.config.allowUnfree = true;
@@ -45,9 +46,10 @@
 # (pkgs.writeShellScriptBin "my-hello" ''
 #   echo "Hello, ${config.home.username}!"
 # '')
+      gcr
 
 # CLI
-    pass
+      pass
       pinentry-curses # gnupg
       gnupg
       bat
@@ -128,7 +130,7 @@
 #  /etc/profiles/per-user/blackgolyb/etc/profile.d/hm-session-vars.sh
 #
   home.sessionVariables = {
-# EDITOR = "emacs";
+    SSH_AUTH_SOCK = "/run/user/1000/keyring/ssh";
     DBUS_SESSION_BUS_ADDRESS = "unix:path=/run/user/1000/bus";
   };
   home.shellAliases = {
