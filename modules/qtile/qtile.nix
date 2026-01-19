@@ -1,6 +1,7 @@
 { config, lib, pkgs, ... }:
 {
     home.packages = with pkgs; [
+       xgamma
        haskellPackages.greenclip
        librsvg
        adwaita-icon-theme
