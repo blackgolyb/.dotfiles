@@ -7,6 +7,9 @@ return {
             "MunifTanjim/nui.nvim",
             "nvim-tree/nvim-web-devicons",
         },
+        keys = {
+            { "<leader>e", ":Neotree toggle<CR>", desc = "Toggle Filetree", silent = true },
+        },
         lazy = false,
         opts = {
             window = {
@@ -20,7 +23,7 @@ return {
                         if node.type == "directory" then
                             if not node:is_expanded() then
                                 require("neo-tree.sources.filesystem.commands").open(state)
-                                else
+                            else
                                 -- Якщо папка вже відкрита, йдемо до першого дитини (вниз)
                                 require("neo-tree.ui.renderer").focus_node(state, node:get_child_ids()[1])
                             end
@@ -43,7 +46,6 @@ return {
                 {
                     event = "file_opened",
                     handler = function(file_path)
-                        -- Закриваємо Neo-tree одразу після відкриття файлу
                         require("neo-tree.command").execute({ action = "close" })
                     end
                 },
@@ -51,3 +53,4 @@ return {
         }
     }
 }
+

@@ -23,9 +23,6 @@ vim.keymap.set('n', '<C-l>', '<C-w>l', { desc = 'Move to right window' })
 
 vim.keymap.set({"o", "x"}, "ie", ":<C-u>normal! ggVG<CR>", { silent = true, desc = "Text object for entire buffer" })
 
--- Filetree
-vim.keymap.set("n", "<leader>e", ":Neotree toggle<CR>", { desc = "Toggle Filetree", silent = true })
-
 -- Statusbar
 local function toggle_status_bar()
   vim.opt.laststatus = vim.opt.laststatus:get() > 0 and 0 or 3
