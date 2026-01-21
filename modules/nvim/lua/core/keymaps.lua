@@ -30,4 +30,17 @@ vim.keymap.set("n", "<leader>e", ":Neotree toggle<CR>", { desc = "Toggle Filetre
 local function toggle_status_bar()
   vim.opt.laststatus = vim.opt.laststatus:get() > 0 and 0 or 3
 end
-vim.keymap.set("n", "<leader>S", toggle_status_bar, { desc = "Toggle Statusline" })
+vim.keymap.set("n", "<leader>s", toggle_status_bar, { desc = "Toggle Statusline" })
+
+
+-- Commands
+local cabbrev = function(expanded, original)
+  vim.cmd('cnoreabbrev ' .. expanded .. ' ' .. original)
+end
+
+cabbrev('W', 'w')
+cabbrev('Q', 'q')
+cabbrev('Wq', 'wq')
+cabbrev('WQ', 'wq')
+cabbrev('Wa', 'wa')
+cabbrev('Qa', 'qa')
