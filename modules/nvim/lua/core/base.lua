@@ -20,3 +20,14 @@ vim.opt.smartcase = true
 vim.opt.cursorline = true
 vim.opt.scrolloff = 8
 vim.opt.updatetime = 50
+
+vim.api.nvim_create_autocmd('TextYankPost', {
+  desc = 'Highlight when yanking (copying) text',
+  group = vim.api.nvim_create_augroup('highlight-yank', { clear = true }),
+  callback = function()
+    vim.highlight.on_yank({
+      higroup = 'IncSearch',
+      timeout = 150,
+    })
+  end,
+})
