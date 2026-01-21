@@ -14,12 +14,21 @@ default_groups = [
             Match(wm_class="firefox"),
             Match(wm_class="floorp"),
             Match(wm_class="zen"),
+            Match(wm_class="zen-twilight"),
         ],
     ),
     create_group("d", "", screen=0),
     create_group("s", "", screen=0),
     create_group("a", "", screen=0),
-    create_group("v", "󱞁", screen=1, matches=[Match(wm_class="Logseq")]),
+    create_group(
+        "v",
+        "󱞁",
+        screen=1,
+        matches=[
+            Match(wm_class="Logseq"),
+            Match(wm_class="superproductivity")
+        ]
+    ),
     create_group("c", "", screen=1),
     create_group(
         "x",
@@ -28,6 +37,7 @@ default_groups = [
         matches=[
             Match(wm_class="discord"),
             Match(wm_class="YouTube Music"),
+            Match(wm_class="youtube music desktop app"),
         ],
     ),
     create_group("z", "", screen=1, matches=[Match(wm_class="Telegram")]),
