@@ -14,6 +14,6 @@ return {
 
     require("telescope").load_extension("aerial")
 
-    vim.keymap.set("n", "<leader>s", "<cmd>Telescope aerial<CR>", { desc = "Search Symbols (Aerial)" })
+    vim.keymap.set("n", "gs", "<cmd>Telescope aerial<CR>", { desc = "Search Symbols (Aerial)" })
   end,
 }
