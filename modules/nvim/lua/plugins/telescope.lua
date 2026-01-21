@@ -12,6 +12,18 @@ return {
         vim.keymap.set('n', 'g/', builtin.live_grep, { desc = "Global search (Live Grep)" })
         vim.keymap.set('n', 'g*', builtin.grep_string, { desc = "Search word under cursor" })
 
+        vim.keymap.set('v', 'g/', function()
+            local function get_visual_selection()
+                vim.cmd('noau normal! "vy"')
+                local text = vim.fn.getreg('v')
+                vim.fn.setreg('v', {})
+                return text
+            end
+
+            local selection = get_visual_selection()
+            builtin.live_grep({ default_text = selection })
+        end, { desc = "Search selection in project" })
+
         require('telescope').setup({
             defaults = {
                 initial_mode = "insert",
