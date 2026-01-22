@@ -32,6 +32,10 @@ return {
                         ["<esc>"] = actions.close,
                     },
                 },
+                sorting_strategy = "ascending",
+                layout_config = {
+                    prompt_position = "top",
+                },
             }
         })
 
