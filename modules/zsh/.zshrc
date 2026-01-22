@@ -191,6 +191,11 @@ alias tarasssh='activate-ssh-key taras'
 alias tfssh='activate-ssh-key tf'
 
 
+function nd() {
+  nix develop "/home/$USER/nixos#${1:-default}" --command zsh
+}
+
+
 function activate-ssh-key() {
     eval "$(ssh-agent -s)" > /dev/null
     ssh-add ~/.ssh/$1 > /dev/null
