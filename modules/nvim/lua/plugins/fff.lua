@@ -23,6 +23,9 @@ return {
         height = 0.6,
         width = 0.4,
       },
+      hl = {
+        border = 'TelescopeBorder',
+      },
     },
     -- No need to lazy-load with lazy.nvim.
     -- This plugin initializes itself lazily.
