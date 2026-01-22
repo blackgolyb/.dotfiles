@@ -18,25 +18,26 @@
     };
   };
 
-  outputs = {self, nixpkgs, home-manager, stylix, ... }@inputs:{
-    # use "nixos", or your hostname as the name of the configuration
-    # it's a better practice than "default" shown in the video
-    nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
-      specialArgs = { inherit inputs; system = "x86_64-linux"; };
-      modules = [
-        stylix.nixosModules.stylix
-        home-manager.nixosModules.home-manager
-        ./configuration.nix
-      ];
-    };
+  outputs = { self, nixpkgs, home-manager, stylix, ... }@inputs: 
+    let
+      system = "x86_64-linux";
+      pkgs = import nixpkgs {
+        inherit system;
+        config.allowUnfree = true;
+      };
+    in {
+      nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
+        specialArgs = { inherit inputs system; };
+        modules = [
+          stylix.nixosModules.stylix
+          home-manager.nixosModules.home-manager
+          ./configuration.nix
+        ];
+      };
 
-    # homeConfigurations.blackgolyb = home-manager.lib.homeManagerConfiguration {
-    #   pkgs = nixpkgs.legacyPackages.x86_64-linux // {
-    #     config = { allowUnfree = true; };
-    #   };
-    #   modules = [
-    #     ./home.nix
-    #   ];
-    # };
-  };
+      devShells.${system} = {
+        node = import ./dev-shells/node.nix { inherit pkgs; };
+        python = import ./dev-shells/python.nix { inherit pkgs; };
+      };
+    };
 }
