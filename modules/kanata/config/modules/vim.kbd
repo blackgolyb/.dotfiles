@@ -12,6 +12,11 @@
   k     up
   l     rght
 
+  f     C-A-f
+  d     C-A-d
+  s     C-A-s
+  a     C-A-a
+
   b     C-left      ;; back word
   w     C-rght      ;; word
 
