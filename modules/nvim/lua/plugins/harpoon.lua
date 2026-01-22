@@ -23,10 +23,10 @@ return {
         require("harpoon"):list():clear()
       end, { desc = "Harpoon Clear List" })
 
-      vim.keymap.set("n", "<M-f>", function() harpoon:list():select(1) end)
-      vim.keymap.set("n", "<M-d>", function() harpoon:list():select(2) end)
-      vim.keymap.set("n", "<M-s>", function() harpoon:list():select(3) end)
-      vim.keymap.set("n", "<M-a>", function() harpoon:list():select(4) end)
+      vim.keymap.set("n", "<C-M-f>", function() harpoon:list():select(1) end)
+      vim.keymap.set("n", "<C-M-d>", function() harpoon:list():select(2) end)
+      vim.keymap.set("n", "<C-M-s>", function() harpoon:list():select(3) end)
+      vim.keymap.set("n", "<C-M-a>", function() harpoon:list():select(4) end)
     end,
   },
 }
