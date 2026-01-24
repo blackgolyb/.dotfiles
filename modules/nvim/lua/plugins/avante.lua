@@ -31,7 +31,15 @@ return {
     instructions_file = "AGENTS.md",
     -- for example
     provider = "copilot",
+    auto_suggestions_provider = "copilot",
     providers = {},
+    suggestion = {
+      debounce = 75,
+      throttle = 75,
+    },
+    behaviour = {
+      auto_suggestions = true,
+    },
   },
   keys = {
     { "<leader><leader>", function() _G.sidebar("avante") end, desc = "Toggle AI Chat", silent = true },
