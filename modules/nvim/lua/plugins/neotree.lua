@@ -18,6 +18,10 @@ return {
                 mappings = {
                     ["<esc>"] = "close_window",
                     ["h"] = "close_node",
+                    ["n"] = "add",
+                    ["N"] = "add_directory",
+                    ["a"] = "none",
+                    ["A"] = "none",
                     ["l"] = function(state)
                         local node = state.tree:get_node()
                         if node.type == "directory" then
@@ -44,12 +48,37 @@ return {
             },
             event_handlers = {
                 {
+                    event = "file_added",
+                    handler = function(file_path)
+                        local timer = vim.loop.new_timer()
+                        timer:start(50, 0, vim.schedule_wrap(function()
+                            vim.cmd("edit " .. vim.fn.fnameescape(file_path))
+                            require("neo-tree.command").execute({ action = "close" })
+
+                            timer:stop()
+                            timer:close()
+                        end))
+                    end
+                },
+                {
                     event = "file_opened",
                     handler = function(file_path)
                         require("neo-tree.command").execute({ action = "close" })
                     end
                 },
-            }
+            },
+            renderers = {
+                file = {
+                    { "indent" },
+                    { "icon" },
+                    { "name", use_git_status_colors = true },
+                },
+                directory = {
+                    { "indent" },
+                    { "icon" },
+                    { "name", use_git_status_colors = true },
+                },
+            },
         }
     }
 }
