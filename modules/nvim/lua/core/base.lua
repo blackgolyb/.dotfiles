@@ -28,6 +28,9 @@ vim.opt.guicursor = {
   "a:blinkon500-blinkoff500",
 }
 
+vim.opt.fillchars:append { eob = " " }
+
+
 vim.o.winborder = 'rounded'
 
 vim.api.nvim_create_autocmd('TextYankPost', {
