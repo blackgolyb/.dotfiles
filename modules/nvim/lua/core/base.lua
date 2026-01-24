@@ -21,6 +21,13 @@ vim.opt.cursorline = true
 vim.opt.scrolloff = 8
 vim.opt.updatetime = 50
 
+vim.opt.guicursor = {
+  "n-v-c:block-Cursor",
+  "i-ci-ve:ver25-Cursor",
+  "r-cr:hor20-Cursor",
+  "a:blinkon500-blinkoff500",
+}
+
 vim.o.winborder = 'rounded'
 
 vim.api.nvim_create_autocmd('TextYankPost', {
