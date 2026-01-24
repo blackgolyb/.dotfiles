@@ -1,3 +1,11 @@
+_G.sidebar_on_open("neotree", function()
+    vim.cmd("Neotree")
+end)
+
+_G.sidebar_on_close("neotree", function()
+    require("neo-tree.command").execute({ action = "close" })
+end)
+
 return {
     {
         "nvim-neo-tree/neo-tree.nvim",
@@ -8,7 +16,7 @@ return {
             "nvim-tree/nvim-web-devicons",
         },
         keys = {
-            { "<leader>e", ":Neotree toggle<CR>", desc = "Toggle Filetree", silent = true },
+            { "<leader>e", function() _G.sidebar("neotree") end, desc = "Toggle Filetree", silent = true },
         },
         lazy = false,
         opts = {
@@ -16,7 +24,7 @@ return {
                 position = "right",
                 width = 30,
                 mappings = {
-                    ["<esc>"] = "close_window",
+                    ["<esc>"] = function() _G.sidebar("none") end,
                     ["h"] = "close_node",
                     ["n"] = "add",
                     ["N"] = "add_directory",
@@ -53,7 +61,7 @@ return {
                         local timer = vim.loop.new_timer()
                         timer:start(50, 0, vim.schedule_wrap(function()
                             vim.cmd("edit " .. vim.fn.fnameescape(file_path))
-                            require("neo-tree.command").execute({ action = "close" })
+                            _G.sidebar("none")
 
                             timer:stop()
                             timer:close()
