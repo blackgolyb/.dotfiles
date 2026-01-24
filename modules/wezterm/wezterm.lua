@@ -18,6 +18,8 @@ config.font = wezterm.font 'FiraCode Nerd Font Mono'
 config.font_size = 16.0
 config.bold_brightens_ansi_colors = false
 
+config.cursor_blink_rate = 300,
+
 config.colors = {
     tab_bar = {
         -- The color of the strip that goes along the top of the window
