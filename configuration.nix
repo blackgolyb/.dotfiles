@@ -10,6 +10,7 @@
       ./hardware-configuration.nix
       ./modules/kanata/kanata.nix
       ./modules/plymouth/plymouth.nix
+      ./modules/thunar/thunar-system.nix
     ];
 
   nix.settings.experimental-features = ["nix-command" "flakes"];

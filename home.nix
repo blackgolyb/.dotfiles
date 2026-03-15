@@ -9,6 +9,7 @@
       ./modules/rofi/rofi.nix
       ./modules/rofi-bluetooth/rofi-bluetooth.nix
       ./modules/rofi-network-manager/rofi-network-manager.nix
+      ./modules/thunar/thunar.nix
       inputs.zen-browser.homeModules.twilight
   ];
 # Home Manager needs a bit of information about you and the paths it should
@@ -74,7 +75,6 @@
 
 # Programs
       xcolor
-      xfce.thunar
       telegram-desktop
       pavucontrol # qtile
       zathura
