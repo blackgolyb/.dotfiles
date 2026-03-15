@@ -225,9 +225,9 @@ function revscale-setup() {
 
 
 
-export EDITOR=zed
-export VISUAL=zed
-export BROWSER=zen-browser
+export EDITOR=zeditor
+export VISUAL=zeditor
+export BROWSER=zen-twilight
 export GOOGLE_CLOUD_PROJECT=ace-bot-441819
 
 export PATH=$HOME/.npm-global/bin:$PATH
