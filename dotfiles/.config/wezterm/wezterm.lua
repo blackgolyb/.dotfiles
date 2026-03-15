@@ -17,6 +17,11 @@ config.enable_tab_bar = true
 config.font = wezterm.font 'FiraCode Nerd Font Mono'
 config.font_size = 16.0
 config.bold_brightens_ansi_colors = false
+config.enable_kitty_graphics=true
+
+config.cursor_blink_rate = 500
+config.animation_fps = 1
+-- config.line_height = 1.35
 
 config.colors = {
     tab_bar = {

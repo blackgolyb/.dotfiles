@@ -8,12 +8,12 @@ on   = [ "c", "n" ]
 run  = "copy filename"
 desc = "Copy the file"
 
-[[mgr.prepend_keymap]]
-on   = [ "l" ]
-run = "plugin fuse-archive mount"
-desc = "Enter or Mount selected archive"
+# [[mgr.prepend_keymap]]
+# on   = [ "l" ]
+# run = "plugin fuse-archive mount"
+# desc = "Enter or Mount selected archive"
 
-[[mgr.prepend_keymap]]
-on   = [ "h" ]
-run = "plugin fuse-archive unmount"
-desc = "Leave or Unmount selected archive"
+# [[mgr.prepend_keymap]]
+# on   = [ "h" ]
+# run = "plugin fuse-archive unmount"
+# desc = "Leave or Unmount selected archive"

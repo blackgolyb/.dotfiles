@@ -39,10 +39,47 @@
         },
     },
     "agent": {
-        "default_model": {
+        "inline_assistant_model": {
             "provider": "copilot_chat",
             "model": "claude-sonnet-4.5",
+            "enable_thinking": false
         },
+        "tool_permissions": {
+            "tools": {
+                "fetch": {
+                    "always_allow": [
+                        {
+                            "pattern": "^https?://docs\\.virustotal\\.com"
+                        }
+                    ]
+                },
+                "terminal": {
+                    "always_allow": [
+                        {
+                            "pattern": "^find\\b"
+                        },
+                        {
+                            "pattern": "^cd\\b"
+                        },
+                        {
+                            "pattern": "^grep\\b"
+                        }
+                    ]
+                },
+                "delete_path": {
+                    "default": "allow"
+                },
+                "create_directory": {
+                    "default": "allow"
+                }
+            }
+        },
+        "default_profile": "write",
+        "default_model": {
+            "provider": "copilot_chat",
+            "model": "claude-sonnet-4.6",
+        },
+        "favorite_models": [],
         "model_parameters": [],
     },
     "edit_predictions": {
@@ -105,7 +142,7 @@
         "show_user_picture": false,
     },
     "status_bar": {
-        "experimental.show": false,
+        // "experimental.show": false,
     },
     "preferred_line_length": 80,
     "vertical_scroll_margin": 10,
@@ -154,25 +191,22 @@
         "Clojure": ["yuck"],
     },
     "languages": {
+        "YAML": {
+            "tab_size": 2,
+        },
         "JSON": {
             "tab_size": 2,
         },
         "Python": {
-            "language_servers": ["pyright", "ruff"],
-            // "language_servers": ["pyright"],
+            "language_servers": ["basedpyright", "ruff"],
             "format_on_save": "on",
+            "code_actions_on_format": {
+                "source.organizeImports.ruff": true,
+            },
             "formatter": [
                 {
                     "language_server": {
                         "name": "ruff",
-                    },
-                },
-                {
-                    "code_actions": {
-                        // Fix all auto-fixable lint violations
-                        // "source.fixAll.ruff": true,
-                        // Organize imports
-                        "source.organizeImports.ruff": true,
                     },
                 },
             ],
@@ -227,7 +261,7 @@
                 },
             },
         },
-        "pyright": {
+        "basedpyright": {
             "settings": {
                 "python.analysis": {
                     "typeCheckingMode": "off",
