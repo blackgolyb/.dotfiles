@@ -192,7 +192,11 @@ alias tfssh='activate-ssh-key tf'
 
 
 function nd() {
-  nix develop "/home/$USER/nixos#${1:-default}" --command zsh
+  if [ -z "$1" ]; then
+    nix develop --command zsh
+  else
+    nix develop "/home/$USER/nixos#$1" --command zsh
+  fi
 }
 
 
