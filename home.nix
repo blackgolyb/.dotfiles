@@ -46,7 +46,6 @@
 # (pkgs.writeShellScriptBin "my-hello" ''
 #   echo "Hello, ${config.home.username}!"
 # '')
-      gcr
 
 # CLI
       pass

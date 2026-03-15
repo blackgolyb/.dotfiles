@@ -66,68 +66,12 @@
     ];
   };
 
-  services.xserver.displayManager.lightdm = {
-    enable = true;
-    greeters.mini = {
-      enable = true;
-      user = "blackgolyb";
-      extraConfig = ''
-        [greeter]
-        show-password-label = false
-        password-alignment = left
-
-        [greeter-theme]
-        # The font to use for all text
-        font = "Sans"
-        # The font size to use for all text
-        font-size = 1em
-        # The font weight to use for all text
-        font-weight = bold
-        # The font style to use for all text
-        font-style = normal
-        # The default text color
-        text-color = "#ffffff"
-        # The color of the error text
-        error-color = "#dc4358"
-        # An absolute path to an optional background image.
-        background-image = ""
-        # Background image size:
-        background-image-size = cover
-        # The screen's background color.
-        background-color = "#2e3440"
-        # The password window's background color
-        window-color = "#2e3440"
-        # The color of the password window's border
-        border-color = "#dc4358"
-        # The width of the password window's border.
-        border-width = 2px
-        # The pixels of empty space around the password input.
-        layout-space = 15
-        # The character used to mask your password.
-        password-character = -1
-        # The color of the text in the password input.
-        password-color = "#ffffff"
-        # The background color of the password input.
-        password-background-color = "#2e3440"
-        # The color of the password input's border.
-        password-border-color = "#dc4358"
-        # The width of the password input's border.
-        password-border-width = 1px
-        # The border radius of the password input.
-        password-border-radius = 0.5em
-        # Override font for system info
-        sys-info-font = "Mono"
-        # Set font size of system info
-        sys-info-font-size = 0.8em
-        # Override color for system info text
-        sys-info-color = "#ffffff"
-        # Margins around the system info section
-        sys-info-margin = -5px -5px 0px
-      '';
-    };
-  };
+  services.xserver.displayManager.lightdm.greeters.slick.enable = true;
+  services.xserver.displayManager.lightdm.greeters.mini.enable = false;
 
   services.gnome.gnome-keyring.enable = true;
+
+  security.pam.services.login.enableGnomeKeyring = true;
   security.pam.services.lightdm.enableGnomeKeyring = true;
 
   services.dbus.enable = true;
@@ -173,9 +117,9 @@
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-     gnome-keyring # сам демон
-     libsecret     # бібліотека для програм (Zed, VS Code, Discord)
-     # 
+     gnome-keyring
+     libsecret
+     #
      vim
      git
      zsh
