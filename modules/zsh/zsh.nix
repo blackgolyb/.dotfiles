@@ -16,8 +16,21 @@
 
     oh-my-zsh = {
       enable = true;
+      plugins = [
+        "git"
+        "poetry"
+        "zsh-navigation-tools"
+      ];
     };
-    
+
+    plugins = [
+      {
+        name = "zsh-vi-mode";
+        src = pkgs.zsh-vi-mode;
+        file = "share/zsh-vi-mode/zsh-vi-mode.plugin.zsh";
+      }
+    ];
+
 
     initContent = ''
       source ${config.home.homeDirectory}/.config/zsh/zshrc

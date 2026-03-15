@@ -71,8 +71,6 @@ ZSH_THEME=""
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
 # plugins=(git poetry zsh-navigation-tools zsh-autosuggestions zsh-syntax-highlighting zsh-vi-mode fzf-zsh-plugin)
-ZVM_INIT_MODE=sourcing
-plugins=(git poetry zsh-navigation-tools zsh-autosuggestions zsh-syntax-highlighting zsh-vi-mode fzf-zsh-plugin)
 
 
 # colorscript random
