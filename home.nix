@@ -133,16 +133,7 @@
     DBUS_SESSION_BUS_ADDRESS = "unix:path=/run/user/1000/bus";
   };
   home.shellAliases = {
-    zen = "zen -P \"Default (twilight)\"";
-  };
-
-  xdg.desktopEntries = {
-    zen = {
-      name = "Zen Browser";
-      exec = "zen -P \"Default (twilight)\" %u";
-      terminal = false;
-      categories = [ "Network" "WebBrowser" ];
-    };
+    zen = "zen-twilight";
   };
 
   stylix.targets = {
