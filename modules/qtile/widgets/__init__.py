@@ -1,28 +1,23 @@
 from libqtile import widget
-from libqtile.widget.battery import BatteryState
 from libqtile.lazy import lazy
 from libqtile.log_utils import logger
+from libqtile.widget.battery import BatteryState
 from qtile_extras import widget as qe_widget
-
 from settings import *
-from .base import WidgetGroup, WidgetBox, WidgetBoxTest
-from .battery import Batteries, BatteriesIcon
-from .volume import Volume
-from .brightness import Brightness
-from .multi_monitor import MultiMonitor
-from .color_picker import ColorPicker, ColorPickerDropper, ColorPickerPalette
-from .keyboard_layout import KeyboardLayout
-from .yt_music import YTMusicWidget
-from .yt_music.api import api as yt_music_api
-from .bluetooth import Bluetooth
 from themes import color_theme
 
+from .base import WidgetBox, WidgetBoxTest, WidgetGroup
+from .battery import Batteries, BatteriesIcon
+from .bluetooth import Bluetooth
+from .brightness import Brightness
+from .color_picker import ColorPicker, ColorPickerDropper, ColorPickerPalette
+from .keyboard_layout import KeyboardLayout
+from .multi_monitor import MultiMonitor
+from .volume import Volume
+from .yt_music import YTMusicWidget
+from .yt_music.api import api as yt_music_api
 
-rofi_wifi_menu = (
-    f"bash {home_path}/.config/rofi-network-manager/rofi-network-manager.sh"
-)
-rofi_bluetooth_menu = f"bash {home_path}/.config/rofi-bluetooth/rofi-bluetooth"
-
+rofi_wifi_menu = f"bash {home_path}/.config/rofi-network-manager/rofi-network-manager.sh"
 
 
 # ВИДЖЕТЫ НА ПАНЕЛИ И ИХ ПАРАМЕТРЫ ------------------------------------------------
@@ -79,15 +74,17 @@ base_groupbox = widget.GroupBox(
 
 battery_pack_widget = WidgetGroup(
     widgets=[
-       # widget.BatteryIcon(
-       #     theme_path=str(resources_path / "battery_icons"),
-       #     battery=0,
-       #     padding=3,
-       #     update_interval=5,
-       #     scale=1,
-       # ),
+        # widget.BatteryIcon(
+        #     theme_path=str(resources_path / "battery_icons"),
+        #     battery=0,
+        #     padding=3,
+        #     update_interval=5,
+        #     scale=1,
+        # ),
         Batteries(
-            batteries=[0, ],
+            batteries=[
+                0,
+            ],
             padding=3,
             format="{percent:2.0%}",
             update_interval=1,
@@ -114,7 +111,7 @@ kb_layout_widget = widget.KeyboardLayout(
 
 bluetooth = Bluetooth(
     icon="",
-    mouse_callbacks={"Button1": lazy.spawn(rofi_bluetooth_menu)},
+    mouse_callbacks={"Button1": lazy.spawn("blueman-manager")},
 )
 
 main_menu = WidgetBox(
@@ -140,16 +137,10 @@ main_menu = WidgetBox(
             text="SEMPAI",
             margin=6,
             padding=3,
-            mouse_callbacks={
-                "Button1": lazy.spawn(f"{webbrowser} https://anifap.top/")
-            },
             **decor,
         ),
         widget.Image(
             filename=str(resources_path / "menu_images" / "hent.jpg"),
-            mouse_callbacks={
-                "Button1": lazy.spawn(f"{webbrowser} https://anifap.top/")
-            },
         ),
         widget.Spacer(length=5),
         widget.TextBox(text="|"),
@@ -202,9 +193,7 @@ default_widgets = [
                 display_format=" {updates}",
                 no_update_string=" 0",
                 padding=0,
-                mouse_callbacks={
-                    "Button1": lazy.spawn(f"{terminal} -e sudo pacman -Sy")
-                },
+                mouse_callbacks={"Button1": lazy.spawn(f"{terminal} -e sudo pacman -Sy")},
             ),
             widget.Spacer(length=6),
             # Bluetooth
