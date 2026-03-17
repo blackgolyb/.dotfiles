@@ -15,14 +15,14 @@ wallpaper_managers = [
         screen=screens[0],
         wallpaper=resources_path / "wallpapers",
         wallpaper_priority=wallpaper_priority,
-        wallpaper_mode="stretch",
+        wallpaper_mode="fill",
         activate_hooks=True,
     ),
     WallpaperManager(
         screen=screens[1],
         wallpaper=resources_path / "wallpapers",
         wallpaper_priority=wallpaper_priority,
-        wallpaper_mode="stretch",
+        wallpaper_mode="fill",
         activate_hooks=True,
     ),
 ]
