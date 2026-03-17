@@ -216,20 +216,20 @@
       "audio/webm" = "vlc.desktop";
 
       # Archives
-      "application/zip" = "xarchiver.desktop";
-      "application/x-7z-compressed" = "xarchiver.desktop";
-      "application/x-rar" = "xarchiver.desktop";
-      "application/x-tar" = "xarchiver.desktop";
-      "application/x-bzip" = "xarchiver.desktop";
-      "application/x-bzip2" = "xarchiver.desktop";
-      "application/x-gzip" = "xarchiver.desktop";
-      "application/x-xz" = "xarchiver.desktop";
-      "application/x-compress" = "xarchiver.desktop";
-      "application/x-compressed-tar" = "xarchiver.desktop";
-      "application/x-bzip-compressed-tar" = "xarchiver.desktop";
-      "application/x-lzip" = "xarchiver.desktop";
-      "application/x-lzma" = "xarchiver.desktop";
-      "application/x-lzop" = "xarchiver.desktop";
+      "application/zip" = "org.gnome.FileRoller.desktop";
+      "application/x-7z-compressed" = "org.gnome.FileRoller.desktop";
+      "application/x-rar" = "org.gnome.FileRoller.desktop";
+      "application/x-tar" = "org.gnome.FileRoller.desktop";
+      "application/x-bzip" = "org.gnome.FileRoller.desktop";
+      "application/x-bzip2" = "org.gnome.FileRoller.desktop";
+      "application/x-gzip" = "org.gnome.FileRoller.desktop";
+      "application/x-xz" = "org.gnome.FileRoller.desktop";
+      "application/x-compress" = "org.gnome.FileRoller.desktop";
+      "application/x-compressed-tar" = "org.gnome.FileRoller.desktop";
+      "application/x-bzip-compressed-tar" = "org.gnome.FileRoller.desktop";
+      "application/x-lzip" = "org.gnome.FileRoller.desktop";
+      "application/x-lzma" = "org.gnome.FileRoller.desktop";
+      "application/x-lzop" = "org.gnome.FileRoller.desktop";
 
       # File manager
       "inode/directory" = "thunar.desktop";
