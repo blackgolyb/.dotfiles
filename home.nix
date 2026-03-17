@@ -7,7 +7,6 @@
       ./modules/nvim/nvim.nix
       ./modules/zed/zed.nix
       ./modules/rofi/rofi.nix
-      ./modules/rofi-bluetooth/rofi-bluetooth.nix
       ./modules/rofi-network-manager/rofi-network-manager.nix
       ./modules/thunar/thunar.nix
       inputs.zen-browser.homeModules.twilight
@@ -63,6 +62,7 @@
       cloc
       docker
       duf
+      blueman
 
 # TUI
       yazi

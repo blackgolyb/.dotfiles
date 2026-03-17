@@ -77,6 +77,10 @@
 
   services.dbus.enable = true;
 
+  # Bluetooth
+  hardware.bluetooth.enable = true;
+  hardware.bluetooth.powerOnBoot = true;
+
   stylix = {
     enable = true;
 
