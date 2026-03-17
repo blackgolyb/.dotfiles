@@ -2,14 +2,11 @@ import subprocess
 
 import libqtile
 from libqtile import hook
-
-from settings import *
 from services import utils
+from settings import *
 
 
-def init_hooks(
-    main_bar: libqtile.bar.Bar | libqtile.bar.Gap, is_bar_rounded: bool
-) -> None:
+def init_hooks(main_bar: libqtile.bar.Bar | libqtile.bar.Gap, is_bar_rounded: bool) -> None:
     # Автозапуск
     @hook.subscribe.startup_once
     def autostart() -> None:
@@ -33,7 +30,7 @@ def init_hooks(
         if is_bar_rounded:
             subprocess.run(addition_process + picom_command, shell=True)
         else:
-            picom_for_bar = ' --rounded-corners-exclude "QTILE_INTERNAL:32c = 1"'
+            picom_for_bar = ' --rounded-corners-exclude "QTILE_INTERNAL = 1"'
             subprocess.run(addition_process + picom_command + picom_for_bar, shell=True)
 
     # Сделать диалоговые окна плавающими
