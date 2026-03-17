@@ -77,6 +77,7 @@
       xcolor
       telegram-desktop
       pavucontrol # qtile
+      feh
       zathura
       anki
       chromium
@@ -156,5 +157,89 @@
 
   programs.zen-browser = {
     enable = true;
+  };
+
+  # XDG MIME types configuration
+  xdg.mimeApps = {
+    enable = true;
+    defaultApplications = {
+      # Browsers / links
+      "x-scheme-handler/http" = "zen-twilight.desktop";
+      "x-scheme-handler/https" = "zen-twilight.desktop";
+      "x-scheme-handler/chrome" = "zen-twilight.desktop";
+      "text/html" = "zen-twilight.desktop";
+      "application/xhtml+xml" = "zen-twilight.desktop";
+
+      # PDF
+      "application/pdf" = "org.pwmt.zathura.desktop";
+
+      # Text & Programming
+      "text/plain" = "dev.zed.Zed.desktop";
+      "text/markdown" = "dev.zed.Zed.desktop";
+      "text/x-python" = "dev.zed.Zed.desktop";
+      "text/x-rust" = "dev.zed.Zed.desktop";
+      "text/x-go" = "dev.zed.Zed.desktop";
+      "text/x-java" = "dev.zed.Zed.desktop";
+      "text/x-csrc" = "dev.zed.Zed.desktop";
+      "text/x-c++src" = "dev.zed.Zed.desktop";
+      "text/x-shellscript" = "dev.zed.Zed.desktop";
+      "application/json" = "dev.zed.Zed.desktop";
+      "application/javascript" = "dev.zed.Zed.desktop";
+      "application/xml" = "dev.zed.Zed.desktop";
+      "application/toml" = "dev.zed.Zed.desktop";
+      "text/x-yaml" = "dev.zed.Zed.desktop";
+      "text/x-toml" = "dev.zed.Zed.desktop";
+
+      # Images
+      "image/png" = "feh.desktop";
+      "image/jpeg" = "feh.desktop";
+      "image/webp" = "feh.desktop";
+      "image/gif" = "feh.desktop";
+      "image/bmp" = "feh.desktop";
+      "image/tiff" = "feh.desktop";
+      "image/svg+xml" = "feh.desktop";
+
+      # Video
+      "video/mp4" = "vlc.desktop";
+      "video/x-matroska" = "vlc.desktop";
+      "video/webm" = "vlc.desktop";
+      "video/x-msvideo" = "vlc.desktop";
+      "video/mpeg" = "vlc.desktop";
+      "video/quicktime" = "vlc.desktop";
+
+      # Audio
+      "audio/mpeg" = "vlc.desktop";
+      "audio/ogg" = "vlc.desktop";
+      "audio/wav" = "vlc.desktop";
+      "audio/flac" = "vlc.desktop";
+      "audio/mp4" = "vlc.desktop";
+      "audio/webm" = "vlc.desktop";
+
+      # Archives
+      "application/zip" = "xarchiver.desktop";
+      "application/x-7z-compressed" = "xarchiver.desktop";
+      "application/x-rar" = "xarchiver.desktop";
+      "application/x-tar" = "xarchiver.desktop";
+      "application/x-bzip" = "xarchiver.desktop";
+      "application/x-bzip2" = "xarchiver.desktop";
+      "application/x-gzip" = "xarchiver.desktop";
+      "application/x-xz" = "xarchiver.desktop";
+      "application/x-compress" = "xarchiver.desktop";
+      "application/x-compressed-tar" = "xarchiver.desktop";
+      "application/x-bzip-compressed-tar" = "xarchiver.desktop";
+      "application/x-lzip" = "xarchiver.desktop";
+      "application/x-lzma" = "xarchiver.desktop";
+      "application/x-lzop" = "xarchiver.desktop";
+
+      # File manager
+      "inode/directory" = "thunar.desktop";
+
+      # App handlers
+      "x-scheme-handler/logseq" = "Logseq.desktop";
+      "x-scheme-handler/heroic" = "com.heroicgameslauncher.hgl.desktop";
+      "x-scheme-handler/ytmd" = "ytmdesktop.desktop";
+      "x-scheme-handler/tonsite" = "org.telegram.desktop.desktop";
+      "x-scheme-handler/tg" = "org.telegram.desktop.desktop";
+    };
   };
 }
