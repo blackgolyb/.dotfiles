@@ -1,9 +1,8 @@
 import subprocess
 
-from libqtile.widget import base
-from libqtile.lazy import lazy
-
 import settings
+from libqtile.lazy import lazy
+from libqtile.widget import base
 from services.utils import str2bool
 
 
@@ -12,8 +11,7 @@ class Volume(base.InLoopPollText):
         (
             "update_interval",
             5,
-            "Update interval in seconds, if none, the "
-            "widget updates whenever it's done.",
+            "Update interval in seconds, if none, the widget updates whenever it's done.",
         ),
         (
             "format",
@@ -54,21 +52,30 @@ class Volume(base.InLoopPollText):
 
     @property
     def volume(self) -> int:
-        result = subprocess.run(
-            ["bash", self.script_path, "get"],
-            capture_output=True,
-            text=True,
-        )
-        return int(result.stdout.replace("\n", ""))
+        try:
+            result = subprocess.run(
+                ["bash", self.script_path, "get"],
+                capture_output=True,
+                text=True,
+            )
+            return int(result.stdout.replace("\n", ""))
+        except ValueError:
+            return 0
 
     @property
     def is_muted(self) -> bool:
-        result = subprocess.run(
-            ["bash", self.script_path, "is_muted"],
-            capture_output=True,
-            text=True,
-        )
-        return str2bool(result.stdout.replace("\n", ""))
+        try:
+            result = subprocess.run(
+                ["bash", self.script_path, "is_muted"],
+                capture_output=True,
+                text=True,
+            )
+            output = result.stdout.strip()
+            if not output:
+                return False
+            return str2bool(output)
+        except (ValueError, subprocess.SubprocessError):
+            return False
 
     def up(self, qtile):
         if self.limit_max_volume:

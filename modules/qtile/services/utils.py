@@ -1,7 +1,7 @@
-import psutil
-import typing
 import subprocess
+import typing
 
+import psutil
 from libqtile import bar
 from libqtile.lazy import lazy
 
@@ -20,7 +20,7 @@ def str2bool(val):
     are 'n', 'no', 'f', 'false', 'off', and '0'.  Raises ValueError if
     'val' is anything else.
     """
-    val = val.lower()
+    val = str(val).strip().lower()
     if val in ("y", "yes", "t", "true", "on", "1"):
         return 1
     elif val in ("n", "no", "f", "false", "off", "0"):
@@ -30,9 +30,7 @@ def str2bool(val):
 
 
 def copy_to_clipboard(input_data):
-    p = subprocess.Popen(
-        ["xclip", "-selection", "clipboard", "-f"], stdin=subprocess.PIPE
-    )
+    p = subprocess.Popen(["xclip", "-selection", "clipboard", "-f"], stdin=subprocess.PIPE)
     p.communicate(input=(input_data.encode()))
 
 
@@ -107,7 +105,7 @@ def configure_bars(
     # ]
     if main_bar is None:
         main_bar = bar.Gap(outer_gaps - group_gaps)
-        
+
     bars = [
         [main_bar, bar.Gap(outer_gaps)],
         [bar.Gap(outer_gaps - group_gaps), bar.Gap(2 * outer_gaps - group_gaps)],
