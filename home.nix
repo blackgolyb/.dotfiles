@@ -54,6 +54,7 @@
       bat
       zoxide
       eza
+      jq
       fzf
       ripgrep
       brightnessctl # qtile
@@ -62,7 +63,6 @@
       cloc
       docker
       duf
-      blueman
 
 # TUI
       yazi
@@ -76,9 +76,10 @@
 # Programs
       xcolor
       telegram-desktop
+      blueman # qtile
       pavucontrol # qtile
       feh
-      zathura
+      sioyek
       anki
       chromium
       logseq
@@ -171,7 +172,7 @@
       "application/xhtml+xml" = "zen-twilight.desktop";
 
       # PDF
-      "application/pdf" = "org.pwmt.zathura.desktop";
+      "application/pdf" = "sioyek.desktop";
 
       # Text & Programming
       "text/plain" = "dev.zed.Zed.desktop";
