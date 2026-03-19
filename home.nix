@@ -67,7 +67,6 @@
 # TUI
       yazi
       zellij
-      lazygit
       lazydocker
       btop
       aider-chat
@@ -133,9 +132,33 @@
   home.sessionVariables = {
     SSH_AUTH_SOCK = "/run/user/1000/keyring/ssh";
     DBUS_SESSION_BUS_ADDRESS = "unix:path=/run/user/1000/bus";
+    GPG_TTY = "$(tty)";
+    EDITOR = "zeditor";
+    VISUAL = "zeditor";
+    BROWSER = "zen-twilight";
   };
   home.shellAliases = {
     zen = "zen-twilight";
+  };
+
+  programs.lazygit = {
+      enable = true;
+      settings = {
+          os = {
+              edit = "zeditor -- {{filename}}";
+              editAtLine = "zeditor -- {{filename}}:{{line}}";
+              editAtLineAndWait = "zeditor --wait -- {{filename}}:{{line}}";
+              openDirInEditor = "zeditor -- {{dir}}";
+              editInTerminal = false;
+          };
+      };
+  };
+
+  programs.git = {
+      enable = true;
+      extraConfig = {
+          core.editor = "zeditor";
+      };
   };
 
   stylix.targets = {
@@ -150,10 +173,6 @@
     enable = true;
     pinentry.package = pkgs.pinentry-curses;
     enableSshSupport = false; # optional, if you use GPG for SSH
-  };
-
-  home.sessionVariables = {
-    GPG_TTY = "$(tty)";
   };
 
   programs.zen-browser = {
