@@ -181,13 +181,23 @@ alias py='python'
 alias rr='cargo run'
 alias alembic='python -m alembic'
 alias tttg='make -f /home/blackgolyb/Documents/tic_tac_toe_api/MakefileDocker serveo_restart'
-alias gitssh='activate-ssh-key github'
-alias epamssh='activate-ssh-key autocode'
-alias vladssh='activate-ssh-key kytas999'
-alias revssh='activate-ssh-key revscale'
-alias tarasssh='activate-ssh-key taras'
-alias tfssh='activate-ssh-key tf'
 
+function activate-ssh-key() {
+    eval "$(ssh-agent -s)" > /dev/null
+    ssh-add ~/.ssh/$1 > /dev/null
+}
+
+function s() {
+    case "$1" in
+        git)    activate-ssh-key github ;;
+        epam)   activate-ssh-key autocode ;;
+        vlad)   activate-ssh-key kytas999 ;;
+        rev)    activate-ssh-key revscale ;;
+        taras)  activate-ssh-key taras ;;
+        tf)     activate-ssh-key tf ;;
+        *)      echo "Unknown profile: $1"; echo "Available: git, epam, vlad, rev, taras, tf" ;;
+    esac
+}
 
 function nd() {
   if [ -z "$1" ]; then
@@ -195,12 +205,6 @@ function nd() {
   else
     nix develop "/home/$USER/nixos#$1" --command zsh
   fi
-}
-
-
-function activate-ssh-key() {
-    eval "$(ssh-agent -s)" > /dev/null
-    ssh-add ~/.ssh/$1 > /dev/null
 }
 
 function my-setup() {
