@@ -93,6 +93,9 @@ class Volume(base.InLoopPollText):
         self.change_volume("mute")
         self.update(self.poll())
 
+    def mic_mute(self, qtile):
+        self.change_volume("mic_mute")
+
     def get_icon_by_volume(self, volume: int, is_muted: bool = False) -> str:
         if is_muted:
             return self.volume_icons[-1]

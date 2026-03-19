@@ -39,4 +39,13 @@ get)
 is_muted)
 	is_muted
 	;;
+mic_mute)
+	wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle
+	STATUS=$(wpctl get-volume @DEFAULT_AUDIO_SOURCE@)
+	if [[ $STATUS == *MUTED* ]]; then
+		echo 1 > /sys/class/leds/platform::micmute/brightness
+	else
+		echo 0 > /sys/class/leds/platform::micmute/brightness
+	fi
+	;;
 esac

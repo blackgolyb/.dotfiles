@@ -127,7 +127,7 @@ default_keys = [
     Key([], "XF86AudioLowerVolume", lazy.function(volume_widget.down)),
     Key([], "XF86AudioRaiseVolume", lazy.function(volume_widget.up)),
     Key([], "XF86AudioMute", lazy.function(volume_widget.mute)),
-    Key([], "XF86AudioMicMute", lazy.spawn("amixer set Capture togglemute")),
+    Key([], "XF86AudioMicMute", lazy.function(volume_widget.mic_mute)),
     # Яркость нужно установить brightnessctl
     Key([], "XF86MonBrightnessDown", lazy.function(brightness_widget.down)),
     Key([], "XF86MonBrightnessUp", lazy.function(brightness_widget.up)),
