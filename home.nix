@@ -61,7 +61,6 @@
       pamixer # qtile
       uv
       cloc
-      docker
       duf
 
 # TUI
