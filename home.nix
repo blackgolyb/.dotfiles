@@ -59,9 +59,9 @@
       ripgrep
       brightnessctl # qtile
       pamixer # qtile
-      uv
       cloc
       duf
+      devbox
 
 # TUI
       yazi
