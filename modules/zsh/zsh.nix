@@ -6,6 +6,7 @@
 
     home.packages = with pkgs; [
       zsh
+      fzf
     ];
 
   programs.zsh = {
@@ -34,6 +35,7 @@
 
     initContent = ''
       source ${config.home.homeDirectory}/.config/zsh/zshrc
+      source ${pkgs.fzf}/share/fzf/key-bindings.zsh
     '';
   };
 

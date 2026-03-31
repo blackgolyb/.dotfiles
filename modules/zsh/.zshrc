@@ -153,6 +153,8 @@ function lazygit_zed() {
 ###########:MY SETTING:###########
 bindkey '^H' backward-kill-word
 bindkey '5~' kill-word
+bindkey '^R' fzf-history-widget
+
 alias ls='exa'
 alias df='duf'
 alias h='btop'
