@@ -68,7 +68,6 @@
       zellij
       lazydocker
       btop
-      aider-chat
       wezterm
 
 # Programs

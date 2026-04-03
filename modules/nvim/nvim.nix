@@ -21,8 +21,8 @@
     # lsp
     nixd
     lua-language-server     # lua_ls
-    nodePackages.typescript-language-server # ts_ls
-    nodePackages.vscode-langservers-extracted # html, cssls, jsonls, eslint
+    typescript-language-server # ts_ls
+    vscode-langservers-extracted # html, cssls, jsonls, eslint
     tailwindcss-language-server
     emmet-ls
     pyright
@@ -30,7 +30,7 @@
     clang-tools             # clangd
     rust-analyzer
     elixir-ls
-    nodePackages.bash-language-server
+    bash-language-server
     dockerfile-language-server
     hadolint
     taplo                   # toml
