@@ -9,5 +9,5 @@ dunst &
 greenclip daemon &
 tmux start &
 
-# zen -P "Default (twilight)" &
-super-productivity &
+zen-twilight &
+Telegram &
