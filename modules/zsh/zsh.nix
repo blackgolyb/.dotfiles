@@ -1,13 +1,15 @@
 { config, pkgs, ... }:
-{
-    imports = [
-    	../starship/starship.nix
-    ];
 
-    home.packages = with pkgs; [
-      zsh
-      fzf
-    ];
+{
+  imports = [
+    ../starship/starship.nix
+  ];
+
+  home.packages = with pkgs; [
+    zsh
+    fzf
+    just
+  ];
 
   programs.zsh = {
     enable = true;
@@ -30,8 +32,12 @@
         src = pkgs.zsh-vi-mode;
         file = "share/zsh-vi-mode/zsh-vi-mode.plugin.zsh";
       }
+      {
+        name = "just-completion";
+        src = pkgs.just;
+        file = "share/zsh/site-functions/_just";
+      }
     ];
-
 
     initContent = ''
       source ${config.home.homeDirectory}/.config/zsh/zshrc

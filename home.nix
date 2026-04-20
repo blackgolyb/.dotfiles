@@ -55,6 +55,7 @@
       zoxide
       eza
       jq
+      just
       fzf
       ripgrep
       brightnessctl # qtile
