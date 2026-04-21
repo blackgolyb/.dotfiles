@@ -11,6 +11,7 @@
       ./modules/kanata/kanata.nix
       ./modules/plymouth/plymouth.nix
       ./modules/thunar/thunar-system.nix
+      ./modules/qemu/qemu.nix
       ./modules/qtile/qtile-sys.nix
     ];
 
