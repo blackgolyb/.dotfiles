@@ -61,7 +61,7 @@ alias e='yazi_cwd'
 alias g='lazygit'
 alias d='lazydocker'
 alias t='zellij'
-alias ai='aider'
+alias ai='opencode'
 alias nrs='sudo nixos-rebuild switch --flake ~/nixos'
 alias nfu='sudo nix flake update --flake ~/nixos'
 

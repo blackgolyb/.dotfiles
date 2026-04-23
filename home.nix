@@ -70,6 +70,7 @@
       lazydocker
       btop
       wezterm
+      opencode
 
 # Programs
       xcolor
