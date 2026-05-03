@@ -63,7 +63,8 @@ alias d='lazydocker'
 alias t='zellij'
 alias ai='opencode'
 alias nrs='sudo nixos-rebuild switch --flake ~/nixos'
-alias nfu='sudo nix flake update --flake ~/nixos'
+alias nfu='nix flake update --flake ~/nixos --option access-tokens "github.com=$(gh auth token)"'
+alias nfug='nix flake update --flake ~/nixos'
 
 function activate-ssh-key() {
     eval "$(ssh-agent -s)" > /dev/null

@@ -63,6 +63,7 @@
       cloc
       duf
       devbox
+      gh
 
 # TUI
       yazi
