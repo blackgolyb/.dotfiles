@@ -47,8 +47,8 @@ class Volume(base.InLoopPollText):
             }
         )
 
-    def change_volume(self, change_type):
-        subprocess.call([f"bash {self.script_path} {change_type}"], shell=True)
+    def call_script(self, command):
+        subprocess.call([f"bash {self.script_path} {command}"], shell=True)
 
     @property
     def volume(self) -> int:
@@ -82,19 +82,22 @@ class Volume(base.InLoopPollText):
             if int(self.volume) >= self.max_volume:
                 return
 
-        self.change_volume("up")
+        self.call_script("up")
         self.update(self.poll())
 
     def down(self, qtile):
-        self.change_volume("down")
+        self.call_script("down")
         self.update(self.poll())
 
     def mute(self, qtile):
-        self.change_volume("mute")
+        self.call_script("mute")
         self.update(self.poll())
 
     def mic_mute(self, qtile):
-        self.change_volume("mic_mute")
+        self.call_script("mic_mute")
+
+    def init(self):
+        self.call_script("init")
 
     def get_icon_by_volume(self, volume: int, is_muted: bool = False) -> str:
         if is_muted:

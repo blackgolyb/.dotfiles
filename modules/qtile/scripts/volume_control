@@ -13,25 +13,57 @@ function send_notification() {
 	dunstify -a "changevolume" -u low -r "9993" -h int:value:"$volume" -i "volume-$1" "󰕾 Volume: ${volume}%" -t 2000
 }
 
+function volume_up() {
+    pamixer -u
+    pamixer -i $1 --allow-boost
+    send_notification up
+}
+
+function volume_down() {
+    pamixer -u
+    pamixer -d $1 --allow-boost
+    send_notification down
+}
+
+function volume_mute() {
+    pamixer -t
+    if $(is_muted); then
+        dunstify -a "changevolume" -t 2000 -r 9993 -u low "󰝟 Muted"
+    else
+        send_notification up
+    fi
+}
+
+function _write_mic_brightness() {
+    echo $1 > /sys/class/leds/platform::micmute/brightness
+}
+
+function toggle_mic_mute() {
+    wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle
+	STATUS=$(wpctl get-volume @DEFAULT_AUDIO_SOURCE@)
+	if [[ $STATUS == *MUTED* ]]; then
+    	_write_mic_brightness 1
+	else
+    	_write_mic_brightness 0
+	fi
+}
+
+function init_volume() {
+    _write_mic_brightness 0
+}
+
 case $1 in
+init)
+    init_volume
+    ;;
 up)
-	# Set the volume on (if it was muted)
-	pamixer -u
-	pamixer -i 5 --allow-boost
-	send_notification $1
+    volume_up 5
 	;;
 down)
-	pamixer -u
-	pamixer -d 5 --allow-boost
-	send_notification $1
+    volume_down 5
 	;;
 mute)
-	pamixer -t
-	if $(is_muted); then
-		dunstify -a "changevolume" -t 2000 -r 9993 -u low "󰝟 Muted"
-	else
-		send_notification up
-	fi
+    volume_mute
 	;;
 get)
 	get_volume
@@ -40,12 +72,6 @@ is_muted)
 	is_muted
 	;;
 mic_mute)
-	wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle
-	STATUS=$(wpctl get-volume @DEFAULT_AUDIO_SOURCE@)
-	if [[ $STATUS == *MUTED* ]]; then
-		echo 1 > /sys/class/leds/platform::micmute/brightness
-	else
-		echo 0 > /sys/class/leds/platform::micmute/brightness
-	fi
+    toggle_mic_mute
 	;;
 esac

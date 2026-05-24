@@ -4,12 +4,14 @@ import libqtile
 from libqtile import hook
 from services import utils
 from settings import *
+from widgets import volume_widget
 
 
 def init_hooks(main_bar: libqtile.bar.Bar | libqtile.bar.Gap, is_bar_rounded: bool) -> None:
     # Автозапуск
     @hook.subscribe.startup_once
     def autostart() -> None:
+        volume_widget.init()
         subprocess.call([str(scripts_path / "autostart.sh")])
 
     # При каждом запуске
