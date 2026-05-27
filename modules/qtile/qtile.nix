@@ -11,6 +11,12 @@
       GDK_PIXBUF_MODULE_FILE = "${pkgs.librsvg}/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache";
     };
 
+
+    xdg.configFile."flameshot/flameshot.ini".text = ''
+        [General]
+        useX11LegacyScreenshot=true
+    '';
+
     xdg.configFile.qtile = {
       source = ./.;
       force = true;
