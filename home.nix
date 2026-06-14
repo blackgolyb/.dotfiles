@@ -54,6 +54,7 @@
       bat
       zoxide
       eza
+      file
       jq
       just
       fzf
@@ -86,7 +87,7 @@
       super-productivity
       firefox-devedition
       mongodb-compass
-      ytmdesktop
+      pear-desktop
       onlyoffice-desktopeditors
       vokoscreen-ng
       vlc
@@ -259,7 +260,6 @@
       # App handlers
       "x-scheme-handler/logseq" = "Logseq.desktop";
       "x-scheme-handler/heroic" = "com.heroicgameslauncher.hgl.desktop";
-      "x-scheme-handler/ytmd" = "ytmdesktop.desktop";
       "x-scheme-handler/tonsite" = "org.telegram.desktop.desktop";
       "x-scheme-handler/tg" = "org.telegram.desktop.desktop";
     };
