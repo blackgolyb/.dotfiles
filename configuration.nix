@@ -13,6 +13,7 @@
       ./modules/thunar/thunar-system.nix
       ./modules/qemu/qemu.nix
       ./modules/qtile/qtile-sys.nix
+      ./modules/hyprland/hyprland-sys.nix
     ];
 
   nix.settings.experimental-features = ["nix-command" "flakes"];
@@ -120,8 +121,12 @@
     packages = with pkgs; [];
   };
 
-  # Allow unfree packages
-  nixpkgs.config.allowUnfree = true;
+  nixpkgs.config = {
+    allowUnfree = true;
+    permittedInsecurePackages = [
+      "electron-39.8.10"
+    ];
+  };
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget

@@ -2,14 +2,16 @@
 {
   imports = [
     ./modules/qtile/qtile.nix
-      ./modules/zsh/zsh.nix
-      ./modules/wezterm/wezterm.nix
-      ./modules/nvim/nvim.nix
-      ./modules/zed/zed.nix
-      ./modules/rofi/rofi.nix
-      ./modules/rofi-network-manager/rofi-network-manager.nix
-      ./modules/thunar/thunar.nix
-      inputs.zen-browser.homeModules.twilight
+    ./modules/hyprland/hyprland.nix
+    ./modules/flameshot/flameshot.nix
+    ./modules/zsh/zsh.nix
+    ./modules/wezterm/wezterm.nix
+    ./modules/nvim/nvim.nix
+    ./modules/zed/zed.nix
+    ./modules/rofi/rofi.nix
+    ./modules/rofi-network-manager/rofi-network-manager.nix
+    ./modules/thunar/thunar.nix
+    inputs.zen-browser.homeModules.twilight
   ];
 # Home Manager needs a bit of information about you and the paths it should
 # manage.
@@ -28,7 +30,12 @@
   services.gnome-keyring.enable = true;
 # The home.packages option allows you to install Nix packages into your
 # environment.
-    nixpkgs.config.allowUnfree = true;
+  nixpkgs.config = {
+    allowUnfree = true;
+    permittedInsecurePackages = [
+      "electron-39.8.10"
+    ];
+  };
   home.packages = with pkgs; [
 # # Adds the 'hello' command to your environment. It prints a friendly
 # # "Hello, world!" when run.
@@ -73,6 +80,7 @@
       btop
       wezterm
       opencode
+      codex
 
 # Programs
       xcolor
@@ -91,7 +99,6 @@
       onlyoffice-desktopeditors
       vokoscreen-ng
       vlc
-      flameshot
       baobab
       krita
 

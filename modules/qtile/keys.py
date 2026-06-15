@@ -122,7 +122,7 @@ default_keys = [
     ),
     # Скриешоты
     # Нужно установить gnome-screenshot
-    Key([], "Print", lazy.spawn("flameshot gui")),
+    Key([], "Print", lazy.spawn("flameshot-session gui")),
     # Контроль звука и яркости
     Key([], "XF86AudioLowerVolume", lazy.function(volume_widget.down)),
     Key([], "XF86AudioRaiseVolume", lazy.function(volume_widget.up)),

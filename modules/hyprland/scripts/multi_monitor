@@ -1,0 +1,128 @@
+#!/usr/bin/env bash
+
+intern="${HYPR_INTERNAL_MONITOR:-eDP-1}"
+extern="${HYPR_EXTERNAL_MONITOR:-HDMI-A-2}"
+extern_mode="${HYPR_EXTERNAL_MODE:-1920x1080@60}"
+
+function detect_external_monitor() {
+  detected=$(hyprctl monitors all | awk '/^Monitor / { print $2 }' | grep -E '^(HDMI|DP)-' | head -n 1)
+  if [ -n "$detected" ]; then
+    extern="$detected"
+  fi
+}
+
+function set_monitor() {
+  hyprctl keyword monitor "$1,$2"
+}
+
+function disconnect_extern_monitor() {
+  set_monitor "$extern" "disable"
+  set_monitor "$intern" "preferred,0x0,1"
+}
+
+function disconnect_main_monitor() {
+  set_monitor "$extern" "preferred,0x0,1"
+  set_monitor "$intern" "disable"
+}
+
+function set_primary_monitor() {
+  echo "$1" > /tmp/__WM__CURRENT_MONITOR__
+  dunstify -a "monitor" "Current monitor: $1" -t 1500
+}
+
+LOCATION=0
+Y_AXIS=0
+X_AXIS=0
+WIDTH=10
+STYLE="element{padding:4px4px4px0px;}listview{fixed-height:false;}"
+rofi_command_add="-location $LOCATION -yoffset $Y_AXIS -xoffset $X_AXIS -theme-str window{width:${WIDTH}em;}$STYLE"
+rofi_command="rofi $rofi_command_add -dmenu $* -p"
+
+function choose_primary() {
+  case $1 in
+  "$intern")
+    set_primary_monitor "$intern"
+    ;;
+  "$extern")
+    set_primary_monitor "$extern"
+    ;;
+  esac
+}
+
+function show_menu_primary() {
+  options="$intern\n$extern"
+  chosen="$(echo -e "$options" | $rofi_command "󰍹")"
+  choose_primary "$chosen"
+}
+
+function choose_location() {
+  case $1 in
+  disconnect)
+    disconnect_extern_monitor
+    ;;
+  extend_left)
+    set_monitor "$extern" "$extern_mode,0x0,1"
+    set_monitor "$intern" "preferred,1920x0,1"
+    ;;
+  extend_right)
+    set_monitor "$intern" "preferred,0x0,1"
+    set_monitor "$extern" "$extern_mode,1920x0,1"
+    ;;
+  extend_top)
+    set_monitor "$extern" "$extern_mode,0x0,1"
+    set_monitor "$intern" "preferred,0x1080,1"
+    ;;
+  extend_bottom)
+    set_monitor "$intern" "preferred,0x0,1"
+    set_monitor "$extern" "$extern_mode,0x1080,1"
+    ;;
+  only_extend)
+    disconnect_main_monitor
+    ;;
+  duplicate)
+    set_monitor "$intern" "preferred,0x0,1"
+    set_monitor "$extern" "$extern_mode,0x0,1"
+    ;;
+  esac
+}
+
+function show_menu_location() {
+  options="disconnect\nextend_left\nextend_right\nextend_top\nextend_bottom\nonly_extend\nduplicate"
+  chosen="$(echo -e "$options" | $rofi_command "󰍹")"
+  choose_location "$chosen"
+}
+
+function choose_menu() {
+  case $1 in
+  Location_menu)
+    show_menu_location
+    ;;
+  Priority_menu)
+    show_menu_primary
+    ;;
+  esac
+}
+
+function show_menu() {
+  options="Location_menu\nPriority_menu"
+  chosen="$(echo -e "$options" | $rofi_command "󰍹")"
+  choose_menu "$chosen"
+}
+
+detect_external_monitor
+
+case $1 in
+menu)
+  show_menu
+  ;;
+autoconfigure)
+  if hyprctl monitors all | grep -q "Monitor $extern"; then
+    choose_location only_extend
+    set_primary_monitor "$extern"
+  fi
+  ;;
+*)
+  choose_location "$1"
+  choose_primary "$2"
+  ;;
+esac

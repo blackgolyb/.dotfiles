@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+
+function get_brightness() {
+  current=$(brightnessctl g)
+  max=$(brightnessctl m)
+  echo $((100 * current / max))
+}
+
+function send_notification() {
+  brightness=$(get_brightness)
+  brightness=$(printf "%.*f\n" 0 "$brightness")
+  dunstify -a "changebrightness" -u low -r "9993" -h int:value:"$brightness" -i "brightness-$1" "󰖨 Brightness: ${brightness}%" -t 2000
+}
+
+case $1 in
+up)
+  brightnessctl s 10%+
+  send_notification "$1"
+  ;;
+down)
+  brightnessctl s 10%-
+  send_notification "$1"
+  ;;
+get)
+  brightness=$(get_brightness)
+  brightness=$(printf "%.*f\n" 0 "$brightness")
+  echo "${brightness}"
+  ;;
+esac

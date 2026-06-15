@@ -1,0 +1,79 @@
+#!/usr/bin/env bash
+
+intern="${HYPR_INTERNAL_MONITOR:-eDP-1}"
+extern="${HYPR_EXTERNAL_MONITOR:-HDMI-A-2}"
+
+function detect_external_monitor() {
+  detected=$(hyprctl monitors all | awk '/^Monitor / { print $2 }' | grep -E '^(HDMI|DP)-' | head -n 1)
+  if [ -n "$detected" ]; then
+    extern="$detected"
+  fi
+}
+
+function start_wallpaper() {
+  monitor=$1
+  url=$2
+  args=$3
+
+  mpvpaper -o "--no-audio $args" "$monitor" "$url" &
+}
+
+LOCATION=0
+Y_AXIS=0
+X_AXIS=0
+WIDTH=10
+STYLE="element{padding:4px4px4px0px;}listview{fixed-height:false;}"
+rofi_command_add="-location $LOCATION -yoffset $Y_AXIS -xoffset $X_AXIS -theme-str window{width:${WIDTH}em;}$STYLE"
+rofi_command="rofi $rofi_command_add -dmenu $* -p"
+
+function play() {
+  monitor_choice="$(echo -e "left\nright" | $rofi_command "󰍹")"
+  loop="$(echo -e "loop\nno_loop" | $rofi_command "󰍹")"
+  url="$($rofi_command "URL")"
+
+  if [ -z "$url" ]; then
+    exit 0
+  fi
+
+  args=""
+  case $loop in
+  loop)
+    args="--loop"
+    ;;
+  esac
+
+  case $monitor_choice in
+  right)
+    start_wallpaper "$extern" "$url" "$args"
+    ;;
+  *)
+    start_wallpaper "$intern" "$url" "$args"
+    ;;
+  esac
+}
+
+function stop() {
+  pkill mpvpaper
+}
+
+function show_menu() {
+  options="play\nstop"
+  chosen="$(echo -e "$options" | $rofi_command "")"
+
+  case $chosen in
+  play)
+    play
+    ;;
+  stop)
+    stop
+    ;;
+  esac
+}
+
+detect_external_monitor
+
+case $1 in
+start)
+  show_menu
+  ;;
+esac

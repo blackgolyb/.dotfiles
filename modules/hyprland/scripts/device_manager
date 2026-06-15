@@ -1,0 +1,42 @@
+#!/usr/bin/env bash
+
+state_dir="${XDG_RUNTIME_DIR:-/tmp}/hypr-device-manager"
+mkdir -p "$state_dir"
+
+function get_device_by_name() {
+  case $1 in
+  touchpad)
+    echo "synaptics-tm3276-022"
+    ;;
+  touchscreen)
+    echo "elan-touchscreen"
+    ;;
+  esac
+}
+
+function toggle_device_status() {
+  device_name=$1
+  state_file="$state_dir/${device_name}.enabled"
+
+  if [ ! -f "$state_file" ]; then
+    echo true > "$state_file"
+  fi
+
+  state=$(cat "$state_file")
+  if [ "$state" = "true" ]; then
+    next=false
+  else
+    next=true
+  fi
+
+  hyprctl keyword "device[$device_name]:enabled" "$next"
+  echo "$next" > "$state_file"
+  dunstify -a "device-manager" "${device_name}: ${next}" -t 1500
+}
+
+for device in "$@"; do
+  device_name=$(get_device_by_name "$device")
+  if [ -n "$device_name" ]; then
+    toggle_device_status "$device_name"
+  fi
+done

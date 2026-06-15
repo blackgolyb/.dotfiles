@@ -1,0 +1,79 @@
+#!/usr/bin/env bash
+
+function get_volume() {
+  pamixer --get-volume
+}
+
+function is_muted() {
+  pamixer --get-mute
+}
+
+function send_notification() {
+  volume=$(get_volume)
+  dunstify -a "changevolume" -u low -r "9993" -h int:value:"$volume" -i "volume-$1" "󰕾 Volume: ${volume}%" -t 2000
+}
+
+function volume_up() {
+  pamixer -u
+  pamixer -i "$1" --allow-boost
+  send_notification up
+}
+
+function volume_down() {
+  pamixer -u
+  pamixer -d "$1" --allow-boost
+  send_notification down
+}
+
+function volume_mute() {
+  pamixer -t
+  if $(is_muted); then
+    dunstify -a "changevolume" -t 2000 -r 9993 -u low "󰝟 Muted"
+  else
+    send_notification up
+  fi
+}
+
+function write_mic_brightness() {
+  if [ -w /sys/class/leds/platform::micmute/brightness ]; then
+    echo "$1" > /sys/class/leds/platform::micmute/brightness
+  fi
+}
+
+function toggle_mic_mute() {
+  wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle
+  status=$(wpctl get-volume @DEFAULT_AUDIO_SOURCE@)
+  if [[ $status == *MUTED* ]]; then
+    write_mic_brightness 1
+  else
+    write_mic_brightness 0
+  fi
+}
+
+function init_volume() {
+  write_mic_brightness 0
+}
+
+case $1 in
+init)
+  init_volume
+  ;;
+up)
+  volume_up 5
+  ;;
+down)
+  volume_down 5
+  ;;
+mute)
+  volume_mute
+  ;;
+get)
+  get_volume
+  ;;
+is_muted)
+  is_muted
+  ;;
+mic_mute)
+  toggle_mic_mute
+  ;;
+esac
