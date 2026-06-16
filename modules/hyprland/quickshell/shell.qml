@@ -9,6 +9,7 @@ ShellRoot {
         implicitHeight: 30
         color: "#2e3440"
         exclusiveZone: implicitHeight
+        aboveWindows: false
 
         anchors {
             top: true
