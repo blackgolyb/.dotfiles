@@ -145,6 +145,7 @@ hl.config({
             border_overlap = false,
         },
         resize_on_border = false,
+        no_focus_fallback = true,
         layout = "dwindle",
     },
     decoration = {
