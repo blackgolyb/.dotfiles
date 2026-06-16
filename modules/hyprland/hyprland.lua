@@ -6,7 +6,6 @@ local browser = "zen-twilight"
 local editor = "zeditor"
 local file_explorer = "wezterm -e yazi"
 local scripts = os.getenv("HOME") .. "/.config/hypr/scripts"
-local current_layout = "dwindle"
 
 local internal_monitor = "eDP-1"
 local external_monitor = "HDMI-A-2"
@@ -37,22 +36,6 @@ local function workspace(key)
     bind(main_mod .. " + SHIFT + " .. key, hl.dsp.window.move({ workspace = name }))
 end
 
-local function set_layout(layout)
-    current_layout = layout
-    hl.config({
-        general = {
-            layout = layout,
-        },
-    })
-end
-
-local function toggle_layout()
-    if current_layout == "dwindle" then
-        set_layout("monocle")
-    else
-        set_layout("dwindle")
-    end
-end
 
 hl.monitor({
     output = internal_monitor,
@@ -145,7 +128,7 @@ hl.config({
         follow_mouse = 1,
         sensitivity = 0,
         touchpad = {
-            natural_scroll = true,
+            natural_scroll = false,
             disable_while_typing = true,
         },
     },
@@ -156,17 +139,17 @@ hl.curve("lightFade", {
     points = { { 0.2, 0.0 }, { 0.0, 1.0 } },
 })
 
-hl.animation({ leaf = "global", enabled = true, speed = 5, bezier = "lightFade" })
+hl.animation({ leaf = "global", enabled = true, speed = 1.5, bezier = "lightFade" })
 hl.animation({ leaf = "windows", enabled = false })
 hl.animation({ leaf = "windowsIn", enabled = false })
 hl.animation({ leaf = "windowsOut", enabled = false })
 hl.animation({ leaf = "windowsMove", enabled = false })
-hl.animation({ leaf = "fade", enabled = true, speed = 5, bezier = "lightFade" })
-hl.animation({ leaf = "fadeIn", enabled = true, speed = 5, bezier = "lightFade" })
-hl.animation({ leaf = "fadeOut", enabled = true, speed = 5, bezier = "lightFade" })
-hl.animation({ leaf = "workspaces", enabled = true, speed = 5, bezier = "lightFade", style = "fade" })
-hl.animation({ leaf = "specialWorkspace", enabled = true, speed = 5, bezier = "lightFade", style = "fade" })
-hl.animation({ leaf = "layers", enabled = true, speed = 5, bezier = "lightFade", style = "fade" })
+hl.animation({ leaf = "fade", enabled = true, speed = 1.5, bezier = "lightFade" })
+hl.animation({ leaf = "fadeIn", enabled = true, speed = 1.5, bezier = "lightFade" })
+hl.animation({ leaf = "fadeOut", enabled = true, speed = 1.5, bezier = "lightFade" })
+hl.animation({ leaf = "workspaces", enabled = true, speed = 1.5, bezier = "lightFade", style = "fade" })
+hl.animation({ leaf = "specialWorkspace", enabled = true, speed = 1.5, bezier = "lightFade", style = "fade" })
+hl.animation({ leaf = "layers", enabled = true, speed = 1.5, bezier = "lightFade", style = "fade" })
 
 for _, rule in ipairs({
     { workspace = "name:f", monitor = internal_monitor, default = true },
@@ -196,7 +179,7 @@ resize_window(main_mod .. " + " .. alt_mod .. " + l", 40, 0)
 resize_window(main_mod .. " + " .. alt_mod .. " + j", 0, 40)
 resize_window(main_mod .. " + " .. alt_mod .. " + k", 0, -40)
 
-bind(main_mod .. " + m", toggle_layout)
+bind(main_mod .. " + m", hl.dsp.window.fullscreen({ mode = "maximized", action = "toggle" }))
 bind(main_mod .. " + u", hl.dsp.window.close())
 exec(main_mod .. " + " .. alt_mod .. " + r", "hyprctl reload")
 
