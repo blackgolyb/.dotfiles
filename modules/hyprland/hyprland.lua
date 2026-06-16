@@ -320,6 +320,16 @@ hl.window_rule({
 })
 
 hl.window_rule({
+    name = "browser-pip",
+    match = {
+        class = "^(firefox|floorp|zen|zen-twilight)$",
+        title = "^Picture-in-Picture$",
+    },
+    float = true,
+    pin = true,
+})
+
+hl.window_rule({
     name = "suppress-maximize-events",
     match = { class = ".*" },
     suppress_event = "maximize",

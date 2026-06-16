@@ -5,6 +5,7 @@
     brightnessctl
     cliphist
     hyprpicker
+    hyprprop
     jq
     libnotify
     mpvpaper
