@@ -9,6 +9,7 @@
     libnotify
     mpvpaper
     pamixer
+    hyprpaper
     quickshell
     swaylock
     wl-clipboard
@@ -16,11 +17,18 @@
 
   xdg.configFile."hypr/hyprland.lua".source = ./hyprland.lua;
 
+  xdg.configFile."hypr/hyprpaper.conf".text = ''
+    splash = false
+    ipc = on
+  '';
+
   xdg.configFile."quickshell/shell.qml".source = ./quickshell/shell.qml;
 
   xdg.configFile."quickshell/widgets".source = ./quickshell/widgets;
 
   xdg.configFile."quickshell/battery_icons".source = ../qtile/resources/battery_icons;
+
+  xdg.configFile."hypr/wallpapers".source = ../qtile/resources/wallpapers;
 
   xdg.configFile."hypr/scripts/autostart.sh" = {
     source = ./scripts/autostart.sh;

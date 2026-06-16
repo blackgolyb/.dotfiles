@@ -6,9 +6,18 @@ local browser = "zen-twilight"
 local editor = "zeditor"
 local file_explorer = "wezterm -e yazi"
 local scripts = os.getenv("HOME") .. "/.config/hypr/scripts"
+local config_home = os.getenv("XDG_CONFIG_HOME") or os.getenv("HOME") .. "/.config"
+local wallpaper_dir = config_home .. "/hypr/wallpapers"
 
 local internal_monitor = "eDP-1"
 local external_monitor = "HDMI-A-2"
+local wallpaper_priority = {
+    ["8.jpg"] = 7,
+    ["10.png"] = 7,
+    ["5.png"] = 7,
+    ["14.jpg"] = 7,
+    ["15.png"] = 7,
+}
 
 local function bind(keys, dispatcher, opts)
     hl.bind(keys, dispatcher, opts)
@@ -35,6 +44,62 @@ local function workspace(key)
     bind(main_mod .. " + " .. key, hl.dsp.focus({ workspace = name }))
     bind(main_mod .. " + SHIFT + " .. key, hl.dsp.window.move({ workspace = name }))
 end
+
+local function shell_quote(value)
+    return "'" .. tostring(value):gsub("'", "'\\''") .. "'"
+end
+
+local function collect_wallpapers()
+    local command = table.concat({
+        "find -L",
+        shell_quote(wallpaper_dir),
+        [[-maxdepth 1 -xtype f \( -iname '*.jpg' -o -iname '*.jpeg' -o -iname '*.png' -o -iname '*.webp' \) -print]],
+    }, " ")
+    local handle = io.popen(command)
+    local wallpapers = {}
+
+    if handle == nil then
+        return wallpapers
+    end
+
+    for path in handle:lines() do
+        local name = path:match("[^/]+$")
+        local weight = wallpaper_priority[name] or 1
+        for _ = 1, weight do
+            table.insert(wallpapers, path)
+        end
+    end
+
+    handle:close()
+    return wallpapers
+end
+
+local function set_random_wallpaper()
+    local wallpapers = collect_wallpapers()
+
+    if #wallpapers == 0 then
+        hl.dispatch(hl.dsp.exec_cmd("notify-send " ..
+            shell_quote("Wallpaper") .. " " .. shell_quote("No wallpapers found in " .. wallpaper_dir)))
+        return
+    end
+
+    local chosen = wallpapers[math.random(#wallpapers)]
+    local command = table.concat({
+        "pkill -x swaybg 2>/dev/null || true;",
+        "if ! pgrep -x hyprpaper >/dev/null; then hyprpaper >/dev/null 2>&1 & sleep 0.2; fi;",
+        "hyprctl hyprpaper unload all >/dev/null 2>&1 || true;",
+        "hyprctl hyprpaper preload",
+        shell_quote(chosen),
+        ">/dev/null 2>&1;",
+        "hyprctl monitors -j | jq -r '.[].name' | while IFS= read -r monitor; do",
+        "hyprctl hyprpaper wallpaper \"$monitor,\"" .. shell_quote(chosen) .. " >/dev/null 2>&1 || true;",
+        "done",
+    }, " ")
+
+    hl.dispatch(hl.dsp.exec_cmd("sh -c " .. shell_quote(command)))
+end
+
+math.randomseed(os.time())
 
 
 hl.monitor({
@@ -84,7 +149,7 @@ hl.config({
     },
     decoration = {
         rounding = 8,
-        rounding_power = 1,
+        rounding_power = 2,
         active_opacity = 1.0,
         inactive_opacity = 1.0,
         shadow = {
@@ -92,7 +157,7 @@ hl.config({
             range = 9,
             render_power = 3,
             color = 0x80000000,
-            offset = { -5, -5 },
+            offset = { 2, 2 },
         },
         blur = {
             enabled = false,
@@ -110,6 +175,7 @@ hl.config({
     },
     misc = {
         disable_hyprland_logo = true,
+        disable_splash_rendering = true,
         force_default_wallpaper = 0,
     },
     cursor = {
@@ -133,6 +199,8 @@ hl.config({
         },
     },
 })
+
+set_random_wallpaper()
 
 hl.curve("lightFade", {
     type = "bezier",
