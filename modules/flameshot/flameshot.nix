@@ -23,6 +23,6 @@
 
   xdg.configFile."flameshot-wayland/flameshot/flameshot.ini".text = ''
     [General]
-    useX11LegacyScreenshot=false
+    useGrimAdapter=true
   '';
 }
