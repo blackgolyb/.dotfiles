@@ -18,6 +18,10 @@
 
   xdg.configFile."quickshell/shell.qml".source = ./quickshell/shell.qml;
 
+  xdg.configFile."quickshell/widgets".source = ./quickshell/widgets;
+
+  xdg.configFile."quickshell/battery_icons".source = ../qtile/resources/battery_icons;
+
   xdg.configFile."hypr/scripts/autostart.sh" = {
     source = ./scripts/autostart.sh;
     executable = true;
