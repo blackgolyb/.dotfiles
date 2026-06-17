@@ -11,7 +11,7 @@ ShellRoot {
         color: "#2e3440"
         exclusiveZone: implicitHeight
         exclusionMode: ExclusionMode.Auto
-        WlrLayershell.layer: WlrLayer.Top
+        WlrLayershell.layer: WlrLayer.Bottom
 
         anchors {
             top: true
