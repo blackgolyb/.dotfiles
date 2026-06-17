@@ -6,10 +6,28 @@ function get_brightness() {
   echo $((100 * current / max))
 }
 
+function notify_replace() {
+  key=$1
+  shift
+
+  state_dir="${XDG_RUNTIME_DIR:-/tmp}/hypr-notifications"
+  mkdir -p "$state_dir"
+  id_file="$state_dir/${key}.id"
+  replace_id=()
+
+  if [ -s "$id_file" ]; then
+    replace_id=(-r "$(cat "$id_file")")
+  fi
+
+  if new_id=$(notify-send -p "${replace_id[@]}" "$@"); then
+    printf '%s\n' "$new_id" > "$id_file"
+  fi
+}
+
 function send_notification() {
   brightness=$(get_brightness)
   brightness=$(printf "%.*f\n" 0 "$brightness")
-  dunstify -a "changebrightness" -u low -r "9993" -h int:value:"$brightness" -i "brightness-$1" "󰖨 Brightness: ${brightness}%" -t 2000
+  notify_replace brightness -a "changebrightness" -u low -h int:value:"$brightness" -i "brightness-$1" -t 2000 "󰖨 Brightness: ${brightness}%"
 }
 
 case $1 in

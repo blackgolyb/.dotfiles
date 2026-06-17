@@ -31,7 +31,7 @@ function toggle_device_status() {
 
   hyprctl keyword "device[$device_name]:enabled" "$next"
   echo "$next" > "$state_file"
-  dunstify -a "device-manager" "${device_name}: ${next}" -t 1500
+  notify-send -a "device-manager" -t 1500 "${device_name}: ${next}"
 }
 
 for device in "$@"; do

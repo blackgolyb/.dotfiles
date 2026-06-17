@@ -27,7 +27,7 @@ function disconnect_main_monitor() {
 
 function set_primary_monitor() {
   echo "$1" > /tmp/__WM__CURRENT_MONITOR__
-  dunstify -a "monitor" "Current monitor: $1" -t 1500
+  notify-send -a "monitor" -t 1500 "Current monitor: $1"
 }
 
 LOCATION=0

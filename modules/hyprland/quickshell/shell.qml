@@ -57,4 +57,6 @@ ShellRoot {
         id: powerPopup
         anchorWindow: bar
     }
+
+    NotificationManager {}
 }

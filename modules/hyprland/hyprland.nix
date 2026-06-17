@@ -78,6 +78,4 @@
     source = ./scripts/volume_control;
     executable = true;
   };
-
-  services.dunst.enable = true;
 }
