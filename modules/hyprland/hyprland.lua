@@ -161,7 +161,15 @@ hl.config({
             offset = { 2, 2 },
         },
         blur = {
-            enabled = false,
+            enabled = true,
+            size = 1,
+            passes = 1,
+
+            vibrancy = 0.1,
+            noise = 0.08,
+            contrast = 1.5,
+
+            ignore_opacity = true,
         },
     },
     animations = {
@@ -347,4 +355,13 @@ hl.window_rule({
         pin = false,
     },
     no_focus = true,
+})
+
+hl.layer_rule({
+    match = {
+        namespace = "^quickshell-overlay-.*$",
+    },
+
+    blur = true,
+    ignore_alpha = 0.05,
 })
