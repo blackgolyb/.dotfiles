@@ -34,6 +34,10 @@ ShellRoot {
 
             VolumeWidget {}
 
+            WifiWidget {
+                anchorWindow: bar
+            }
+
             KeyboardLayoutWidget {}
 
             BatteryWidget {}
