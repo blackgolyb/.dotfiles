@@ -10,6 +10,7 @@
     libnotify
     mpvpaper
     pamixer
+    playerctl
     hyprpaper
     qrencode
     quickshell

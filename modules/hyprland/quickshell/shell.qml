@@ -19,36 +19,48 @@ ShellRoot {
             right: true
         }
 
-        RowLayout {
+        Item {
             id: barContent
             anchors.fill: parent
             anchors.leftMargin: 20
             anchors.rightMargin: 20
-            spacing: 8
 
-            WorkspacesWidget {}
+            RowLayout {
+                anchors.left: parent.left
+                anchors.verticalCenter: parent.verticalCenter
+                spacing: 8
 
-            Item {
-                Layout.fillWidth: true
+                WorkspacesWidget {}
             }
 
-            VolumeWidget {}
-
-            WifiWidget {
+            MusicWidget {
+                anchors.centerIn: parent
                 anchorWindow: bar
             }
 
-            KeyboardLayoutWidget {}
+            RowLayout {
+                anchors.right: parent.right
+                anchors.verticalCenter: parent.verticalCenter
+                spacing: 8
 
-            BatteryWidget {}
+                VolumeWidget {}
 
-            ClockWidget {
-                anchorWindow: bar
-            }
+                WifiWidget {
+                    anchorWindow: bar
+                }
 
-            PowerButton {
-                popupVisible: powerPopup.visible
-                onClicked: powerPopup.visible = !powerPopup.visible
+                KeyboardLayoutWidget {}
+
+                BatteryWidget {}
+
+                ClockWidget {
+                    anchorWindow: bar
+                }
+
+                PowerButton {
+                    popupVisible: powerPopup.visible
+                    onClicked: powerPopup.visible = !powerPopup.visible
+                }
             }
         }
     }
