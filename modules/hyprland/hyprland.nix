@@ -32,6 +32,13 @@
 
   xdg.configFile."hypr/wallpapers".source = ../qtile/resources/wallpapers;
 
+  xdg.dataFile."icons/qtile-cursors/cursors".source = ../qtile/resources/cursors;
+
+  xdg.dataFile."icons/qtile-cursors/index.theme".text = ''
+    [Icon Theme]
+    Name=qtile-cursors
+  '';
+
   xdg.configFile."hypr/scripts/autostart.sh" = {
     source = ./scripts/autostart.sh;
     executable = true;

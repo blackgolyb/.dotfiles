@@ -8,6 +8,8 @@ local file_explorer = "wezterm -e yazi"
 local scripts = os.getenv("HOME") .. "/.config/hypr/scripts"
 local config_home = os.getenv("XDG_CONFIG_HOME") or os.getenv("HOME") .. "/.config"
 local wallpaper_dir = config_home .. "/hypr/wallpapers"
+local xcursor_theme = "qtile-cursors"
+local cursor_size = "24"
 
 local internal_monitor = "eDP-1"
 local external_monitor = "HDMI-A-2"
@@ -123,8 +125,11 @@ hl.env("QT_QPA_PLATFORM", "wayland;xcb")
 hl.env("XDG_CURRENT_DESKTOP", "Hyprland")
 hl.env("XDG_SESSION_DESKTOP", "Hyprland")
 hl.env("XDG_SESSION_TYPE", "wayland")
+hl.env("XCURSOR_THEME", xcursor_theme)
+hl.env("XCURSOR_SIZE", cursor_size)
 
 hl.on("hyprland.start", function()
+    hl.dispatch(hl.dsp.exec_cmd("hyprctl setcursor " .. xcursor_theme .. " " .. cursor_size))
     hl.dispatch(hl.dsp.exec_cmd(scripts .. "/autostart.sh"))
 end)
 
