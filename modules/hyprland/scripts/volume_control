@@ -8,27 +8,9 @@ function is_muted() {
   pamixer --get-mute
 }
 
-function notify_replace() {
-  key=$1
-  shift
-
-  state_dir="${XDG_RUNTIME_DIR:-/tmp}/hypr-notifications"
-  mkdir -p "$state_dir"
-  id_file="$state_dir/${key}.id"
-  replace_id=()
-
-  if [ -s "$id_file" ]; then
-    replace_id=(-r "$(cat "$id_file")")
-  fi
-
-  if new_id=$(notify-send -p "${replace_id[@]}" "$@"); then
-    printf '%s\n' "$new_id" > "$id_file"
-  fi
-}
-
 function send_notification() {
   volume=$(get_volume)
-  notify_replace volume -a "changevolume" -u low -h int:value:"$volume" -i "volume-$1" -t 2000 "󰕾 Volume: ${volume}%"
+  notify-send -a "changevolume" -u low -h string:x-canonical-private-synchronous:volume -h int:value:"$volume" -i "volume-$1" -t 2000 "󰕾 Volume: ${volume}%"
 }
 
 function volume_up() {
@@ -46,7 +28,7 @@ function volume_down() {
 function volume_mute() {
   pamixer -t
   if [ "$(is_muted)" = "true" ]; then
-    notify_replace volume -a "changevolume" -t 2000 -u low "󰝟 Muted"
+    notify-send -a "changevolume" -t 2000 -u low -h string:x-canonical-private-synchronous:volume "󰝟 Muted"
   else
     send_notification up
   fi

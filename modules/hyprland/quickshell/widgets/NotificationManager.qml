@@ -7,22 +7,163 @@ import Quickshell.Wayland
 Item {
     id: root
 
+    property var visibleNotifications: []
+    property var notificationsById: ({})
+    property var notificationsByStackTag: ({})
+    readonly property int defaultTimeoutMs: 5000
+
+    function hintValue(hints, key) {
+        if (hints == null)
+            return "";
+
+        const value = hints[key];
+        if (value === undefined || value === null)
+            return "";
+
+        const unwrapped = value.value !== undefined ? value.value : value;
+        const text = String(unwrapped);
+        return text.length > 0 ? text : "";
+    }
+
+    function stackTagFor(notification) {
+        const hints = notification.hints;
+        return root.hintValue(hints, "x-quickshell-stack-tag") || root.hintValue(hints, "x-dunst-stack-tag") || root.hintValue(hints, "x-canonical-private-synchronous");
+    }
+
+    function timeoutMsFor(notification) {
+        if (notification.expireTimeout === 0)
+            return 0;
+        if (notification.expireTimeout > 0)
+            return notification.expireTimeout;
+        return root.defaultTimeoutMs;
+    }
+
+    function trackNotification(notification) {
+        const stackTag = root.stackTagFor(notification);
+        notification.tracked = true;
+        notification.closed.connect(() => root.removeNotification(notification));
+
+        if (stackTag.length > 0 && root.notificationsByStackTag[stackTag] !== undefined) {
+            const oldNotification = root.notificationsByStackTag[stackTag];
+            const replaced = root.replaceNotification(oldNotification, notification, stackTag);
+            if (replaced)
+                return;
+        }
+
+        const idKey = String(notification.id);
+        if (root.notificationsById[idKey] !== undefined) {
+            const oldNotification = root.notificationsById[idKey];
+            const replaced = root.replaceNotification(oldNotification, notification, stackTag);
+            if (replaced)
+                return;
+        }
+
+        root.addNotification(notification, stackTag);
+    }
+
+    function addNotification(notification, stackTag) {
+        root.visibleNotifications = root.visibleNotifications.concat([
+            {
+                notification,
+                stackTag,
+                serial: `${notification.id}:${Date.now()}`
+            }
+        ]);
+
+        const nextIdMap = Object.assign({}, root.notificationsById);
+        nextIdMap[String(notification.id)] = notification;
+        root.notificationsById = nextIdMap;
+
+        if (stackTag.length > 0) {
+            const nextMap = Object.assign({}, root.notificationsByStackTag);
+            nextMap[stackTag] = notification;
+            root.notificationsByStackTag = nextMap;
+        }
+    }
+
+    function replaceNotification(oldNotification, notification, stackTag) {
+        const nextNotifications = root.visibleNotifications.slice();
+        const index = nextNotifications.findIndex(entry => entry.notification === oldNotification);
+
+        if (index === -1) {
+            root.removeStackTag(stackTag, oldNotification);
+            return false;
+        }
+
+        nextNotifications[index] = {
+            notification,
+            stackTag,
+            serial: `${notification.id}:${Date.now()}`
+        };
+        root.visibleNotifications = nextNotifications;
+
+        const nextIdMap = Object.assign({}, root.notificationsById);
+        for (const id in nextIdMap) {
+            if (nextIdMap[id] === oldNotification)
+                delete nextIdMap[id];
+        }
+        nextIdMap[String(notification.id)] = notification;
+        root.notificationsById = nextIdMap;
+
+        const nextMap = Object.assign({}, root.notificationsByStackTag);
+        for (const existingStackTag in nextMap) {
+            if (nextMap[existingStackTag] === oldNotification)
+                delete nextMap[existingStackTag];
+        }
+        if (stackTag.length > 0)
+            nextMap[stackTag] = notification;
+        root.notificationsByStackTag = nextMap;
+
+        if (oldNotification !== notification)
+            oldNotification.tracked = false;
+
+        return true;
+    }
+
+    function removeNotification(notification) {
+        const nextNotifications = root.visibleNotifications.filter(entry => entry.notification !== notification);
+        if (nextNotifications.length !== root.visibleNotifications.length)
+            root.visibleNotifications = nextNotifications;
+
+        const nextIdMap = Object.assign({}, root.notificationsById);
+        for (const id in nextIdMap) {
+            if (nextIdMap[id] === notification)
+                delete nextIdMap[id];
+        }
+        root.notificationsById = nextIdMap;
+
+        const nextMap = Object.assign({}, root.notificationsByStackTag);
+        for (const stackTag in nextMap) {
+            if (nextMap[stackTag] === notification)
+                delete nextMap[stackTag];
+        }
+        root.notificationsByStackTag = nextMap;
+    }
+
+    function removeStackTag(stackTag, notification) {
+        const nextMap = Object.assign({}, root.notificationsByStackTag);
+        if (nextMap[stackTag] === notification)
+            delete nextMap[stackTag];
+        root.notificationsByStackTag = nextMap;
+    }
+
     NotificationServer {
         id: notificationServer
         actionsSupported: true
         bodyMarkupSupported: true
+        extraHints: ["x-quickshell-stack-tag", "x-dunst-stack-tag", "x-canonical-private-synchronous"]
         imageSupported: true
         keepOnReload: false
 
         onNotification: notification => {
-            notification.tracked = true;
+            root.trackNotification(notification);
         }
     }
 
     PanelWindow {
         id: notificationWindow
 
-        readonly property int notificationCount: notificationServer.trackedNotifications.values.length
+        readonly property int notificationCount: root.visibleNotifications.length
 
         width: 360
         height: Math.min(620, Math.max(1, notificationColumn.implicitHeight))
@@ -48,27 +189,41 @@ Item {
             spacing: 8
 
             Repeater {
-                model: notificationServer.trackedNotifications
+                model: root.visibleNotifications
 
                 Rectangle {
                     id: card
 
                     required property var modelData
 
-                    readonly property int autoExpireMs: modelData.expireTimeout > 0 ? modelData.expireTimeout * 1000 : 5000
+                    readonly property var notification: modelData.notification
+                    readonly property string serial: modelData.serial
+                    readonly property int autoExpireMs: root.timeoutMsFor(notification)
+                    readonly property bool shouldAutoExpire: autoExpireMs > 0 && !notification.resident && notification.urgency !== NotificationUrgency.Critical
 
                     Layout.fillWidth: true
                     Layout.preferredHeight: Math.max(84, cardContent.implicitHeight + 24)
                     radius: 14
                     color: "#2e3440"
                     border.width: 1
-                    border.color: urgencyColor(card.modelData.urgency)
+                    border.color: urgencyColor(card.notification.urgency)
                     opacity: 0
                     x: 24
 
                     Component.onCompleted: {
                         opacity = 1;
                         x = 0;
+                        restartExpireTimer();
+                    }
+
+                    onSerialChanged: restartExpireTimer()
+                    onAutoExpireMsChanged: restartExpireTimer()
+                    onShouldAutoExpireChanged: restartExpireTimer()
+
+                    function restartExpireTimer() {
+                        expireTimer.stop();
+                        if (card.shouldAutoExpire)
+                            expireTimer.start();
                     }
 
                     function urgencyColor(urgency) {
@@ -93,15 +248,16 @@ Item {
                     }
 
                     Timer {
-                        interval: card.autoExpireMs
-                        running: !card.modelData.resident && card.modelData.urgency !== NotificationUrgency.Critical
+                        id: expireTimer
+                        interval: Math.max(1, card.autoExpireMs)
+                        running: false
                         repeat: false
-                        onTriggered: card.modelData.expire()
+                        onTriggered: card.notification.expire()
                     }
 
                     MouseArea {
                         anchors.fill: parent
-                        onClicked: card.modelData.dismiss()
+                        onClicked: card.notification.dismiss()
                     }
 
                     ColumnLayout {
@@ -119,7 +275,7 @@ Item {
                                 Layout.preferredHeight: 34
                                 radius: 9
                                 color: "#252b35"
-                                visible: card.modelData.image.length === 0
+                                visible: card.notification.image.length === 0
 
                                 Text {
                                     anchors.centerIn: parent
@@ -133,8 +289,8 @@ Item {
                             Image {
                                 Layout.preferredWidth: 34
                                 Layout.preferredHeight: 34
-                                visible: card.modelData.image.length > 0
-                                source: card.modelData.image
+                                visible: card.notification.image.length > 0
+                                source: card.notification.image
                                 fillMode: Image.PreserveAspectCrop
                             }
 
@@ -144,7 +300,7 @@ Item {
 
                                 Text {
                                     Layout.fillWidth: true
-                                    text: card.modelData.summary
+                                    text: card.notification.summary
                                     color: "#ffffff"
                                     font.family: "JetBrainsMono Nerd Font Mono"
                                     font.pixelSize: 13
@@ -154,12 +310,12 @@ Item {
 
                                 Text {
                                     Layout.fillWidth: true
-                                    text: card.modelData.appName
+                                    text: card.notification.appName
                                     color: "#8f98aa"
                                     font.family: "JetBrainsMono Nerd Font Mono"
                                     font.pixelSize: 10
                                     elide: Text.ElideRight
-                                    visible: card.modelData.appName.length > 0
+                                    visible: card.notification.appName.length > 0
                                 }
                             }
 
@@ -172,14 +328,14 @@ Item {
                                     id: closeMouse
                                     anchors.fill: parent
                                     hoverEnabled: true
-                                    onClicked: card.modelData.dismiss()
+                                    onClicked: card.notification.dismiss()
                                 }
                             }
                         }
 
                         Text {
                             Layout.fillWidth: true
-                            text: card.modelData.body
+                            text: card.notification.body
                             textFormat: Text.RichText
                             color: "#c3c3c3"
                             font.family: "JetBrainsMono Nerd Font Mono"
@@ -187,12 +343,12 @@ Item {
                             wrapMode: Text.Wrap
                             maximumLineCount: 4
                             elide: Text.ElideRight
-                            visible: card.modelData.body.length > 0
+                            visible: card.notification.body.length > 0
                         }
 
                         RowLayout {
                             Layout.fillWidth: true
-                            visible: card.modelData.actions.length > 0
+                            visible: card.notification.actions.length > 0
                             spacing: 6
 
                             Item {
@@ -200,7 +356,7 @@ Item {
                             }
 
                             Repeater {
-                                model: card.modelData.actions
+                                model: card.notification.actions
 
                                 Rectangle {
                                     required property var modelData
