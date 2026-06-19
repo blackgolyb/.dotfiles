@@ -1,6 +1,8 @@
 import QtQuick
 import QtQuick.Layouts
+import Quickshell
 import Quickshell.Services.Notifications
+import Quickshell.Widgets
 import "../../ui" as Ui
 
 Ui.UiCard {
@@ -9,6 +11,10 @@ Ui.UiCard {
     required property var entry
     readonly property var notification: entry.notification
     readonly property string serial: entry.serial
+    readonly property string imageSource: root.notification.image ?? ""
+    readonly property string appIcon: root.notification.appIcon ?? ""
+    readonly property bool hasImage: root.imageSource.length > 0
+    readonly property bool hasAppIcon: root.appIcon.length > 0
 
     signal dismissRequested(var notification)
     signal actionRequested(var action)
@@ -65,7 +71,7 @@ Ui.UiCard {
                 Layout.preferredHeight: 34
                 radius: Ui.Theme.radiusSm
                 color: Ui.Theme.surfaceSunken
-                visible: root.notification.image.length === 0
+                visible: !root.hasImage && !root.hasAppIcon
 
                 Ui.UiIcon {
                     anchors.centerIn: parent
@@ -77,9 +83,17 @@ Ui.UiCard {
             Image {
                 Layout.preferredWidth: 34
                 Layout.preferredHeight: 34
-                visible: root.notification.image.length > 0
-                source: root.notification.image
+                visible: root.hasImage
+                source: root.imageSource
                 fillMode: Image.PreserveAspectCrop
+            }
+
+            IconImage {
+                Layout.preferredWidth: 34
+                Layout.preferredHeight: 34
+                visible: !root.hasImage && root.hasAppIcon
+                source: visible ? Quickshell.iconPath(root.appIcon, "dialog-information") : ""
+                asynchronous: true
             }
 
             ColumnLayout {

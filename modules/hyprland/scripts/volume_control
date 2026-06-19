@@ -10,7 +10,14 @@ function is_muted() {
 
 function send_notification() {
   volume=$(get_volume)
-  notify-send -a "changevolume" -u low -h string:x-canonical-private-synchronous:volume -h int:value:"$volume" -i "volume-$1" -t 2000 "󰕾 Volume: ${volume}%"
+  if [ "$volume" -le 33 ]; then
+    icon="audio-volume-low-symbolic"
+  elif [ "$volume" -le 66 ]; then
+    icon="audio-volume-medium-symbolic"
+  else
+    icon="audio-volume-high-symbolic"
+  fi
+  notify-send -a "changevolume" -u low -h string:x-canonical-private-synchronous:volume -h int:value:"$volume" -i "$icon" -t 2000 "󰕾 Volume: ${volume}%"
 }
 
 function volume_up() {
@@ -28,7 +35,7 @@ function volume_down() {
 function volume_mute() {
   pamixer -t
   if [ "$(is_muted)" = "true" ]; then
-    notify-send -a "changevolume" -t 2000 -u low -h string:x-canonical-private-synchronous:volume "󰝟 Muted"
+    notify-send -a "changevolume" -t 2000 -u low -h string:x-canonical-private-synchronous:volume -i "audio-volume-muted-symbolic" "󰝟 Muted"
   else
     send_notification up
   fi
