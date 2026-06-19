@@ -70,5 +70,13 @@ ShellRoot {
         anchorWindow: bar
     }
 
+    AppLauncher {
+        anchorWindow: bar
+    }
+
+    PolkitAuth {
+        anchorWindow: bar
+    }
+
     NotificationManager {}
 }

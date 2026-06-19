@@ -277,7 +277,7 @@ exec(main_mod .. " + SHIFT + t", scripts .. "/device_manager touchscreen")
 exec(main_mod .. " + " .. alt_mod .. " + p", scripts .. "/pick_color")
 exec(main_mod .. " + " .. alt_mod .. " + v", "sh -c 'cliphist list | rofi -dmenu | cliphist decode | wl-copy'")
 bind(main_mod .. " + o", hl.dsp.window.pin({ action = "toggle" }))
-exec(main_mod .. " + space", "rofi -show drun")
+exec(main_mod .. " + space", "qs ipc call launcher toggle")
 exec(main_mod .. " + home", "swaylock -f")
 exec("Print", scripts .. "/screenshot")
 
