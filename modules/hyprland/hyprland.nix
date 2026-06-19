@@ -85,4 +85,9 @@
     source = ./scripts/volume_control;
     executable = true;
   };
+
+  xdg.configFile."hypr/scripts/wallpaper_control" = {
+    source = ./scripts/wallpaper_control;
+    executable = true;
+  };
 }

@@ -12,6 +12,8 @@ Item {
     property string password: ""
     property string statusText: ""
     property bool authenticating: false
+    readonly property string cacheHome: Quickshell.env("XDG_CACHE_HOME") ?? `${Quickshell.env("HOME")}/.cache`
+    readonly property string currentWallpaper: `${cacheHome}/hypr/current-wallpaper`
 
     visible: false
 
@@ -130,7 +132,8 @@ Item {
 
             Image {
                 anchors.fill: parent
-                source: `file://${Quickshell.env("HOME")}/.config/hypr/wallpapers/9.png`
+                source: `file://${root.currentWallpaper}`
+                cache: false
                 fillMode: Image.PreserveAspectCrop
                 asynchronous: true
             }

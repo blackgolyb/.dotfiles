@@ -1,0 +1,137 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+config_home="${XDG_CONFIG_HOME:-$HOME/.config}"
+cache_home="${XDG_CACHE_HOME:-$HOME/.cache}"
+wallpaper_dir="$config_home/hypr/wallpapers"
+current_wallpaper="$cache_home/hypr/current-wallpaper"
+
+function usage() {
+  printf 'Usage: %s {set_random|set_rendom|set WALLPAPER|get}\n' "$0" >&2
+}
+
+function notify_error() {
+  if command -v notify-send >/dev/null 2>&1; then
+    notify-send "Wallpaper" "$1"
+  fi
+  printf '%s\n' "$1" >&2
+}
+
+function weight_for() {
+  case "$1" in
+  8.jpg | 10.png | 5.png | 14.jpg | 15.png)
+    printf '7\n'
+    ;;
+  *)
+    printf '1\n'
+    ;;
+  esac
+}
+
+function collect_wallpapers() {
+  while IFS= read -r wallpaper; do
+    name="${wallpaper##*/}"
+    weight="$(weight_for "$name")"
+    for ((i = 0; i < weight; i++)); do
+      printf '%s\n' "$wallpaper"
+    done
+  done < <(find -L "$wallpaper_dir" -maxdepth 1 -xtype f \( -iname '*.jpg' -o -iname '*.jpeg' -o -iname '*.png' -o -iname '*.webp' \) -print)
+}
+
+function resolve_wallpaper() {
+  local wallpaper="$1"
+
+  if [ -f "$wallpaper" ]; then
+    readlink -f "$wallpaper"
+    return
+  fi
+
+  if [ -f "$wallpaper_dir/$wallpaper" ]; then
+    readlink -f "$wallpaper_dir/$wallpaper"
+    return
+  fi
+
+  return 1
+}
+
+function apply_wallpaper() {
+  local wallpaper="$1"
+  local applied=0
+
+  mkdir -p "${current_wallpaper%/*}"
+  ln -sfn "$wallpaper" "$current_wallpaper"
+
+  if ! pgrep -x hyprpaper >/dev/null; then
+    hyprpaper >/dev/null 2>&1 &
+  fi
+
+  for _ in {1..30}; do
+    applied=1
+    while IFS= read -r monitor; do
+      if ! hyprctl hyprpaper wallpaper "$monitor,$wallpaper" >/dev/null 2>&1; then
+        applied=0
+      fi
+    done < <(hyprctl monitors -j | jq -r '.[].name')
+
+    if [ "$applied" -eq 1 ]; then
+      printf '%s\n' "$wallpaper"
+      return
+    fi
+
+    sleep 0.1
+  done
+
+  notify_error "Could not apply wallpaper through hyprpaper"
+  exit 1
+}
+
+function set_wallpaper() {
+  local wallpaper
+
+  if [ "$#" -lt 1 ]; then
+    usage
+    exit 2
+  fi
+
+  if ! wallpaper="$(resolve_wallpaper "$1")"; then
+    notify_error "Wallpaper not found: $1"
+    exit 1
+  fi
+
+  apply_wallpaper "$wallpaper"
+}
+
+function set_random_wallpaper() {
+  local wallpaper
+
+  if ! wallpaper="$(collect_wallpapers | shuf -n 1)" || [ -z "$wallpaper" ]; then
+    notify_error "No wallpapers found in $wallpaper_dir"
+    exit 1
+  fi
+
+  apply_wallpaper "$wallpaper"
+}
+
+function get_wallpaper() {
+  if [ -e "$current_wallpaper" ]; then
+    readlink -f "$current_wallpaper"
+  fi
+}
+
+case "${1:-}" in
+set_random | set_rendom)
+  set_random_wallpaper
+  ;;
+set)
+  shift
+  set_wallpaper "$@"
+  ;;
+get)
+  get_wallpaper
+  ;;
+*)
+  usage
+  exit 2
+  ;;
+esac
