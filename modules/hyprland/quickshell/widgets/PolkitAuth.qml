@@ -5,6 +5,7 @@ import Quickshell
 import Quickshell.Services.Polkit
 import Quickshell.Wayland
 import Quickshell.Widgets
+import "../ui" as Ui
 
 PanelWindow {
     id: root
@@ -14,7 +15,7 @@ PanelWindow {
 
     screen: root.anchorWindow.screen
     visible: agent.isActive
-    color: "transparent"
+    color: Ui.Theme.transparent
     exclusionMode: ExclusionMode.Ignore
     focusable: true
     WlrLayershell.layer: WlrLayer.Overlay
@@ -31,7 +32,7 @@ PanelWindow {
     onVisibleChanged: {
         if (visible) {
             passwordInput.text = "";
-            passwordInput.forceActiveFocus();
+            passwordInput.forceInputFocus();
         }
     }
 
@@ -50,25 +51,16 @@ PanelWindow {
         path: "/org/quickshell/Polkit"
     }
 
-    Rectangle {
+    Ui.UiOverlay {
         anchors.fill: parent
-        color: "#000000"
-        opacity: 0.34
-
-        MouseArea {
-            anchors.fill: parent
-            onClicked: root.cancel()
-        }
+        dimOpacity: 0.34
+        onDismissed: root.cancel()
     }
 
-    Rectangle {
+    Ui.UiCard {
         width: Math.min(root.width - 40, 480)
         implicitHeight: content.implicitHeight + 32
         anchors.centerIn: parent
-        radius: 18
-        color: "#2e3440"
-        border.width: 1
-        border.color: "#4c566a"
 
         ColumnLayout {
             id: content
@@ -90,71 +82,49 @@ PanelWindow {
                     Layout.fillWidth: true
                     spacing: 2
 
-                    Text {
+                    Ui.UiText {
                         Layout.fillWidth: true
                         text: "Authentication required"
-                        color: "#eceff4"
-                        font.family: "JetBrainsMono Nerd Font Mono"
                         font.pixelSize: 15
                         font.bold: true
                     }
 
-                    Text {
+                    Ui.UiText {
                         Layout.fillWidth: true
                         text: root.flow !== null ? root.flow.actionId : ""
-                        color: "#7f889b"
+                        color: Ui.Theme.textMuted
                         elide: Text.ElideRight
-                        font.family: "JetBrainsMono Nerd Font Mono"
-                        font.pixelSize: 10
+                        font.pixelSize: Ui.Theme.textXs
                     }
                 }
             }
 
-            Text {
+            Ui.UiText {
                 Layout.fillWidth: true
                 text: root.flow !== null ? root.flow.message : ""
-                color: "#d8dee9"
+                color: Ui.Theme.textSecondary
                 wrapMode: Text.WordWrap
-                font.family: "JetBrainsMono Nerd Font Mono"
-                font.pixelSize: 12
+                font.pixelSize: Ui.Theme.textMd
             }
 
-            Text {
+            Ui.UiText {
                 Layout.fillWidth: true
                 text: root.flow !== null ? root.flow.supplementaryMessage : ""
                 visible: text.length > 0
-                color: root.flow !== null && root.flow.supplementaryIsError ? "#bf616a" : "#a9b1c1"
+                color: root.flow !== null && root.flow.supplementaryIsError ? Ui.Theme.danger : Ui.Theme.textSubtle
                 wrapMode: Text.WordWrap
-                font.family: "JetBrainsMono Nerd Font Mono"
-                font.pixelSize: 11
+                font.pixelSize: Ui.Theme.textSm
             }
 
-            Rectangle {
+            Ui.UiTextInput {
+                id: passwordInput
                 Layout.fillWidth: true
                 implicitHeight: 42
-                radius: 10
-                color: "#252b35"
-                border.width: passwordInput.activeFocus ? 1 : 0
-                border.color: "#88c0d0"
-
-                TextInput {
-                    id: passwordInput
-                    anchors.fill: parent
-                    anchors.leftMargin: 12
-                    anchors.rightMargin: 12
-                    verticalAlignment: TextInput.AlignVCenter
-                    enabled: root.flow !== null && root.flow.isResponseRequired
-                    echoMode: root.flow !== null && root.flow.responseVisible ? TextInput.Normal : TextInput.Password
-                    passwordCharacter: "*"
-                    color: "#eceff4"
-                    selectedTextColor: "#2e3440"
-                    selectionColor: "#88c0d0"
-                    font.family: "JetBrainsMono Nerd Font Mono"
-                    font.pixelSize: 14
-                    Keys.onEscapePressed: root.cancel()
-                    Keys.onReturnPressed: root.submit()
-                    Keys.onEnterPressed: root.submit()
-                }
+                inputEnabled: root.flow !== null && root.flow.isResponseRequired
+                echoMode: root.flow !== null && root.flow.responseVisible ? TextInput.Normal : TextInput.Password
+                textPixelSize: Ui.Theme.textLg
+                onEscaped: root.cancel()
+                onAccepted: root.submit()
             }
 
             RowLayout {
@@ -165,49 +135,19 @@ PanelWindow {
                     Layout.fillWidth: true
                 }
 
-                Rectangle {
-                    implicitWidth: 96
-                    implicitHeight: 34
-                    radius: 9
-                    color: cancelMouse.containsMouse ? "#3b4252" : "#252b35"
-
-                    MouseArea {
-                        id: cancelMouse
-                        anchors.fill: parent
-                        hoverEnabled: true
-                        onClicked: root.cancel()
-                    }
-
-                    Text {
-                        anchors.centerIn: parent
-                        text: "Cancel"
-                        color: "#d8dee9"
-                        font.family: "JetBrainsMono Nerd Font Mono"
-                        font.pixelSize: 12
-                    }
+                Ui.UiButton {
+                    text: "Cancel"
+                    textColor: Ui.Theme.textSecondary
+                    onClicked: root.cancel()
                 }
 
-                Rectangle {
+                Ui.UiButton {
+                    text: "Authenticate"
                     implicitWidth: 112
-                    implicitHeight: 34
-                    radius: 9
-                    color: authMouse.containsMouse ? "#8fbcbb" : "#88c0d0"
-
-                    MouseArea {
-                        id: authMouse
-                        anchors.fill: parent
-                        hoverEnabled: true
-                        onClicked: root.submit()
-                    }
-
-                    Text {
-                        anchors.centerIn: parent
-                        text: "Authenticate"
-                        color: "#2e3440"
-                        font.family: "JetBrainsMono Nerd Font Mono"
-                        font.pixelSize: 12
-                        font.bold: true
-                    }
+                    normalColor: Ui.Theme.accent
+                    hoverColor: Ui.Theme.accentHover
+                    textColor: Ui.Theme.textInverse
+                    onClicked: root.submit()
                 }
             }
         }

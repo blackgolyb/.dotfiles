@@ -3,6 +3,7 @@ import QtQuick.Layouts
 import Quickshell.Io
 import Quickshell.Services.UPower
 import Quickshell.Widgets
+import "../ui" as Ui
 
 RowLayout {
     id: root
@@ -52,7 +53,7 @@ RowLayout {
 
         if (!root.notifiedTenPercent) {
             root.notifiedTenPercent = true;
-            root.sendNotification("normal", "Battery low", `Battery is at ${root.batteryPercentValue}%`);
+            root.sendNotification("critical", "Battery low", `Battery is at ${root.batteryPercentValue}%`);
         }
     }
 
@@ -72,10 +73,9 @@ RowLayout {
         source: Qt.resolvedUrl(`../battery_icons/${root.iconName}.svg`)
     }
 
-    Text {
+    Ui.UiText {
         text: root.percentText
-        color: "#ffffff"
-        font.family: "JetBrainsMono Nerd Font Mono"
-        font.pixelSize: 16
+        color: Ui.Theme.textPrimary
+        font.pixelSize: Ui.Theme.textXl
     }
 }

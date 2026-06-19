@@ -2,13 +2,14 @@ import QtQuick
 import QtQuick.Layouts
 import Quickshell
 import Quickshell.Wayland
+import "ui" as Ui
 import "widgets"
 
 ShellRoot {
     PanelWindow {
         id: bar
         implicitHeight: 26
-        color: "#2e3440"
+        color: Ui.Theme.background
         exclusiveZone: implicitHeight
         exclusionMode: ExclusionMode.Auto
         WlrLayershell.layer: WlrLayer.Bottom
@@ -65,16 +66,16 @@ ShellRoot {
         }
     }
 
-    PowerPopup {
-        id: powerPopup
-        anchorWindow: bar
-    }
-
     AppLauncher {
         anchorWindow: bar
     }
 
     PolkitAuth {
+        anchorWindow: bar
+    }
+
+    PowerPopup {
+        id: powerPopup
         anchorWindow: bar
     }
 

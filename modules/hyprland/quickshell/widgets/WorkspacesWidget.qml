@@ -1,5 +1,6 @@
 import QtQuick
 import Quickshell.Hyprland
+import "../ui" as Ui
 
 Item {
     id: root
@@ -82,20 +83,19 @@ Item {
                 width: root.itemWidth
                 height: root.itemHeight
                 radius: 0
-                color: "transparent"
+                color: Ui.Theme.transparent
 
                 MouseArea {
                     anchors.fill: parent
                     onClicked: parent.modelData.workspace.activate()
                 }
 
-                Text {
+                Ui.UiText {
                     anchors.centerIn: parent
                     text: parent.modelData.label + "<sup> " + parent.modelData.key + "</sup>"
                     textFormat: Text.RichText
-                    color: "#ffffff"
-                    font.family: "JetBrainsMono Nerd Font Mono"
-                    font.pixelSize: 16
+                    color: Ui.Theme.textPrimary
+                    font.pixelSize: Ui.Theme.textXl
                 }
             }
         }
@@ -108,7 +108,7 @@ Item {
         width: root.itemWidth
         height: 1.5
         radius: 1
-        color: "#ffffff"
+        color: Ui.Theme.textPrimary
         visible: root.activeIndex >= 0
         x: root.activeIndex * root.itemWidth
         y: root.itemHeight - height

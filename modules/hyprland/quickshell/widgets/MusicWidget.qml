@@ -2,6 +2,7 @@ import QtQuick
 import QtQuick.Layouts
 import Quickshell
 import Quickshell.Services.Mpris
+import "../ui" as Ui
 
 Item {
     id: root
@@ -70,7 +71,7 @@ Item {
         id: compactCard
         anchors.fill: parent
         radius: 8
-        color: compactMouse.containsMouse || root.detailsOpen ? "#3b4252" : "transparent"
+        color: compactMouse.containsMouse || root.detailsOpen ? Ui.Theme.surfaceActive : Ui.Theme.transparent
 
         Behavior on color {
             ColorAnimation {
@@ -84,13 +85,13 @@ Item {
             anchors.bottom: parent.bottom
             height: 2
             radius: 1
-            color: "#4c566a"
+            color: Ui.Theme.border
 
             Rectangle {
                 width: parent.width * root.progress
                 height: parent.height
                 radius: parent.radius
-                color: root.playing ? "#88c0d0" : "#8f98aa"
+                color: root.playing ? Ui.Theme.accent : Ui.Theme.textDisabled
 
                 Behavior on width {
                     NumberAnimation {
@@ -107,10 +108,8 @@ Item {
             anchors.bottomMargin: 2
             spacing: 6
 
-            Text {
+            Ui.UiIcon {
                 text: root.playing ? "" : ""
-                color: "#ffffff"
-                font.family: "JetBrainsMono Nerd Font Mono"
                 font.pixelSize: 12
             }
 
@@ -132,20 +131,16 @@ Item {
                     x: 0
                     y: 1
 
-                    Text {
+                    Ui.UiText {
                         id: compactTitlePrimary
                         text: root.titleLine
-                        color: "#ffffff"
-                        font.family: "JetBrainsMono Nerd Font Mono"
                         font.pixelSize: 12
                     }
 
-                    Text {
+                    Ui.UiText {
                         x: titleViewport.cycleWidth
                         text: root.titleLine
                         visible: titleViewport.scrolling
-                        color: "#ffffff"
-                        font.family: "JetBrainsMono Nerd Font Mono"
                         font.pixelSize: 12
                     }
 
@@ -193,15 +188,11 @@ Item {
         implicitWidth: 420
         implicitHeight: 156
         visible: root.detailsOpen && root.hasPlayers
-        color: "transparent"
+        color: Ui.Theme.transparent
 
-        Rectangle {
+        Ui.UiCard {
             id: popupCard
             anchors.fill: parent
-            radius: 16
-            color: "#2e3440"
-            border.width: 1
-            border.color: "#4c566a"
 
             HoverHandler {
                 onHoveredChanged: {
@@ -219,7 +210,7 @@ Item {
                     Layout.preferredWidth: 94
                     Layout.preferredHeight: 94
                     radius: 14
-                    color: "#252b35"
+                    color: Ui.Theme.surfaceSunken
                     clip: true
 
                     Image {
@@ -229,12 +220,10 @@ Item {
                         fillMode: Image.PreserveAspectCrop
                     }
 
-                    Text {
+                    Ui.UiIcon {
                         anchors.centerIn: parent
                         visible: root.artUrl.length === 0
                         text: "󰝚"
-                        color: "#ffffff"
-                        font.family: "JetBrainsMono Nerd Font Mono"
                         font.pixelSize: 34
                     }
                 }
@@ -244,22 +233,20 @@ Item {
                     Layout.fillHeight: true
                     spacing: 8
 
-                    Text {
+                    Ui.UiText {
                         Layout.fillWidth: true
                         text: root.title
-                        color: "#ffffff"
-                        font.family: "JetBrainsMono Nerd Font Mono"
-                        font.pixelSize: 14
+                        color: Ui.Theme.textPrimary
+                        font.pixelSize: Ui.Theme.textLg
                         font.bold: true
                         elide: Text.ElideRight
                     }
 
-                    Text {
+                    Ui.UiText {
                         Layout.fillWidth: true
                         text: `${root.artist}  -  ${root.album}`
-                        color: "#c3c3c3"
-                        font.family: "JetBrainsMono Nerd Font Mono"
-                        font.pixelSize: 11
+                        color: Ui.Theme.textSecondary
+                        font.pixelSize: Ui.Theme.textSm
                         elide: Text.ElideRight
                     }
 
@@ -267,11 +254,10 @@ Item {
                         Layout.fillWidth: true
                         spacing: 8
 
-                        Text {
+                        Ui.UiText {
                             text: root.formatTime(root.position)
-                            color: "#8f98aa"
-                            font.family: "JetBrainsMono Nerd Font Mono"
-                            font.pixelSize: 10
+                            color: Ui.Theme.textDisabled
+                            font.pixelSize: Ui.Theme.textXs
                         }
 
                         Rectangle {
@@ -279,13 +265,13 @@ Item {
                             Layout.fillWidth: true
                             Layout.preferredHeight: 8
                             radius: 4
-                            color: "#4c566a"
+                            color: Ui.Theme.border
 
                             Rectangle {
                                 width: parent.width * root.progress
                                 height: parent.height
                                 radius: parent.radius
-                                color: root.canSeek ? "#88c0d0" : "#8f98aa"
+                                color: root.canSeek ? Ui.Theme.accent : Ui.Theme.textDisabled
                             }
 
                             MouseArea {
@@ -301,11 +287,10 @@ Item {
                             }
                         }
 
-                        Text {
+                        Ui.UiText {
                             text: root.length > 0 ? root.formatTime(root.length) : "--:--"
-                            color: "#8f98aa"
-                            font.family: "JetBrainsMono Nerd Font Mono"
-                            font.pixelSize: 10
+                            color: Ui.Theme.textDisabled
+                            font.pixelSize: Ui.Theme.textXs
                         }
                     }
 
@@ -318,13 +303,11 @@ Item {
                             Layout.preferredHeight: 28
                             radius: 9
                             opacity: root.player != null && root.player.canGoPrevious ? 1 : 0.35
-                            color: previousMouse.containsMouse ? "#4c566a" : "#3b4252"
+                            color: previousMouse.containsMouse ? Ui.Theme.border : Ui.Theme.surfaceActive
 
-                            Text {
+                            Ui.UiIcon {
                                 anchors.centerIn: parent
                                 text: "󰒮"
-                                color: "#ffffff"
-                                font.family: "JetBrainsMono Nerd Font Mono"
                                 font.pixelSize: 15
                             }
 
@@ -342,13 +325,11 @@ Item {
                             Layout.preferredHeight: 32
                             radius: 11
                             opacity: root.player != null && root.player.canTogglePlaying ? 1 : 0.35
-                            color: toggleMouse.containsMouse ? "#88c0d0" : "#5e81ac"
+                            color: toggleMouse.containsMouse ? Ui.Theme.accent : Ui.Theme.primitive.frost3
 
-                            Text {
+                            Ui.UiIcon {
                                 anchors.centerIn: parent
                                 text: root.playing ? "" : ""
-                                color: "#ffffff"
-                                font.family: "JetBrainsMono Nerd Font Mono"
                                 font.pixelSize: 15
                             }
 
@@ -366,13 +347,11 @@ Item {
                             Layout.preferredHeight: 28
                             radius: 9
                             opacity: root.player != null && root.player.canGoNext ? 1 : 0.35
-                            color: nextMouse.containsMouse ? "#4c566a" : "#3b4252"
+                            color: nextMouse.containsMouse ? Ui.Theme.border : Ui.Theme.surfaceActive
 
-                            Text {
+                            Ui.UiIcon {
                                 anchors.centerIn: parent
                                 text: "󰒭"
-                                color: "#ffffff"
-                                font.family: "JetBrainsMono Nerd Font Mono"
                                 font.pixelSize: 15
                             }
 

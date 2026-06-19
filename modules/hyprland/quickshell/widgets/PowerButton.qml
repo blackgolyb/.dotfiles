@@ -1,4 +1,5 @@
 import QtQuick
+import "../ui" as Ui
 
 Item {
     id: root
@@ -10,11 +11,10 @@ Item {
 
     signal clicked
 
-    Text {
+    Ui.UiText {
         id: powerText
         text: "⏻"
-        color: root.popupVisible ? "#ffffff" : "#c3c3c3"
-        font.family: "JetBrainsMono Nerd Font Mono"
+        color: root.popupVisible ? Ui.Theme.textPrimary : Ui.Theme.textSecondary
         font.pixelSize: 17
     }
 

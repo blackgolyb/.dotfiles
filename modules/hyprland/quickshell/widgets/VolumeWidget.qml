@@ -1,8 +1,9 @@
 import QtQuick
 import Quickshell.Io
 import Quickshell.Services.Pipewire
+import "../ui" as Ui
 
-Text {
+Ui.UiText {
     id: root
 
     readonly property var audioSink: Pipewire.defaultAudioSink
@@ -13,9 +14,8 @@ Text {
     readonly property string volumeText: `${root.volumeIcon(root.volume, root.muted)} ${root.volume}`
 
     text: root.volumeText
-    color: "#ffffff"
-    font.family: "JetBrainsMono Nerd Font Mono"
-    font.pixelSize: 16
+    color: Ui.Theme.textPrimary
+    font.pixelSize: Ui.Theme.textXl
 
     function volumeIcon(volume, muted) {
         if (muted || volume === 0)

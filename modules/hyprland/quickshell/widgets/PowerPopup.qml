@@ -4,6 +4,7 @@ import Quickshell
 import Quickshell.Hyprland
 import Quickshell.Io
 import Quickshell.Wayland
+import "../ui" as Ui
 
 PanelWindow {
     id: root
@@ -39,7 +40,7 @@ PanelWindow {
 
     screen: root.anchorWindow.screen
     visible: false
-    color: "transparent"
+    color: Ui.Theme.transparent
     exclusionMode: ExclusionMode.Ignore
     focusable: true
     WlrLayershell.layer: WlrLayer.Overlay
@@ -82,26 +83,16 @@ PanelWindow {
         Keys.onEscapePressed: root.visible = false
     }
 
-    Rectangle {
-        id: dimLayer
+    Ui.UiOverlay {
         anchors.fill: parent
-        color: "#000000"
-        opacity: 0.22
-
-        MouseArea {
-            anchors.fill: parent
-            onClicked: root.visible = false
-        }
+        dimOpacity: 0.22
+        onDismissed: root.visible = false
     }
 
-    Rectangle {
+    Ui.UiCard {
         width: 420
         height: 132
         anchors.centerIn: parent
-        radius: 16
-        color: "#2e3440"
-        border.width: 1
-        border.color: "#4c566a"
 
         RowLayout {
             anchors.fill: parent
@@ -116,8 +107,8 @@ PanelWindow {
 
                     Layout.fillWidth: true
                     Layout.fillHeight: true
-                    radius: 10
-                    color: powerMouse.containsMouse ? "#3b4252" : "#252b35"
+                    radius: Ui.Theme.radiusMd
+                    color: powerMouse.containsMouse ? Ui.Theme.surfaceActive : Ui.Theme.surfaceSunken
 
                     MouseArea {
                         id: powerMouse
@@ -130,20 +121,17 @@ PanelWindow {
                         anchors.centerIn: parent
                         spacing: 6
 
-                        Text {
+                        Ui.UiIcon {
                             Layout.alignment: Qt.AlignHCenter
                             text: parent.parent.modelData.icon
-                            color: "#ffffff"
-                            font.family: "JetBrainsMono Nerd Font Mono"
                             font.pixelSize: 22
                         }
 
-                        Text {
+                        Ui.UiText {
                             Layout.alignment: Qt.AlignHCenter
                             text: parent.parent.modelData.label
-                            color: "#c3c3c3"
-                            font.family: "JetBrainsMono Nerd Font Mono"
-                            font.pixelSize: 11
+                            color: Ui.Theme.textSecondary
+                            font.pixelSize: Ui.Theme.textSm
                         }
                     }
                 }

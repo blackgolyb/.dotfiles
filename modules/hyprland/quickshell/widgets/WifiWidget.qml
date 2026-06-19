@@ -3,6 +3,7 @@ import QtQuick.Layouts
 import Quickshell
 import Quickshell.Hyprland
 import Quickshell.Io
+import "../ui" as Ui
 
 Item {
     id: root
@@ -83,7 +84,7 @@ Item {
     function showPasswordPrompt(ssid) {
         root.selectedSsid = ssid;
         root.selectedPassword = "";
-        passwordPrompt.forceActiveFocus();
+        passwordPrompt.forceInputFocus();
     }
 
     function closePasswordPrompt() {
@@ -143,12 +144,11 @@ test -n "$ssid" || exit 1
 qrencode -t PNG -s 8 -m 2 -o ${root.shellQuote(root.qrPath)} "WIFI:S:$ssid;T:$security;P:$password;;"
 `
 
-    Text {
+    Ui.UiIcon {
         id: wifiText
         text: root.buttonText
-        color: root.menuOpen ? "#ffffff" : "#c3c3c3"
-        font.family: "JetBrainsMono Nerd Font Mono"
-        font.pixelSize: 16
+        color: root.menuOpen ? Ui.Theme.textPrimary : Ui.Theme.textSecondary
+        font.pixelSize: Ui.Theme.textXl
 
         Behavior on color {
             ColorAnimation {
@@ -242,24 +242,20 @@ qrencode -t PNG -s 8 -m 2 -o ${root.shellQuote(root.qrPath)} "WIFI:S:$ssid;T:$se
         height: 500
         visible: root.menuOpen
         grabFocus: true
-        color: "transparent"
+        color: Ui.Theme.transparent
 
         onVisibleChanged: {
             root.menuOpen = visible;
             wifiFocusGrab.active = visible;
             if (visible)
-                searchInput.forceActiveFocus();
+                searchInput.forceInputFocus();
         }
 
-        Rectangle {
+        Ui.UiCard {
             id: card
             anchors.fill: parent
             scale: root.menuOpen ? 1 : 0.96
             opacity: root.menuOpen ? 1 : 0
-            radius: 16
-            color: "#2e3440"
-            border.width: 1
-            border.color: "#4c566a"
 
             Behavior on scale {
                 NumberAnimation {
@@ -289,10 +285,8 @@ qrencode -t PNG -s 8 -m 2 -o ${root.shellQuote(root.qrPath)} "WIFI:S:$ssid;T:$se
                     Layout.fillWidth: true
                     spacing: 8
 
-                    Text {
+                    Ui.UiText {
                         text: root.wifiEnabled ? "Wi-Fi" : "Wi-Fi Off"
-                        color: "#ffffff"
-                        font.family: "JetBrainsMono Nerd Font Mono"
                         font.pixelSize: 17
                         Layout.fillWidth: true
                     }
@@ -300,15 +294,13 @@ qrencode -t PNG -s 8 -m 2 -o ${root.shellQuote(root.qrPath)} "WIFI:S:$ssid;T:$se
                     Rectangle {
                         Layout.preferredWidth: 34
                         Layout.preferredHeight: 26
-                        radius: 8
+                        radius: Ui.Theme.radiusSm
                         visible: root.wifiEnabled
-                        color: refreshMouse.containsMouse ? "#434c5e" : "#3b4252"
+                        color: refreshMouse.containsMouse ? Ui.Theme.primitive.polarNight2 : Ui.Theme.surfaceActive
 
-                        Text {
+                        Ui.UiIcon {
                             anchors.centerIn: parent
                             text: "󰑓"
-                            color: "#ffffff"
-                            font.family: "JetBrainsMono Nerd Font Mono"
                             font.pixelSize: 15
                         }
 
@@ -327,7 +319,7 @@ qrencode -t PNG -s 8 -m 2 -o ${root.shellQuote(root.qrPath)} "WIFI:S:$ssid;T:$se
                         Layout.preferredWidth: 54
                         Layout.preferredHeight: 26
                         radius: 13
-                        color: root.wifiEnabled ? "#a3be8c" : "#4c566a"
+                        color: root.wifiEnabled ? Ui.Theme.accent : Ui.Theme.border
 
                         Rectangle {
                             width: 20
@@ -335,7 +327,7 @@ qrencode -t PNG -s 8 -m 2 -o ${root.shellQuote(root.qrPath)} "WIFI:S:$ssid;T:$se
                             radius: 10
                             y: 3
                             x: root.wifiEnabled ? parent.width - width - 3 : 3
-                            color: "#ffffff"
+                            color: Ui.Theme.textPrimary
 
                             Behavior on x {
                                 NumberAnimation {
@@ -365,51 +357,26 @@ qrencode -t PNG -s 8 -m 2 -o ${root.shellQuote(root.qrPath)} "WIFI:S:$ssid;T:$se
                     fillMode: Image.PreserveAspectFit
                 }
 
-                Rectangle {
+                Ui.UiTextInput {
+                    id: searchInput
                     Layout.fillWidth: true
                     Layout.preferredHeight: 32
-                    radius: 9
-                    color: "#252b35"
-                    border.width: 1
-                    border.color: searchInput.activeFocus ? "#88c0d0" : "#3b4252"
-
-                    TextInput {
-                        id: searchInput
-                        anchors.fill: parent
-                        anchors.leftMargin: 10
-                        anchors.rightMargin: 10
-                        verticalAlignment: TextInput.AlignVCenter
-                        color: "#ffffff"
-                        selectionColor: "#5e81ac"
-                        selectedTextColor: "#ffffff"
-                        font.family: "JetBrainsMono Nerd Font Mono"
-                        font.pixelSize: 13
-                        clip: true
-                        text: root.searchText
-                        onActiveFocusChanged: {
-                            if (activeFocus)
-                                root.closePasswordPrompt();
-                        }
-                        onTextChanged: root.searchText = text
+                    text: root.searchText
+                    placeholderText: "Search networks"
+                    textPixelSize: 13
+                    selectionTextColor: Ui.Theme.textPrimary
+                    onInputActiveFocusChanged: {
+                        if (inputActiveFocus)
+                            root.closePasswordPrompt();
                     }
-
-                    Text {
-                        anchors.verticalCenter: parent.verticalCenter
-                        anchors.left: parent.left
-                        anchors.leftMargin: 10
-                        visible: searchInput.text.length === 0 && !searchInput.activeFocus
-                        text: "Search networks"
-                        color: "#6f7787"
-                        font.family: "JetBrainsMono Nerd Font Mono"
-                        font.pixelSize: 13
-                    }
+                    onTextChanged: root.searchText = text
                 }
 
                 Rectangle {
                     Layout.fillWidth: true
                     Layout.preferredHeight: 40
-                    radius: 9
-                    color: "#252b35"
+                    radius: Ui.Theme.radiusSm
+                    color: Ui.Theme.surfaceSunken
                     visible: root.selectedSsid.length > 0
 
                     RowLayout {
@@ -417,28 +384,25 @@ qrencode -t PNG -s 8 -m 2 -o ${root.shellQuote(root.qrPath)} "WIFI:S:$ssid;T:$se
                         anchors.margins: 7
                         spacing: 8
 
-                        Text {
+                        Ui.UiText {
                             text: root.selectedSsid
-                            color: "#ffffff"
-                            font.family: "JetBrainsMono Nerd Font Mono"
-                            font.pixelSize: 12
+                            color: Ui.Theme.textPrimary
+                            font.pixelSize: Ui.Theme.textMd
                             elide: Text.ElideRight
                             Layout.preferredWidth: 110
                         }
 
-                        TextInput {
+                        Ui.UiTextInput {
                             id: passwordPrompt
                             Layout.fillWidth: true
                             text: root.selectedPassword
                             echoMode: TextInput.Password
-                            color: "#ffffff"
-                            selectionColor: "#5e81ac"
-                            font.family: "JetBrainsMono Nerd Font Mono"
-                            font.pixelSize: 12
-                            clip: true
+                            implicitHeight: 28
+                            textPixelSize: Ui.Theme.textMd
+                            selectionTextColor: Ui.Theme.textPrimary
                             onTextChanged: root.selectedPassword = text
                             onAccepted: root.connect(root.selectedSsid, root.selectedPassword)
-                            Keys.onEscapePressed: root.closePasswordPrompt()
+                            onEscaped: root.closePasswordPrompt()
                         }
 
                         SmallButton {
@@ -462,8 +426,8 @@ qrencode -t PNG -s 8 -m 2 -o ${root.shellQuote(root.qrPath)} "WIFI:S:$ssid;T:$se
 
                         width: ListView.view.width
                         height: root.actionSsid === modelData.ssid ? 76 : 42
-                        radius: 10
-                        color: networkMouse.containsMouse ? "#3b4252" : "#252b35"
+                        radius: Ui.Theme.radiusMd
+                        color: networkMouse.containsMouse ? Ui.Theme.surfaceActive : Ui.Theme.surfaceSunken
 
                         Behavior on height {
                             NumberAnimation {
@@ -488,40 +452,36 @@ qrencode -t PNG -s 8 -m 2 -o ${root.shellQuote(root.qrPath)} "WIFI:S:$ssid;T:$se
                             height: 42
                             spacing: 8
 
-                            Text {
+                            Ui.UiIcon {
                                 text: root.signalIcon(networkRow.modelData.signal)
-                                color: "#ffffff"
-                                font.family: "JetBrainsMono Nerd Font Mono"
-                                font.pixelSize: 16
+                                color: Ui.Theme.textPrimary
+                                font.pixelSize: Ui.Theme.textXl
                             }
 
                             ColumnLayout {
                                 Layout.fillWidth: true
                                 spacing: 0
 
-                                Text {
+                                Ui.UiText {
                                     Layout.fillWidth: true
                                     text: networkRow.modelData.ssid
-                                    color: "#ffffff"
-                                    font.family: "JetBrainsMono Nerd Font Mono"
                                     font.pixelSize: 13
                                     elide: Text.ElideRight
                                 }
 
-                                Text {
+                                Ui.UiText {
                                     Layout.fillWidth: true
                                     text: `${networkRow.modelData.signal}% ${root.securityIcon(networkRow.modelData.security)} ${networkRow.modelData.remembered ? "remembered" : networkRow.modelData.security}`
-                                    color: "#8f98aa"
-                                    font.family: "JetBrainsMono Nerd Font Mono"
-                                    font.pixelSize: 10
+                                    color: Ui.Theme.textDisabled
+                                    font.pixelSize: Ui.Theme.textXs
                                     elide: Text.ElideRight
                                 }
                             }
 
-                            Text {
+                            Ui.UiText {
                                 text: networkRow.modelData.active ? "●" : ""
-                                color: "#a3be8c"
-                                font.pixelSize: 12
+                                color: Ui.Theme.accent
+                                font.pixelSize: Ui.Theme.textMd
                             }
 
                             SmallButton {
@@ -616,12 +576,11 @@ qrencode -t PNG -s 8 -m 2 -o ${root.shellQuote(root.qrPath)} "WIFI:S:$ssid;T:$se
                     }
                 }
 
-                Text {
+                Ui.UiText {
                     Layout.fillWidth: true
                     text: root.statusText
-                    color: "#8f98aa"
-                    font.family: "JetBrainsMono Nerd Font Mono"
-                    font.pixelSize: 11
+                    color: Ui.Theme.textDisabled
+                    font.pixelSize: Ui.Theme.textSm
                     elide: Text.ElideRight
                 }
             }
@@ -643,16 +602,15 @@ qrencode -t PNG -s 8 -m 2 -o ${root.shellQuote(root.qrPath)} "WIFI:S:$ssid;T:$se
 
         Layout.preferredWidth: button.subtle ? 24 : Math.max(42, labelText.implicitWidth + 16)
         Layout.preferredHeight: 26
-        radius: 8
-        color: button.subtle ? (buttonMouse.containsMouse ? "#343b49" : "transparent") : (buttonMouse.containsMouse ? "#4c566a" : "#3b4252")
+        radius: Ui.Theme.radiusSm
+        color: button.subtle ? (buttonMouse.containsMouse ? Ui.Theme.surfaceHover : Ui.Theme.transparent) : (buttonMouse.containsMouse ? Ui.Theme.border : Ui.Theme.surfaceActive)
 
-        Text {
+        Ui.UiText {
             id: labelText
             anchors.centerIn: parent
             text: button.label
-            color: "#ffffff"
-            font.family: "JetBrainsMono Nerd Font Mono"
-            font.pixelSize: 11
+            color: Ui.Theme.textPrimary
+            font.pixelSize: Ui.Theme.textSm
         }
 
         MouseArea {

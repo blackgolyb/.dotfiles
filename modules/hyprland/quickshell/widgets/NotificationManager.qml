@@ -3,6 +3,7 @@ import QtQuick.Layouts
 import Quickshell
 import Quickshell.Services.Notifications
 import Quickshell.Wayland
+import "../ui" as Ui
 
 Item {
     id: root
@@ -168,7 +169,7 @@ Item {
         width: 360
         height: Math.min(620, Math.max(1, notificationColumn.implicitHeight))
         visible: notificationCount > 0
-        color: "transparent"
+        color: Ui.Theme.transparent
         exclusiveZone: 0
         WlrLayershell.layer: WlrLayer.Overlay
         WlrLayershell.namespace: "quickshell-notifications"
@@ -191,7 +192,7 @@ Item {
             Repeater {
                 model: root.visibleNotifications
 
-                Rectangle {
+                Ui.UiCard {
                     id: card
 
                     required property var modelData
@@ -203,9 +204,6 @@ Item {
 
                     Layout.fillWidth: true
                     Layout.preferredHeight: Math.max(84, cardContent.implicitHeight + 24)
-                    radius: 14
-                    color: "#2e3440"
-                    border.width: 1
                     border.color: urgencyColor(card.notification.urgency)
                     opacity: 0
                     x: 24
@@ -228,10 +226,10 @@ Item {
 
                     function urgencyColor(urgency) {
                         if (urgency === NotificationUrgency.Critical)
-                            return "#bf616a";
+                            return Ui.Theme.danger;
                         if (urgency === NotificationUrgency.Low)
-                            return "#4c566a";
-                        return "#88c0d0";
+                            return Ui.Theme.border;
+                        return Ui.Theme.accent;
                     }
 
                     Behavior on opacity {
@@ -273,15 +271,13 @@ Item {
                             Rectangle {
                                 Layout.preferredWidth: 34
                                 Layout.preferredHeight: 34
-                                radius: 9
-                                color: "#252b35"
+                                radius: Ui.Theme.radiusSm
+                                color: Ui.Theme.surfaceSunken
                                 visible: card.notification.image.length === 0
 
-                                Text {
+                                Ui.UiIcon {
                                     anchors.centerIn: parent
                                     text: "󰂚"
-                                    color: "#ffffff"
-                                    font.family: "JetBrainsMono Nerd Font Mono"
                                     font.pixelSize: 17
                                 }
                             }
@@ -298,30 +294,27 @@ Item {
                                 Layout.fillWidth: true
                                 spacing: 1
 
-                                Text {
+                                Ui.UiText {
                                     Layout.fillWidth: true
                                     text: card.notification.summary
-                                    color: "#ffffff"
-                                    font.family: "JetBrainsMono Nerd Font Mono"
                                     font.pixelSize: 13
                                     font.bold: true
                                     elide: Text.ElideRight
                                 }
 
-                                Text {
+                                Ui.UiText {
                                     Layout.fillWidth: true
                                     text: card.notification.appName
-                                    color: "#8f98aa"
-                                    font.family: "JetBrainsMono Nerd Font Mono"
-                                    font.pixelSize: 10
+                                    color: Ui.Theme.textDisabled
+                                    font.pixelSize: Ui.Theme.textXs
                                     elide: Text.ElideRight
                                     visible: card.notification.appName.length > 0
                                 }
                             }
 
-                            Text {
+                            Ui.UiText {
                                 text: "×"
-                                color: closeMouse.containsMouse ? "#ffffff" : "#8f98aa"
+                                color: closeMouse.containsMouse ? Ui.Theme.textPrimary : Ui.Theme.textDisabled
                                 font.pixelSize: 18
 
                                 MouseArea {
@@ -333,13 +326,12 @@ Item {
                             }
                         }
 
-                        Text {
+                        Ui.UiText {
                             Layout.fillWidth: true
                             text: card.notification.body
                             textFormat: Text.RichText
-                            color: "#c3c3c3"
-                            font.family: "JetBrainsMono Nerd Font Mono"
-                            font.pixelSize: 11
+                            color: Ui.Theme.textSecondary
+                            font.pixelSize: Ui.Theme.textSm
                             wrapMode: Text.Wrap
                             maximumLineCount: 4
                             elide: Text.ElideRight
@@ -363,16 +355,15 @@ Item {
 
                                     Layout.preferredWidth: Math.max(actionText.implicitWidth + 18, 52)
                                     Layout.preferredHeight: 26
-                                    radius: 8
-                                    color: actionMouse.containsMouse ? "#4c566a" : "#3b4252"
+                                    radius: Ui.Theme.radiusSm
+                                    color: actionMouse.containsMouse ? Ui.Theme.border : Ui.Theme.surfaceActive
 
-                                    Text {
+                                    Ui.UiText {
                                         id: actionText
                                         anchors.centerIn: parent
                                         text: parent.modelData.text
-                                        color: "#ffffff"
-                                        font.family: "JetBrainsMono Nerd Font Mono"
-                                        font.pixelSize: 10
+                                        color: Ui.Theme.textPrimary
+                                        font.pixelSize: Ui.Theme.textXs
                                     }
 
                                     MouseArea {

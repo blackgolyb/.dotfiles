@@ -4,6 +4,7 @@
   home.packages = with pkgs; [
     brightnessctl
     cliphist
+    curl
     hyprpicker
     hyprprop
     jq
@@ -28,6 +29,10 @@
   xdg.configFile."quickshell/shell.qml".source = ./quickshell/shell.qml;
 
   xdg.configFile."quickshell/widgets".source = ./quickshell/widgets;
+
+  xdg.configFile."quickshell/ui".source = ./quickshell/ui;
+
+  xdg.configFile."quickshell/search".source = ./quickshell/search;
 
   xdg.configFile."quickshell/battery_icons".source = ../qtile/resources/battery_icons;
 

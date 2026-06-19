@@ -1,5 +1,6 @@
 import QtQuick
 import Quickshell
+import "../ui" as Ui
 
 Item {
     id: root
@@ -14,12 +15,11 @@ Item {
         precision: SystemClock.Minutes
     }
 
-    Text {
+    Ui.UiText {
         id: clockText
         text: Qt.formatDateTime(clock.date, "hh:mm")
-        color: "#ffffff"
-        font.family: "JetBrainsMono Nerd Font Mono"
-        font.pixelSize: 16
+        color: Ui.Theme.textPrimary
+        font.pixelSize: Ui.Theme.textXl
     }
 
     MouseArea {

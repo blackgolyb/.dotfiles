@@ -1,6 +1,7 @@
 import QtQuick
 import QtQuick.Layouts
 import Quickshell
+import "../ui" as Ui
 
 PopupWindow {
     id: root
@@ -14,27 +15,25 @@ PopupWindow {
     width: 260
     height: 96
     visible: false
-    color: "#2e3440"
+    color: Ui.Theme.surface
 
     ColumnLayout {
         anchors.fill: parent
         anchors.margins: 12
         spacing: 8
 
-        Text {
+        Ui.UiText {
             Layout.alignment: Qt.AlignHCenter
             text: Qt.formatDateTime(root.clockDate, "dd MMMM yyyy")
-            color: "#ffffff"
-            font.family: "JetBrainsMono Nerd Font Mono"
-            font.pixelSize: 16
+            color: Ui.Theme.textPrimary
+            font.pixelSize: Ui.Theme.textXl
         }
 
-        Text {
+        Ui.UiText {
             Layout.alignment: Qt.AlignHCenter
             text: Qt.formatDateTime(root.clockDate, "dddd")
-            color: "#c3c3c3"
-            font.family: "JetBrainsMono Nerd Font Mono"
-            font.pixelSize: 14
+            color: Ui.Theme.textSecondary
+            font.pixelSize: Ui.Theme.textLg
         }
     }
 }

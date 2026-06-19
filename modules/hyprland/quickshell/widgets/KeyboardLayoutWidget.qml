@@ -1,16 +1,16 @@
 import QtQuick
 import Quickshell.Hyprland
 import Quickshell.Io
+import "../ui" as Ui
 
-Text {
+Ui.UiText {
     id: root
 
     property string layoutText: "us"
 
     text: root.layoutText
-    color: "#ffffff"
-    font.family: "JetBrainsMono Nerd Font Mono"
-    font.pixelSize: 16
+    color: Ui.Theme.textPrimary
+    font.pixelSize: Ui.Theme.textXl
 
     function normalizeLayout(layout) {
         const value = layout.trim().toLowerCase();
