@@ -16,7 +16,7 @@ Item {
     signal resultsUpdated
 
     function active(input, forceActive = false): bool {
-        return forceActive || input.trim().startsWith("clip:");
+        return forceActive || input.trim().startsWith(":");
     }
 
     function shellQuote(value): string {
@@ -37,7 +37,7 @@ Item {
             return;
         }
 
-        const needle = (forceActive ? input.trim() : input.trim().slice("clip:".length).trim()).toLowerCase();
+        const needle = (forceActive ? input.trim() : input.trim().slice(1).trim()).toLowerCase();
         const filtered = needle.length === 0 ? entries : entries.filter(entry => entry.display.toLowerCase().includes(needle));
 
         results = filtered.slice(0, 80).map((entry, index) => ({
