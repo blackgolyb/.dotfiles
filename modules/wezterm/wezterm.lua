@@ -12,6 +12,7 @@ config.window_padding = {
     bottom = 15,
 }
 config.enable_tab_bar = true
+config.enable_kitty_keyboard = true
 
 
 config.font = wezterm.font 'FiraCode Nerd Font Mono'
@@ -117,6 +118,11 @@ config.keys = {
         key = 'a',
         mods = 'ALT',
         action = wezterm.action.ActivateTab(3),
+    },
+    {
+        key = "Enter",
+        mods = "ALT",
+        action = wezterm.action.DisableDefaultAssignment,
     },
 }
 
