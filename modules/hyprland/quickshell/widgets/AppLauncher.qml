@@ -18,7 +18,7 @@ PanelWindow {
     focusable: true
     WlrLayershell.layer: WlrLayer.Overlay
     WlrLayershell.keyboardFocus: WlrKeyboardFocus.Exclusive
-    WlrLayershell.namespace: "quickshell-app-launcher"
+    WlrLayershell.namespace: "quickshell-overlay-app-launcher"
 
     anchors {
         top: true

@@ -20,7 +20,7 @@ PanelWindow {
     focusable: true
     WlrLayershell.layer: WlrLayer.Overlay
     WlrLayershell.keyboardFocus: WlrKeyboardFocus.Exclusive
-    WlrLayershell.namespace: "quickshell-polkit-auth"
+    WlrLayershell.namespace: "quickshell-overlay-polkit-auth"
 
     anchors {
         top: true

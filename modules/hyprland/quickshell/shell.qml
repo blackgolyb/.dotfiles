@@ -4,6 +4,7 @@ import Quickshell
 import Quickshell.Wayland
 import "ui" as Ui
 import "widgets"
+import "widgets/notifications"
 
 ShellRoot {
     PanelWindow {

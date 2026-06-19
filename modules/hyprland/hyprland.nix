@@ -34,6 +34,8 @@
 
   xdg.configFile."quickshell/search".source = ./quickshell/search;
 
+  xdg.configFile."quickshell/services".source = ./quickshell/services;
+
   xdg.configFile."quickshell/battery_icons".source = ../qtile/resources/battery_icons;
 
   xdg.configFile."hypr/wallpapers".source = ../qtile/resources/wallpapers;
