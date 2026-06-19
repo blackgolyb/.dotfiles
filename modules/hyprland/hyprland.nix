@@ -35,11 +35,11 @@
 
   xdg.configFile."quickshell/services".source = ./quickshell/services;
 
-  xdg.configFile."quickshell/battery_icons".source = ../qtile/resources/battery_icons;
+  xdg.configFile."quickshell/battery_icons".source = ../../resources/battery_icons;
 
-  xdg.configFile."hypr/wallpapers".source = ../qtile/resources/wallpapers;
+  xdg.configFile."hypr/wallpapers".source = ../../resources/wallpapers;
 
-  xdg.dataFile."icons/qtile-cursors/cursors".source = ../qtile/resources/cursors;
+  xdg.dataFile."icons/qtile-cursors/cursors".source = ../../resources/cursors;
 
   xdg.dataFile."icons/qtile-cursors/index.theme".text = ''
     [Icon Theme]

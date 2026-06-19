@@ -16,6 +16,11 @@
       force = true;
     };
 
+    xdg.configFile."qtile/resources" = {
+      source = ../../resources;
+      force = true;
+    };
+
     xdg.configFile."picom/picom.conf" = {
       source = ./picom.conf;
       force = true;
