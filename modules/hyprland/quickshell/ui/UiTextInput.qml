@@ -11,9 +11,11 @@ Rectangle {
     property string placeholderText: ""
     property bool inputEnabled: true
     property int echoMode: TextInput.Normal
-    property string passwordCharacter: "*"
+    property string passwordCharacter: "●"
     property int textPixelSize: Theme.textXl
     property int iconPixelSize: Theme.textXl
+    property real letterSpacing: 0
+    property real passwordLetterSpacing: 6
     property color selectionTextColor: Theme.textInverse
     signal accepted
     signal escaped
@@ -68,6 +70,7 @@ Rectangle {
             selectionColor: Theme.accent
             font.family: Theme.fontFamily
             font.pixelSize: root.textPixelSize
+            font.letterSpacing: root.echoMode === TextInput.Password && input.text.length > 0 ? root.passwordLetterSpacing : root.letterSpacing
             clip: true
             verticalAlignment: TextInput.AlignVCenter
 
@@ -79,6 +82,7 @@ Rectangle {
                 color: Theme.textMuted
                 font.family: Theme.fontFamily
                 font.pixelSize: root.textPixelSize
+                font.letterSpacing: root.letterSpacing
             }
 
             Keys.onPressed: event => {

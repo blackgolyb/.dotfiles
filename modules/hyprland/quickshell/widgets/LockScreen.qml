@@ -160,79 +160,52 @@ Item {
             }
 
             ColumnLayout {
-                width: Math.min(surface.width - 48, 460)
+                id: clockBlock
                 anchors.centerIn: parent
-                spacing: 18
+                spacing: 4
 
-                ColumnLayout {
-                    Layout.fillWidth: true
-                    spacing: 4
-
-                    Ui.UiText {
-                        Layout.alignment: Qt.AlignHCenter
-                        text: Qt.formatDateTime(clock.date, "hh:mm")
-                        color: Ui.Theme.textPrimary
-                        font.pixelSize: 72
-                        font.bold: true
-                    }
-
-                    Ui.UiText {
-                        Layout.alignment: Qt.AlignHCenter
-                        text: Qt.formatDateTime(clock.date, "dddd, dd MMMM")
-                        color: Ui.Theme.textSecondary
-                        font.pixelSize: Ui.Theme.textLg
-                    }
+                Ui.UiText {
+                    Layout.alignment: Qt.AlignHCenter
+                    text: Qt.formatDateTime(clock.date, "hh:mm")
+                    color: Ui.Theme.textPrimary
+                    font.pixelSize: 72
+                    font.bold: true
                 }
 
-                Ui.UiCard {
+                Ui.UiText {
+                    Layout.alignment: Qt.AlignHCenter
+                    text: Qt.formatDateTime(clock.date, "dddd, dd MMMM")
+                    color: Ui.Theme.textSecondary
+                    font.pixelSize: Ui.Theme.textLg
+                }
+            }
+
+            ColumnLayout {
+                width: Math.min(surface.width - 48, 460)
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.top: clockBlock.bottom
+                anchors.topMargin: 28
+                spacing: 12
+
+                Ui.UiTextInput {
+                    id: passwordInput
                     Layout.fillWidth: true
-                    implicitHeight: unlockContent.implicitHeight + 32
+                    implicitHeight: 44
+                    inputEnabled: !root.authenticating
+                    echoMode: TextInput.Password
+                    placeholderText: root.authenticating ? "Checking..." : "Password"
+                    textPixelSize: Ui.Theme.textLg
+                    color: Ui.Theme.transparent
+                    onAccepted: surface.submit()
+                }
 
-                    ColumnLayout {
-                        id: unlockContent
-                        anchors.fill: parent
-                        anchors.margins: 16
-                        spacing: 12
-
-                        Ui.UiText {
-                            Layout.fillWidth: true
-                            text: Quickshell.env("USER") ?? ""
-                            color: Ui.Theme.textPrimary
-                            horizontalAlignment: Text.AlignHCenter
-                            font.pixelSize: Ui.Theme.textLg
-                            font.bold: true
-                        }
-
-                        Ui.UiTextInput {
-                            id: passwordInput
-                            Layout.fillWidth: true
-                            implicitHeight: 44
-                            inputEnabled: !root.authenticating
-                            echoMode: TextInput.Password
-                            placeholderText: "Password"
-                            textPixelSize: Ui.Theme.textLg
-                            onAccepted: surface.submit()
-                        }
-
-                        Ui.UiText {
-                            Layout.fillWidth: true
-                            text: root.statusText
-                            visible: text.length > 0
-                            color: root.authenticating ? Ui.Theme.textSubtle : Ui.Theme.danger
-                            horizontalAlignment: Text.AlignHCenter
-                            font.pixelSize: Ui.Theme.textSm
-                        }
-
-                        Ui.UiButton {
-                            Layout.alignment: Qt.AlignHCenter
-                            text: root.authenticating ? "Checking..." : "Login"
-                            implicitWidth: 140
-                            normalColor: Ui.Theme.accent
-                            hoverColor: Ui.Theme.accentHover
-                            textColor: Ui.Theme.textInverse
-                            onClicked: surface.submit()
-                        }
-                    }
+                Ui.UiText {
+                    Layout.fillWidth: true
+                    text: root.statusText
+                    visible: text.length > 0
+                    color: root.authenticating ? Ui.Theme.textSubtle : Ui.Theme.danger
+                    horizontalAlignment: Text.AlignHCenter
+                    font.pixelSize: Ui.Theme.textSm
                 }
             }
 
