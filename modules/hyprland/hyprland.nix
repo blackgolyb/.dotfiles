@@ -15,7 +15,6 @@
     hyprpaper
     qrencode
     quickshell
-    swaylock
     wl-clipboard
   ];
 
