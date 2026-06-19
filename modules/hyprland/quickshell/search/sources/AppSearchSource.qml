@@ -8,13 +8,17 @@ Item {
 
     readonly property string sourceId: "apps"
     readonly property string name: "Applications"
+    readonly property string mode: sourceId
     property string query: ""
     property var results: []
     signal resultsUpdated
 
-    function active(input): bool {
+    function active(input, forceActive = false): bool {
+        if (forceActive)
+            return true;
+
         const trimmed = input.trim();
-        return !trimmed.startsWith("=") && !trimmed.startsWith("?");
+        return !trimmed.startsWith("=") && !trimmed.startsWith("?") && !trimmed.startsWith("clip:");
     }
 
     function searchText(entry): string {
@@ -35,10 +39,10 @@ Item {
         return 50;
     }
 
-    function setQuery(input): void {
+    function setQuery(input, forceActive = false): void {
         query = input;
 
-        if (!active(input)) {
+        if (!active(input, forceActive)) {
             results = [];
             resultsUpdated();
             return;

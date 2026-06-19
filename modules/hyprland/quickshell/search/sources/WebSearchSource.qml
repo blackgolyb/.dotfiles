@@ -9,6 +9,7 @@ Item {
 
     readonly property string sourceId: "web"
     readonly property string name: "Web"
+    readonly property string mode: sourceId
     property string browser: "zen"
     property string searchEngine: "duckduckgo"
     property string suggestionEngine: "duckduckgo"
@@ -18,15 +19,15 @@ Item {
     property var results: []
     signal resultsUpdated
 
-    function active(input): bool {
-        return input.trim().startsWith("?");
+    function active(input, forceActive = false): bool {
+        return forceActive || input.trim().startsWith("?");
     }
 
-    function setQuery(input): void {
+    function setQuery(input, forceActive = false): void {
         query = input;
         generation++;
 
-        if (!active(input)) {
+        if (!active(input, forceActive)) {
             searchTerm = "";
             suggestionsTimer.stop();
             results = [];
@@ -34,7 +35,7 @@ Item {
             return;
         }
 
-        searchTerm = input.trim().slice(1).trim();
+        searchTerm = forceActive ? input.trim() : input.trim().slice(1).trim();
         if (searchTerm.length === 0) {
             suggestionsTimer.stop();
             results = [];

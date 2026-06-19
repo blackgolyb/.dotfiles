@@ -8,24 +8,25 @@ Item {
 
     readonly property string sourceId: "calculator"
     readonly property string name: "Calculator"
+    readonly property string mode: sourceId
     property string query: ""
     property var results: []
     signal resultsUpdated
 
-    function active(input): bool {
-        return input.trim().startsWith("=");
+    function active(input, forceActive = false): bool {
+        return forceActive || input.trim().startsWith("=");
     }
 
-    function setQuery(input): void {
+    function setQuery(input, forceActive = false): void {
         query = input;
 
-        if (!active(input)) {
+        if (!active(input, forceActive)) {
             results = [];
             resultsUpdated();
             return;
         }
 
-        const expression = input.trim().slice(1).trim();
+        const expression = forceActive ? input.trim() : input.trim().slice(1).trim();
         const value = evaluate(expression);
 
         if (expression.length === 0 || !Number.isFinite(value)) {

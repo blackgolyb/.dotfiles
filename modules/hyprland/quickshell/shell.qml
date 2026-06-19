@@ -81,5 +81,7 @@ ShellRoot {
         anchorWindow: bar
     }
 
+    LockScreen {}
+
     NotificationManager {}
 }

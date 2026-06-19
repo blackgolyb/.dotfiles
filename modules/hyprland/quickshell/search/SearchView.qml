@@ -11,24 +11,56 @@ Ui.UiCard {
     property var sources: []
     property var results: []
     property int selectedIndex: 0
+    property var mode: null
+    property int initialRefreshAttempts: 0
     property alias query: searchField.text
+    readonly property var activeSources: mode === null ? sources : sources.filter(source => sourceMode(source) === mode)
+    readonly property string placeholderText: mode === null ? "Search" : `Search ${modeName()}`
     signal accepted
     signal closeRequested
+
+    function sourceMode(source): var {
+        return source.mode;
+    }
+
+    function modeName(): string {
+        const source = activeSources.length > 0 ? activeSources[0] : null;
+        return source !== null && source.name !== undefined ? source.name.toLowerCase() : String(mode);
+    }
+
+    function setMode(nextMode): void {
+        mode = nextMode;
+        reset();
+    }
+
+    function setSourceMode(source): void {
+        setMode(sourceMode(source));
+    }
 
     function reset(): void {
         searchField.text = "";
         selectedIndex = 0;
+        initialRefreshAttempts = 0;
+        refreshActiveSources();
         updateSources();
+        initialRefreshTimer.restart();
     }
 
     function forceSearchFocus(): void {
         searchField.forceInputFocus();
     }
 
+    function refreshActiveSources(): void {
+        for (const source of activeSources) {
+            if (source.refresh !== undefined)
+                source.refresh();
+        }
+    }
+
     function updateSources(): void {
-        for (const source of sources) {
+        for (const source of activeSources) {
             if (source.setQuery !== undefined)
-                source.setQuery(query);
+                source.setQuery(query, mode !== null);
         }
         refreshResults();
     }
@@ -36,7 +68,7 @@ Ui.UiCard {
     function refreshResults(): void {
         const nextResults = [];
 
-        for (const source of sources) {
+        for (const source of activeSources) {
             const sourceResults = source.results ?? [];
             for (const result of sourceResults)
                 nextResults.push(result);
@@ -78,8 +110,21 @@ Ui.UiCard {
 
     onQueryChanged: {
         selectedIndex = 0;
+        initialRefreshTimer.stop();
         updateSources();
         resultList.positionViewAtBeginning();
+    }
+
+    Timer {
+        id: initialRefreshTimer
+        interval: 80
+        repeat: true
+        onTriggered: {
+            root.initialRefreshAttempts += 1;
+            root.updateSources();
+            if (root.results.length > 0 || root.initialRefreshAttempts >= 5)
+                stop();
+        }
     }
 
     ColumnLayout {
@@ -90,7 +135,7 @@ Ui.UiCard {
         Ui.UiSearchField {
             id: searchField
             Layout.fillWidth: true
-            placeholderText: "Search"
+            placeholderText: root.placeholderText
             onAccepted: root.runSelected()
             onEscaped: root.closeRequested()
             onMoveRequested: delta => root.moveSelection(delta)

@@ -34,8 +34,17 @@ PanelWindow {
         }
     }
 
-    function toggle(): void {
-        root.visible = !root.visible;
+    function open(modeName = null): void {
+        const wasVisible = root.visible;
+        const nextMode = modeName === undefined || modeName === "" ? null : modeName;
+        if (wasVisible)
+            searchView.setMode(nextMode);
+        else
+            searchView.mode = nextMode;
+
+        root.visible = true;
+        if (wasVisible)
+            searchView.forceSearchFocus();
     }
 
     function close(): void {
@@ -45,12 +54,12 @@ PanelWindow {
     IpcHandler {
         target: "launcher"
 
-        function toggle(): void {
-            root.toggle();
+        function open(): void {
+            root.open();
         }
 
-        function open(): void {
-            root.visible = true;
+        function openWithMode(modeName: string): void {
+            root.open(modeName);
         }
 
         function close(): void {
@@ -79,6 +88,11 @@ PanelWindow {
             suggestionEngine: "duckduckgo"
             onResultsUpdated: searchView.refreshResults()
         }
+
+        Sources.ClipboardSearchSource {
+            id: clipboardSource
+            onResultsUpdated: searchView.refreshResults()
+        }
     }
 
     Ui.UiOverlay {
@@ -91,7 +105,7 @@ PanelWindow {
             width: Math.min(root.width - 40, 720)
             height: Math.min(root.height - 80, 560)
             anchors.centerIn: parent
-            sources: [appSource, calculatorSource, webSource]
+            sources: [appSource, calculatorSource, webSource, clipboardSource]
             onAccepted: root.close()
             onCloseRequested: root.close()
         }
