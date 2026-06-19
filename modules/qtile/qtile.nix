@@ -13,6 +13,7 @@
 
     xdg.configFile.qtile = {
       source = ./.;
+      recursive = true;
       force = true;
     };
 
