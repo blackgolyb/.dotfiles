@@ -14,7 +14,7 @@ PanelWindow {
         {
             label: "Lock",
             icon: "",
-            command: ["qs", "ipc", "call", "lock", "open"]
+            command: ["lock"]
         },
         {
             label: "Suspend",

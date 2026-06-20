@@ -215,7 +215,7 @@ exec(main_mod .. " + " .. alt_mod .. " + p", scripts .. "/pick_color")
 exec(main_mod .. " + " .. alt_mod .. " + v", "qs ipc call launcher openWithMode clipboard")
 bind(main_mod .. " + o", hl.dsp.window.pin({ action = "toggle" }))
 exec(main_mod .. " + space", "qs ipc call launcher open")
-exec(main_mod .. " + home", "qs ipc call lock open")
+exec(main_mod .. " + home", "lock")
 exec("Print", scripts .. "/screenshot")
 
 bind("XF86AudioLowerVolume", hl.dsp.exec_cmd(scripts .. "/volume_control down"), { locked = true, repeating = true })

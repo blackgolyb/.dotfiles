@@ -16,6 +16,9 @@
     qrencode
     quickshell
     wl-clipboard
+    (writeShellScriptBin "lock" ''
+      exec qs ipc call lock open
+    '')
   ];
 
   xdg.configFile."hypr/hyprland.lua".source = ./hyprland.lua;
