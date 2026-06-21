@@ -10,10 +10,10 @@ PopupWindow {
     required property var clockDate
 
     anchor.window: root.anchorWindow
-    anchor.rect.x: root.anchorWindow.width - width - 20
+    anchor.rect.x: root.anchorWindow.width - implicitWidth - 20
     anchor.rect.y: root.anchorWindow.height
-    width: 260
-    height: 96
+    implicitWidth: 260
+    implicitHeight: 96
     visible: false
     color: Ui.Theme.surface
 

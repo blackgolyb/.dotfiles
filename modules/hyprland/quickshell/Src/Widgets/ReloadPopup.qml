@@ -37,8 +37,8 @@ Scope {
         PanelWindow {
             id: popup
 
-            width: Math.min(contentCard.implicitWidth, 680)
-            height: contentCard.implicitHeight
+            implicitWidth: Math.min(contentCard.implicitWidth, 680)
+            implicitHeight: contentCard.implicitHeight
             color: Ui.Theme.transparent
             exclusionMode: ExclusionMode.Ignore
             WlrLayershell.layer: WlrLayer.Overlay

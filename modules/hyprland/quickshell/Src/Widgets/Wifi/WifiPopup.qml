@@ -14,8 +14,6 @@ PopupWindow {
     anchor.rect.y: root.anchorWindow != null ? root.anchorWindow.height + 8 : 0
     implicitWidth: 420
     implicitHeight: 500
-    width: 420
-    height: 500
     grabFocus: true
     color: Ui.Theme.transparent
 

@@ -17,8 +17,8 @@ Item {
 
         readonly property int notificationCount: notificationService.visibleNotifications.length
 
-        width: 360
-        height: Math.min(620, Math.max(1, notificationColumn.implicitHeight))
+        implicitWidth: 360
+        implicitHeight: Math.min(620, Math.max(1, notificationColumn.implicitHeight))
         visible: notificationCount > 0
         color: Ui.Theme.transparent
         exclusiveZone: 0
