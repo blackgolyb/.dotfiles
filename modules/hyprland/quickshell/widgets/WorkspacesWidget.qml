@@ -1,58 +1,39 @@
 import QtQuick
 import Quickshell.Hyprland
 import "../ui" as Ui
+import "../utils/fp.mjs" as FP
 
 Item {
     id: root
 
     readonly property int itemWidth: 32
     readonly property int itemHeight: 24
-    readonly property var groups: [
-        {
-            key: "f",
-            label: "󰈹"
-        },
-        {
-            key: "d",
-            label: ""
-        },
-        {
-            key: "s",
-            label: ""
-        },
-        {
-            key: "a",
-            label: ""
-        },
-        {
-            key: "v",
-            label: "󱞁"
-        },
-        {
-            key: "c",
-            label: ""
-        },
-        {
-            key: "x",
-            label: "󰋋"
-        },
-        {
-            key: "z",
-            label: ""
-        },
-    ]
-    readonly property var activeGroups: root.groups.map(group => {
-        const workspace = root.workspaceFor(group.key);
-        return {
+    readonly property int animationDuration: 190
+    readonly property var keys:   [ "f", "d", "s", "a", "v", "c", "x", "z" ]
+    readonly property var labels: [ "󰈹", "", "", "", "󱞁", "", "󰋋", "" ]
+    readonly property var groups: FP.range(root.keys.length)
+        .map( i => ({
+            key: root.keys[i],
+            label: root.labels[i],
+        }))
+    readonly property var activeGroups: root.groups
+        .map(group => ({
             key: group.key,
             label: group.label,
-            workspace: workspace
-        };
-    }).filter(group => root.isShown(group.workspace))
+            workspace: root.workspaceFor(group.key),
+        }))
+        .filter(group => root.isShown(group.workspace))
     readonly property int activeIndex: root.activeGroups.findIndex(group => root.isActive(group.key))
 
     implicitWidth: root.activeGroups.length * root.itemWidth
     implicitHeight: root.itemHeight
+
+    Behavior on implicitWidth {
+        NumberAnimation {
+            duration: root.animationDuration
+            easing.type: Easing.OutCubic
+        }
+    }
 
     function isShown(workspace) {
         return workspace != null && (workspace.toplevels.values.length > 0 || workspace.active);
@@ -75,23 +56,55 @@ Item {
         spacing: 0
 
         Repeater {
-            model: root.activeGroups
+            model: root.groups
 
             Rectangle {
                 required property var modelData
 
-                width: root.itemWidth
+                readonly property var workspace: root.workspaceFor(modelData.key)
+                readonly property bool shown: root.isShown(workspace)
+
+                width: shown ? root.itemWidth : 0
                 height: root.itemHeight
                 radius: 0
                 color: Ui.Theme.transparent
+                opacity: shown ? 1 : 0
+                scale: shown ? 1 : 0.7
+                transformOrigin: Item.Center
+                clip: false
+
+                Behavior on width {
+                    NumberAnimation {
+                        duration: root.animationDuration
+                        easing.type: Easing.OutCubic
+                    }
+                }
+
+                Behavior on opacity {
+                    NumberAnimation {
+                        duration: root.animationDuration
+                        easing.type: Easing.OutCubic
+                    }
+                }
+
+                Behavior on scale {
+                    NumberAnimation {
+                        duration: root.animationDuration
+                        easing.type: shown ? Easing.OutBack : Easing.InCubic
+                    }
+                }
 
                 MouseArea {
                     anchors.fill: parent
-                    onClicked: parent.modelData.workspace.activate()
+                    enabled: parent.shown
+                    onClicked: parent.workspace.activate()
                 }
 
                 Ui.UiText {
-                    anchors.centerIn: parent
+                    width: root.itemWidth
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    horizontalAlignment: Text.AlignHCenter
                     text: parent.modelData.label + "<sup> " + parent.modelData.key + "</sup>"
                     textFormat: Text.RichText
                     color: Ui.Theme.textPrimary
@@ -104,7 +117,6 @@ Item {
     Rectangle {
         id: activeIndicator
 
-        readonly property int duration: 160
         width: root.itemWidth
         height: 1.5
         radius: 1
@@ -114,31 +126,9 @@ Item {
         y: root.itemHeight - height
 
         Behavior on x {
-            ParallelAnimation {
-                NumberAnimation {
-                    target: activeIndicator
-                    property: "x"
-                    duration: activeIndicator.duration
-                    easing.type: Easing.OutCubic
-                }
-
-                SequentialAnimation {
-                    NumberAnimation {
-                        target: activeIndicator
-                        property: "width"
-                        to: root.itemWidth * 1.2
-                        duration: Math.round(activeIndicator.duration * 0.4)
-                        easing.type: Easing.InOutCubic
-                    }
-
-                    NumberAnimation {
-                        target: activeIndicator
-                        property: "width"
-                        to: root.itemWidth
-                        duration: Math.round(activeIndicator.duration * 0.4)
-                        easing.type: Easing.OutCubic
-                    }
-                }
+            NumberAnimation {
+                duration: root.animationDuration
+                easing.type: Easing.OutCubic
             }
         }
     }
