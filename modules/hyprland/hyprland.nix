@@ -16,6 +16,23 @@
     qrencode
     quickshell
     wl-clipboard
+    (writeShellScriptBin "qs-hyprland" ''
+      set -eu
+
+      config_path="''${XDG_CONFIG_HOME:-$HOME/.config}/quickshell"
+
+      if [ "$#" -gt 0 ] && { [ -d "$1" ] || [ -f "$1" ]; }; then
+        config_path="$1"
+        shift
+      elif [ -d "$PWD/modules/hyprland/quickshell" ]; then
+        config_path="$PWD/modules/hyprland/quickshell"
+      fi
+
+      export QML2_IMPORT_PATH="$config_path''${QML2_IMPORT_PATH:+:$QML2_IMPORT_PATH}"
+      export QML_IMPORT_PATH="$config_path''${QML_IMPORT_PATH:+:$QML_IMPORT_PATH}"
+
+      exec qs -p "$config_path" "$@"
+    '')
     (writeShellScriptBin "lock" ''
       exec qs ipc call lock open
     '')
@@ -30,13 +47,7 @@
 
   xdg.configFile."quickshell/shell.qml".source = ./quickshell/shell.qml;
 
-  xdg.configFile."quickshell/widgets".source = ./quickshell/widgets;
-
-  xdg.configFile."quickshell/ui".source = ./quickshell/ui;
-
-  xdg.configFile."quickshell/search".source = ./quickshell/search;
-
-  xdg.configFile."quickshell/services".source = ./quickshell/services;
+  xdg.configFile."quickshell/Src".source = ./quickshell/Src;
 
   xdg.configFile."quickshell/battery_icons".source = ../../resources/battery_icons;
 

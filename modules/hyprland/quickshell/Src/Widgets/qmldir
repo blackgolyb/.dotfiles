@@ -1,0 +1,16 @@
+module Src.Widgets
+AppLauncher 1.0 AppLauncher.qml
+BatteryWidget 1.0 BatteryWidget.qml
+CalendarPopup 1.0 CalendarPopup.qml
+ClockWidget 1.0 ClockWidget.qml
+KeyboardLayoutWidget 1.0 KeyboardLayoutWidget.qml
+LockScreen 1.0 LockScreen.qml
+MusicWidget 1.0 MusicWidget.qml
+NotificationManager 1.0 Notifications/NotificationManager.qml
+PolkitAuth 1.0 PolkitAuth.qml
+PowerButton 1.0 PowerButton.qml
+PowerPopup 1.0 PowerPopup.qml
+ReloadPopup 1.0 ReloadPopup.qml
+VolumeWidget 1.0 VolumeWidget.qml
+WifiWidget 1.0 Wifi/WifiWidget.qml
+WorkspacesWidget 1.0 WorkspacesWidget.qml

@@ -1,0 +1,5 @@
+module Src.Search.Sources
+AppSearchSource 1.0 AppSearchSource.qml
+CalculatorSearchSource 1.0 CalculatorSearchSource.qml
+ClipboardSearchSource 1.0 ClipboardSearchSource.qml
+WebSearchSource 1.0 WebSearchSource.qml

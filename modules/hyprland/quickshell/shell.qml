@@ -2,10 +2,8 @@ import QtQuick
 import QtQuick.Layouts
 import Quickshell
 import Quickshell.Wayland
-import "ui" as Ui
-import "widgets"
-import "widgets/notifications"
-import "widgets/wifi"
+import Src.Ui as Ui
+import Src.Widgets
 
 ShellRoot {
     PanelWindow {
