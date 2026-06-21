@@ -83,5 +83,7 @@ ShellRoot {
 
     LockScreen {}
 
+    ReloadPopup {}
+
     NotificationManager {}
 }
