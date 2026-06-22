@@ -61,6 +61,8 @@
     variant = "";
   };
   services.xserver.enable = true;
+  services.xserver.updateDbusEnvironment = true;
+  services.xserver.desktopManager.runXdgAutostartIfNone = true;
   services.xserver.windowManager.qtile = {
     enable = true;
     # package = pkgs.python312.pkgs.qtile;

@@ -1,10 +1,13 @@
 { config, lib, pkgs, ... }:
 {
     home.packages = with pkgs; [
-       xgamma
-       haskellPackages.greenclip
-       librsvg
-       adwaita-icon-theme
+        xgamma
+        haskellPackages.greenclip
+        librsvg
+        adwaita-icon-theme
+        dunst
+        picom
+        unclutter-xfixes
     ];
 
     home.sessionVariables = {
@@ -27,16 +30,4 @@
       force = true;
     };
 
-    services.picom = {
-      enable = true;
-    };
-
-    services.unclutter = {
-      enable = true;
-      timeout = 10;
-    };
-
-    services.dunst = {
-      enable = true;
-    };
 }

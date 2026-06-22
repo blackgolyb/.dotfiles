@@ -6,6 +6,7 @@ dbus-update-activation-environment --all &
 # glava &
 # eww open --config ~/.config/eww/test bar
 dunst &
+unclutter --timeout 10 --jitter 0 &
 greenclip daemon &
 tmux start &
 
