@@ -83,10 +83,6 @@ function s() {
     esac
 }
 
-function qst() {
-    QML2_IMPORT_PATH="$(pwd)${QML2_IMPORT_PATH:+:$QML2_IMPORT_PATH}" QML_IMPORT_PATH="$(pwd)${QML_IMPORT_PATH:+:$QML_IMPORT_PATH}" qs -p "$(pwd)"
-}
-
 function nd() {
   if [ -z "$1" ]; then
     nix develop --command zsh

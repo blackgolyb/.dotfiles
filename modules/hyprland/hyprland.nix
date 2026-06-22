@@ -16,22 +16,35 @@
     qrencode
     quickshell
     wl-clipboard
-    (writeShellScriptBin "qs-hyprland" ''
+    (writeShellScriptBin "qsm" ''
       set -eu
 
       config_path="''${XDG_CONFIG_HOME:-$HOME/.config}/quickshell"
+      qs_args=()
 
-      if [ "$#" -gt 0 ] && { [ -d "$1" ] || [ -f "$1" ]; }; then
-        config_path="$1"
-        shift
-      elif [ -d "$PWD/modules/hyprland/quickshell" ]; then
-        config_path="$PWD/modules/hyprland/quickshell"
-      fi
+      while [ "$#" -gt 0 ]; do
+        case "$1" in
+          -p)
+            if [ "$#" -lt 2 ]; then
+              echo "error: -p requires a path argument" >&2
+              exit 1
+            fi
+            config_path="$2"
+            shift 2
+            ;;
+          *)
+            qs_args+=("$1")
+            shift
+            ;;
+        esac
+      done
+
+      rm -rf "$HOME/.cache/quickshell/qmlcache/"
 
       export QML2_IMPORT_PATH="$config_path''${QML2_IMPORT_PATH:+:$QML2_IMPORT_PATH}"
       export QML_IMPORT_PATH="$config_path''${QML_IMPORT_PATH:+:$QML_IMPORT_PATH}"
 
-      exec qs -p "$config_path" "$@"
+      exec qs -p "$config_path" "''${qs_args[@]}"
     '')
     (writeShellScriptBin "lock" ''
       exec qs ipc call lock open
