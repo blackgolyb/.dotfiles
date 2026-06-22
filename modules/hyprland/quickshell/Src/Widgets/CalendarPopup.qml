@@ -32,6 +32,9 @@ PopupWindow {
             viewDate = firstOfMonth(clockDate);
             selectedDate = startOfDay(clockDate);
         }
+        else {
+            clearSelectorFocus();
+        }
     }
 
     function startOfDay(date) {
@@ -53,6 +56,11 @@ PopupWindow {
     function selectDate(date) {
         selectedDate = startOfDay(date);
         viewDate = firstOfMonth(date);
+    }
+
+    function clearSelectorFocus() {
+        monthSelector.clearInputFocus();
+        yearSelector.clearInputFocus();
     }
 
     function setViewMonth(month) {
@@ -113,6 +121,10 @@ PopupWindow {
         implicitWidth: 360
         implicitHeight: content.implicitHeight + 28
 
+        Ui.UiFocusSink {
+            onSinkClicked: root.clearSelectorFocus()
+        }
+
         ColumnLayout {
             id: content
 
@@ -130,7 +142,7 @@ PopupWindow {
                     radius: Ui.Theme.radiusSm
                     color: previousMouse.containsMouse ? Ui.Theme.surfaceHover : Ui.Theme.surfaceSunken
 
-                    MouseArea {
+                    Ui.UiClickArea {
                         id: previousMouse
 
                         anchors.fill: parent
@@ -183,6 +195,7 @@ PopupWindow {
                                 Layout.preferredHeight: 30
                                 model: root.yearOptions
                                 currentIndex: root.yearOptions.indexOf(root.viewDate.getFullYear())
+                                inlineCompletion: false
                                 validator: IntValidator {
                                     bottom: 1
                                     top: 9999
@@ -212,7 +225,7 @@ PopupWindow {
                     radius: Ui.Theme.radiusSm
                     color: nextMouse.containsMouse ? Ui.Theme.surfaceHover : Ui.Theme.surfaceSunken
 
-                    MouseArea {
+                    Ui.UiClickArea {
                         id: nextMouse
 
                         anchors.fill: parent
@@ -267,7 +280,7 @@ PopupWindow {
                         border.width: today && !selected ? 1 : 0
                         border.color: Ui.Theme.accent
 
-                        MouseArea {
+                        Ui.UiClickArea {
                             id: dayMouse
 
                             anchors.fill: parent

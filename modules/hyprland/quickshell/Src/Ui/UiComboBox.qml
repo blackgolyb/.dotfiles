@@ -7,6 +7,8 @@ Controls.ComboBox {
     property int arrowWidth: 30
     property int textPixelSize: Theme.textMd
     property int textHorizontalAlignment: TextInput.AlignLeft
+    property bool openPopupOnTextEdited: true
+    property bool inlineCompletion: true
 
     editable: true
     implicitHeight: 30
@@ -16,6 +18,27 @@ Controls.ComboBox {
     bottomPadding: 0
     font.family: Theme.fontFamily
     font.pixelSize: root.textPixelSize
+
+    function clearInputFocus(): void {
+        if (root.popup.visible)
+            root.popup.close();
+        textInput.focus = false;
+        root.focus = false;
+    }
+
+    function completionSuffix(prefix) {
+        if (!root.inlineCompletion || prefix.length === 0)
+            return "";
+
+        const normalized = prefix.toLowerCase();
+        for (let index = 0; index < root.count; index++) {
+            const candidate = root.textAt(index);
+            if (candidate.toLowerCase().startsWith(normalized) && candidate !== prefix)
+                return candidate.slice(prefix.length);
+        }
+
+        return "";
+    }
 
     delegate: Controls.ItemDelegate {
         required property var modelData
@@ -84,12 +107,42 @@ Controls.ComboBox {
             clip: true
             activeFocusOnPress: true
             validator: root.validator
-            onTextEdited: root.editText = text
+            onTextEdited: {
+                root.editText = text;
+                if (root.openPopupOnTextEdited && !root.popup.visible)
+                    root.popup.open();
+            }
             Keys.onReturnPressed: root.accepted()
             Keys.onEnterPressed: root.accepted()
+            Keys.onEscapePressed: {
+                root.popup.close();
+                root.clearInputFocus();
+            }
 
             HoverHandler {
                 id: textHover
+            }
+
+            TextMetrics {
+                id: completionPrefixMetrics
+
+                font: textInput.font
+                text: textInput.text
+            }
+
+            Text {
+                readonly property string suffix: root.completionSuffix(textInput.text)
+
+                x: textInput.leftPadding + completionPrefixMetrics.width
+                y: Math.round((textInput.height - height) / 2)
+                width: Math.max(0, textInput.width - x - textInput.rightPadding)
+                text: suffix
+                visible: textInput.activeFocus && textInput.cursorPosition === textInput.text.length && textInput.selectedText.length === 0 && suffix.length > 0
+                color: Theme.textMuted
+                elide: Text.ElideRight
+                font.family: Theme.fontFamily
+                font.pixelSize: root.textPixelSize
+                verticalAlignment: Text.AlignVCenter
             }
         }
     }
