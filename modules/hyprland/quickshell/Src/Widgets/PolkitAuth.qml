@@ -3,31 +3,23 @@ import QtQuick.Controls
 import QtQuick.Layouts
 import Quickshell
 import Quickshell.Services.Polkit
-import Quickshell.Wayland
 import Quickshell.Widgets
 import Src.Ui as Ui
 
-PanelWindow {
+Ui.UiOverlay {
     id: root
 
-    required property var anchorWindow
     readonly property var flow: agent.flow
 
+    namespaceName: "polkit-auth"
+    enableBlur: true
+    exclusiveKeyboard: true
+    focusableWindow: true
+    overlay: true
+    dimOpacity: 0.34
     screen: root.anchorWindow.screen
+    onDismissed: root.cancel()
     visible: agent.isActive
-    color: Ui.Theme.transparent
-    exclusionMode: ExclusionMode.Ignore
-    focusable: true
-    WlrLayershell.layer: WlrLayer.Overlay
-    WlrLayershell.keyboardFocus: WlrKeyboardFocus.Exclusive
-    WlrLayershell.namespace: "quickshell-overlay-polkit-auth"
-
-    anchors {
-        top: true
-        bottom: true
-        left: true
-        right: true
-    }
 
     onVisibleChanged: {
         if (visible) {
@@ -49,12 +41,6 @@ PanelWindow {
     PolkitAgent {
         id: agent
         path: "/org/quickshell/Polkit"
-    }
-
-    Ui.UiOverlay {
-        anchors.fill: parent
-        dimOpacity: 0.34
-        onDismissed: root.cancel()
     }
 
     Ui.UiCard {

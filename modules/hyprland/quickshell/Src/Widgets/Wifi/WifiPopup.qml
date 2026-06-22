@@ -1,21 +1,17 @@
 import QtQuick
 import QtQuick.Layouts
-import Quickshell
 import Src.Ui as Ui
 
-PopupWindow {
+Ui.UiPopup {
     id: root
 
-    required property var anchorWindow
     required property var service
 
-    anchor.window: root.anchorWindow
     anchor.rect.x: root.anchorWindow != null ? root.anchorWindow.width - root.implicitWidth - 84 : 0
     anchor.rect.y: root.anchorWindow != null ? root.anchorWindow.height + 8 : 0
     implicitWidth: 420
     implicitHeight: 500
     grabFocus: true
-    color: Ui.Theme.transparent
 
     onVisibleChanged: {
         if (visible)

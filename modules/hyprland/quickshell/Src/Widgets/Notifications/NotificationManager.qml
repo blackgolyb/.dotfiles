@@ -1,7 +1,6 @@
 import QtQuick
 import QtQuick.Layouts
 import Quickshell
-import Quickshell.Wayland
 import Src.Services as Services
 import Src.Ui as Ui
 
@@ -12,7 +11,7 @@ Item {
         id: notificationService
     }
 
-    PanelWindow {
+    Ui.UiOverlay {
         id: notificationWindow
 
         readonly property int notificationCount: notificationService.visibleNotifications.length
@@ -20,10 +19,9 @@ Item {
         implicitWidth: 360
         implicitHeight: Math.min(620, Math.max(1, notificationColumn.implicitHeight))
         visible: notificationCount > 0
-        color: Ui.Theme.transparent
+        namespaceName: "notifications"
+        enableBlur: true
         exclusiveZone: 0
-        WlrLayershell.layer: WlrLayer.Overlay
-        WlrLayershell.namespace: "quickshell-overlay-notifications"
 
         anchors {
             top: true

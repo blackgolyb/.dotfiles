@@ -1,24 +1,20 @@
 import QtQuick
 import QtQuick.Layouts
-import Quickshell
 import Src.Ui as Ui
 
-PopupWindow {
+Ui.UiPopup {
     id: root
 
-    required property var anchorWindow
     required property var clockDate
     property var viewDate: firstOfMonth(clockDate ?? new Date())
     property var selectedDate: startOfDay(clockDate ?? new Date())
 
-    anchor.window: root.anchorWindow
     anchor.rect.x: root.anchorWindow.width - implicitWidth - 20
     anchor.rect.y: root.anchorWindow.height + 8
     implicitWidth: 360
     implicitHeight: calendarCard.implicitHeight
     visible: false
     grabFocus: true
-    color: Ui.Theme.transparent
 
     Keys.onEscapePressed: root.visible = false
 

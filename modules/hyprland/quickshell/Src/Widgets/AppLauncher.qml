@@ -1,31 +1,22 @@
 import QtQuick
 import Quickshell
 import Quickshell.Io
-import Quickshell.Wayland
 import Src.Search as Search
 import Src.Search.Sources as Sources
 import Src.Ui as Ui
 
-PanelWindow {
+Ui.UiOverlay {
     id: root
 
-    required property var anchorWindow
-
+    namespaceName: "app-launcher"
+    enableBlur: true
+    exclusiveKeyboard: true
+    focusableWindow: true
+    overlay: true
+    dimOpacity: 0.28
     screen: root.anchorWindow.screen
+    onDismissed: root.close()
     visible: false
-    color: Ui.Theme.transparent
-    exclusionMode: ExclusionMode.Ignore
-    focusable: true
-    WlrLayershell.layer: WlrLayer.Overlay
-    WlrLayershell.keyboardFocus: WlrKeyboardFocus.Exclusive
-    WlrLayershell.namespace: "quickshell-overlay-app-launcher"
-
-    anchors {
-        top: true
-        bottom: true
-        left: true
-        right: true
-    }
 
     onVisibleChanged: {
         if (visible) {
@@ -95,19 +86,13 @@ PanelWindow {
         }
     }
 
-    Ui.UiOverlay {
-        anchors.fill: parent
-        dimOpacity: 0.28
-        onDismissed: root.close()
-
-        Search.SearchView {
-            id: searchView
-            width: Math.min(root.width - 40, 720)
-            height: Math.min(root.height - 80, 560)
-            anchors.centerIn: parent
-            sources: [appSource, calculatorSource, webSource, clipboardSource]
-            onAccepted: root.close()
-            onCloseRequested: root.close()
-        }
+    Search.SearchView {
+        id: searchView
+        width: Math.min(root.width - 40, 720)
+        height: Math.min(root.height - 80, 560)
+        anchors.centerIn: parent
+        sources: [appSource, calculatorSource, webSource, clipboardSource]
+        onAccepted: root.close()
+        onCloseRequested: root.close()
     }
 }

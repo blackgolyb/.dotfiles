@@ -3,13 +3,11 @@ import QtQuick.Layouts
 import Quickshell
 import Quickshell.Hyprland
 import Quickshell.Io
-import Quickshell.Wayland
 import Src.Ui as Ui
 
-PanelWindow {
+Ui.UiOverlay {
     id: root
 
-    required property var anchorWindow
     readonly property var actions: [
         {
             label: "Lock",
@@ -38,21 +36,15 @@ PanelWindow {
         },
     ]
 
+    namespaceName: "power-menu"
+    enableBlur: true
+    exclusiveKeyboard: true
+    focusableWindow: true
+    overlay: true
+    dimOpacity: 0.22
     screen: root.anchorWindow.screen
+    onDismissed: root.visible = false
     visible: false
-    color: Ui.Theme.transparent
-    exclusionMode: ExclusionMode.Ignore
-    focusable: true
-    WlrLayershell.layer: WlrLayer.Overlay
-    WlrLayershell.keyboardFocus: WlrKeyboardFocus.Exclusive
-    WlrLayershell.namespace: "quickshell-overlay-power-menu"
-
-    anchors {
-        top: true
-        bottom: true
-        left: true
-        right: true
-    }
 
     onVisibleChanged: {
         if (visible)
@@ -81,12 +73,6 @@ PanelWindow {
         anchors.fill: parent
         focus: root.visible
         Keys.onEscapePressed: root.visible = false
-    }
-
-    Ui.UiOverlay {
-        anchors.fill: parent
-        dimOpacity: 0.22
-        onDismissed: root.visible = false
     }
 
     Ui.UiCard {

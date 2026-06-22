@@ -1,7 +1,6 @@
 import QtQuick
 import QtQuick.Layouts
 import Quickshell
-import Quickshell.Wayland
 import Src.Ui as Ui
 
 Scope {
@@ -34,15 +33,13 @@ Scope {
     LazyLoader {
         id: popupLoader
 
-        PanelWindow {
+        Ui.UiOverlay {
             id: popup
 
             implicitWidth: Math.min(contentCard.implicitWidth, 680)
             implicitHeight: contentCard.implicitHeight
-            color: Ui.Theme.transparent
-            exclusionMode: ExclusionMode.Ignore
-            WlrLayershell.layer: WlrLayer.Overlay
-            WlrLayershell.namespace: "quickshell-reload-popup"
+            namespaceName: "reload-popup"
+            enableBlur: false
 
             anchors {
                 top: true

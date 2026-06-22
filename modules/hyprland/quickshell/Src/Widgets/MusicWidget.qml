@@ -180,15 +180,14 @@ Item {
         }
     }
 
-    PopupWindow {
+    Ui.UiPopup {
         id: popup
-        anchor.window: root.anchorWindow
+        anchorWindow: root.anchorWindow
         anchor.rect.x: root.anchorWindow != null ? Math.max(20, Math.round((root.anchorWindow.width - popup.implicitWidth) / 2)) : 0
         anchor.rect.y: root.anchorWindow != null ? root.anchorWindow.height + 8 : 0
         implicitWidth: 420
         implicitHeight: 156
         visible: root.detailsOpen && root.hasPlayers
-        color: Ui.Theme.transparent
 
         Ui.UiCard {
             id: popupCard
