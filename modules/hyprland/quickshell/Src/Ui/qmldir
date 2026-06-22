@@ -2,6 +2,7 @@ module Src.Ui
 singleton Theme 1.0 Theme.qml
 UiButton 1.0 UiButton.qml
 UiCard 1.0 UiCard.qml
+UiComboBox 1.0 UiComboBox.qml
 UiIcon 1.0 UiIcon.qml
 UiListItem 1.0 UiListItem.qml
 UiOverlay 1.0 UiOverlay.qml

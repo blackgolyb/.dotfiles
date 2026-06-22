@@ -1,5 +1,6 @@
 import QtQuick
 import Quickshell
+import Quickshell.Hyprland
 import Src.Ui as Ui
 
 Item {
@@ -31,5 +32,12 @@ Item {
         id: calendar
         anchorWindow: root.anchorWindow
         clockDate: clock.date
+        onVisibleChanged: calendarFocusGrab.active = visible
+    }
+
+    HyprlandFocusGrab {
+        id: calendarFocusGrab
+        windows: [calendar]
+        onCleared: calendar.visible = false
     }
 }
