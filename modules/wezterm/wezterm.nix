@@ -1,7 +1,12 @@
 { config, pkgs, lib, ... }:
+
+let
+  inherit (import ../dotfiles/lib.nix { inherit config lib; }) dotfileConfig;
+in
+lib.mkMerge [
 {
   programs.wezterm.enable = true;
-
-  xdg.configFile."wezterm/wezterm.lua".source = ./wezterm.lua;
-  xdg.configFile."wezterm/colors/custom.toml".source = ./colors/custom.toml;
 }
+  (dotfileConfig "wezterm/wezterm.lua" "modules/wezterm/wezterm.lua" ./wezterm.lua { })
+  (dotfileConfig "wezterm/colors/custom.toml" "modules/wezterm/colors/custom.toml" ./colors/custom.toml { })
+]

@@ -1,5 +1,9 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
+let
+  inherit (import ../dotfiles/lib.nix { inherit config lib; }) dotfileConfig;
+in
+lib.mkMerge [
 {
   programs.rofi = {
     enable = true;
@@ -11,8 +15,6 @@
     };
   };
 
-  xdg.configFile.rofi = {
-    source = ./.;
-    recursive = true;
-  };
 }
+  (dotfileConfig "rofi" "modules/rofi" ./. { recursive = true; })
+]

@@ -1,4 +1,9 @@
 { config, lib, pkgs, ... }:
+
+let
+  inherit (import ../dotfiles/lib.nix { inherit config lib; }) dotfileConfig;
+in
+lib.mkMerge [
 {
     home.packages = with pkgs; [
         xgamma
@@ -14,20 +19,7 @@
       GDK_PIXBUF_MODULE_FILE = "${pkgs.librsvg}/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache";
     };
 
-    xdg.configFile.qtile = {
-      source = ./.;
-      recursive = true;
-      force = true;
-    };
-
-    xdg.configFile."qtile/resources" = {
-      source = ../../resources;
-      force = true;
-    };
-
-    xdg.configFile."picom/picom.conf" = {
-      source = ./picom.conf;
-      force = true;
-    };
-
 }
+  (dotfileConfig "qtile" "modules/qtile" ./. { recursive = true; force = true; })
+  (dotfileConfig "picom/picom.conf" "modules/qtile/picom.conf" ./picom.conf { force = true; })
+]

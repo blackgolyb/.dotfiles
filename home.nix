@@ -1,6 +1,7 @@
 { config, pkgs, system, inputs, ... }:
 {
   imports = [
+    ./modules/dotfiles/dotfiles.nix
     ./modules/qtile/qtile.nix
     ./modules/hyprland/hyprland.nix
     ./modules/flameshot/flameshot.nix
@@ -26,6 +27,8 @@
 # want to update the value, then make sure to first check the Home Manager
 # release notes.
   home.stateVersion = "24.11"; # Please read the comment before changing.
+
+  dotfiles.pure = false;
 
   services.gnome-keyring.enable = true;
 # The home.packages option allows you to install Nix packages into your
