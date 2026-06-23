@@ -1,8 +1,5 @@
 { config, lib, pkgs, ... }:
 
-let
-  inherit (import ../dotfiles/lib.nix { inherit config lib; }) dotfileConfig;
-in
 {
   imports = [
     ../starship/starship.nix
@@ -50,6 +47,11 @@ in
         '';
       };
     }
-    (dotfileConfig "zsh/zshrc" "modules/zsh/.zshrc" ./.zshrc { })
+    {
+      dotfiles.config."zsh/zshrc" = {
+        path = "modules/zsh/.zshrc";
+        source = ./.zshrc;
+      };
+    }
   ];
 }

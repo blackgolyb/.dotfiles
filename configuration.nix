@@ -154,7 +154,9 @@
 
   home-manager = {
     # also pass inputs to home-manager modules
-    extraSpecialArgs = {inherit inputs;};
+    extraSpecialArgs = {
+      inherit inputs;
+    };
     backupFileExtension = "backup";
     users = {
       "blackgolyb" = import ./home.nix;

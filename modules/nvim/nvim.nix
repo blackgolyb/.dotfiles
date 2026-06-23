@@ -1,9 +1,5 @@
-{ config, lib, pkgs, ... }:
+{ pkgs, ... }:
 
-let
-  inherit (import ../dotfiles/lib.nix { inherit config lib; }) dotfileConfig;
-in
-lib.mkMerge [
 {
   programs.neovim = {
     enable = true;
@@ -43,6 +39,9 @@ lib.mkMerge [
     marksman
   ];
 
+  dotfiles.config."nvim" = {
+    path = "modules/nvim";
+    source = ./.;
+    recursive = true;
+  };
 }
-  (dotfileConfig "nvim" "modules/nvim" ./. { recursive = true; })
-]

@@ -1,6 +1,9 @@
-{ config, lib, pkgs, ... }:
+{ ... }:
 
-let
-  inherit (import ../dotfiles/lib.nix { inherit config lib; }) dotfileConfig;
-in
-dotfileConfig "rofi-network-manager" "modules/rofi-network-manager" ./. { recursive = true; }
+{
+  dotfiles.config."rofi-network-manager" = {
+    path = "modules/rofi-network-manager";
+    source = ./.;
+    recursive = true;
+  };
+}

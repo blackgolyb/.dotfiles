@@ -1,8 +1,6 @@
-{ config, lib, pkgs, ... }:
+{ config, pkgs, ... }:
 
 let
-  inherit (import ../dotfiles/lib.nix { inherit config lib; }) dotfileConfig;
-
   # Workaround for Zed's managed Node.js not working on NixOS.
   # Zed downloads a generic Linux node binary that fails due to missing dynamic linker.
   # We create a directory that symlinks to Nix's nodejs, with a writable cache dir.
@@ -17,7 +15,6 @@ let
     ln -s ${config.home.homeDirectory}/.cache/zed-node $out/cache
   '';
 in
-lib.mkMerge [
 {
     # Symlink Nix nodejs into the location Zed expects
     home.file.".local/share/zed/node/${zedNodeVersion}".source = zedNodeShim;
@@ -26,6 +23,9 @@ lib.mkMerge [
     	zed-editor
     ];
 
+    dotfiles.config."zed" = {
+      path = "modules/zed";
+      source = ./.;
+      force = true;
+    };
 }
-  (dotfileConfig "zed" "modules/zed" ./. { force = true; })
-]

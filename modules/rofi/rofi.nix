@@ -1,20 +1,22 @@
-{ config, lib, pkgs, ... }:
+{ lib, pkgs, ... }:
 
-let
-  inherit (import ../dotfiles/lib.nix { inherit config lib; }) dotfileConfig;
-in
 lib.mkMerge [
-{
-  programs.rofi = {
-    enable = true;
-    package = pkgs.rofi.override {
-      plugins = [ 
-        pkgs.rofi-calc 
-        pkgs.rofi-emoji 
-      ];
+  {
+    programs.rofi = {
+      enable = true;
+      package = pkgs.rofi.override {
+        plugins = [
+          pkgs.rofi-calc
+          pkgs.rofi-emoji
+        ];
+      };
     };
-  };
-
-}
-  (dotfileConfig "rofi" "modules/rofi" ./. { recursive = true; })
+  }
+  {
+    dotfiles.config."rofi" = {
+      path = "modules/rofi";
+      source = ./.;
+      recursive = true;
+    };
+  }
 ]

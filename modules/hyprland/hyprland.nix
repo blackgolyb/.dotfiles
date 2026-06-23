@@ -1,9 +1,5 @@
-{ config, lib, pkgs, ... }:
+{ pkgs, ... }:
 
-let
-  inherit (import ../dotfiles/lib.nix { inherit config lib; }) dotfileConfig dotfileData;
-in
-lib.mkMerge [
 {
   home.packages = with pkgs; [
     brightnessctl
@@ -64,20 +60,90 @@ lib.mkMerge [
     [Icon Theme]
     Name=qtile-cursors
   '';
+
+  dotfiles.config = {
+    "hypr/hyprland.lua" = {
+      path = "modules/hyprland/hyprland.lua";
+      source = ./hyprland.lua;
+    };
+
+    "quickshell/shell.qml" = {
+      path = "modules/hyprland/quickshell/shell.qml";
+      source = ./quickshell/shell.qml;
+    };
+
+    "quickshell/Src" = {
+      path = "modules/hyprland/quickshell/Src";
+      source = ./quickshell/Src;
+    };
+
+    "quickshell/battery_icons" = {
+      path = "resources/battery_icons";
+      source = ../../resources/battery_icons;
+    };
+
+    "hypr/wallpapers" = {
+      path = "resources/wallpapers";
+      source = ../../resources/wallpapers;
+    };
+
+    "hypr/scripts/autostart.sh" = {
+      path = "modules/hyprland/scripts/autostart.sh";
+      source = ./scripts/autostart.sh;
+      executable = true;
+    };
+
+    "hypr/scripts/brightness_control" = {
+      path = "modules/hyprland/scripts/brightness_control";
+      source = ./scripts/brightness_control;
+      executable = true;
+    };
+
+    "hypr/scripts/device_manager" = {
+      path = "modules/hyprland/scripts/device_manager";
+      source = ./scripts/device_manager;
+      executable = true;
+    };
+
+    "hypr/scripts/multi_monitor" = {
+      path = "modules/hyprland/scripts/multi_monitor";
+      source = ./scripts/multi_monitor;
+      executable = true;
+    };
+
+    "hypr/scripts/pick_color" = {
+      path = "modules/hyprland/scripts/pick_color";
+      source = ./scripts/pick_color;
+      executable = true;
+    };
+
+    "hypr/scripts/screenshot" = {
+      path = "modules/hyprland/scripts/screenshot";
+      source = ./scripts/screenshot;
+      executable = true;
+    };
+
+    "hypr/scripts/video_wallpaper" = {
+      path = "modules/hyprland/scripts/video_wallpaper";
+      source = ./scripts/video_wallpaper;
+      executable = true;
+    };
+
+    "hypr/scripts/volume_control" = {
+      path = "modules/hyprland/scripts/volume_control";
+      source = ./scripts/volume_control;
+      executable = true;
+    };
+
+    "hypr/scripts/wallpaper_control" = {
+      path = "modules/hyprland/scripts/wallpaper_control";
+      source = ./scripts/wallpaper_control;
+      executable = true;
+    };
+  };
+
+  dotfiles.data."icons/qtile-cursors/cursors" = {
+    path = "resources/cursors";
+    source = ../../resources/cursors;
+  };
 }
-  (dotfileConfig "hypr/hyprland.lua" "modules/hyprland/hyprland.lua" ./hyprland.lua { })
-  (dotfileConfig "quickshell/shell.qml" "modules/hyprland/quickshell/shell.qml" ./quickshell/shell.qml { })
-  (dotfileConfig "quickshell/Src" "modules/hyprland/quickshell/Src" ./quickshell/Src { })
-  (dotfileConfig "quickshell/battery_icons" "resources/battery_icons" ../../resources/battery_icons { })
-  (dotfileConfig "hypr/wallpapers" "resources/wallpapers" ../../resources/wallpapers { })
-  (dotfileData "icons/qtile-cursors/cursors" "resources/cursors" ../../resources/cursors { })
-  (dotfileConfig "hypr/scripts/autostart.sh" "modules/hyprland/scripts/autostart.sh" ./scripts/autostart.sh { executable = true; })
-  (dotfileConfig "hypr/scripts/brightness_control" "modules/hyprland/scripts/brightness_control" ./scripts/brightness_control { executable = true; })
-  (dotfileConfig "hypr/scripts/device_manager" "modules/hyprland/scripts/device_manager" ./scripts/device_manager { executable = true; })
-  (dotfileConfig "hypr/scripts/multi_monitor" "modules/hyprland/scripts/multi_monitor" ./scripts/multi_monitor { executable = true; })
-  (dotfileConfig "hypr/scripts/pick_color" "modules/hyprland/scripts/pick_color" ./scripts/pick_color { executable = true; })
-  (dotfileConfig "hypr/scripts/screenshot" "modules/hyprland/scripts/screenshot" ./scripts/screenshot { executable = true; })
-  (dotfileConfig "hypr/scripts/video_wallpaper" "modules/hyprland/scripts/video_wallpaper" ./scripts/video_wallpaper { executable = true; })
-  (dotfileConfig "hypr/scripts/volume_control" "modules/hyprland/scripts/volume_control" ./scripts/volume_control { executable = true; })
-  (dotfileConfig "hypr/scripts/wallpaper_control" "modules/hyprland/scripts/wallpaper_control" ./scripts/wallpaper_control { executable = true; })
-]

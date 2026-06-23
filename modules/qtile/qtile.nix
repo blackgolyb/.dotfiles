@@ -1,9 +1,4 @@
-{ config, lib, pkgs, ... }:
-
-let
-  inherit (import ../dotfiles/lib.nix { inherit config lib; }) dotfileConfig;
-in
-lib.mkMerge [
+{ pkgs, ... }:
 {
     home.packages = with pkgs; [
         xgamma
@@ -19,7 +14,16 @@ lib.mkMerge [
       GDK_PIXBUF_MODULE_FILE = "${pkgs.librsvg}/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache";
     };
 
+    dotfiles.config."qtile" = {
+      path = "modules/qtile";
+      source = ./.;
+      recursive = true;
+      force = true;
+    };
+
+    dotfiles.config."picom/picom.conf" = {
+      path = "modules/qtile/picom.conf";
+      source = ./picom.conf;
+      force = true;
+    };
 }
-  (dotfileConfig "qtile" "modules/qtile" ./. { recursive = true; force = true; })
-  (dotfileConfig "picom/picom.conf" "modules/qtile/picom.conf" ./picom.conf { force = true; })
-]

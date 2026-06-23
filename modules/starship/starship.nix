@@ -1,13 +1,15 @@
-{ config, pkgs, lib, ... }:
+{ pkgs, lib, ... }:
 
-let
-  inherit (import ../dotfiles/lib.nix { inherit config lib; }) dotfileConfig;
-in
 lib.mkMerge [
-{
+  {
     home.packages = with pkgs; [
       starship
     ];
-}
-  (dotfileConfig "starship/starship.toml" "modules/starship/starship.toml" ./starship.toml { })
+  }
+  {
+    dotfiles.config."starship/starship.toml" = {
+      path = "modules/starship/starship.toml";
+      source = ./starship.toml;
+    };
+  }
 ]
