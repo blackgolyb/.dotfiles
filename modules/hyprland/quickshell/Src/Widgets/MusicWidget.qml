@@ -1,6 +1,7 @@
 import QtQuick
 import QtQuick.Layouts
 import Quickshell
+import Quickshell.Io
 import Quickshell.Services.Mpris
 import Src.Ui as Ui
 
@@ -9,7 +10,10 @@ Item {
 
     property var anchorWindow: null
 
-    readonly property var players: Mpris.players.values
+    readonly property var allowedPlayerNames: ["pear-desktop", "com.github.th_ch.youtube_music", "youtube_music"]
+    readonly property var blockedPlayerNames: ["firefox", "zen", "chromium", "google-chrome", "google chrome", "brave", "vivaldi", "opera", "microsoft-edge", "microsoft edge", "librewolf", "waterfox", "floorp"]
+    readonly property var blockedPlayerDbusPrefixes: ["firefox", "zen", "librewolf", "waterfox", "floorp"]
+    readonly property var players: Mpris.players.values.filter(player => !isBlockedPlayer(player))
     readonly property bool hasPlayers: players.length > 0
     readonly property var player: players.find(player => player.isPlaying) ?? players[0] ?? null
     readonly property string title: player != null && player.trackTitle.length > 0 ? player.trackTitle : "Unknown Title"
@@ -38,10 +42,82 @@ Item {
         return `${minutes}:${rest.toString().padStart(2, "0")}`;
     }
 
+    function playerText(value) {
+        return value == null ? "" : value.toString().toLowerCase();
+    }
+
+    function playerIdentityText(player) {
+        return `${playerText(player.desktopEntry)} ${playerText(player.identity)}`;
+    }
+
+    function playerDbusName(player) {
+        return playerText(player.dbusName).replace(/^org\.mpris\.mediaplayer2\./, "");
+    }
+
+    function isBlockedPlayer(player) {
+        const identityText = playerIdentityText(player);
+        const dbusName = playerDbusName(player);
+
+        if (allowedPlayerNames.some(name => identityText.includes(name)))
+            return false;
+
+        if (blockedPlayerNames.some(name => identityText.includes(name)))
+            return true;
+
+        if (blockedPlayerDbusPrefixes.some(name =>
+            dbusName === name ||
+            dbusName.startsWith(`${name}.`) ||
+            dbusName.startsWith(`${name}_`)
+        ))
+            return true;
+
+        return false;
+    }
+
     function seekAt(mouseX, width) {
         if (!root.canSeek || root.player == null || root.length <= 0)
             return;
         root.player.position = Math.max(0, Math.min(root.length, root.length * mouseX / width));
+    }
+
+    function togglePlaying(): void {
+        if (root.player != null && root.player.canTogglePlaying)
+            root.player.togglePlaying();
+    }
+
+    function play(): void {
+        if (root.player != null && root.player.canPlay)
+            root.player.play();
+    }
+
+    function pause(): void {
+        if (root.player != null && root.player.canPause)
+            root.player.pause();
+    }
+
+    function stop(): void {
+        if (root.player != null && root.player.canControl)
+            root.player.stop();
+    }
+
+    function next(): void {
+        if (root.player != null && root.player.canGoNext)
+            root.player.next();
+    }
+
+    function previous(): void {
+        if (root.player != null && root.player.canGoPrevious)
+            root.player.previous();
+    }
+
+    function seek(offset: real): void {
+        if (root.player != null && root.player.canSeek)
+            root.player.seek(offset);
+    }
+
+    function setPosition(position: real): void {
+        if (root.canSeek && root.length > 0)
+            root.player.position = Math.max(0, Math.min(root.length, position));
     }
 
     function toggleDetails(open) {
@@ -65,6 +141,46 @@ Item {
         repeat: true
         running: root.player != null && root.playing
         onTriggered: root.player.positionChanged()
+    }
+
+    IpcHandler {
+        target: "music"
+
+        function toggle(): void {
+            root.togglePlaying();
+        }
+
+        function playPause(): void {
+            root.togglePlaying();
+        }
+
+        function play(): void {
+            root.play();
+        }
+
+        function pause(): void {
+            root.pause();
+        }
+
+        function stop(): void {
+            root.stop();
+        }
+
+        function next(): void {
+            root.next();
+        }
+
+        function previous(): void {
+            root.previous();
+        }
+
+        function seek(offset: real): void {
+            root.seek(offset);
+        }
+
+        function setPosition(position: real): void {
+            root.setPosition(position);
+        }
     }
 
     Rectangle {
