@@ -1,11 +1,10 @@
 { pkgs, ... }:
 
 {
-  programs.neovim = {
-    enable = true;
-  };
+  stylix.targets.neovim.enable = false;
 
   home.packages = with pkgs; [
+    neovim
     xclip
     unzip
     nodejs
@@ -40,8 +39,8 @@
   ];
 
   dotfiles.config."nvim" = {
-    path = "modules/nvim";
     source = ./.;
     recursive = true;
+    force = true;
   };
 }

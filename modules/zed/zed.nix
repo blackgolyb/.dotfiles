@@ -24,7 +24,6 @@ in
     ];
 
     dotfiles.config."zed" = {
-      path = "modules/zed";
       source = ./.;
       force = true;
     };

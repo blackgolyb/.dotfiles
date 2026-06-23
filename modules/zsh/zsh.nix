@@ -49,7 +49,6 @@
     }
     {
       dotfiles.config."zsh/zshrc" = {
-        path = "modules/zsh/.zshrc";
         source = ./.zshrc;
       };
     }

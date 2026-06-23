@@ -8,7 +8,6 @@ lib.mkMerge [
   }
   {
     dotfiles.config."starship/starship.toml" = {
-      path = "modules/starship/starship.toml";
       source = ./starship.toml;
     };
   }

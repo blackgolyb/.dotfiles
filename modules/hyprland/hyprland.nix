@@ -63,87 +63,72 @@
 
   dotfiles.config = {
     "hypr/hyprland.lua" = {
-      path = "modules/hyprland/hyprland.lua";
       source = ./hyprland.lua;
     };
 
     "quickshell/shell.qml" = {
-      path = "modules/hyprland/quickshell/shell.qml";
       source = ./quickshell/shell.qml;
     };
 
     "quickshell/Src" = {
-      path = "modules/hyprland/quickshell/Src";
       source = ./quickshell/Src;
     };
 
     "quickshell/battery_icons" = {
-      path = "resources/battery_icons";
       source = ../../resources/battery_icons;
     };
 
     "hypr/wallpapers" = {
-      path = "resources/wallpapers";
       source = ../../resources/wallpapers;
     };
 
     "hypr/scripts/autostart.sh" = {
-      path = "modules/hyprland/scripts/autostart.sh";
       source = ./scripts/autostart.sh;
       executable = true;
     };
 
     "hypr/scripts/brightness_control" = {
-      path = "modules/hyprland/scripts/brightness_control";
       source = ./scripts/brightness_control;
       executable = true;
     };
 
     "hypr/scripts/device_manager" = {
-      path = "modules/hyprland/scripts/device_manager";
       source = ./scripts/device_manager;
       executable = true;
     };
 
     "hypr/scripts/multi_monitor" = {
-      path = "modules/hyprland/scripts/multi_monitor";
       source = ./scripts/multi_monitor;
       executable = true;
     };
 
     "hypr/scripts/pick_color" = {
-      path = "modules/hyprland/scripts/pick_color";
       source = ./scripts/pick_color;
       executable = true;
     };
 
     "hypr/scripts/screenshot" = {
-      path = "modules/hyprland/scripts/screenshot";
       source = ./scripts/screenshot;
       executable = true;
     };
 
     "hypr/scripts/video_wallpaper" = {
-      path = "modules/hyprland/scripts/video_wallpaper";
       source = ./scripts/video_wallpaper;
       executable = true;
     };
 
     "hypr/scripts/volume_control" = {
-      path = "modules/hyprland/scripts/volume_control";
       source = ./scripts/volume_control;
       executable = true;
     };
 
     "hypr/scripts/wallpaper_control" = {
-      path = "modules/hyprland/scripts/wallpaper_control";
       source = ./scripts/wallpaper_control;
       executable = true;
     };
   };
 
   dotfiles.data."icons/qtile-cursors/cursors" = {
-    path = "resources/cursors";
     source = ../../resources/cursors;
   };
 }

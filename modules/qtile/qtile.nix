@@ -15,14 +15,12 @@
     };
 
     dotfiles.config."qtile" = {
-      path = "modules/qtile";
       source = ./.;
       recursive = true;
       force = true;
     };
 
     dotfiles.config."picom/picom.conf" = {
-      path = "modules/qtile/picom.conf";
       source = ./picom.conf;
       force = true;
     };

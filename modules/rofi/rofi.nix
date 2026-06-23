@@ -2,21 +2,22 @@
 
 lib.mkMerge [
   {
-    programs.rofi = {
-      enable = true;
-      package = pkgs.rofi.override {
+    home.packages = [
+      (pkgs.rofi.override {
         plugins = [
           pkgs.rofi-calc
           pkgs.rofi-emoji
         ];
-      };
-    };
+      })
+    ];
+
+    stylix.targets.rofi.enable = false;
   }
   {
     dotfiles.config."rofi" = {
-      path = "modules/rofi";
       source = ./.;
       recursive = true;
+      force = true;
     };
   }
 ]

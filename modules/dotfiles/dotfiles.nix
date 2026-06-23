@@ -1,4 +1,4 @@
-{ config, lib, ... }:
+{ config, inputs, lib, ... }:
 
 let
   cfg = config.dotfiles;
@@ -6,8 +6,9 @@ let
   entryType = lib.types.submodule {
     options = {
       path = lib.mkOption {
-        type = lib.types.str;
-        description = "Path relative to dotfiles.root used for impure symlinks.";
+        type = lib.types.nullOr lib.types.str;
+        default = null;
+        description = "Path relative to dotfiles.root used for impure symlinks. If null, it is inferred from source.";
       };
 
       source = lib.mkOption {
@@ -50,7 +51,18 @@ let
 
   renderActivationEntry = homeTarget: entry:
     let
-      source = "${cfg.root}/${entry.path}";
+      inferredPath =
+        let
+          sourceRoot = "${cfg.sourceRoot}/";
+          sourcePath = toString entry.source;
+          relativePath = lib.removePrefix sourceRoot sourcePath;
+        in
+        if relativePath == sourcePath then
+          throw "Cannot infer dotfile path for ${sourcePath}; set dotfiles.*.<name>.path explicitly or adjust dotfiles.sourceRoot."
+        else
+          relativePath;
+      repoPath = if entry.path == null then inferredPath else entry.path;
+      source = "${cfg.root}/${repoPath}";
       force = if entry.force then "1" else "0";
       executable = if entry.executable then "1" else "0";
     in
@@ -82,14 +94,44 @@ let
       run ln -s "$source" "$target"
     '';
 
+  renderPreCleanEntry = homeTarget: entry:
+    let
+      force = if entry.force then "1" else "0";
+    in
+    ''
+      target="$HOME/${homeTarget}"
+      force=${force}
+
+      if [ -L "$target" ]; then
+        run rm "$target"
+      elif [ -e "$target" ] && [ "$force" = 1 ]; then
+        run rm -rf "$target"
+      fi
+    '';
+
   renderConfigEntry = name: entry:
     renderActivationEntry ".config/${name}" entry;
+
+  renderPreCleanConfigEntry = name: entry:
+    renderPreCleanEntry ".config/${name}" entry;
 
   renderDataEntry = name: entry:
     renderActivationEntry ".local/share/${name}" entry;
 
+  renderPreCleanDataEntry = name: entry:
+    renderPreCleanEntry ".local/share/${name}" entry;
+
   renderFileEntry = name: entry:
     renderActivationEntry name entry;
+
+  renderPreCleanFileEntry = name: entry:
+    renderPreCleanEntry name entry;
+
+  preCleanScript = lib.concatStringsSep "\n" (
+    lib.mapAttrsToList renderPreCleanConfigEntry cfg.config
+    ++ lib.mapAttrsToList renderPreCleanDataEntry cfg.data
+    ++ lib.mapAttrsToList renderPreCleanFileEntry cfg.file
+  );
 
   activationScript = lib.concatStringsSep "\n" (
     lib.mapAttrsToList renderConfigEntry cfg.config
@@ -109,6 +151,12 @@ in
       type = lib.types.str;
       default = "${config.home.homeDirectory}/nixos";
       description = "Absolute path to the dotfiles repository used for impure symlinks.";
+    };
+
+    sourceRoot = lib.mkOption {
+      type = lib.types.str;
+      default = toString inputs.self;
+      description = "Nix source root used to infer repository-relative paths from source.";
     };
 
     config = lib.mkOption {
@@ -135,8 +183,12 @@ in
     xdg.dataFile = lib.mkIf cfg.pure (lib.mapAttrs (_: pureAttrs) cfg.data);
     home.file = lib.mkIf cfg.pure (lib.mapAttrs (_: pureAttrs) cfg.file);
 
+    home.activation.dotfilesPreClean = lib.mkIf (!cfg.pure) (
+      lib.hm.dag.entryBefore [ "linkGeneration" ] preCleanScript
+    );
+
     home.activation.dotfiles = lib.mkIf (!cfg.pure) (
-      lib.hm.dag.entryAfter [ "writeBoundary" ] activationScript
+      lib.hm.dag.entryAfter [ "linkGeneration" ] activationScript
     );
   };
 }
