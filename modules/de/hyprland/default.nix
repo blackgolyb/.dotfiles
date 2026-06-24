@@ -7,12 +7,6 @@ in
   options.my.de.hyprland.enable = lib.mkEnableOption "Hyprland desktop";
 
   config = lib.mkIf cfg.enable {
-    my.apps.flameshot.enable = lib.mkDefault true;
-    my.apps.rofi.enable = lib.mkDefault true;
-    my.apps.rofiNetworkManager.enable = lib.mkDefault true;
-    my.apps.thunar.enable = lib.mkDefault true;
-    my.apps.wezterm.enable = lib.mkDefault true;
-
     home.packages = with pkgs; [
       brightnessctl
       cliphist

@@ -1,0 +1,3 @@
+{
+  apps.starship.enable = true;
+}

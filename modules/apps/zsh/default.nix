@@ -8,8 +8,6 @@ in
 
   config = lib.mkIf cfg.enable (lib.mkMerge [
     {
-      my.apps.starship.enable = lib.mkDefault true;
-
       home.packages = with pkgs; [
         zsh
         fzf

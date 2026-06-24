@@ -1,0 +1,3 @@
+{
+  apps.rofi.enable = true;
+}

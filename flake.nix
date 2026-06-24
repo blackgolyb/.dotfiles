@@ -18,34 +18,11 @@
     };
   };
 
-  outputs = { self, nixpkgs, home-manager, stylix, ... }@inputs: 
+  outputs = { self, nixpkgs, home-manager, stylix, ... }@inputs:
     let
+      lib = nixpkgs.lib;
       system = "x86_64-linux";
-      enabled = {
-        apps = {
-          flameshot.enable = true;
-          nvim.enable = true;
-          rofi.enable = true;
-          rofiNetworkManager.enable = true;
-          starship.enable = true;
-          thunar.enable = true;
-          wezterm.enable = true;
-          zed.enable = true;
-          zsh.enable = true;
-        };
-
-        de = {
-          hyprland.enable = true;
-          qtile.enable = true;
-        };
-
-        hardware.kanata.enable = true;
-
-        system = {
-          plymouth.enable = true;
-          qemu.enable = true;
-        };
-      };
+      enabled = import ./enabled.nix { inherit lib; };
       pkgs = import nixpkgs {
         inherit system;
         config.allowUnfree = true;
