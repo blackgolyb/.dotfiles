@@ -2,18 +2,18 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, pkgs, inputs, ... }:
+{ config, pkgs, enabled, inputs, ... }:
 
 {
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
-      ./modules/kanata/kanata.nix
-      ./modules/plymouth/plymouth.nix
-      ./modules/thunar/thunar-system.nix
-      ./modules/qemu/qemu.nix
-      ./modules/qtile/qtile-sys.nix
-      ./modules/hyprland/hyprland-sys.nix
+      ./modules/apps/thunar/system.nix
+      ./modules/de/hyprland/system.nix
+      ./modules/de/qtile/system.nix
+      ./modules/hardware/kanata/kanata.nix
+      ./modules/system/plymouth/plymouth.nix
+      ./modules/system/qemu/qemu.nix
     ];
 
   nix.settings.experimental-features = ["nix-command" "flakes"];
@@ -60,20 +60,10 @@
     layout = "us";
     variant = "";
   };
-  services.xserver.enable = true;
-  services.xserver.updateDbusEnvironment = true;
-  services.xserver.desktopManager.runXdgAutostartIfNone = true;
-  services.xserver.windowManager.qtile = {
-    enable = true;
-    # package = pkgs.python312.pkgs.qtile;
-    extraPackages = python3Packages: with python3Packages; [
-      qtile-extras
-      requests
-    ];
-  };
-
-  services.xserver.displayManager.lightdm.greeters.slick.enable = true;
-  services.xserver.displayManager.lightdm.greeters.mini.enable = false;
+  my.apps.thunar = enabled.apps.thunar;
+  my.de = enabled.de;
+  my.hardware = enabled.hardware;
+  my.system = enabled.system;
 
   services.gnome.gnome-keyring.enable = true;
 
@@ -155,7 +145,7 @@
   home-manager = {
     # also pass inputs to home-manager modules
     extraSpecialArgs = {
-      inherit inputs;
+      inherit enabled inputs;
     };
     backupFileExtension = "backup";
     users = {
@@ -198,27 +188,5 @@
   # Before changing this value read the documentation for this option
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
   system.stateVersion = "25.05"; # Did you read the comment?
-
-  # Enable the uinput module
-  boot.kernelModules = [ "uinput" ];
-
-  # Enable uinput
-  hardware.uinput.enable = true;
-
-  # Set up udev rules for uinput
-  services.udev.extraRules = ''
-    KERNEL=="uinput", MODE="0660", GROUP="uinput", OPTIONS+="static_node=uinput"
-  '';
-
-  # Ensure the uinput group exists
-  users.groups.uinput = { };
-
-  # Add the Kanata service user to necessary groups
-   systemd.services.kanata-internalKeyboard.serviceConfig = {
-     SupplementaryGroups = [
-       "input"
-       "uinput"
-     ];
-   };
 
 }

@@ -1,17 +1,18 @@
-{ config, pkgs, system, inputs, ... }:
+{ config, pkgs, system, enabled, inputs, ... }:
 {
   imports = [
-    ./modules/dotfiles/dotfiles.nix
-    ./modules/qtile/qtile.nix
-    ./modules/hyprland/hyprland.nix
-    ./modules/flameshot/flameshot.nix
-    ./modules/zsh/zsh.nix
-    ./modules/wezterm/wezterm.nix
-    ./modules/nvim/nvim.nix
-    ./modules/zed/zed.nix
-    ./modules/rofi/rofi.nix
-    ./modules/rofi-network-manager/rofi-network-manager.nix
-    ./modules/thunar/thunar.nix
+    ./modules/core/dotfiles/dotfiles.nix
+    ./modules/apps/flameshot
+    ./modules/apps/nvim
+    ./modules/apps/rofi
+    ./modules/apps/rofi-network-manager
+    ./modules/apps/starship
+    ./modules/apps/thunar
+    ./modules/apps/wezterm
+    ./modules/apps/zed
+    ./modules/apps/zsh
+    ./modules/de/hyprland
+    ./modules/de/qtile
     inputs.zen-browser.homeModules.twilight
   ];
 # Home Manager needs a bit of information about you and the paths it should
@@ -29,6 +30,9 @@
   home.stateVersion = "24.11"; # Please read the comment before changing.
 
   dotfiles.pure = false;
+
+  my.apps = enabled.apps;
+  my.de = enabled.de;
 
   services.gnome-keyring.enable = true;
 # The home.packages option allows you to install Nix packages into your

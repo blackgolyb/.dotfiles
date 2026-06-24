@@ -21,13 +21,38 @@
   outputs = { self, nixpkgs, home-manager, stylix, ... }@inputs: 
     let
       system = "x86_64-linux";
+      enabled = {
+        apps = {
+          flameshot.enable = true;
+          nvim.enable = true;
+          rofi.enable = true;
+          rofiNetworkManager.enable = true;
+          starship.enable = true;
+          thunar.enable = true;
+          wezterm.enable = true;
+          zed.enable = true;
+          zsh.enable = true;
+        };
+
+        de = {
+          hyprland.enable = true;
+          qtile.enable = true;
+        };
+
+        hardware.kanata.enable = true;
+
+        system = {
+          plymouth.enable = true;
+          qemu.enable = true;
+        };
+      };
       pkgs = import nixpkgs {
         inherit system;
         config.allowUnfree = true;
       };
     in {
       nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
-        specialArgs = { inherit inputs system; };
+        specialArgs = { inherit enabled inputs system; };
         modules = [
           stylix.nixosModules.stylix
           home-manager.nixosModules.home-manager

@@ -3,9 +3,9 @@
     lib,
     username,
     ...
-  }: {
-    imports = [
-      ./kanata/kanata.nix
-    ];
-  };
+    }: {
+      imports = [
+       ./hardware/kanata/kanata.nix
+      ];
+    };
 }
