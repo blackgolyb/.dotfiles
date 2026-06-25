@@ -7,6 +7,8 @@ Item {
     property var visibleNotifications: []
     property var notificationsById: ({})
     property var notificationsByStackTag: ({})
+    readonly property var ignoredOsdAppNames: ["changevolume", "changebrightness"]
+    readonly property var ignoredOsdStackTags: []
     readonly property bool hasExpiringNotifications: visibleNotifications.some(entry => entry.expiresAt > 0)
     readonly property int defaultTimeoutMs: 5000
 
@@ -42,6 +44,17 @@ Item {
         return root.timeoutMsFor(notification) > 0 && !notification.resident && notification.urgency !== NotificationUrgency.Critical;
     }
 
+    function normalizedText(value): string {
+        return String(value ?? "").toLowerCase();
+    }
+
+    function shouldIgnore(notification, stackTag): bool {
+        const appName = root.normalizedText(notification.appName);
+        const tag = root.normalizedText(stackTag);
+
+        return root.ignoredOsdAppNames.includes(appName) || root.ignoredOsdStackTags.includes(tag);
+    }
+
     function entryFor(notification, stackTag): var {
         const timeoutMs = root.timeoutMsFor(notification);
         const expiresAt = root.shouldAutoExpire(notification) ? Date.now() + timeoutMs : 0;
@@ -64,6 +77,12 @@ Item {
 
     function trackNotification(notification): void {
         const stackTag = root.stackTagFor(notification);
+        if (root.shouldIgnore(notification, stackTag)) {
+            notification.tracked = true;
+            notification.dismiss();
+            return;
+        }
+
         notification.tracked = true;
         notification.closed.connect(() => root.removeNotification(notification));
 
