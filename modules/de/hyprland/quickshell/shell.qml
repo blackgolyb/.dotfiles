@@ -3,6 +3,7 @@ import QtQuick.Layouts
 import Quickshell
 import Quickshell.Wayland
 import Src.Ui as Ui
+import Src.Widgets.StatusLine as Status
 import Src.Widgets
 
 ShellRoot {
@@ -34,8 +35,10 @@ ShellRoot {
                 WorkspacesWidget {}
             }
 
-            MusicWidget {
-                anchors.centerIn: parent
+            StatusLineWidget {
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.top: parent.top
+                anchors.topMargin: 1
                 anchorWindow: bar
             }
 

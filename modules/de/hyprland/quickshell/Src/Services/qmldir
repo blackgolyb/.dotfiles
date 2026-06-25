@@ -1,2 +1,3 @@
 module Src.Services
+singleton MusicService 1.0 MusicService.qml
 NotificationService 1.0 NotificationService.qml
