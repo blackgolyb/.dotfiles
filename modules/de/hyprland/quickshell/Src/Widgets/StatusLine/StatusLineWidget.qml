@@ -23,6 +23,7 @@ Item {
     readonly property bool hasPlayers: music.hasPlayers
     readonly property bool playing: music.playing
     readonly property real musicProgress: music.progress
+    readonly property var brightnessService: Services.BrightnessService
 
     readonly property string effectiveMode: transientMode.length > 0 ? transientMode : hasPlayers ? "music" : "passive"
     readonly property real effectiveProgress: effectiveMode === "volume" ? Math.min(1, volume / 100) : effectiveMode === "brightness" ? brightness / 100 : effectiveMode === "music" ? musicProgress : 0
@@ -30,8 +31,8 @@ Item {
     readonly property string effectiveIcon: effectiveMode === "volume" ? volumeIcon(volume, muted) : effectiveMode === "brightness" ? "󰃠" : effectiveMode === "music" ? playing ? "" : "" : ""
     readonly property string effectiveText: effectiveMode === "volume" ? `${volume}%` : effectiveMode === "brightness" ? `${brightness}%` : effectiveMode === "music" ? music.titleLine : ""
 
-    property int brightness: 0
-    property bool brightnessReady: false
+    readonly property int brightness: brightnessService.percent
+    readonly property bool brightnessReady: brightnessService.ready
     property bool bluetoothPowered: false
     property bool bluetoothReady: false
     property string transientMode: ""
@@ -40,6 +41,7 @@ Item {
     property bool panelOpen: false
     property int lastVolume: -1
     property bool lastMuted: false
+    property int lastBrightness: -1
 
     implicitWidth: 300
     implicitHeight: 24
@@ -58,6 +60,19 @@ Item {
         if (lastVolume >= 0 && lastMuted !== muted)
             showTransient("volume");
         lastMuted = muted;
+    }
+
+    onBrightnessReadyChanged: {
+        if (brightnessReady)
+            lastBrightness = brightness;
+    }
+
+    onBrightnessChanged: {
+        if (!brightnessReady)
+            return;
+        if (lastBrightness >= 0 && lastBrightness !== brightness)
+            showTransient("brightness");
+        lastBrightness = brightness;
     }
 
     function showTransient(mode: string): void {
@@ -98,12 +113,11 @@ Item {
     }
 
     function setBrightness(value: real): void {
-        const next = Math.round(Math.max(1, Math.min(100, value)));
-        brightnessWriteProcess.exec(["brightnessctl", "set", `${next}%`]);
+        brightnessService.setPercent(value);
     }
 
     function refreshBrightness(): void {
-        brightnessReadProcess.exec(["brightnessctl", "-m"]);
+        brightnessService.refresh();
     }
 
     function refreshBluetooth(): void {
@@ -143,40 +157,10 @@ Item {
     }
 
     Timer {
-        interval: 1200
-        repeat: true
-        running: true
-        onTriggered: root.refreshBrightness()
-    }
-
-    Timer {
         interval: 6000
         repeat: true
         running: true
         onTriggered: root.refreshBluetooth()
-    }
-
-    Process {
-        id: brightnessReadProcess
-        stdout: StdioCollector {
-            onStreamFinished: {
-                const parts = text.trim().split(",");
-                const rawPercent = Number((parts[4] ?? "0%").replace("%", ""));
-                if (Number.isNaN(rawPercent))
-                    return;
-
-                const percent = Math.round(Math.max(0, Math.min(100, rawPercent)));
-                if (root.brightnessReady && root.brightness !== percent)
-                    root.showTransient("brightness");
-                root.brightness = percent;
-                root.brightnessReady = true;
-            }
-        }
-    }
-
-    Process {
-        id: brightnessWriteProcess
-        onExited: root.refreshBrightness()
     }
 
     Process {
