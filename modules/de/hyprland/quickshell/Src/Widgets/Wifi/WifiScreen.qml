@@ -42,6 +42,10 @@ Item {
 
             Ui.UiNavigateBack {
                 view: root.view
+
+                onClicked: {
+                    root.service.clearQrCode();
+                }
             }
 
             Ui.UiText {

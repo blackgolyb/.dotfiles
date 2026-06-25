@@ -93,6 +93,11 @@ Item {
         qrProcess.exec(["sh", "-c", qrScript]);
     }
 
+    function clearQrCode(): void {
+        root.qrVersion = 0;
+        qrCleanupProcess.exec(["rm", "-f", root.qrPath]);
+    }
+
     function copyPassword(): void {
         if (root.activeSsid.length === 0)
             return;
@@ -183,6 +188,10 @@ qrencode -t PNG -s 8 -m 2 -o ${root.shellQuote(root.qrPath)} "WIFI:S:$ssid;T:$se
                 root.setStatus("Could not generate Wi-Fi QR code");
             }
         }
+    }
+
+    Process {
+        id: qrCleanupProcess
     }
 
     Process {

@@ -15,8 +15,10 @@ Ui.UiPopup {
     onVisibleChanged: {
         if (visible)
             wifiScreen.focusSearch();
-        else
+        else {
             root.service.closePasswordPrompt();
+            root.service.clearQrCode();
+        }
     }
 
     Ui.UiCard {
@@ -40,7 +42,6 @@ Ui.UiPopup {
 
             anchors.fill: parent
             service: root.service
-            showBackButton: false
             margins: 14
             qrSize: 120
         }

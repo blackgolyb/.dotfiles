@@ -49,13 +49,9 @@ ShellRoot {
 
                 VolumeWidget {}
 
-                WifiWidget {
-                    anchorWindow: bar
-                }
+                BatteryWidget {}
 
                 KeyboardLayoutWidget {}
-
-                BatteryWidget {}
 
                 ClockWidget {
                     anchorWindow: bar
