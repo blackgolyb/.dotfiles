@@ -14,5 +14,8 @@ ReloadPopup 1.0 ReloadPopup.qml
 StatusLineWidget 1.0 StatusLine/StatusLineWidget.qml
 VolumeWidget 1.0 VolumeWidget.qml
 WifiService 1.0 Wifi/WifiService.qml
+WifiSmallButton 1.0 Wifi/WifiSmallButton.qml
+WifiNetworkRow 1.0 Wifi/WifiNetworkRow.qml
+WifiScreen 1.0 Wifi/WifiScreen.qml
 WifiWidget 1.0 Wifi/WifiWidget.qml
 WorkspacesWidget 1.0 WorkspacesWidget.qml

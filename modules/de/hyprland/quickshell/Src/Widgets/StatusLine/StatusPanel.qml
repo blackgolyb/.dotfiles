@@ -1,9 +1,7 @@
 import QtQuick
-import QtQuick.Layouts
-import Quickshell.Io
+import QtQuick.Controls as Controls
 import Src.Ui as Ui
 import Src.Widgets as Widgets
-import Src.Widgets.StatusLine as Status
 
 Ui.UiPopup {
     id: root
@@ -18,16 +16,15 @@ Ui.UiPopup {
     implicitHeight: 390
     grabFocus: false
 
-    function run(command): void {
-        actionProcess.exec(["sh", "-c", command]);
+    function resetView(): void {
+        if (stackView.depth > 1)
+            stackView.pop(stackView.get(0), Controls.StackView.Immediate);
+        root.status.wifiService.closePasswordPrompt();
     }
 
-    function sliderValue(mouseX, width): real {
-        return Math.max(0, Math.min(100, 100 * mouseX / width));
-    }
-
-    Process {
-        id: actionProcess
+    onVisibleChanged: {
+        if (!visible)
+            resetView();
     }
 
     Item {
@@ -35,227 +32,91 @@ Ui.UiPopup {
         clip: true
 
         Ui.UiCard {
-        id: card
-        border.width: 0
+            id: card
 
-        width: parent.width
-        height: parent.height
-        y: root.visible ? 0 : -root.slideDistance
-        opacity: root.visible ? 1 : 0
+            width: parent.width
+            height: parent.height
+            y: root.visible ? 0 : -root.slideDistance
+            opacity: root.visible ? 1 : 0
+            border.width: 0
 
-        HoverHandler {
-            onHoveredChanged: root.hovered = hovered
-        }
+            HoverHandler {
+                onHoveredChanged: root.hovered = hovered
+            }
 
-        Behavior on y {
-            NumberAnimation { duration: 170; easing.type: Easing.OutCubic }
-        }
+            Behavior on y {
+                NumberAnimation { duration: 170; easing.type: Easing.OutCubic }
+            }
 
-        Behavior on opacity {
-            NumberAnimation { duration: 120 }
-        }
-
-        Rectangle {
-            anchors.left: parent.left
-            anchors.right: parent.right
-            anchors.top: parent.top
-            height: card.radius + 1
-            color: card.color
-        }
-
-        ColumnLayout {
-            anchors.fill: parent
-            anchors.margins: 16
-            spacing: 12
-
-            RowLayout {
-                Layout.fillWidth: true
-                spacing: 10
-
-                Ui.UiText {
-                    text: "Control center"
-                    color: Ui.Theme.textPrimary
-                    font.pixelSize: Ui.Theme.textLg
-                    font.bold: true
-                    Layout.fillWidth: true
-                }
-
-                Ui.UiText {
-                    text: status.wifiService.activeSsid.length > 0 ? `󰤨 ${status.wifiService.activeSsid}` : "󰤭 Offline"
-                    color: Ui.Theme.textMuted
-                    font.pixelSize: Ui.Theme.textSm
-                    elide: Text.ElideRight
-                    Layout.preferredWidth: 170
-                }
+            Behavior on opacity {
+                NumberAnimation { duration: 120 }
             }
 
             Rectangle {
-                Layout.fillWidth: true
-                Layout.preferredHeight: status.music.hasPlayers ? 142 : 46
-                radius: Ui.Theme.radiusMd
-                color: status.music.hasPlayers ? Ui.Theme.transparent : Ui.Theme.surfaceSunken
+                anchors.left: parent.left
+                anchors.right: parent.right
+                anchors.top: parent.top
+                height: card.radius + 1
+                color: card.color
+            }
 
-                Widgets.MusicWidget {
-                    anchors.fill: parent
+            Controls.StackView {
+                id: stackView
+
+                anchors.fill: parent
+                clip: true
+                initialItem: mainScreenComponent
+
+                pushEnter: Transition {
+                    NumberAnimation { property: "x"; from: stackView.width; to: 0; duration: 170; easing.type: Easing.OutCubic }
+                    NumberAnimation { property: "opacity"; from: 0; to: 1; duration: 120 }
+                }
+
+                pushExit: Transition {
+                    NumberAnimation { property: "x"; from: 0; to: -stackView.width * 0.25; duration: 170; easing.type: Easing.OutCubic }
+                    NumberAnimation { property: "opacity"; from: 1; to: 0; duration: 120 }
+                }
+
+                popEnter: Transition {
+                    NumberAnimation { property: "x"; from: -stackView.width * 0.25; to: 0; duration: 170; easing.type: Easing.OutCubic }
+                    NumberAnimation { property: "opacity"; from: 0; to: 1; duration: 120 }
+                }
+
+                popExit: Transition {
+                    NumberAnimation { property: "x"; from: 0; to: stackView.width; duration: 170; easing.type: Easing.OutCubic }
+                    NumberAnimation { property: "opacity"; from: 1; to: 0; duration: 120 }
+                }
+
+                onCurrentItemChanged: {
+                    if (root.visible && currentItem != null && currentItem.focusSearch != null)
+                        currentItem.focusSearch();
+                }
+            }
+
+            Component {
+                id: mainScreenComponent
+
+                StatusPanelMainScreen {
+                    status: root.status
                     anchorWindow: root.anchorWindow
-                    enablePopup: false
-                    visible: status.music.hasPlayers
-                }
-
-                RowLayout {
-                    anchors.centerIn: parent
-                    visible: !status.music.hasPlayers
-                    spacing: 8
-
-                    Ui.UiIcon {
-                        text: "󰝚"
-                        color: Ui.Theme.textDisabled
-                        font.pixelSize: 16
-                    }
-
-                    Ui.UiText {
-                        text: "No active player"
-                        color: Ui.Theme.textDisabled
-                        font.pixelSize: Ui.Theme.textMd
+                    onWifiRequested: {
+                        root.status.wifiService.closePasswordPrompt();
+                        root.status.wifiService.refresh(false);
+                        stackView.push(wifiScreenComponent);
                     }
                 }
             }
 
-            ColumnLayout {
-                Layout.fillWidth: true
-                spacing: 10
+            Component {
+                id: wifiScreenComponent
 
-                RowLayout {
-                    Layout.fillWidth: true
-                    spacing: 10
-
-                    Ui.UiIcon { text: status.volumeIcon(status.volume, status.muted); font.pixelSize: 18 }
-                    Status.Progress {
-                        id: volumeProgress
-                        Layout.fillWidth: true
-                        Layout.preferredHeight: 10
-                        progress: Math.min(1, status.volume / 100)
-                        active: !status.muted
-                        MouseArea {
-                            id: volumeMouse
-                            anchors.fill: parent
-                            onPressed: mouse => status.setVolume(root.sliderValue(mouse.x, volumeProgress.width))
-                            onPositionChanged: mouse => {
-                                if (volumeMouse.pressed)
-                                    status.setVolume(root.sliderValue(mouse.x, volumeProgress.width));
-                            }
-                        }
-                    }
-                    Ui.UiText { text: `${status.volume}%`; color: Ui.Theme.textMuted; font.pixelSize: Ui.Theme.textSm; Layout.preferredWidth: 42 }
-                    Rectangle {
-                        Layout.preferredWidth: 34
-                        Layout.preferredHeight: 26
-                        radius: Ui.Theme.radiusSm
-                        color: muteMouse.containsMouse ? Ui.Theme.border : Ui.Theme.surfaceActive
-                        Ui.UiIcon { anchors.centerIn: parent; text: status.muted ? "󰝟" : "󰕾"; font.pixelSize: 14 }
-                        MouseArea { id: muteMouse; anchors.fill: parent; hoverEnabled: true; onClicked: status.toggleMute() }
-                    }
-                }
-
-                RowLayout {
-                    Layout.fillWidth: true
-                    spacing: 10
-
-                    Ui.UiIcon { text: "󰃠"; font.pixelSize: 18 }
-                    Status.Progress {
-                        id: brightnessProgress
-                        Layout.fillWidth: true
-                        Layout.preferredHeight: 10
-                        progress: status.brightness / 100
-                        active: status.brightnessReady
-                        MouseArea {
-                            id: brightnessMouse
-                            anchors.fill: parent
-                            onPressed: mouse => status.setBrightness(root.sliderValue(mouse.x, brightnessProgress.width))
-                            onPositionChanged: mouse => {
-                                if (brightnessMouse.pressed)
-                                    status.setBrightness(root.sliderValue(mouse.x, brightnessProgress.width));
-                            }
-                        }
-                    }
-                    Ui.UiText { text: `${status.brightness}%`; color: Ui.Theme.textMuted; font.pixelSize: Ui.Theme.textSm; Layout.preferredWidth: 42 }
+                Widgets.WifiScreen {
+                    service: root.status.wifiService
+                    view: stackView
+                    margins: 16
+                    qrSize: 96
                 }
             }
-
-            GridLayout {
-                Layout.fillWidth: true
-                columns: 2
-                columnSpacing: 10
-                rowSpacing: 10
-
-                Rectangle {
-                    Layout.fillWidth: true
-                    Layout.preferredHeight: 52
-                    radius: Ui.Theme.radiusMd
-                    color: status.wifiService.wifiEnabled ? Ui.Theme.surfaceActive : Ui.Theme.surfaceSunken
-                    RowLayout {
-                        anchors.fill: parent
-                        anchors.margins: 10
-                        spacing: 8
-                        Ui.UiIcon { text: status.wifiService.wifiEnabled ? "󰤨" : "󰤭"; font.pixelSize: 18 }
-                        Ui.UiText { Layout.fillWidth: true; text: status.wifiService.activeSsid.length > 0 ? status.wifiService.activeSsid : status.wifiService.wifiEnabled ? "Wi-Fi on" : "Wi-Fi off"; elide: Text.ElideRight; font.pixelSize: Ui.Theme.textSm }
-                        Ui.UiIcon { text: "󰐥"; font.pixelSize: 14 }
-                    }
-                    MouseArea { anchors.fill: parent; onClicked: status.wifiService.toggleWifi() }
-                }
-
-                Rectangle {
-                    Layout.fillWidth: true
-                    Layout.preferredHeight: 52
-                    radius: Ui.Theme.radiusMd
-                    color: status.bluetoothPowered ? Ui.Theme.surfaceActive : Ui.Theme.surfaceSunken
-                    RowLayout {
-                        anchors.fill: parent
-                        anchors.margins: 10
-                        spacing: 8
-                        Ui.UiIcon { text: "󰂯"; font.pixelSize: 18 }
-                        Ui.UiText { Layout.fillWidth: true; text: status.bluetoothPowered ? "Bluetooth on" : status.bluetoothReady ? "Bluetooth off" : "Bluetooth unavailable"; elide: Text.ElideRight; font.pixelSize: Ui.Theme.textSm }
-                        Ui.UiIcon { text: "󰐥"; font.pixelSize: 14 }
-                    }
-                    MouseArea { anchors.fill: parent; enabled: status.bluetoothReady; onClicked: status.toggleBluetooth() }
-                }
-            }
-
-            RowLayout {
-                Layout.fillWidth: true
-                spacing: 10
-
-                Repeater {
-                    model: [
-                        { label: "Lock", command: "lock" },
-                        { label: "Suspend", command: "systemctl suspend" },
-                        { label: "Power", command: "systemctl poweroff" }
-                    ]
-
-                    Rectangle {
-                        required property var modelData
-
-                        Layout.fillWidth: true
-                        Layout.preferredHeight: 34
-                        radius: Ui.Theme.radiusSm
-                        color: utilityMouse.containsMouse ? Ui.Theme.border : Ui.Theme.surfaceActive
-
-                        Ui.UiText {
-                            anchors.centerIn: parent
-                            text: modelData.label
-                            font.pixelSize: Ui.Theme.textSm
-                        }
-
-                        MouseArea {
-                            id: utilityMouse
-                            anchors.fill: parent
-                            hoverEnabled: true
-                            onClicked: root.run(modelData.command)
-                        }
-                    }
-                }
-            }
-        }
         }
     }
 }

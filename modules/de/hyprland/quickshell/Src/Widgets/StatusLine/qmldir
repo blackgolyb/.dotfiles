@@ -4,3 +4,4 @@ Progress 1.0 Progress.qml
 Loading 1.0 Loading.qml
 StatusLineWidget 1.0 StatusLineWidget.qml
 StatusPanel 1.0 StatusPanel.qml
+StatusPanelMainScreen 1.0 StatusPanelMainScreen.qml

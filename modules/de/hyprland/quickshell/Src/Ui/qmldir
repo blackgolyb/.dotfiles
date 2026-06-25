@@ -12,3 +12,4 @@ UiPopup 1.0 UiPopup.qml
 UiSearchField 1.0 UiSearchField.qml
 UiText 1.0 UiText.qml
 UiTextInput 1.0 UiTextInput.qml
+UiNavigateBack 1.0 UiNavigateBack.qml
