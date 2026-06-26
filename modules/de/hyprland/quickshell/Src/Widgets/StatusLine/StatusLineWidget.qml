@@ -1,8 +1,6 @@
 import QtQuick
 import QtQuick.Layouts
 import Quickshell.Io
-import Quickshell.Services.Pipewire
-import Src.Services as Services
 import Src.Ui as Ui
 import Src.Widgets as Widgets
 import Src.Widgets.StatusLine as Status
@@ -13,71 +11,44 @@ Item {
     required property var anchorWindow
     property alias wifiService: wifiService
 
-    readonly property var audioSink: Pipewire.defaultAudioSink
-    readonly property var audio: root.audioSink != null ? root.audioSink.audio : null
-    readonly property bool audioReady: Pipewire.ready && root.audioSink != null && root.audioSink.ready && root.audio != null
-    readonly property int volume: root.audioReady ? Math.round(root.audio.volume * 100) : 0
-    readonly property bool muted: root.audioReady ? root.audio.muted : false
+    readonly property var sources: [volumeSource, brightnessSource, musicSource, passiveSource]
+    readonly property var currentSource: sourceForDisplay(sourceRevision)
 
-    readonly property var music: Services.MusicService
-    readonly property bool hasPlayers: music.hasPlayers
-    readonly property bool playing: music.playing
-    readonly property real musicProgress: music.progress
-    readonly property var brightnessService: Services.BrightnessService
+    readonly property var music: musicSource.music
+    readonly property bool hasPlayers: musicSource.hasPlayers
+    readonly property int volume: volumeSource.volume
+    readonly property bool muted: volumeSource.muted
+    readonly property bool audioReady: volumeSource.ready
+    readonly property int brightness: brightnessSource.percent
+    readonly property bool brightnessReady: brightnessSource.ready
 
-    readonly property string effectiveMode: transientMode.length > 0 ? transientMode : hasPlayers ? "music" : "passive"
-    readonly property real effectiveProgress: effectiveMode === "volume" ? Math.min(1, volume / 100) : effectiveMode === "brightness" ? brightness / 100 : effectiveMode === "music" ? musicProgress : 0
-    readonly property bool effectiveActive: effectiveMode === "music" ? playing : effectiveMode !== "passive"
-    readonly property string effectiveIcon: effectiveMode === "volume" ? volumeIcon(volume, muted) : effectiveMode === "brightness" ? "󰃠" : effectiveMode === "music" ? playing ? "" : "" : ""
-    readonly property string effectiveText: effectiveMode === "volume" ? `${volume}%` : effectiveMode === "brightness" ? `${brightness}%` : effectiveMode === "music" ? music.titleLine : ""
+    readonly property string effectiveMode: currentSource.mode
+    readonly property real effectiveProgress: currentSource.progress
+    readonly property bool effectiveActive: currentSource.active
+    readonly property string effectiveIcon: currentSource.icon
+    readonly property string effectiveText: currentSource.text
 
-    readonly property int brightness: brightnessService.percent
-    readonly property bool brightnessReady: brightnessService.ready
     property bool bluetoothPowered: false
     property bool bluetoothReady: false
-    property string transientMode: ""
     property bool widgetHovered: false
     property bool panelHovered: false
     property bool panelOpen: false
-    property int lastVolume: -1
-    property bool lastMuted: false
-    property int lastBrightness: -1
+    property int sourceRevision: 0
 
     implicitWidth: 300
     implicitHeight: 24
 
-    onVolumeChanged: {
-        if (!audioReady)
-            return;
-        if (lastVolume >= 0 && lastVolume !== volume)
-            showTransient("volume");
-        lastVolume = volume;
+    function sourceForDisplay(revision = 0): var {
+        const orderedSources = sources;
+        for (const source of orderedSources) {
+            if (source.available)
+                return source;
+        }
+        return passiveSource;
     }
 
-    onMutedChanged: {
-        if (!audioReady)
-            return;
-        if (lastVolume >= 0 && lastMuted !== muted)
-            showTransient("volume");
-        lastMuted = muted;
-    }
-
-    onBrightnessReadyChanged: {
-        if (brightnessReady)
-            lastBrightness = brightness;
-    }
-
-    onBrightnessChanged: {
-        if (!brightnessReady)
-            return;
-        if (lastBrightness >= 0 && lastBrightness !== brightness)
-            showTransient("brightness");
-        lastBrightness = brightness;
-    }
-
-    function showTransient(mode: string): void {
-        transientMode = mode;
-        transientTimer.restart();
+    function updateCurrentSource(): void {
+        sourceRevision += 1;
     }
 
     function openPanel(): void {
@@ -93,31 +64,23 @@ Item {
     }
 
     function volumeIcon(volume, muted): string {
-        if (muted || volume === 0)
-            return "󰝟";
-        if (volume <= 33)
-            return "";
-        if (volume <= 66)
-            return "󰖀";
-        return "󰕾";
+        return volumeSource.volumeIcon(volume, muted);
     }
 
     function setVolume(value: real): void {
-        if (audioReady)
-            audio.volume = Math.max(0, Math.min(1.5, value / 100));
+        volumeSource.setVolume(value);
     }
 
     function toggleMute(): void {
-        if (audioReady)
-            audio.muted = !audio.muted;
+        volumeSource.toggleMute();
     }
 
     function setBrightness(value: real): void {
-        brightnessService.setPercent(value);
+        brightnessSource.setPercent(value);
     }
 
     function refreshBrightness(): void {
-        brightnessService.refresh();
+        brightnessSource.refresh();
     }
 
     function refreshBluetooth(): void {
@@ -134,19 +97,39 @@ Item {
         wifiService.refresh(false);
     }
 
-    PwObjectTracker {
-        objects: [Pipewire.defaultAudioSink]
+    Status.VolumeSource {
+        id: volumeSource
+    }
+
+    Status.BrightnessSource {
+        id: brightnessSource
+    }
+
+    Status.MusicSource {
+        id: musicSource
+    }
+
+    Status.PassiveSource {
+        id: passiveSource
+    }
+
+    Connections {
+        target: volumeSource
+        function onAvailableChanged(): void { root.updateCurrentSource(); }
+    }
+
+    Connections {
+        target: brightnessSource
+        function onAvailableChanged(): void { root.updateCurrentSource(); }
+    }
+
+    Connections {
+        target: musicSource
+        function onAvailableChanged(): void { root.updateCurrentSource(); }
     }
 
     Widgets.WifiService {
         id: wifiService
-    }
-
-    Timer {
-        id: transientTimer
-        interval: 1400
-        repeat: false
-        onTriggered: root.transientMode = ""
     }
 
     Timer {
