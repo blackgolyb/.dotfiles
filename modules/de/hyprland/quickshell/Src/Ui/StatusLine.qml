@@ -1,5 +1,4 @@
 import QtQuick
-import Src.Ui as Ui
 
 Item {
     id: root
@@ -14,11 +13,11 @@ Item {
     property int iconSize: 12
     property int animationDuration: 160
     property int loadingDuration: 900
-    property color backgroundColor: Ui.Theme.border
-    property color activeColor: Ui.Theme.accent
-    property color inactiveColor: Ui.Theme.textDisabled
-    property color passiveColor: Ui.Theme.surfaceActive
-    property color iconColor: active ? Ui.Theme.textPrimary : Ui.Theme.textDisabled
+    property color backgroundColor: Theme.border
+    property color activeColor: Theme.accent
+    property color inactiveColor: Theme.textDisabled
+    property color passiveColor: Theme.surfaceActive
+    property color iconColor: active ? Theme.textPrimary : Theme.textDisabled
 
     implicitWidth: orientation === Qt.Horizontal ? 120 : thickness
     implicitHeight: orientation === Qt.Horizontal ? thickness : 120
@@ -28,7 +27,7 @@ Item {
         sourceComponent: root.mode === "loading" ? loadingComponent : root.mode === "passive" ? passiveComponent : progressComponent
     }
 
-    Ui.UiIcon {
+    UiIcon {
         anchors.centerIn: parent
         visible: root.icon.length > 0
         text: root.icon

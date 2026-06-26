@@ -166,7 +166,7 @@ Item {
         radius: 9
         color: compactMouse.containsMouse || root.panelOpen ? Ui.Theme.surfaceActive : Ui.Theme.transparent
 
-        Status.StatusLine {
+        Ui.StatusLine {
             anchors.left: parent.left
             anchors.right: parent.right
             anchors.top: parent.top

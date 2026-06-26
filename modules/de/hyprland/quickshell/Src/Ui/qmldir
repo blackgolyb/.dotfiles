@@ -1,5 +1,8 @@
 module Src.Ui
 singleton Theme 1.0 Theme.qml
+Progress 1.0 Progress.qml
+Loading 1.0 Loading.qml
+StatusLine 1.0 StatusLine.qml
 UiButton 1.0 UiButton.qml
 UiCard 1.0 UiCard.qml
 UiClickArea 1.0 UiClickArea.qml

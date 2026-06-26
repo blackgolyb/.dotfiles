@@ -1,7 +1,4 @@
 module Src.Widgets.StatusLine
-StatusLine 1.0 StatusLine.qml
-Progress 1.0 Progress.qml
-Loading 1.0 Loading.qml
 VolumeSource 1.0 VolumeSource.qml
 BrightnessSource 1.0 BrightnessSource.qml
 MusicSource 1.0 MusicSource.qml

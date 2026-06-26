@@ -3,7 +3,6 @@ import QtQuick.Layouts
 import Quickshell.Io
 import Src.Ui as Ui
 import Src.Widgets as Widgets
-import Src.Widgets.StatusLine as Status
 
 ColumnLayout {
     id: root
@@ -69,7 +68,7 @@ ColumnLayout {
             spacing: 10
 
             Ui.UiIcon { text: root.status.volumeIcon(root.status.volume, root.status.muted); font.pixelSize: 18 }
-            Status.Progress {
+            Ui.Progress {
                 id: volumeProgress
                 Layout.fillWidth: true
                 Layout.preferredHeight: 10
@@ -101,7 +100,7 @@ ColumnLayout {
             spacing: 10
 
             Ui.UiIcon { text: "󰃠"; font.pixelSize: 18 }
-            Status.Progress {
+            Ui.Progress {
                 id: brightnessProgress
                 Layout.fillWidth: true
                 Layout.preferredHeight: 10

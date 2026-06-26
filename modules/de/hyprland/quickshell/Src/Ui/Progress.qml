@@ -1,5 +1,4 @@
 import QtQuick
-import Src.Ui as Ui
 
 Item {
     id: root
@@ -10,9 +9,9 @@ Item {
     property bool active: true
     property int thickness: 2
     property int animationDuration: 160
-    property color backgroundColor: Ui.Theme.border
-    property color activeColor: Ui.Theme.accent
-    property color inactiveColor: Ui.Theme.textDisabled
+    property color backgroundColor: Theme.border
+    property color activeColor: Theme.accent
+    property color inactiveColor: Theme.textDisabled
     readonly property real normalizedProgress: Math.max(0, Math.min(1, progress))
 
     implicitWidth: orientation === Qt.Horizontal ? 120 : thickness

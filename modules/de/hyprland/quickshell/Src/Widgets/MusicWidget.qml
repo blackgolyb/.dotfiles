@@ -3,7 +3,6 @@ import QtQuick.Layouts
 import Quickshell
 import Src.Services as Services
 import Src.Ui as Ui
-import Src.Widgets.StatusLine as Status
 
 Item {
     id: root
@@ -90,7 +89,7 @@ Item {
                         font.pixelSize: Ui.Theme.textXs
                     }
 
-                    Status.Progress {
+                    Ui.Progress {
                         id: musicProgress
                         Layout.fillWidth: true
                         Layout.preferredHeight: 8

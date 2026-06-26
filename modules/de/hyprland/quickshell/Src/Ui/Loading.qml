@@ -1,5 +1,4 @@
 import QtQuick
-import Src.Ui as Ui
 
 Item {
     id: root
@@ -11,9 +10,9 @@ Item {
     property int thickness: 2
     property int duration: 900
     property real segmentRatio: 0.34
-    property color backgroundColor: Ui.Theme.border
-    property color activeColor: Ui.Theme.accent
-    property color inactiveColor: Ui.Theme.textDisabled
+    property color backgroundColor: Theme.border
+    property color activeColor: Theme.accent
+    property color inactiveColor: Theme.textDisabled
     property real phase: 0
 
     implicitWidth: orientation === Qt.Horizontal ? 120 : thickness
