@@ -97,7 +97,7 @@ Item {
                         progress: root.progress
                         active: root.canSeek
 
-                        MouseArea {
+                        Ui.UiClickArea {
                             id: progressMouse
                             anchors.fill: parent
                             enabled: root.canSeek
@@ -121,70 +121,31 @@ Item {
                     Layout.alignment: Qt.AlignHCenter
                     spacing: 10
 
-                    Rectangle {
-                        Layout.preferredWidth: 34
-                        Layout.preferredHeight: 28
-                        radius: Ui.Theme.radiusSm
-                        opacity: root.player != null && root.player.canGoPrevious ? 1 : 0.35
-                        color: previousMouse.containsMouse ? Ui.Theme.border : Ui.Theme.surfaceActive
-
-                        Ui.UiIcon {
-                            anchors.centerIn: parent
-                            text: "󰒮"
-                            font.pixelSize: 15
-                        }
-
-                        MouseArea {
-                            id: previousMouse
-                            anchors.fill: parent
-                            hoverEnabled: true
-                            enabled: root.player != null && root.player.canGoPrevious
-                            onClicked: root.music.previous()
-                        }
+                    Ui.UiButton {
+                        enabled: root.player != null && root.player.canGoPrevious
+                        text: "󰒮"
+                        size: "sm"
+                        variant: "surface"
+                        icon: true
+                        onClicked: root.music.previous()
                     }
 
-                    Rectangle {
-                        Layout.preferredWidth: 42
-                        Layout.preferredHeight: 32
-                        radius: Ui.Theme.radiusSm
-                        opacity: root.player != null && root.player.canTogglePlaying ? 1 : 0.35
-                        color: toggleMouse.containsMouse ? Ui.Theme.accent : Ui.Theme.primitive.frost3
-
-                        Ui.UiIcon {
-                            anchors.centerIn: parent
-                            text: root.playing ? "" : ""
-                            font.pixelSize: 15
-                        }
-
-                        MouseArea {
-                            id: toggleMouse
-                            anchors.fill: parent
-                            hoverEnabled: true
-                            enabled: root.player != null && root.player.canTogglePlaying
-                            onClicked: root.music.togglePlaying()
-                        }
+                    Ui.UiButton {
+                        enabled: root.player != null && root.player.canTogglePlaying
+                        text: root.playing ? "" : ""
+                        size: "sm"
+                        variant: "accent"
+                        icon: true
+                        onClicked: root.music.togglePlaying()
                     }
 
-                    Rectangle {
-                        Layout.preferredWidth: 34
-                        Layout.preferredHeight: 28
-                        radius: Ui.Theme.radiusSm
-                        opacity: root.player != null && root.player.canGoNext ? 1 : 0.35
-                        color: nextMouse.containsMouse ? Ui.Theme.border : Ui.Theme.surfaceActive
-
-                        Ui.UiIcon {
-                            anchors.centerIn: parent
-                            text: "󰒭"
-                            font.pixelSize: 15
-                        }
-
-                        MouseArea {
-                            id: nextMouse
-                            anchors.fill: parent
-                            hoverEnabled: true
-                            enabled: root.player != null && root.player.canGoNext
-                            onClicked: root.music.next()
-                        }
+                    Ui.UiButton {
+                        enabled: root.player != null && root.player.canGoNext
+                        text: "󰒭"
+                        size: "sm"
+                        variant: "surface"
+                        icon: true
+                        onClicked: root.music.next()
                     }
                 }
             }

@@ -28,27 +28,6 @@ ColumnLayout {
         id: actionProcess
     }
 
-    RowLayout {
-        Layout.fillWidth: true
-        spacing: 10
-
-        Ui.UiText {
-            text: "Control center"
-            color: Ui.Theme.textPrimary
-            font.pixelSize: Ui.Theme.textLg
-            font.bold: true
-            Layout.fillWidth: true
-        }
-
-        Ui.UiText {
-            text: root.status.wifiService.activeSsid.length > 0 ? `󰤨 ${root.status.wifiService.activeSsid}` : "󰤭 Offline"
-            color: Ui.Theme.textMuted
-            font.pixelSize: Ui.Theme.textSm
-            elide: Text.ElideRight
-            Layout.preferredWidth: 170
-        }
-    }
-
     Rectangle {
         Layout.fillWidth: true
         Layout.preferredHeight: root.status.music.hasPlayers ? 142 : 46

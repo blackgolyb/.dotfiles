@@ -13,10 +13,6 @@ QtObject {
         readonly property color snowStorm0: "#d8dee9"
         readonly property color snowStorm1: "#e5e9f0"
         readonly property color snowStorm2: "#eceff4"
-        readonly property color frost0: "#8fbcbb"
-        readonly property color frost1: "#88c0d0"
-        readonly property color frost2: "#81a1c1"
-        readonly property color frost3: "#5e81ac"
         readonly property color red: "#bf616a"
         readonly property color orange: "#d08770"
         readonly property color yellow: "#ebcb8b"
@@ -32,8 +28,8 @@ QtObject {
     readonly property color surfaceHover: "#343b49"
     readonly property color surfaceActive: primitive.polarNight1
     readonly property color border: primitive.polarNight3
-    readonly property color accent: primitive.frost1
-    readonly property color accentHover: primitive.frost0
+    readonly property color accent: "#99d1ff"
+    readonly property color accentHover: "#66baff"
     readonly property color textPrimary: primitive.snowStorm2
     readonly property color textSecondary: primitive.snowStorm0
     readonly property color textMuted: "#7f889b"
