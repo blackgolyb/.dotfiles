@@ -1,21 +1,20 @@
 import QtQuick
 import QtQuick.Layouts
-import Quickshell.Io
 import Src.Ui as Ui
-import Src.Widgets as Widgets
 import Src.Widgets.StatusLine as Status
 
 Item {
     id: root
 
     required property var anchorWindow
-    property alias wifiService: wifiService
 
     readonly property var sources: [volumeSource, brightnessSource, musicSource, passiveSource]
     readonly property var currentSource: sourceForDisplay(sourceRevision)
 
     readonly property var music: musicSource.music
     readonly property bool hasPlayers: musicSource.hasPlayers
+    readonly property var volumeControl: volumeSource
+    readonly property var brightnessControl: brightnessSource
     readonly property int volume: volumeSource.volume
     readonly property bool muted: volumeSource.muted
     readonly property bool audioReady: volumeSource.ready
@@ -28,8 +27,6 @@ Item {
     readonly property string effectiveIcon: currentSource.icon
     readonly property string effectiveText: currentSource.text
 
-    property bool bluetoothPowered: false
-    property bool bluetoothReady: false
     property bool widgetHovered: false
     property bool panelHovered: false
     property bool panelOpen: false
@@ -54,47 +51,21 @@ Item {
     function openPanel(): void {
         closeTimer.stop();
         panelOpen = true;
-        wifiService.refresh(false);
-        refreshBrightness();
-        refreshBluetooth();
     }
 
     function scheduleClose(): void {
         closeTimer.restart();
     }
 
-    function volumeIcon(volume, muted): string {
-        return volumeSource.volumeIcon(volume, muted);
+    function handleClick(): void {
+        if (root.hasPlayers) {
+            root.music.togglePlaying();
+        }
     }
 
-    function setVolume(value: real): void {
-        volumeSource.setVolume(value);
-    }
-
-    function toggleMute(): void {
-        volumeSource.toggleMute();
-    }
-
-    function setBrightness(value: real): void {
-        brightnessSource.setPercent(value);
-    }
-
-    function refreshBrightness(): void {
-        brightnessSource.refresh();
-    }
-
-    function refreshBluetooth(): void {
-        bluetoothReadProcess.exec(["bluetoothctl", "show"]);
-    }
-
-    function toggleBluetooth(): void {
-        bluetoothCommandProcess.exec(["bluetoothctl", "power", bluetoothPowered ? "off" : "on"]);
-    }
-
-    Component.onCompleted: {
-        refreshBrightness();
-        refreshBluetooth();
-        wifiService.refresh(false);
+    function handleWheel(wheel): void {
+        const deltaChange = wheel.angleDelta.y > 0 ? 5 : -5;
+        root.volumeControl.setVolume(root.volume + deltaChange);
     }
 
     Status.VolumeSource {
@@ -128,37 +99,11 @@ Item {
         function onAvailableChanged(): void { root.updateCurrentSource(); }
     }
 
-    Widgets.WifiService {
-        id: wifiService
-    }
-
     Timer {
         id: closeTimer
         interval: 180
         repeat: false
         onTriggered: root.panelOpen = root.widgetHovered || root.panelHovered
-    }
-
-    Timer {
-        interval: 6000
-        repeat: true
-        running: true
-        onTriggered: root.refreshBluetooth()
-    }
-
-    Process {
-        id: bluetoothReadProcess
-        stdout: StdioCollector {
-            onStreamFinished: {
-                root.bluetoothPowered = text.includes("Powered: yes");
-                root.bluetoothReady = text.length > 0;
-            }
-        }
-    }
-
-    Process {
-        id: bluetoothCommandProcess
-        onExited: root.refreshBluetooth()
     }
 
     Rectangle {
@@ -211,8 +156,8 @@ Item {
                 root.widgetHovered = false;
                 root.scheduleClose();
             }
-            onClicked: root.hasPlayers ? root.music.togglePlaying() : root.openPanel()
-            onWheel: root.setVolume(root.volume + (wheel.angleDelta.y > 0 ? 5 : -5))
+            onClicked: root.handleClick()
+            onWheel: root.handleWheel(wheel)
         }
     }
 

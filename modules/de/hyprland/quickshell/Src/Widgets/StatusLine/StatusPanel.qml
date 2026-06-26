@@ -1,5 +1,6 @@
 import QtQuick
 import QtQuick.Controls as Controls
+import Quickshell.Io
 import Src.Ui as Ui
 import Src.Widgets as Widgets
 
@@ -8,6 +9,8 @@ Ui.UiPopup {
 
     required property var status
     property bool hovered: false
+    property bool bluetoothPowered: false
+    property bool bluetoothReady: false
     readonly property int slideDistance: 22
 
     anchor.rect.x: root.anchorWindow != null ? Math.max(20, Math.round((root.anchorWindow.width - root.implicitWidth) / 2)) : 0
@@ -16,15 +19,57 @@ Ui.UiPopup {
     implicitHeight: 390
     grabFocus: false
 
+    function refresh(): void {
+        panelWifiService.refresh(false);
+        root.status.brightnessControl.refresh();
+        refreshBluetooth();
+    }
+
+    function refreshBluetooth(): void {
+        bluetoothReadProcess.exec(["bluetoothctl", "show"]);
+    }
+
+    function toggleBluetooth(): void {
+        bluetoothCommandProcess.exec(["bluetoothctl", "power", bluetoothPowered ? "off" : "on"]);
+    }
+
     function resetView(): void {
         if (stackView.depth > 1)
             stackView.pop(stackView.get(0), Controls.StackView.Immediate);
-        root.status.wifiService.closePasswordPrompt();
+        panelWifiService.closePasswordPrompt();
     }
 
     onVisibleChanged: {
-        if (!visible)
+        if (visible)
+            refresh();
+        else
             resetView();
+    }
+
+    Widgets.WifiService {
+        id: panelWifiService
+    }
+
+    Timer {
+        interval: 6000
+        repeat: true
+        running: root.visible
+        onTriggered: root.refreshBluetooth()
+    }
+
+    Process {
+        id: bluetoothReadProcess
+        stdout: StdioCollector {
+            onStreamFinished: {
+                root.bluetoothPowered = text.includes("Powered: yes");
+                root.bluetoothReady = text.length > 0;
+            }
+        }
+    }
+
+    Process {
+        id: bluetoothCommandProcess
+        onExited: root.refreshBluetooth()
     }
 
     Item {
@@ -98,10 +143,14 @@ Ui.UiPopup {
 
                 StatusPanelMainScreen {
                     status: root.status
+                    wifiService: panelWifiService
+                    bluetoothPowered: root.bluetoothPowered
+                    bluetoothReady: root.bluetoothReady
                     anchorWindow: root.anchorWindow
+                    onBluetoothRequested: root.toggleBluetooth()
                     onWifiRequested: {
-                        root.status.wifiService.closePasswordPrompt();
-                        root.status.wifiService.refresh(false);
+                        panelWifiService.closePasswordPrompt();
+                        panelWifiService.refresh(false);
                         stackView.push(wifiScreenComponent);
                     }
                 }
@@ -111,7 +160,7 @@ Ui.UiPopup {
                 id: wifiScreenComponent
 
                 Widgets.WifiScreen {
-                    service: root.status.wifiService
+                    service: panelWifiService
                     view: stackView
                     margins: 16
                     qrSize: 96

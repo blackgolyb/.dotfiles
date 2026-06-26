@@ -8,8 +8,12 @@ ColumnLayout {
     id: root
 
     required property var status
+    required property var wifiService
     required property var anchorWindow
+    property bool bluetoothPowered: false
+    property bool bluetoothReady: false
     signal wifiRequested
+    signal bluetoothRequested
 
     anchors.fill: parent
     anchors.margins: 16
@@ -67,7 +71,7 @@ ColumnLayout {
             Layout.fillWidth: true
             spacing: 10
 
-            Ui.UiIcon { text: root.status.volumeIcon(root.status.volume, root.status.muted); font.pixelSize: 18 }
+            Ui.UiIcon { text: root.status.volumeControl.icon; font.pixelSize: 18 }
             Ui.Progress {
                 id: volumeProgress
                 Layout.fillWidth: true
@@ -77,10 +81,10 @@ ColumnLayout {
                 MouseArea {
                     id: volumeMouse
                     anchors.fill: parent
-                    onPressed: mouse => root.status.setVolume(root.sliderValue(mouse.x, volumeProgress.width))
+                    onPressed: mouse => root.status.volumeControl.setVolume(root.sliderValue(mouse.x, volumeProgress.width))
                     onPositionChanged: mouse => {
                         if (volumeMouse.pressed)
-                            root.status.setVolume(root.sliderValue(mouse.x, volumeProgress.width));
+                            root.status.volumeControl.setVolume(root.sliderValue(mouse.x, volumeProgress.width));
                     }
                 }
             }
@@ -91,7 +95,7 @@ ColumnLayout {
                 radius: Ui.Theme.radiusSm
                 color: muteMouse.containsMouse ? Ui.Theme.border : Ui.Theme.surfaceActive
                 Ui.UiIcon { anchors.centerIn: parent; text: root.status.muted ? "󰝟" : "󰕾"; font.pixelSize: 14 }
-                MouseArea { id: muteMouse; anchors.fill: parent; hoverEnabled: true; onClicked: root.status.toggleMute() }
+                MouseArea { id: muteMouse; anchors.fill: parent; hoverEnabled: true; onClicked: root.status.volumeControl.toggleMute() }
             }
         }
 
@@ -109,10 +113,10 @@ ColumnLayout {
                 MouseArea {
                     id: brightnessMouse
                     anchors.fill: parent
-                    onPressed: mouse => root.status.setBrightness(root.sliderValue(mouse.x, brightnessProgress.width))
+                    onPressed: mouse => root.status.brightnessControl.setPercent(root.sliderValue(mouse.x, brightnessProgress.width))
                     onPositionChanged: mouse => {
                         if (brightnessMouse.pressed)
-                            root.status.setBrightness(root.sliderValue(mouse.x, brightnessProgress.width));
+                            root.status.brightnessControl.setPercent(root.sliderValue(mouse.x, brightnessProgress.width));
                     }
                 }
             }
@@ -130,13 +134,13 @@ ColumnLayout {
             Layout.fillWidth: true
             Layout.preferredHeight: 52
             radius: Ui.Theme.radiusMd
-            color: root.status.wifiService.wifiEnabled ? Ui.Theme.surfaceActive : Ui.Theme.surfaceSunken
+            color: root.wifiService.wifiEnabled ? Ui.Theme.surfaceActive : Ui.Theme.surfaceSunken
             RowLayout {
                 anchors.fill: parent
                 anchors.margins: 10
                 spacing: 8
-                Ui.UiIcon { text: root.status.wifiService.wifiEnabled ? "󰤨" : "󰤭"; font.pixelSize: 18 }
-                Ui.UiText { Layout.fillWidth: true; text: root.status.wifiService.activeSsid.length > 0 ? root.status.wifiService.activeSsid : root.status.wifiService.wifiEnabled ? "Wi-Fi on" : "Wi-Fi off"; elide: Text.ElideRight; font.pixelSize: Ui.Theme.textSm }
+                Ui.UiIcon { text: root.wifiService.wifiEnabled ? "󰤨" : "󰤭"; font.pixelSize: 18 }
+                Ui.UiText { Layout.fillWidth: true; text: root.wifiService.activeSsid.length > 0 ? root.wifiService.activeSsid : root.wifiService.wifiEnabled ? "Wi-Fi on" : "Wi-Fi off"; elide: Text.ElideRight; font.pixelSize: Ui.Theme.textSm }
                 Ui.UiIcon { text: "󰐥"; font.pixelSize: 14 }
             }
             MouseArea { anchors.fill: parent; onClicked: root.wifiRequested() }
@@ -146,16 +150,16 @@ ColumnLayout {
             Layout.fillWidth: true
             Layout.preferredHeight: 52
             radius: Ui.Theme.radiusMd
-            color: root.status.bluetoothPowered ? Ui.Theme.surfaceActive : Ui.Theme.surfaceSunken
+            color: root.bluetoothPowered ? Ui.Theme.surfaceActive : Ui.Theme.surfaceSunken
             RowLayout {
                 anchors.fill: parent
                 anchors.margins: 10
                 spacing: 8
                 Ui.UiIcon { text: "󰂯"; font.pixelSize: 18 }
-                Ui.UiText { Layout.fillWidth: true; text: root.status.bluetoothPowered ? "Bluetooth on" : root.status.bluetoothReady ? "Bluetooth off" : "Bluetooth unavailable"; elide: Text.ElideRight; font.pixelSize: Ui.Theme.textSm }
+                Ui.UiText { Layout.fillWidth: true; text: root.bluetoothPowered ? "Bluetooth on" : root.bluetoothReady ? "Bluetooth off" : "Bluetooth unavailable"; elide: Text.ElideRight; font.pixelSize: Ui.Theme.textSm }
                 Ui.UiIcon { text: "󰐥"; font.pixelSize: 14 }
             }
-            MouseArea { anchors.fill: parent; enabled: root.status.bluetoothReady; onClicked: root.status.toggleBluetooth() }
+            MouseArea { anchors.fill: parent; enabled: root.bluetoothReady; onClicked: root.bluetoothRequested() }
         }
     }
 
