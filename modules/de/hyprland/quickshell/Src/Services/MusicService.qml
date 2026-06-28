@@ -24,7 +24,12 @@ Item {
     readonly property real progress: length > 0 ? Math.max(0, Math.min(1, position / length)) : 0
     readonly property string titleLine: `${title}  -  ${artist}`
 
+    property string artAccentColor: ""
+    property string pendingAccentArtUrl: ""
+
     visible: false
+
+    onArtUrlChanged: root.extractAccentColor()
 
     function playerText(value): string {
         return value == null ? "" : value.toString().toLowerCase();
@@ -57,6 +62,28 @@ Item {
         const minutes = Math.floor(safeSeconds / 60);
         const rest = safeSeconds % 60;
         return `${minutes}:${rest.toString().padStart(2, "0")}`;
+    }
+
+    function colorzInputFor(url: string): string {
+        if (url.startsWith("file://"))
+            return decodeURIComponent(url.slice("file://".length));
+        return url;
+    }
+
+    function parseAccentColor(output: string): string {
+        const colors = output.trim().split(/\s+/);
+        return colors.length >= 2 ? colors[1] : "";
+    }
+
+    function extractAccentColor(): void {
+        if (root.artUrl.length === 0) {
+            root.pendingAccentArtUrl = "";
+            root.artAccentColor = "";
+            return;
+        }
+
+        root.pendingAccentArtUrl = root.artUrl;
+        accentProcess.exec(["sh", "-c", "command -v colorz >/dev/null 2>&1 || exit 127; colorz -n 1 --no-preview \"$1\"", "colorz", root.colorzInputFor(root.artUrl)]);
     }
 
     function seekAt(mouseX: real, width: real): void {
@@ -109,6 +136,21 @@ Item {
         repeat: true
         running: root.player != null && root.playing
         onTriggered: root.player.positionChanged()
+    }
+
+    Process {
+        id: accentProcess
+        stdout: StdioCollector {
+            onStreamFinished: {
+                if (root.pendingAccentArtUrl !== root.artUrl)
+                    return;
+                root.artAccentColor = root.parseAccentColor(text);
+            }
+        }
+        onExited: exitCode => {
+            if (exitCode !== 0 && root.pendingAccentArtUrl === root.artUrl)
+                root.artAccentColor = "";
+        }
     }
 
     IpcHandler {

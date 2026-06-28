@@ -21,6 +21,7 @@ QtObject {
         readonly property color white: "#ffffff"
     }
 
+    readonly property color base: "#000"
     readonly property color background: primitive.polarNight0
     readonly property color surface: primitive.polarNight0
     readonly property color surfaceRaised: primitive.polarNight1

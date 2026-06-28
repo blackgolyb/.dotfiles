@@ -10,6 +10,7 @@ in
     home.packages = with pkgs; [
       brightnessctl
       cliphist
+      colorz
       curl
       hyprpicker
       hyprprop

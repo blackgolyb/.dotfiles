@@ -1,8 +1,11 @@
 import QtQuick
+import QtQuick.Effects
 import QtQuick.Layouts
 import Quickshell
+import Quickshell.Widgets as QsWidgets
 import Src.Services as Services
 import Src.Ui as Ui
+import Src.Ui.Effects as Effects
 
 Item {
     id: root
@@ -21,20 +24,68 @@ Item {
     readonly property real position: music.position
     readonly property real length: music.length
     readonly property real progress: music.progress
+    readonly property bool hasArt: root.artUrl.length > 0
 
     visible: hasPlayers
     implicitWidth: hasPlayers ? 420 : 0
     implicitHeight: hasPlayers ? 126 : 0
 
     Ui.UiCard {
-        anchors.fill: parent
+        id: card
 
+        anchors.fill: parent
+        color: Ui.Theme.surface
+        border.width: 0
+
+        QsWidgets.ClippingRectangle {
+            anchors.fill: parent
+            anchors.margins: card.border.width
+            visible: root.hasArt
+            radius: Math.max(0, card.radius - card.border.width)
+            color: Ui.Theme.base
+            clip: true
+
+            Image {
+                id: backdropSource
+                anchors.fill: parent
+                anchors.margins: -34
+                source: root.artUrl
+                visible: false
+                fillMode: Image.PreserveAspectCrop
+                smooth: true
+                asynchronous: true
+            }
+
+            MultiEffect {
+                anchors.fill: parent
+                source: backdropSource
+
+                blurEnabled: true
+                blurMax: 32
+                blur: 1.0
+
+                saturation: 1.25
+                brightness: -0.2
+                opacity: 0.62
+            }
+
+            Effects.Noise {
+                anchors.fill: parent
+                opacity: 0.1
+            }
+
+            Rectangle {
+                anchors.fill: parent
+                color: Ui.Theme.background
+                opacity: 0.3
+            }
+        }
         RowLayout {
             anchors.fill: parent
             anchors.margins: 14
             spacing: 14
 
-            Rectangle {
+            QsWidgets.ClippingRectangle {
                 Layout.preferredWidth: 88
                 Layout.preferredHeight: 88
                 radius: 16

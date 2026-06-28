@@ -1,0 +1,2 @@
+module Src.Ui.Effects
+Noise 1.0 Noise.qml
