@@ -19,20 +19,39 @@ vim.keymap.set('n', '<C-h>', '<C-w>h', { desc = 'Move to left window' })
 vim.keymap.set('n', '<C-j>', '<C-w>j', { desc = 'Move to bottom window' })
 vim.keymap.set('n', '<C-k>', '<C-w>k', { desc = 'Move to top window' })
 vim.keymap.set('n', '<C-l>', '<C-w>l', { desc = 'Move to right window' })
+vim.keymap.set('n', '<C-S-h>', '<C-w>H', { desc = 'Move to left window' })
+vim.keymap.set('n', '<C-S-j>', '<C-w>J', { desc = 'Move to bottom window' })
+vim.keymap.set('n', '<C-S-k>', '<C-w>K', { desc = 'Move to top window' })
+vim.keymap.set('n', '<C-S-l>', '<C-w>L', { desc = 'Move to right window' })
 
+local function hover_with_diagnostics()
+    -- Show diagnostics first (if there are any)
+    vim.diagnostic.open_float(nil, {
+        scope = "cursor",
+        focus = false,
+        border = "rounded",
+    })
+
+    -- Then request LSP hover
+    vim.lsp.buf.hover()
+end
+
+vim.keymap.set("n", "K", hover_with_diagnostics, {
+    desc = "Hover + diagnostics",
+})
 
 -- vim.keymap.set({"o", "x"}, "ie", ":<C-u>normal! ggVG<CR>", { silent = true, desc = "Text object for entire buffer" })
 
 -- Statusbar
 local function toggle_status_bar()
-  vim.opt.laststatus = vim.opt.laststatus:get() > 0 and 0 or 3
+    vim.opt.laststatus = vim.opt.laststatus:get() > 0 and 0 or 3
 end
 vim.keymap.set("n", "<leader>s", toggle_status_bar, { desc = "Toggle Statusline" })
 
 
 -- Commands
 local cabbrev = function(expanded, original)
-  vim.cmd('cnoreabbrev ' .. expanded .. ' ' .. original)
+    vim.cmd('cnoreabbrev ' .. expanded .. ' ' .. original)
 end
 
 cabbrev('W', 'w')

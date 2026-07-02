@@ -1,16 +1,17 @@
 return {
-  {
-    'saghen/blink.cmp',
-    version = '*',
-    opts = {
-      keymap = { preset = 'default' },
+    {
+        'saghen/blink.cmp',
+        branch = 'v1',
+        version = '*',
+        opts = {
+            keymap = { preset = 'default' },
 
-      appearance = {
-        use_nvim_cmp_as_default = false,
-        nerd_font_variant = 'mono'
-      },
+            appearance = {
+                use_nvim_cmp_as_default = false,
+                nerd_font_variant = 'mono'
+            },
 
-      signature = { enable = true },
+            signature = { enable = true },
+        },
     },
-  },
 }

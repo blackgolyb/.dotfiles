@@ -16,8 +16,6 @@ return {
                 vim.lsp.config(server_name, {
                     capabilities = capabilities,
                 })
-
-                vim.lsp.enable(server_name)
             end
 
             -- LSP scpecific settings
@@ -32,7 +30,7 @@ return {
 
             vim.lsp.config('ruff', {
                 capabilities = capabilities,
-                initialization_options = {
+                init_options = {
                     settings = {
                         lineLength = 100,
                         lint = {
@@ -52,21 +50,34 @@ return {
                         pythonPath = ".venv/bin/python"
                     }
                 },
-                root_dir = require("lspconfig.util").root_pattern(".git", "pyproject.toml", "setup.py", ".venv"),
             })
 
-	    -- Keymaps
+            for _, server_name in ipairs(servers) do
+                vim.lsp.enable(server_name)
+            end
+
+            -- Keymaps
             vim.api.nvim_create_autocmd('LspAttach', {
-		callback = function(event)
-		  local opts = { buffer = event.buf }
-                  vim.keymap.set('n', 'gd', vim.lsp.buf.definition, opts)
-                  vim.keymap.set('n', 'K', vim.lsp.buf.hover, opts)
-                  vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, opts)
-                  vim.keymap.set('n', 'gr', vim.lsp.buf.references, opts)
-                  vim.keymap.set('n', 'cd', vim.lsp.buf.rename, opts)
-                  vim.keymap.set('n', 'g.', vim.lsp.buf.code_action, opts)
-		end,
-	      })
+                callback = function(event)
+                    local opts = { buffer = event.buf }
+
+                    local function show_diagnostics()
+                        vim.diagnostic.open_float(nil, {
+                            scope = "cursor",
+                            focus = false,
+                            border = "rounded",
+                        })
+                    end
+
+                    vim.keymap.set('n', 'gd', vim.lsp.buf.definition, opts)
+                    vim.keymap.set('n', 'K',  vim.lsp.buf.hover, opts)
+                    vim.keymap.set('n', 'ge', show_diagnostics, opts)
+                    vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, opts)
+                    vim.keymap.set('n', 'gr', vim.lsp.buf.references, opts)
+                    vim.keymap.set('n', 'cd', vim.lsp.buf.rename, opts)
+                    vim.keymap.set('n', 'g.', vim.lsp.buf.code_action, opts)
+                end,
+            })
         end,
     },
 }

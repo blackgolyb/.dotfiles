@@ -1,8 +1,9 @@
 return {
     'nvim-telescope/telescope.nvim',
-    tag = '0.2.1',
+    tag = 'v0.2.1',
     dependencies = {
         'nvim-lua/plenary.nvim',
+        'nvim-telescope/telescope-ui-select.nvim',
         { 'nvim-telescope/telescope-fzf-native.nvim', build = 'make' },
     },
     config = function()
@@ -11,6 +12,16 @@ return {
 
         vim.keymap.set('n', 'g/', builtin.live_grep, { desc = "Global search (Live Grep)" })
         vim.keymap.set('n', 'g*', builtin.grep_string, { desc = "Search word under cursor" })
+
+        vim.keymap.set("n", "<leader>D", builtin.diagnostics, {
+          desc = "Workspace diagnostics",
+        })
+
+        vim.keymap.set("n", "<leader>d", function()
+          builtin.diagnostics({ bufnr = 0 })
+        end, {
+          desc = "Buffer diagnostics",
+        })
 
         vim.keymap.set('v', 'g/', function()
             local function get_visual_selection()
@@ -36,9 +47,15 @@ return {
                 layout_config = {
                     prompt_position = "top",
                 },
-            }
+            },
+            extensions = {
+                ["ui-select"] = {
+                    require("telescope.themes").get_dropdown({}),
+                },
+            },
         })
 
         require('telescope').load_extension('fzf')
+        require("telescope").load_extension("ui-select")
     end
 }
