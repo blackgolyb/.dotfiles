@@ -1,7 +1,7 @@
 {pkgs, ...}:
 pkgs.mkShell {
   nativeBuildInputs = with pkgs; [
-    python
+    python3
     ruff
     uv
   ];
