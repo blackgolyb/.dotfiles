@@ -4,6 +4,7 @@
     ./modules/core/dotfiles/dotfiles.nix
     ./modules/apps/copy-to-clipboard
     ./modules/apps/flameshot
+    ./modules/apps/lazygit
     ./modules/apps/nvim
     ./modules/apps/rofi
     ./modules/apps/rofi-network-manager
@@ -151,32 +152,19 @@
     SSH_AUTH_SOCK = "/run/user/1000/keyring/ssh";
     DBUS_SESSION_BUS_ADDRESS = "unix:path=/run/user/1000/bus";
     GPG_TTY = "$(tty)";
-    EDITOR = "zeditor";
-    VISUAL = "zeditor";
+    EDITOR = "nvim";
+    VISUAL = "nvim";
     BROWSER = "zen-twilight";
   };
   home.shellAliases = {
     zen = "zen-twilight";
   };
 
-  programs.lazygit = {
-      enable = true;
-      settings = {
-          os = {
-              edit = "zeditor -- {{filename}}";
-              editAtLine = "zeditor -- {{filename}}:{{line}}";
-              editAtLineAndWait = "zeditor --wait -- {{filename}}:{{line}}";
-              openDirInEditor = "zeditor -- {{dir}}";
-              editInTerminal = false;
-          };
-      };
-  };
-
   programs.git = {
       enable = true;
       settings = {
           push.autoSetupRemote = true;
-          core.editor = "zeditor";
+          core.editor = "nvim";
       };
   };
 
