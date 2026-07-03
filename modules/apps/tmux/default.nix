@@ -44,12 +44,19 @@ let
       }
 
       list_project_session_choices() {
+        current_session=$(tmux display-message -p '#S')
+
         list_project_sessions |
           while IFS= read -r session; do
             label=''${session#"$session_prefix"}
             hash=''${label##*-}
             name=''${label%"-$hash"}
-            printf '%s \033[2m%s\033[0m\t%s\n' "$name" "$hash" "$session"
+            current=""
+            if [ "$session" = "$current_session" ]; then
+              current=" \033[2m(current)\033[0m"
+            fi
+
+            printf '%s \033[2m%s\033[0m%s\t%s\n' "$name" "$hash" "$current" "$session"
           done
       }
 
