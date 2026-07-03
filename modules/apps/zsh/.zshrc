@@ -64,7 +64,6 @@ alias v='nvim'
 alias e='yazi_cwd'
 alias g='lazygit'
 alias d='lazydocker'
-alias t='zellij'
 alias ai='opencode'
 alias nrs='sudo nixos-rebuild switch --flake ~/nixos'
 alias nfu='nix flake update --flake ~/nixos --option access-tokens "github.com=$(gh auth token)"'
@@ -73,6 +72,10 @@ alias nfug='nix flake update --flake ~/nixos'
 function activate-ssh-key() {
     eval "$(ssh-agent -s)" > /dev/null
     ssh-add ~/.ssh/$1 > /dev/null
+}
+
+function t() {
+    tmux-project-session "${1:-.}"
 }
 
 function s() {
