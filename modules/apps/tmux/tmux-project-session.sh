@@ -1,9 +1,9 @@
 set -u
 
 session_prefix='@sessionPrefix@'
-dim='\033[2m'
-blue='\033[34m'
-reset='\033[0m'
+dim=$(printf '\033[2m')
+blue=$(printf '\033[34m')
+reset=$(printf '\033[0m')
 
 git_root() {
   git -C "$1" rev-parse --show-toplevel 2>/dev/null
