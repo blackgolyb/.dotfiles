@@ -9,14 +9,20 @@ return {
             "LazyGitFilter",
             "LazyGitFilterCurrentFile",
         },
-        -- optional for floating window border decoration
         dependencies = {
             "nvim-lua/plenary.nvim",
         },
-        -- setting the keybinding for LazyGit with 'keys' is recommended in
-        -- order to load the plugin when the command is run for the first time
+        init = function()
+            if vim.v.servername == "" then
+                vim.fn.serverstart()
+            end
+
+            vim.g.lazygit_use_neovim_remote = 1
+            vim.env.NVIM_LISTEN_ADDRESS = vim.v.servername
+            vim.env.GIT_EDITOR = "nvr --remote-wait-silent +'set bufhidden=wipe'"
+        end,
         keys = {
-            { "<leader>g", "<cmd>LazyGit<cr>", desc = "LazyGit" }
-        }
+            { "<leader>g", "<cmd>LazyGit<cr>", desc = "LazyGit" },
+        },
     },
 }

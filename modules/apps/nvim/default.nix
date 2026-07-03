@@ -11,6 +11,7 @@ in
 
     home.packages = with pkgs; [
       neovim
+      neovim-remote
       xclip
       unzip
       nodejs
