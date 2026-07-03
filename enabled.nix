@@ -4,6 +4,7 @@ let
   requested = {
     apps = {
       nvim.enable = true;
+      tmux.enable = true;
       zed.enable = true;
       zsh.enable = true;
     };

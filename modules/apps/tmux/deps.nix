@@ -1,0 +1,3 @@
+{
+  apps.copyToClipboard.enable = true;
+}

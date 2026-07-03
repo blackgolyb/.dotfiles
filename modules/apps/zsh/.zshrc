@@ -1,3 +1,7 @@
+if [[ -o interactive && -z "$TMUX" && -z "$SSH_CONNECTION" && -z "$NO_TMUX" ]] && command -v tmux >/dev/null 2>&1; then
+  exec tmux new-session
+fi
+
 ###########:STARSHIP:###########
 eval "$(starship init zsh)"
 

@@ -2,12 +2,14 @@
 {
   imports = [
     ./modules/core/dotfiles/dotfiles.nix
+    ./modules/apps/copy-to-clipboard
     ./modules/apps/flameshot
     ./modules/apps/nvim
     ./modules/apps/rofi
     ./modules/apps/rofi-network-manager
     ./modules/apps/starship
     ./modules/apps/thunar
+    ./modules/apps/tmux
     ./modules/apps/wezterm
     ./modules/apps/zed
     ./modules/apps/zsh

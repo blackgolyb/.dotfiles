@@ -2,6 +2,8 @@ local wezterm = require 'wezterm'
 
 local config = wezterm.config_builder()
 
+config.default_prog = { 'tmux', 'new-session' }
+
 config.color_scheme = 'custom'
 -- config.color_scheme = 'Breeze (Gogh)'
 config.window_background_opacity = 0.985
@@ -11,7 +13,7 @@ config.window_padding = {
     top = 15,
     bottom = 15,
 }
-config.enable_tab_bar = true
+config.enable_tab_bar = false
 config.enable_kitty_keyboard = true
 
 
@@ -91,36 +93,36 @@ config.colors = {
 config.show_new_tab_button_in_tab_bar = false
 
 config.keys = {
-    {
-        key = 't',
-        mods = 'ALT',
-        action = wezterm.action.SpawnTab 'CurrentPaneDomain',
-    },
-    {
-        key = 'w',
-        mods = 'ALT',
-        action = wezterm.action.CloseCurrentTab { confirm = false },
-    },
-    {
-        key = 'f',
-        mods = 'ALT',
-        action = wezterm.action.ActivateTab(0),
-    },
-    {
-        key = 'd',
-        mods = 'ALT',
-        action = wezterm.action.ActivateTab(1),
-    },
-    {
-        key = 's',
-        mods = 'ALT',
-        action = wezterm.action.ActivateTab(2),
-    },
-    {
-        key = 'a',
-        mods = 'ALT',
-        action = wezterm.action.ActivateTab(3),
-    },
+    -- {
+    --     key = 't',
+    --     mods = 'ALT',
+    --     action = wezterm.action.SpawnTab 'CurrentPaneDomain',
+    -- },
+    -- {
+    --     key = 'w',
+    --     mods = 'ALT',
+    --     action = wezterm.action.CloseCurrentTab { confirm = false },
+    -- },
+    -- {
+    --     key = 'f',
+    --     mods = 'ALT',
+    --     action = wezterm.action.ActivateTab(0),
+    -- },
+    -- {
+    --     key = 'd',
+    --     mods = 'ALT',
+    --     action = wezterm.action.ActivateTab(1),
+    -- },
+    -- {
+    --     key = 's',
+    --     mods = 'ALT',
+    --     action = wezterm.action.ActivateTab(2),
+    -- },
+    -- {
+    --     key = 'a',
+    --     mods = 'ALT',
+    --     action = wezterm.action.ActivateTab(3),
+    -- },
     {
         key = "Enter",
         mods = "ALT",

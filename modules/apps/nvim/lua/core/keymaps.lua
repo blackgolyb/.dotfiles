@@ -15,10 +15,6 @@ vim.keymap.set("n", "N", "Nzzzv")
 
 vim.keymap.set("x", "<leader>p", [["_dP]], { desc = "Paste over selection" })
 
-vim.keymap.set('n', '<C-h>', '<C-w>h', { desc = 'Move to left window' })
-vim.keymap.set('n', '<C-j>', '<C-w>j', { desc = 'Move to bottom window' })
-vim.keymap.set('n', '<C-k>', '<C-w>k', { desc = 'Move to top window' })
-vim.keymap.set('n', '<C-l>', '<C-w>l', { desc = 'Move to right window' })
 vim.keymap.set('n', '<C-S-h>', '<C-w>H', { desc = 'Move to left window' })
 vim.keymap.set('n', '<C-S-j>', '<C-w>J', { desc = 'Move to bottom window' })
 vim.keymap.set('n', '<C-S-k>', '<C-w>K', { desc = 'Move to top window' })
