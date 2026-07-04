@@ -18,6 +18,7 @@ in
       git
       gcc
       gnumake
+      tree-sitter
       python3
       rustc
       cargo
