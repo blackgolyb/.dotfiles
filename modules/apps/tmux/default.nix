@@ -20,6 +20,13 @@ let
 
   resurrectSave = "${pkgs.tmuxPlugins.resurrect}/share/tmux-plugins/resurrect/scripts/save.sh";
   resurrectRestore = "${pkgs.tmuxPlugins.resurrect}/share/tmux-plugins/resurrect/scripts/restore.sh";
+  tmuxFilterResurrectSave = pkgs.writeShellApplication {
+    name = "tmux-filter-resurrect-save";
+    runtimeInputs = [ pkgs.python3 ];
+    text = ''
+      exec python3 ${./tmux-filter-resurrect-save.py} "$@"
+    '';
+  };
   tmuxStateDir = "\${XDG_RUNTIME_DIR:-/tmp}/tmux-resurrect-systemd";
   tmuxAutostart = pkgs.writeShellApplication {
     name = "tmux-autostart";
@@ -89,8 +96,38 @@ let
       [ -e "$restoring" ] && exit 0
       [ -e "$restored" ] || exit 0
 
+      filter_last_save() {
+        resurrect_dir="$HOME/.tmux/resurrect"
+        last_link="$resurrect_dir/last"
+
+        [ -e "$last_link" ] || return 0
+
+        last_target="$(readlink "$last_link" || true)"
+        [ -n "$last_target" ] || return 0
+
+        last_file="$resurrect_dir/$last_target"
+        backup_file="$resurrect_dir/_bak_$(basename "$last_target")"
+        [ -f "$last_file" ] || return 0
+
+        tmp="$(mktemp "$last_file.XXXXXX")"
+        ${lib.getExe tmuxFilterResurrectSave} < "$last_file" > "$tmp"
+
+        if [ ! -s "$tmp" ]; then
+          rm -f "$tmp"
+          return 0
+        fi
+
+        if cmp -s "$last_file" "$tmp"; then
+          rm -f "$tmp"
+        else
+          cp -p "$last_file" "$backup_file"
+          mv "$tmp" "$last_file"
+        fi
+      }
+
       if tmux has-session 2>/dev/null; then
-        exec ${resurrectSave} quiet
+        ${resurrectSave} quiet
+        filter_last_save
       fi
     '';
   };
@@ -117,6 +154,7 @@ in
       tmuxProjectSession
       tmuxAutostart
       tmuxAutosave
+      tmuxFilterResurrectSave
     ];
 
     programs.tmux = {
