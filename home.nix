@@ -10,6 +10,7 @@
     ./modules/apps/rofi
     ./modules/apps/rofi-network-manager
     ./modules/apps/starship
+    ./modules/apps/ssh
     ./modules/apps/thunar
     ./modules/apps/tmux
     ./modules/apps/wezterm
@@ -17,6 +18,7 @@
     ./modules/apps/zsh
     ./modules/de/hyprland
     ./modules/de/qtile
+    inputs.sops-nix.homeManagerModules.sops
     inputs.zen-browser.homeModules.twilight
   ];
 # Home Manager needs a bit of information about you and the paths it should
