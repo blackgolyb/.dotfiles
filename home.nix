@@ -6,6 +6,7 @@
     ./modules/apps/flameshot
     ./modules/apps/lazygit
     ./modules/apps/nvim
+    ./modules/apps/pass
     ./modules/apps/rofi
     ./modules/apps/rofi-network-manager
     ./modules/apps/starship
@@ -65,7 +66,6 @@
 # '')
 
 # CLI
-      pass
       pinentry-curses # gnupg
       gnupg
       bat
