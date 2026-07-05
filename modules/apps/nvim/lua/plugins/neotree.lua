@@ -6,6 +6,34 @@ _G.sidebar_on_close("neotree", function()
     require("neo-tree.command").execute({ action = "close" })
 end)
 
+local function lazygit_filter_node(state)
+    local node = state.tree:get_node()
+    local path = node and node.path
+
+    if not path then
+        return
+    end
+
+    local cwd = node.type == "directory" and path or vim.fs.dirname(path)
+    local result = vim.system({ "git", "-C", cwd, "rev-parse", "--show-toplevel" }, { text = true }):wait()
+
+    if result.code ~= 0 then
+        vim.notify("Not inside a Git repository", vim.log.levels.WARN)
+        return
+    end
+
+    local git_root = vim.trim(result.stdout)
+    local relative_path = vim.fs.relpath(git_root, path)
+
+    if not relative_path then
+        vim.notify("Selected path is outside Git root", vim.log.levels.WARN)
+        return
+    end
+
+    require("lazy").load({ plugins = { "lazygit.nvim" } })
+    require("lazygit").lazygitfilter(relative_path, git_root)
+end
+
 return {
     {
         "nvim-neo-tree/neo-tree.nvim",
@@ -30,6 +58,7 @@ return {
                     ["N"] = "add_directory",
                     ["a"] = "none",
                     ["A"] = "none",
+                    ["g"] = lazygit_filter_node,
                     ["l"] = function(state)
                         local node = state.tree:get_node()
                         if node.type == "directory" then
@@ -90,4 +119,3 @@ return {
         }
     }
 }
-
