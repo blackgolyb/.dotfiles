@@ -48,19 +48,47 @@ sudo nixos-rebuild switch --flake ~/nixos#nixos --option experimental-features '
 
 This applies NixOS and Home Manager config for user `blackgolyb`.
 
-## 4. Verify Secrets
+## 4. Verify Secrets And Pass
 
 After login, check SOPS decrypted the GitHub SSH key:
 
 ```sh
 systemctl --user status sops-nix.service
 ls -l ~/.config/sops-nix/secrets/ssh/github
+ls -l ~/.ssh/github
 ```
 
 Expected secret path:
 
 ```text
 ~/.config/sops-nix/secrets/ssh/github
+```
+
+Expected convenience symlink for the normal SSH workflow:
+
+```text
+~/.ssh/github -> ~/.config/sops-nix/secrets/ssh/github
+```
+
+The password store is bootstrapped by `password-store.service` after `sops-nix.service`.
+It uses the decrypted GitHub SSH key from the SOPS secrets directory to clone:
+
+```text
+git@github.com:blackgolyb/pass.git
+```
+
+Verify it:
+
+```sh
+systemctl --user status password-store.service
+git -C ~/.password-store remote get-url origin
+pass ls
+```
+
+Expected origin:
+
+```text
+git@github.com:blackgolyb/pass.git
 ```
 
 ## 5. If Age Key Is Lost
