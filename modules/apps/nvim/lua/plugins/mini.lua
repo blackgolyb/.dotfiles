@@ -36,6 +36,57 @@ end
 
 return {
     {
+        'rmagatti/alternate-toggler',
+        opts = {
+            alternates = {
+                { 'true', 'false' },
+                { 'True', 'False' },
+                { 'TRUE', 'FALSE' },
+                { 'Yes', 'No' },
+                { 'YES', 'NO' },
+                { '1', '0' },
+                { '<', '>' },
+                { '>=', '<=' },
+                { '+', '-' },
+                { '===', '!==' },
+                { '==', '!=' },
+                { '&&', '||' },
+                { 'and', 'or' },
+                { 'public', 'private', 'protected' },
+            },
+        },
+        config = function(_, opts)
+            require('alternate-toggler').setup(opts)
+        end,
+    },
+    {
+        'nvim-mini/mini.splitjoin',
+        version = false,
+        keys = {
+            {
+                '<leader>m',
+                function()
+                    local changedtick = vim.b.changedtick
+                    vim.cmd.ToggleAlternate()
+
+                    if vim.b.changedtick ~= changedtick then
+                        return
+                    end
+
+                    require('mini.splitjoin').toggle()
+                end,
+                desc = 'Toggle alternate or split/join',
+            },
+        },
+        opts = {
+            mappings = {
+                toggle = '',
+                split = '',
+                join = '',
+            },
+        },
+    },
+    {
         "nvim-mini/mini.ai",
         version = false,
         config = function()
