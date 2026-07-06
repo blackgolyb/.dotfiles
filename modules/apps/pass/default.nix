@@ -63,7 +63,7 @@ in
 
     sshKeyPath = lib.mkOption {
       type = lib.types.str;
-      default = config.sops.secrets."ssh/github".path;
+      default = config.sops.secrets."ssh/system/github".path;
       description = "SSH private key used to clone the password store.";
     };
   };

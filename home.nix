@@ -9,6 +9,7 @@
     ./modules/apps/pass
     ./modules/apps/rofi
     ./modules/apps/rofi-network-manager
+    ./modules/apps/secrets
     ./modules/apps/starship
     ./modules/apps/ssh
     ./modules/apps/thunar

@@ -6,3 +6,7 @@ creation_rules:
     key_groups:
       - age:
           - *blackgolyb
+  - path_regex: secrets/ssh/.+\.key$
+    key_groups:
+      - age:
+          - *blackgolyb

@@ -48,30 +48,35 @@ sudo nixos-rebuild switch --flake ~/nixos#nixos --option experimental-features '
 
 This applies NixOS and Home Manager config for user `blackgolyb`.
 
-## 4. Verify Secrets And Pass
+## 4. Verify SSH Keys And Pass
 
-After login, check SOPS decrypted the GitHub SSH key:
+After login, check sops-nix decrypted the system GitHub key and the SSH key installer linked the user GitHub key:
 
 ```sh
 systemctl --user status sops-nix.service
-ls -l ~/.config/sops-nix/secrets/ssh/github
+systemctl --user status ssh-keys.service
+ls -l ~/.config/sops-nix/secrets/ssh/system/github
+ls -l "${XDG_RUNTIME_DIR:-/run/user/$(id -u)}/dotfiles-ssh/user/github"
 ls -l ~/.ssh/github
+ls -l ~/.ssh/github.pub
 ```
 
-Expected secret path:
+Expected runtime secret paths:
 
 ```text
-~/.config/sops-nix/secrets/ssh/github
+~/.config/sops-nix/secrets/ssh/system/github
+${XDG_RUNTIME_DIR}/dotfiles-ssh/user/github
 ```
 
 Expected convenience symlink for the normal SSH workflow:
 
 ```text
-~/.ssh/github -> ~/.config/sops-nix/secrets/ssh/github
+~/.ssh/github -> ${XDG_RUNTIME_DIR}/dotfiles-ssh/user/github
+~/.ssh/github.pub -> ${XDG_RUNTIME_DIR}/dotfiles-ssh/user/github.pub
 ```
 
 The password store is bootstrapped by `password-store.service` after `sops-nix.service`.
-It uses the decrypted GitHub SSH key from the SOPS secrets directory to clone:
+It uses the explicit sops-nix system GitHub SSH key to clone:
 
 ```text
 git@github.com:blackgolyb/pass.git
@@ -91,7 +96,31 @@ Expected origin:
 git@github.com:blackgolyb/pass.git
 ```
 
-## 5. If Age Key Is Lost
+## 5. Add SSH Keys
+
+Generate a service-only key under `secrets/ssh/system/`:
+
+```sh
+dotfiles ssh-keygen system <name>
+```
+
+Generate a user workflow key under `secrets/ssh/user/`:
+
+```sh
+dotfiles ssh-keygen user <name>
+```
+
+You can also pass an explicit encrypted private key file path:
+
+```sh
+dotfiles ssh-keygen user <name> secrets/ssh/user/custom-name.key
+```
+
+The command writes an encrypted private key file and a plain public key file next to it.
+Files under `secrets/ssh/user/*.key` are linked automatically to `~/.ssh/<name>` with matching `~/.ssh/<name>.pub`.
+System keys under `secrets/ssh/system/*.key` must be declared explicitly in `my.apps.secrets.secrets` and are consumed through `config.sops.secrets.<name>.path`.
+
+## 6. If Age Key Is Lost
 
 On a machine that can still decrypt secrets:
 
@@ -103,5 +132,6 @@ age-keygen -y ~/.config/sops/age/keys.txt
 Put the new public recipient into `.sops.yaml`, then re-encrypt secrets:
 
 ```sh
-sops updatekeys secrets/ssh.yaml
+sops updatekeys secrets/ssh/system/*.key
+sops updatekeys secrets/ssh/user/*.key
 ```

@@ -5,6 +5,7 @@ let
     apps = {
       nvim.enable = true;
       pass.enable = true;
+      secrets.enable = true;
       ssh.enable = true;
       tmux.enable = true;
       zed.enable = true;

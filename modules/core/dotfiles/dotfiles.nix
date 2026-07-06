@@ -1,4 +1,4 @@
-{ config, inputs, lib, ... }:
+{ config, inputs, lib, pkgs, ... }:
 
 let
   cfg = config.dotfiles;
@@ -138,6 +138,22 @@ let
     ++ lib.mapAttrsToList renderDataEntry cfg.data
     ++ lib.mapAttrsToList renderFileEntry cfg.file
   );
+
+  dotfilesPython = pkgs.python3.withPackages (pythonPkgs: [
+    pythonPkgs.click
+  ]);
+
+  dotfilesCli = pkgs.writeShellApplication {
+    name = "dotfiles";
+    runtimeInputs = with pkgs; [
+      git
+      openssh
+      sops
+    ];
+    text = ''
+      exec ${dotfilesPython}/bin/python ${./cli.py} "$@"
+    '';
+  };
 in
 {
   options.dotfiles = {
@@ -179,6 +195,8 @@ in
   };
 
   config = {
+    home.packages = [ dotfilesCli ];
+
     xdg.configFile = lib.mkIf cfg.pure (lib.mapAttrs (_: pureAttrs) cfg.config);
     xdg.dataFile = lib.mkIf cfg.pure (lib.mapAttrs (_: pureAttrs) cfg.data);
     home.file = lib.mkIf cfg.pure (lib.mapAttrs (_: pureAttrs) cfg.file);
