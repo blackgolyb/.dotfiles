@@ -110,12 +110,6 @@ Generate a user workflow key under `secrets/ssh/user/`:
 dotfiles ssh-keygen user <name>
 ```
 
-You can also pass an explicit encrypted private key file path:
-
-```sh
-dotfiles ssh-keygen user <name> secrets/ssh/user/custom-name.key
-```
-
 The command writes an encrypted private key file and a plain public key file next to it.
 Files under `secrets/ssh/user/*.key` are linked automatically to `~/.ssh/<name>` with matching `~/.ssh/<name>.pub`.
 System keys under `secrets/ssh/system/*.key` must be declared explicitly in `my.apps.secrets.secrets` and are consumed through `config.sops.secrets.<name>.path`.

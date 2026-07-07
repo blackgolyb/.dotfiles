@@ -146,11 +146,11 @@ let
   dotfilesCli = pkgs.writeShellApplication {
     name = "dotfiles";
     runtimeInputs = with pkgs; [
-      git
       openssh
       sops
     ];
     text = ''
+      export DOTFILES_ROOT=${lib.escapeShellArg cfg.root}
       exec ${dotfilesPython}/bin/python ${./cli.py} "$@"
     '';
   };
