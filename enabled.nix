@@ -4,6 +4,7 @@ let
   requested = {
     apps = {
       nvim.enable = true;
+      openwhispr.enable = true;
       pass.enable = true;
       secrets.enable = true;
       ssh.enable = true;

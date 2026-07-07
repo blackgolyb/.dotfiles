@@ -199,10 +199,31 @@
         "type": "github"
       }
     },
+    "openwhispr": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1783395265,
+        "narHash": "sha256-AzHCxJeCfV6NKOiX5hS13j4cHtqHqfeEPaktC9r8tNM=",
+        "owner": "OpenWhispr",
+        "repo": "openwhispr",
+        "rev": "87736b85b47b5ca794edf13e081c0448a58f219f",
+        "type": "github"
+      },
+      "original": {
+        "owner": "OpenWhispr",
+        "repo": "openwhispr",
+        "type": "github"
+      }
+    },
     "root": {
       "inputs": {
         "home-manager": "home-manager",
         "nixpkgs": "nixpkgs",
+        "openwhispr": "openwhispr",
         "sops-nix": "sops-nix",
         "stylix": "stylix",
         "zen-browser": "zen-browser"

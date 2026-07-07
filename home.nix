@@ -6,6 +6,7 @@
     ./modules/apps/flameshot
     ./modules/apps/lazygit
     ./modules/apps/nvim
+    ./modules/apps/openwhispr
     ./modules/apps/pass
     ./modules/apps/rofi
     ./modules/apps/rofi-network-manager
