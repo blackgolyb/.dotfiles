@@ -58,7 +58,7 @@ return {
                     ["N"] = "add_directory",
                     ["a"] = "none",
                     ["A"] = "none",
-                    ["g"] = lazygit_filter_node,
+                    ["<leader>g"] = lazygit_filter_node,
                     ["l"] = function(state)
                         local node = state.tree:get_node()
                         if node.type == "directory" then
