@@ -34,6 +34,22 @@ local function lazygit_filter_node(state)
     require("lazygit").lazygitfilter(relative_path, git_root)
 end
 
+local function oil_node(state)
+    local node = state.tree:get_node()
+    local path = node and node.path
+
+    if not path then
+        return
+    end
+
+    local dir = node.type == "directory" and path or vim.fs.dirname(path)
+
+    _G.sidebar("none")
+    vim.schedule(function()
+        require("oil").open_float(dir)
+    end)
+end
+
 return {
     {
         "nvim-neo-tree/neo-tree.nvim",
@@ -59,6 +75,7 @@ return {
                     ["a"] = "none",
                     ["A"] = "none",
                     ["<leader>g"] = lazygit_filter_node,
+                    ["<leader>E"] = oil_node,
                     ["l"] = function(state)
                         local node = state.tree:get_node()
                         if node.type == "directory" then
