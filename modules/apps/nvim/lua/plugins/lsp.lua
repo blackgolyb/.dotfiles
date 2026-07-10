@@ -9,7 +9,8 @@ return {
                 "nixd", "lua_ls", "ts_ls", "html", "cssls", "jsonls",
                 "eslint", "tailwindcss", "emmet_ls", "pyright", "ruff",
                 "clangd", "rust_analyzer", "elixirls", "bashls",
-                "dockerls", "taplo", "yamlls", "typos_lsp", "marksman"
+                "dockerls", "taplo", "yamlls", "typos_lsp", "marksman",
+                "wgsl_analyzer"
             }
 
             for _, server_name in ipairs(servers) do

@@ -44,6 +44,7 @@ in
       yaml-language-server
       typos-lsp
       marksman
+      wgsl-analyzer
     ];
 
     dotfiles.config."nvim" = {

@@ -22,6 +22,7 @@ local ensure_installed = {
     'typescript',
     'vim',
     'vimdoc',
+    'wgsl',
     'xml',
     'yaml',
 }
