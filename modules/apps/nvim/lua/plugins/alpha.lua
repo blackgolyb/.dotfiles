@@ -149,6 +149,12 @@ return {
         dashboard.section.buttons.opts.spacing = 0
         dashboard.section.buttons.opts.hl = "Function"
 
+        local content_height = #dashboard.section.header.val + #dashboard.section.buttons.val + 2
+        dashboard.opts.layout[1].val = math.max(
+          0,
+          math.floor((vim.api.nvim_win_get_height(0) - content_height) / 2)
+        )
+
         alpha.setup(dashboard.opts)
       end
     }
