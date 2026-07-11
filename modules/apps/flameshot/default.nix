@@ -28,8 +28,6 @@ in
     '';
 
     xdg.configFile."flameshot-wayland/flameshot/flameshot.ini".text = ''
-      [General]
-      useGrimAdapter=true
     '';
   };
 }
