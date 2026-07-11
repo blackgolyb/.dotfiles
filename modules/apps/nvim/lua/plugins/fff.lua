@@ -36,6 +36,18 @@ return {
         function() require('fff').find_files() end,
         desc = 'FFFind files',
       }
-    }
+    },
+    config = function(_, opts)
+      require("fff").setup(opts)
+
+      vim.keymap.set("i", "<C-x><C-f>", function()
+        require("fff").find_files({
+          on_submit = function(item, ctx)
+            local path = ctx.relative_path
+            vim.api.nvim_feedkeys("a" .. path, "n", false)
+          end,
+        })
+      end, { desc = "Insert file path via fff" })
+    end,
   },
 }
