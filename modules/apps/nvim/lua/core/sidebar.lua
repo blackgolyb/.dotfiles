@@ -23,13 +23,24 @@ _G.sidebar = function(name)
   if prev ~= "none" then
     vim.api.nvim_exec_autocmds("User", {
       pattern = "SidebarClose",
-      data = { 
+      data = {
         name = prev,
       },
     })
   end
 end
 
+_G.sidebar_close = function()
+  local name = _G.sidebar_manager.current
+  if name == "none" then
+    return
+  end
+  _G.sidebar_manager.current = "none"
+  vim.api.nvim_exec_autocmds("User", {
+    pattern = "SidebarClose",
+    data = { name = name },
+  })
+end
 
 _G.sidebar_on_open = function(name, callback)
   vim.api.nvim_create_autocmd("User", {

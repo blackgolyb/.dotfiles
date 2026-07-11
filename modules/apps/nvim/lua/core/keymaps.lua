@@ -14,6 +14,9 @@ vim.keymap.set("n", "n", "nzzzv")
 vim.keymap.set("n", "N", "Nzzzv")
 
 vim.keymap.set("x", "<leader>p", [["_dP]], { desc = "Paste over selection" })
+vim.keymap.set("t", "<Esc><Esc>", [[<C-\><C-n>]], {
+    desc = "Exit terminal mode",
+})
 
 vim.keymap.set('n', '<C-S-h>', '<C-w>H', { desc = 'Move to left window' })
 vim.keymap.set('n', '<C-S-j>', '<C-w>J', { desc = 'Move to bottom window' })
