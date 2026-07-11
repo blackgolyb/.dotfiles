@@ -14,6 +14,7 @@ in
       neovim-remote
       xclip
       unzip
+      lsof
       nodejs
       git
       gcc
