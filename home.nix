@@ -6,6 +6,7 @@
     ./modules/apps/flameshot
     ./modules/apps/lazygit
     ./modules/apps/nvim
+    ./modules/apps/opencode
     ./modules/apps/openwhispr
     ./modules/apps/pass
     ./modules/apps/rofi
@@ -93,7 +94,6 @@
       lazydocker
       btop
       wezterm
-      opencode
       codex
 
 # Programs
