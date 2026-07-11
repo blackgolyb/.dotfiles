@@ -136,6 +136,12 @@ in
   options.my.apps.tmux = {
     enable = lib.mkEnableOption "tmux";
 
+    autoSaveAndRestore = lib.mkOption {
+      type = lib.types.bool;
+      default = false;
+      description = "Whether to automatically save and restore tmux sessions with tmux-resurrect.";
+    };
+
     autoSaveInterval = lib.mkOption {
       type = lib.types.str;
       default = "10min";
@@ -150,12 +156,12 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    home.packages = [
-      tmuxProjectSession
-      tmuxAutostart
-      tmuxAutosave
-      tmuxFilterResurrectSave
-    ];
+    home.packages = [ tmuxProjectSession ]
+      ++ lib.optionals cfg.autoSaveAndRestore [
+        tmuxAutostart
+        tmuxAutosave
+        tmuxFilterResurrectSave
+      ];
 
     programs.tmux = {
       enable = true;
@@ -182,48 +188,52 @@ in
 
     # auto-start tmux on login so resurrect can restore sessions
     # even before you open a terminal
-    systemd.user.services.tmux = {
-      Unit = {
-        Description = "tmux: terminal multiplexer (detached)";
-        Documentation = [ "man:tmux(1)" ];
+    systemd.user.services = lib.mkIf cfg.autoSaveAndRestore {
+      tmux = {
+        Unit = {
+          Description = "tmux: terminal multiplexer (detached)";
+          Documentation = [ "man:tmux(1)" ];
+        };
+        Service = {
+          Type = "oneshot";
+          RemainAfterExit = true;
+          ExecStart = lib.getExe tmuxAutostart;
+          ExecStop = [
+            (lib.getExe tmuxAutosave)
+            "${lib.getExe pkgs.tmux} kill-server"
+          ];
+          KillMode = "mixed";
+        };
+        Install = {
+          WantedBy = [ "default.target" ];
+        };
       };
-      Service = {
-        Type = "oneshot";
-        RemainAfterExit = true;
-        ExecStart = lib.getExe tmuxAutostart;
-        ExecStop = [
-          (lib.getExe tmuxAutosave)
-          "${lib.getExe pkgs.tmux} kill-server"
-        ];
-        KillMode = "mixed";
-      };
-      Install = {
-        WantedBy = [ "default.target" ];
+
+      tmux-autosave = {
+        Unit = {
+          Description = "tmux-resurrect autosave";
+          After = [ "tmux.service" ];
+        };
+        Service = {
+          Type = "oneshot";
+          ExecStart = lib.getExe tmuxAutosave;
+        };
       };
     };
 
-    systemd.user.services.tmux-autosave = {
-      Unit = {
-        Description = "tmux-resurrect autosave";
-        After = [ "tmux.service" ];
-      };
-      Service = {
-        Type = "oneshot";
-        ExecStart = lib.getExe tmuxAutosave;
-      };
-    };
-
-    systemd.user.timers.tmux-autosave = {
-      Unit = {
-        Description = "tmux-resurrect autosave timer";
-      };
-      Timer = {
-        OnActiveSec = cfg.autoSaveInterval;
-        OnUnitActiveSec = cfg.autoSaveInterval;
-        Unit = "tmux-autosave.service";
-      };
-      Install = {
-        WantedBy = [ "timers.target" ];
+    systemd.user.timers = lib.mkIf cfg.autoSaveAndRestore {
+      tmux-autosave = {
+        Unit = {
+          Description = "tmux-resurrect autosave timer";
+        };
+        Timer = {
+          OnActiveSec = cfg.autoSaveInterval;
+          OnUnitActiveSec = cfg.autoSaveInterval;
+          Unit = "tmux-autosave.service";
+        };
+        Install = {
+          WantedBy = [ "timers.target" ];
+        };
       };
     };
   };
