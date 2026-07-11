@@ -14,7 +14,7 @@ vim.keymap.set("n", "n", "nzzzv")
 vim.keymap.set("n", "N", "Nzzzv")
 
 vim.keymap.set("x", "<leader>p", [["_dP]], { desc = "Paste over selection" })
-vim.keymap.set("t", "<Esc><Esc>", [[<C-\><C-n>]], {
+vim.keymap.set("t", "<C-g>", [[<C-\><C-n>]], {
     desc = "Exit terminal mode",
 })
 

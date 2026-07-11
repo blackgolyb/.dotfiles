@@ -41,7 +41,7 @@ return {
 
             vim.keymap.set('x', 'gl', '<Plug>(VM-Find-Subword-Under)', { remap = true })
             vim.keymap.set('x', 'ga', '<Plug>(VM-Visual-All)', { remap = true })
-            vim.keymap.set('x', 'gb', '<Plug>(VM-Visual-Cursors)', { remap = true })
+            vim.keymap.set('x', 'gI', '<Plug>(VM-Visual-Cursors)', { remap = true })
 
             local group = vim.api.nvim_create_augroup('visual_multi_custom_esc', { clear = true })
 
