@@ -6,7 +6,7 @@ config.default_prog = { 'tmux', 'new-session' }
 
 config.color_scheme = 'custom'
 -- config.color_scheme = 'Breeze (Gogh)'
-config.window_background_opacity = 0.985
+config.window_background_opacity = 0.995
 config.window_padding = {
     left = 15,
     right = 15,
