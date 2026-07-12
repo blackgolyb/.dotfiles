@@ -18,7 +18,8 @@ config.enable_kitty_keyboard = true
 
 
 config.font = wezterm.font 'FiraCode Nerd Font Mono'
-config.font_size = 16.0
+config.font_size = 15.0
+config.line_height = 1.33
 config.bold_brightens_ansi_colors = false
 
 config.cursor_blink_ease_in = "Constant"
