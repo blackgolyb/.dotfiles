@@ -60,8 +60,7 @@ return {
         end,
     },
     {
-        'nvim-mini/mini.splitjoin',
-        version = false,
+        'Wansmer/treesj',
         keys = {
             {
                 '<leader>m',
@@ -73,33 +72,56 @@ return {
                         return
                     end
 
-                    require('mini.splitjoin').toggle()
+                    require('treesj').toggle()
                 end,
                 desc = 'Toggle alternate or split/join',
             },
         },
-        opts = {
-            mappings = {
-                toggle = '',
-                split = '',
-                join = '',
-            },
-        },
+        config = function()
+            require('treesj').setup({
+                use_default_keymaps = false,
+            })
+        end,
     },
     {
         "nvim-mini/mini.ai",
         version = false,
+        dependencies = {
+            "nvim-treesitter/nvim-treesitter-textobjects",
+        },
         config = function()
             local ai = require("mini.ai")
             ai.setup({
                 custom_textobjects = {
                     e = buffer_boundary,
                     i = indent_boundary,
+                    b = ai.gen_spec.pair("(", ")"),
+                    B = ai.gen_spec.pair("{", "}"),
+                    f = ai.gen_spec.treesitter({
+                        a = "@function.outer",
+                        i = "@function.inner",
+                    }),
                 },
             })
         end,
     },
     { 'nvim-mini/mini.move', version = false, config = true },
-    -- { 'nvim-mini/mini.surround', version = false, config = true },
+    {
+        'nvim-mini/mini.surround',
+        version = false,
+        config = function()
+            local surround = require("mini.surround")
+            surround.setup({
+                  mappings = {
+                    add = 'Sa',
+                    delete = 'Sd',
+                    find = 'Sf',
+                    find_left = 'SF',
+                    highlight = 'Sh',
+                    replace = 'Sr',
+                },
+            })
+        end,
+    },
     { 'nvim-mini/mini.pairs', version = false, config = true },
 }
