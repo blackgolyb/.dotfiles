@@ -1,3 +1,5 @@
+local ui = require("core.ui")
+
 return {
     'nvim-telescope/telescope.nvim',
     tag = 'v0.2.1',
@@ -9,6 +11,11 @@ return {
     config = function()
         local builtin = require('telescope.builtin')
         local actions = require('telescope.actions')
+        local borderchars = {
+            prompt = ui.surface_border,
+            results = ui.surface_border,
+            preview = ui.surface_border,
+        }
 
         vim.keymap.set('n', 'g/', builtin.live_grep, { desc = "Global search (Live Grep)" })
         vim.keymap.set('n', 'g*', builtin.grep_string, { desc = "Search word under cursor" })
@@ -44,13 +51,18 @@ return {
                     },
                 },
                 sorting_strategy = "ascending",
+                border = true,
+                borderchars = borderchars,
                 layout_config = {
                     prompt_position = "top",
                 },
             },
             extensions = {
                 ["ui-select"] = {
-                    require("telescope.themes").get_dropdown({}),
+                    require("telescope.themes").get_dropdown({
+                        border = true,
+                        borderchars = borderchars,
+                    }),
                 },
             },
         })

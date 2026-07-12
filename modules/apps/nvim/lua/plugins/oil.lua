@@ -1,3 +1,5 @@
+local ui = require("core.ui")
+
 return {
   "stevearc/oil.nvim",
   lazy = false,
@@ -22,6 +24,22 @@ return {
     },
     view_options = {
       show_hidden = true,
+    },
+    float = {
+      border = ui.surface_border,
+    },
+    confirmation = {
+      border = ui.surface_border,
+    },
+    progress = {
+      border = ui.surface_border,
+      minimized_border = ui.surface_border,
+    },
+    ssh = {
+      border = ui.surface_border,
+    },
+    keymaps_help = {
+      border = ui.surface_border,
     },
   },
   init = function()

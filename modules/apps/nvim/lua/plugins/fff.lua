@@ -13,18 +13,24 @@ return {
         enabled = true,     -- we expect your collaboration at least during the beta
         show_scores = false, -- to help us optimize the scoring system, feel free to share your scores!
       },
-      prompt = '',
+      prompt = '  ',
       title = 'Files',
       preview = {
         enabled = false,
       },
       layout = {
+        border = 'single',
+        title_pos = 'center',
         prompt_position = 'top',
         height = 0.6,
         width = 0.4,
       },
       hl = {
-        border = 'TelescopeBorder',
+        border = 'FFFBorder',
+        normal = 'FFFNormal',
+        prompt = 'FFFPrompt',
+        title = 'FFFTitle',
+        cursor = 'FFFCursor',
       },
     },
     -- No need to lazy-load with lazy.nvim.
@@ -34,10 +40,33 @@ return {
       {
         "<leader>f", -- try it if you didn't it is a banger keybinding for a picker
         function() require('fff').find_files() end,
-        desc = 'FFFind files',
+        desc = 'Fuzzy Find Files',
       }
     },
     config = function(_, opts)
+      local fff_layout = require('fff.layout')
+
+      if not fff_layout._title_pos_patched then
+        local compute = fff_layout.compute
+
+        fff_layout.compute = function(config, ...)
+          local result = compute(config, ...)
+          local title_pos = config.layout and config.layout.title_pos
+
+          if title_pos and result.win_configs then
+            for _, win in ipairs({ result.win_configs.list, result.win_configs.input }) do
+              if win and win.title then
+                win.title_pos = title_pos
+              end
+            end
+          end
+
+          return result
+        end
+
+        fff_layout._title_pos_patched = true
+      end
+
       require("fff").setup(opts)
 
       vim.keymap.set("i", "<C-x><C-f>", function()

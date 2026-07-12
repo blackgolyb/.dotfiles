@@ -1,6 +1,8 @@
 vim.g.mapleader = " "
 vim.g.maplocalleader = "\\"
 
+local ui = require("core.ui")
+
 vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>", { desc = "Clear search highlight" })
 
 vim.keymap.set("n", "Q", "<nop>")
@@ -28,7 +30,7 @@ local function hover_with_diagnostics()
     vim.diagnostic.open_float(nil, {
         scope = "cursor",
         focus = false,
-        border = "rounded",
+        border = ui.surface_border,
     })
 
     -- Then request LSP hover

@@ -112,11 +112,11 @@ local function diagnostics_component()
     local parts = {}
 
     if errors > 0 then
-        table.insert(parts, hl('TmuxLualineDiagnosticError', 'E' .. errors))
+        table.insert(parts, hl('TmuxLualineDiagnosticError', 'E:' .. errors))
     end
 
     if warnings > 0 then
-        table.insert(parts, hl('TmuxLualineDiagnosticWarn', 'W' .. warnings))
+        table.insert(parts, hl('TmuxLualineDiagnosticWarn', 'W:' .. warnings))
     end
 
     return table.concat(parts, config.options.component_separator)

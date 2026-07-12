@@ -31,7 +31,7 @@ vim.opt.guicursor = {
 vim.opt.fillchars:append { eob = " " }
 
 
-vim.o.winborder = 'rounded'
+vim.o.winborder = 'single'
 
 vim.api.nvim_create_autocmd('TextYankPost', {
   desc = 'Highlight when yanking (copying) text',

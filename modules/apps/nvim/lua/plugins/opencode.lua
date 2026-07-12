@@ -1,3 +1,5 @@
+local ui = require("core.ui")
+
 return {
     "nickjvandyke/opencode.nvim",
     version = "*", -- Latest stable release
@@ -176,7 +178,7 @@ return {
                 row = 1,
                 col = 1,
                 style = "minimal",
-                border = "rounded",
+                border = ui.surface_border,
             })
             vim.wo.number = false
             vim.wo.relativenumber = false

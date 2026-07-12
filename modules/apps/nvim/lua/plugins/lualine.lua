@@ -8,7 +8,7 @@ return {
             local function lsp_clients()
                 local clients = vim.lsp.get_clients({ bufnr = 0 })
                 if #clients == 0 then
-                    return "no lsp"
+                    return ''
                 end
 
                 local names = {}
@@ -64,7 +64,7 @@ return {
 
             require('lualine').setup({
                 options = {
-                    theme = 'auto',
+                    theme = 'monodark',
                     globalstatus = true,
                     icons_enabled = true,
                     component_separators = '',
@@ -78,13 +78,19 @@ return {
                     lualine_b = {
                         filename_widget,
                     },
-                    lualine_c = {},
+                    lualine_c = {
+                        'branch',
+                        {
+                            'diff',
+                            symbols = { added = '+', modified = '~', removed = '-' },
+                        },
+                    },
                     lualine_x = {
                         {
                             'diagnostics',
                             sources = { 'nvim_diagnostic' },
                             sections = { 'error', 'warn' },
-                            symbols = { error = 'E', warn = 'W' },
+                            symbols = { error = 'E:', warn = 'W:' },
                         },
                         lsp_clients,
                     },

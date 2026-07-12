@@ -8,7 +8,7 @@ return {
       harpoon:setup()
 
       vim.keymap.set("n", "<leader>t", function()
-        harpoon.ui:toggle_quick_menu(harpoon:list())
+        harpoon.ui:toggle_quick_menu(harpoon:list(), { title_pos = "center" })
       end, { desc = "Harpoon Menu" })
 
       vim.keymap.set("n", "<leader>a", function()

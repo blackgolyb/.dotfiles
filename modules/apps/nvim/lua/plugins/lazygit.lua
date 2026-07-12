@@ -1,3 +1,5 @@
+local ui = require("core.ui")
+
 return {
     {
         "kdheepak/lazygit.nvim",
@@ -18,6 +20,7 @@ return {
             end
 
             vim.g.lazygit_use_neovim_remote = 1
+            vim.g.lazygit_floating_window_border_chars = ui.surface_border
             vim.env.NVIM_LISTEN_ADDRESS = vim.v.servername
             vim.env.GIT_EDITOR = "nvr --remote-wait-silent +'set bufhidden=wipe'"
         end,

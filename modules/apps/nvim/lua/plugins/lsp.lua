@@ -1,3 +1,5 @@
+local ui = require("core.ui")
+
 return {
     {
         "neovim/nvim-lspconfig",
@@ -66,7 +68,7 @@ return {
                         vim.diagnostic.open_float(nil, {
                             scope = "cursor",
                             focus = false,
-                            border = "rounded",
+                            border = ui.surface_border,
                         })
                     end
 
