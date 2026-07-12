@@ -64,17 +64,16 @@ return {
                 callback = function(event)
                     local opts = { buffer = event.buf }
 
-                    local function show_diagnostics()
-                        vim.diagnostic.open_float(nil, {
-                            scope = "cursor",
-                            focus = false,
-                            border = ui.surface_border,
-                        })
-                    end
-
                     vim.keymap.set('n', 'gd', vim.lsp.buf.definition, opts)
                     vim.keymap.set('n', 'K',  vim.lsp.buf.hover, opts)
-                    vim.keymap.set('n', 'ge', show_diagnostics, opts)
+                    vim.keymap.set("n", "ge", function()
+                      vim.diagnostic.open_float({
+                        buffer = event.buf,
+                        scope = "cursor",
+                        focusable = true,
+                        source = "if_many",
+                      })
+                    end, { desc = "Cursor diagnostics" })
                     vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, opts)
                     vim.keymap.set('n', 'gr', vim.lsp.buf.references, opts)
                     vim.keymap.set('n', 'cd', vim.lsp.buf.rename, opts)
