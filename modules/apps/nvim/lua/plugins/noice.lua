@@ -5,7 +5,31 @@ return {
         "folke/noice.nvim",
         event = "VeryLazy",
         opts = {
+            messages = {
+                enabled = true,
+                view = "mini",
+                view_error = "notify",
+                view_warn = "notify",
+                view_history = "messages",
+                view_search = false,
+            },
+            notify = {
+                enabled = true,
+                view = "notify",
+            },
             views = {
+                mini = {
+                    timeout = 1800,
+                },
+                notify = {
+                    timeout = 3500,
+                    merge = false,
+                    replace = false,
+                },
+                messages = {
+                    enter = true,
+                    size = "25%",
+                },
                 cmdline_popup = {
                     border = {
                         style = ui.surface_border,
@@ -51,9 +75,6 @@ return {
                 hover = {
                     enabled = false,
                 },
-            },
-            notify = {
-                enabled = false,
             },
         },
         dependencies = {
