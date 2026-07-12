@@ -69,6 +69,7 @@ return {
         end
 
         _G.sidebar_on_open("ai", M.open)
+        _G.sidebar_on_focus("ai", M.open)
         _G.sidebar_on_close("ai", M.close)
 
         local prompt = { buf = nil }
@@ -118,6 +119,19 @@ return {
             })
         end
 
+        function M.focus_prompt()
+            if prompt.buf and vim.api.nvim_buf_is_valid(prompt.buf) then
+                local win = vim.fn.bufwinid(prompt.buf)
+                if win ~= -1 and vim.api.nvim_win_is_valid(win) then
+                    vim.api.nvim_set_current_win(win)
+                    vim.cmd("startinsert")
+                    return
+                end
+            end
+
+            M.open_prompt()
+        end
+
         function M.send_to_opencode(content)
             if not content:match("%S") then
                 return
@@ -145,6 +159,7 @@ return {
         end
 
         _G.sidebar_on_open("ai-prompt", M.open_prompt)
+        _G.sidebar_on_focus("ai-prompt", M.focus_prompt)
         _G.sidebar_on_close("ai-prompt", M.close_prompt)
 
         ---@type opencode.Opts

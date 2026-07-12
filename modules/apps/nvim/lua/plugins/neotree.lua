@@ -2,6 +2,10 @@ _G.sidebar_on_open("neotree", function()
     vim.cmd("Neotree")
 end)
 
+_G.sidebar_on_focus("neotree", function()
+    vim.cmd("Neotree focus")
+end)
+
 _G.sidebar_on_close("neotree", function()
     require("neo-tree.command").execute({ action = "close" })
 end)
