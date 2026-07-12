@@ -65,3 +65,7 @@ _G.sidebar_on_close = function(name, callback)
     end,
   })
 end
+
+vim.keymap.set({ "n", "t" }, "<C-q>", function()
+  _G.sidebar_close()
+end, { desc = "Close current sidebar", silent = true })

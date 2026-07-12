@@ -6,6 +6,12 @@ return {
     config = function()
         local M = { win = nil, buf = nil }
 
+        function M.connect_events()
+            require("opencode.server.discovery").get():catch(function(err)
+                vim.notify("Failed to connect Agent events: " .. err, vim.log.levels.WARN, { title = "opencode" })
+            end)
+        end
+
         function M.open()
             if M.win and vim.api.nvim_win_is_valid(M.win) then
                 vim.api.nvim_set_current_win(M.win)
@@ -35,11 +41,11 @@ return {
             vim.keymap.set({"n", "t"}, "<C-e>", function() _G.sidebar("ai-prompt") end,
                 { desc = "Edit prompt", buffer = M.buf, silent = true })
             vim.keymap.set("n", "<leader>of", function() M.toggle_fullscreen() end,
-                { desc = "Toggle OpenCode fullscreen sidebar", buffer = M.buf, silent = true })
+                { desc = "Toggle Agent fullscreen sidebar", buffer = M.buf, silent = true })
             vim.keymap.set({"n", "t"}, "<C-u>", function() require("opencode").command("session.half.page.up") end,
-                { desc = "Scroll OpenCode up", buffer = M.buf, silent = true })
+                { desc = "Scroll Agent up", buffer = M.buf, silent = true })
             vim.keymap.set({"n", "t"}, "<C-d>", function() require("opencode").command("session.half.page.down") end,
-                { desc = "Scroll OpenCode down", buffer = M.buf, silent = true })
+                { desc = "Scroll Agent down", buffer = M.buf, silent = true })
             vim.keymap.set("n", "G", function() require("opencode").command("session.last") end,
                 { desc = "Go to bottom", buffer = M.buf, silent = true })
             vim.keymap.set("n", "{", function() require("opencode").command("session.page.up") end,
@@ -52,6 +58,7 @@ return {
                     vim.cmd("startinsert")
                 end
             end, 200)
+            vim.defer_fn(M.connect_events, 500)
         end
 
         function M.close()
@@ -155,6 +162,47 @@ return {
             },
         }
 
+        local pending_permission = nil
+
+        local function reply_permission(reply)
+            if not pending_permission then
+                vim.notify("No pending Agent permission", vim.log.levels.WARN, { title = "opencode" })
+                return
+            end
+
+            local permission = pending_permission
+            pending_permission = nil
+
+            require("opencode.server").new(permission.url):next(function(server)
+                return server:permit(permission.id, reply)
+            end):catch(function(err)
+                pending_permission = permission
+                vim.notify("Failed to reply to Agent permission: " .. err, vim.log.levels.ERROR, { title = "opencode" })
+            end)
+        end
+
+        vim.api.nvim_create_autocmd("User", {
+            pattern = { "OpencodeEvent:permission.asked", "OpencodeEvent:permission.replied" },
+            group = vim.api.nvim_create_augroup("OpenCodePermissionHotkeys", { clear = true }),
+            callback = function(args)
+                local event = args.data and args.data.event
+                if not event then
+                    return
+                end
+
+                if event.type == "permission.asked" then
+                    pending_permission = {
+                        id = event.properties.id,
+                        permission = event.properties.permission,
+                        url = args.data.url,
+                    }
+                elseif event.type == "permission.replied" and pending_permission
+                    and pending_permission.id == event.properties.requestID then
+                    pending_permission = nil
+                end
+            end,
+        })
+
         vim.o.autoread = true
 
         function M.open_fullscreen()
@@ -184,6 +232,7 @@ return {
             vim.wo.relativenumber = false
             vim.wo.signcolumn = "no"
             vim.cmd("startinsert")
+            vim.defer_fn(M.connect_events, 500)
         end
 
         function M.toggle_fullscreen()
@@ -203,21 +252,23 @@ return {
         end
 
         vim.keymap.set({ "n", "x" }, "<leader><leader>", function() _G.sidebar("ai") end,
-            { desc = "Toggle OpenCode sidebar", silent = true })
+            { desc = "Toggle Agent sidebar", silent = true })
         vim.keymap.set({ "n", "x" }, "<leader>os", function() require("opencode").ask("@this: ") end,
-            { desc = "Ask OpenCode…" })
+            { desc = "Ask Agent…" })
         vim.keymap.set({ "n", "x" }, "<leader>op", function() require("opencode").select() end,
-            { desc = "Select OpenCode…" })
+            { desc = "Select Agent…" })
         vim.keymap.set({ "n", "x" }, "<leader>oi", function() _G.sidebar("ai-prompt") end,
             { desc = "Edit prompt in buffer" })
 
+        vim.keymap.set("n", "<leader>y", function() reply_permission("once") end,
+            { desc = "Approve Agent permission", silent = true })
+        vim.keymap.set("n", "<leader>n", function() reply_permission("reject") end,
+            { desc = "Reject Agent permission", silent = true })
+
         vim.keymap.set("n", "<leader>of", function() M.toggle_fullscreen() end,
-            { desc = "Toggle OpenCode fullscreen sidebar" })
+            { desc = "Toggle Agent fullscreen sidebar" })
 
         vim.keymap.set({ "n", "x" }, "<leader>oa", function() return require("opencode").operator("@this ") end,
-            { desc = "Append range to OpenCode", expr = true })
-
-        vim.keymap.set({ "n", "t" }, "<C-q>", function() _G.sidebar_close() end,
-            { desc = "Close current sidebar", silent = true })
+            { desc = "Append range to Agent", expr = true })
     end,
 }
