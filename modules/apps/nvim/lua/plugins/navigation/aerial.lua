@@ -1,3 +1,4 @@
+-- Code outline and symbol navigation
 return {
   "stevearc/aerial.nvim",
   dependencies = {

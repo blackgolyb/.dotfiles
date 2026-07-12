@@ -1,3 +1,4 @@
+-- Multiple cursors and multi-selection
 return {
     {
         'mg979/vim-visual-multi',

@@ -1,3 +1,4 @@
+-- Autocompletion engine with fuzzy matching
 local ui = require("core.ui")
 
 return {

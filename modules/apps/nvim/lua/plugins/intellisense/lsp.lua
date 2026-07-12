@@ -1,3 +1,4 @@
+-- Language server protocol configuration
 local ui = require("core.ui")
 
 return {

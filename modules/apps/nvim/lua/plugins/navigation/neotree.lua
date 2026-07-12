@@ -1,3 +1,4 @@
+-- File tree explorer sidebar
 _G.sidebar_on_open("neotree", function()
     vim.cmd("Neotree")
 end)

@@ -1,3 +1,4 @@
+-- Dark colorscheme with transparent background
 return {
   "blackgolyb/monodark.nvim",
   version = false,

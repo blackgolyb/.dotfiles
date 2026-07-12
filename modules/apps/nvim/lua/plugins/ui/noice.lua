@@ -1,3 +1,4 @@
+-- Enhanced messages, cmdline, and popups
 local ui = require("core.ui")
 
 return {

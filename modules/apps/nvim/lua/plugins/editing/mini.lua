@@ -1,3 +1,4 @@
+-- Text objects, surround, move, pairs, toggle, split/join
 function buffer_boundary()
     local n_lines = vim.api.nvim_buf_line_count(0)
     local last_line = vim.api.nvim_buf_get_lines(0, n_lines - 1, n_lines, true)[1]

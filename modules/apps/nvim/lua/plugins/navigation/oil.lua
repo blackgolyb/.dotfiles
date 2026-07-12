@@ -1,3 +1,4 @@
+-- Buffer-based file explorer
 local ui = require("core.ui")
 
 return {

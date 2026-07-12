@@ -1,3 +1,4 @@
+-- Quick file bookmarking
 return {
   {
     "ThePrimeagen/harpoon",

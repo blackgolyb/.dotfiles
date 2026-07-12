@@ -1,3 +1,4 @@
+-- Seamless tmux pane navigation
 return {
     "christoomey/vim-tmux-navigator",
     lazy = false,

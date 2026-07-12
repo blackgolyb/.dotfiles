@@ -1,3 +1,4 @@
+-- Syntax highlighting and code parsing
 local ensure_installed = {
     'bash',
     'c',

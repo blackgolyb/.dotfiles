@@ -1,3 +1,4 @@
+-- Fuzzy finder framework
 local ui = require("core.ui")
 
 return {

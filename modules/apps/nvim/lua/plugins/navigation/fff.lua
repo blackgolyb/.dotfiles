@@ -1,3 +1,4 @@
+-- Fast fuzzy file finder
 return {
   {
     'dmtrKovalenko/fff.nvim',

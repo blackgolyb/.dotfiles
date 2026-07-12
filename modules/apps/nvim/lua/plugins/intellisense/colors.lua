@@ -1,3 +1,4 @@
+-- Inline color highlight rendering
 return {
 	{
 		'brenoprata10/nvim-highlight-colors',

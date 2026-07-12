@@ -1,3 +1,4 @@
+-- Floating LazyGit terminal
 local ui = require("core.ui")
 
 return {

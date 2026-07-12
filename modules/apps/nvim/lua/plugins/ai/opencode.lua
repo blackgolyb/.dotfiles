@@ -1,3 +1,4 @@
+-- AI coding assistant integration
 local ui = require("core.ui")
 
 return {

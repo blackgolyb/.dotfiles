@@ -1,3 +1,4 @@
+-- Scrollbar with search, diagnostic, and git markers
 return {
     {
         "petertriho/nvim-scrollbar",

@@ -1,3 +1,4 @@
+-- Push Neovim statusline into tmux status bar
 return {
     'vimpostor/vim-tpipeline',
     lazy = false,

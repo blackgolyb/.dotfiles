@@ -1,3 +1,5 @@
+-- An attractive welcome screen
+
 local computer_girl = {
     [[⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠿⠿⠛⠛⠛⠛⠻⠿⠿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿]],
     [[⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠿⠛⣉⠄⣢⣴⣟⣫⣤⣾⢿⣿⣷⡶⢦⣬⣉⠻⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿]],
@@ -155,7 +157,7 @@ return {
     {
       'goolord/alpha-nvim',
       dependencies = { 'nvim-tree/nvim-web-devicons' },
-      event = 'VimEnter', -- Завантажувати при старті Vim
+      event = 'VimEnter',
       config = function ()
         local alpha = require('alpha')
         local dashboard = require('alpha.themes.dashboard')
