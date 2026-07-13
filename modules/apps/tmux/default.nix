@@ -18,6 +18,35 @@ let
     text = builtins.readFile tmuxProjectSessionSource;
   };
 
+  tmuxOpenTarget = pkgs.writeShellApplication {
+    name = "tmux-open-target";
+    runtimeInputs = with pkgs; [
+      python3
+      neovim-remote
+      tmux
+      xdg-utils
+    ];
+    text = ''
+      exec python3 ${./tmux-open-target.py} "$@"
+    '';
+  };
+
+  tmuxThumbsPick = pkgs.writeShellApplication {
+    name = "tmux-thumbs-pick";
+    text = ''
+      copy_command='tmux set-buffer -- "{}" && printf "%s" "{}" | copy-to-clipboard && tmux display-message "Copied {}"'
+      paste_command='tmux set-buffer -- "{}" && printf "%s" "{}" | copy-to-clipboard && tmux paste-buffer && tmux display-message "Copied {}"'
+      multi_command='tmux set-buffer -- "{}" && printf "%s" "{}" | copy-to-clipboard && tmux paste-buffer && tmux display-message "Copied multiple items"'
+
+      exec ${pkgs.thumbs}/bin/tmux-thumbs \
+        --dir ${pkgs.thumbs}/bin \
+        --command "$copy_command" \
+        --upcase-command "$paste_command" \
+        --multi-command "$multi_command" \
+        "$@"
+    '';
+  };
+
   resurrectSave = "${pkgs.tmuxPlugins.resurrect}/share/tmux-plugins/resurrect/scripts/save.sh";
   resurrectRestore = "${pkgs.tmuxPlugins.resurrect}/share/tmux-plugins/resurrect/scripts/restore.sh";
   tmuxFilterResurrectSave = pkgs.writeShellApplication {
@@ -156,7 +185,12 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    home.packages = [ tmuxProjectSession ]
+    home.packages = [
+      tmuxProjectSession
+      tmuxOpenTarget
+      tmuxThumbsPick
+      pkgs.thumbs
+    ]
       ++ lib.optionals cfg.autoSaveAndRestore [
         tmuxAutostart
         tmuxAutosave
