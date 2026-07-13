@@ -31,6 +31,16 @@ return {
           desc = "Buffer diagnostics",
         })
 
+        vim.keymap.set("n", "<leader>b", function()
+            builtin.buffers({
+                sort_mru = true,
+                select_current = true,
+                show_all_buffers = true,
+            })
+        end, {
+            desc = "Buffers",
+        })
+
         vim.keymap.set('v', 'g/', function()
             local function get_visual_selection()
                 vim.cmd('noau normal! "vy"')
