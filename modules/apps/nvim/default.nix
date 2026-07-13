@@ -27,20 +27,24 @@ in
       curl
 
       # lsp
+      gopls
       nixd
       lua-language-server     # lua_ls
-      typescript-language-server # ts_ls
+      vtsls
+      vue-language-server      # vue_ls
       vscode-langservers-extracted # html, cssls, jsonls, eslint
       tailwindcss-language-server
       emmet-ls
-      pyright
+      basedpyright
       ruff
       clang-tools             # clangd
       rust-analyzer
       elixir-ls
       bash-language-server
-      dockerfile-language-server
+      docker-language-server
       hadolint
+      sqls
+      texlab
       taplo                   # toml
       yaml-language-server
       typos-lsp

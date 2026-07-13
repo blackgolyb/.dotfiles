@@ -4,16 +4,26 @@ local ui = require("core.ui")
 return {
     {
         "neovim/nvim-lspconfig",
-        dependencies = { "saghen/blink.cmp" },
+        dependencies = {
+            "saghen/blink.cmp",
+            "Crysthamus/nvim-file-operations",
+        },
         config = function()
-            local capabilities = require('blink.cmp').get_lsp_capabilities()
+            require("nvim-file-operations").setup()
+
+            local capabilities = vim.tbl_deep_extend(
+                "force",
+                require("nvim-file-operations.config").default_capabilities(),
+                require('blink.cmp').get_lsp_capabilities()
+            )
 
             local servers = {
-                "nixd", "lua_ls", "ts_ls", "html", "cssls", "jsonls",
-                "eslint", "tailwindcss", "emmet_ls", "pyright", "ruff",
+                "gopls", "nixd", "lua_ls", "vtsls", "vue_ls",
+                "html", "cssls", "jsonls", "eslint", "tailwindcss",
+                "emmet_ls", "basedpyright", "ruff",
                 "clangd", "rust_analyzer", "elixirls", "bashls",
-                "dockerls", "taplo", "yamlls", "typos_lsp", "marksman",
-                "wgsl_analyzer"
+                "docker_language_server", "sqls", "texlab", "taplo",
+                "yamlls", "typos_lsp", "marksman", "wgsl_analyzer"
             }
 
             for _, server_name in ipairs(servers) do
@@ -32,6 +42,31 @@ return {
                 },
             })
 
+            vim.lsp.config('vtsls', {
+                capabilities = capabilities,
+                filetypes = {
+                    "javascript", "javascriptreact", "typescript",
+                    "typescriptreact", "vue"
+                },
+                settings = {
+                    vtsls = {
+                        tsserver = {
+                            globalPlugins = {
+                                {
+                                    name = "@vue/typescript-plugin",
+                                    location = vim.fn.fnamemodify(
+                                        vim.fn.exepath("vue-language-server"),
+                                        ":h:h"
+                                    ) .. "/lib/node_modules/@vue/language-server",
+                                    languages = { "vue" },
+                                    configNamespace = "typescript",
+                                },
+                            },
+                        },
+                    },
+                },
+            })
+
             vim.lsp.config('ruff', {
                 capabilities = capabilities,
                 init_options = {
@@ -44,13 +79,15 @@ return {
                 }
             })
 
-            vim.lsp.config('pyright', {
+            vim.lsp.config('basedpyright', {
                 capabilities = capabilities,
                 settings = {
-                    python = {
+                    basedpyright = {
                         analysis = {
-                            typeCheckingMode = "off",
+                            typeCheckingMode = "basic",
                         },
+                    },
+                    python = {
                         pythonPath = ".venv/bin/python"
                     }
                 },
