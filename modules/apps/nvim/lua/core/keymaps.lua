@@ -1,8 +1,6 @@
 vim.g.mapleader = " "
 vim.g.maplocalleader = "\\"
 
-local ui = require("core.ui")
-
 vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>", { desc = "Clear search highlight" })
 
 vim.keymap.set("n", "Q", "<nop>")
@@ -29,24 +27,6 @@ vim.keymap.set('n', '<C-S-h>', '<C-w>H', { desc = 'Move to left window' })
 vim.keymap.set('n', '<C-S-j>', '<C-w>J', { desc = 'Move to bottom window' })
 vim.keymap.set('n', '<C-S-k>', '<C-w>K', { desc = 'Move to top window' })
 vim.keymap.set('n', '<C-S-l>', '<C-w>L', { desc = 'Move to right window' })
-
-local function hover_with_diagnostics()
-    -- Show diagnostics first (if there are any)
-    vim.diagnostic.open_float(nil, {
-        scope = "cursor",
-        focus = false,
-        border = ui.surface_border,
-    })
-
-    -- Then request LSP hover
-    vim.lsp.buf.hover()
-end
-
-vim.keymap.set("n", "K", hover_with_diagnostics, {
-    desc = "Hover + diagnostics",
-})
-
--- vim.keymap.set({"o", "x"}, "ie", ":<C-u>normal! ggVG<CR>", { silent = true, desc = "Text object for entire buffer" })
 
 -- Statusbar
 local function toggle_status_bar()
