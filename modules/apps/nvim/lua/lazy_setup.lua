@@ -21,6 +21,7 @@ require("lazy").setup({
         { import = "plugins.intellisense" },
         { import = "plugins.editing" },
         { import = "plugins.navigation" },
+        { import = "plugins.themes" },
         { import = "plugins.ui" },
         { import = "plugins.git" },
         { import = "plugins.ai" },
