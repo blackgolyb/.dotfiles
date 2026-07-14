@@ -15,6 +15,11 @@ vim.keymap.set("n", "<C-u>", "<C-u>zz")
 vim.keymap.set("n", "n", "nzzzv")
 vim.keymap.set("n", "N", "Nzzzv")
 
+-- Keep indentation on an empty line created with `o`/`O` (e.g. `o<Esc>`).
+-- `<Space><BS>` prevents Vim from stripping the auto-indent.
+vim.keymap.set("n", "o", "o<Space><BS>", { remap = false })
+vim.keymap.set("n", "O", "O<Space><BS>", { remap = false })
+
 vim.keymap.set("x", "<leader>p", [["_dP]], { desc = "Paste over selection" })
 vim.keymap.set("t", "<C-g>", [[<C-\><C-n>]], {
     desc = "Exit terminal mode",
