@@ -156,14 +156,32 @@ Item {
     IpcHandler {
         target: "music"
 
-        function toggle(): void { root.togglePlaying(); }
-        function playPause(): void { root.togglePlaying(); }
-        function play(): void { root.play(); }
-        function pause(): void { root.pause(); }
-        function stop(): void { root.stop(); }
-        function next(): void { root.next(); }
-        function previous(): void { root.previous(); }
-        function seek(offset: real): void { root.seek(offset); }
-        function setPosition(position: real): void { root.setPosition(position); }
+        function toggle(): void {
+            root.togglePlaying();
+        }
+        function playPause(): void {
+            root.togglePlaying();
+        }
+        function play(): void {
+            root.play();
+        }
+        function pause(): void {
+            root.pause();
+        }
+        function stop(): void {
+            root.stop();
+        }
+        function next(): void {
+            root.next();
+        }
+        function previous(): void {
+            root.previous();
+        }
+        function seek(offset: real): void {
+            root.seek(offset);
+        }
+        function setPosition(position: real): void {
+            root.setPosition(position);
+        }
     }
 }

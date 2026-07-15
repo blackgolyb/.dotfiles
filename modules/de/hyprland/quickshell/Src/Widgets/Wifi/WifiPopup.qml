@@ -34,7 +34,9 @@ Ui.UiPopup {
         }
 
         Behavior on opacity {
-            NumberAnimation { duration: 120 }
+            NumberAnimation {
+                duration: 120
+            }
         }
 
         WifiScreen {

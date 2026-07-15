@@ -90,11 +90,16 @@ Ui.UiPopup {
             }
 
             Behavior on y {
-                NumberAnimation { duration: 170; easing.type: Easing.OutCubic }
+                NumberAnimation {
+                    duration: 170
+                    easing.type: Easing.OutCubic
+                }
             }
 
             Behavior on opacity {
-                NumberAnimation { duration: 120 }
+                NumberAnimation {
+                    duration: 120
+                }
             }
 
             Rectangle {
@@ -113,23 +118,67 @@ Ui.UiPopup {
                 initialItem: mainScreenComponent
 
                 pushEnter: Transition {
-                    NumberAnimation { property: "x"; from: stackView.width; to: 0; duration: 170; easing.type: Easing.OutCubic }
-                    NumberAnimation { property: "opacity"; from: 0; to: 1; duration: 120 }
+                    NumberAnimation {
+                        property: "x"
+                        from: stackView.width
+                        to: 0
+                        duration: 170
+                        easing.type: Easing.OutCubic
+                    }
+                    NumberAnimation {
+                        property: "opacity"
+                        from: 0
+                        to: 1
+                        duration: 120
+                    }
                 }
 
                 pushExit: Transition {
-                    NumberAnimation { property: "x"; from: 0; to: -stackView.width * 0.25; duration: 170; easing.type: Easing.OutCubic }
-                    NumberAnimation { property: "opacity"; from: 1; to: 0; duration: 120 }
+                    NumberAnimation {
+                        property: "x"
+                        from: 0
+                        to: -stackView.width * 0.25
+                        duration: 170
+                        easing.type: Easing.OutCubic
+                    }
+                    NumberAnimation {
+                        property: "opacity"
+                        from: 1
+                        to: 0
+                        duration: 120
+                    }
                 }
 
                 popEnter: Transition {
-                    NumberAnimation { property: "x"; from: -stackView.width * 0.25; to: 0; duration: 170; easing.type: Easing.OutCubic }
-                    NumberAnimation { property: "opacity"; from: 0; to: 1; duration: 120 }
+                    NumberAnimation {
+                        property: "x"
+                        from: -stackView.width * 0.25
+                        to: 0
+                        duration: 170
+                        easing.type: Easing.OutCubic
+                    }
+                    NumberAnimation {
+                        property: "opacity"
+                        from: 0
+                        to: 1
+                        duration: 120
+                    }
                 }
 
                 popExit: Transition {
-                    NumberAnimation { property: "x"; from: 0; to: stackView.width; duration: 170; easing.type: Easing.OutCubic }
-                    NumberAnimation { property: "opacity"; from: 1; to: 0; duration: 120 }
+                    NumberAnimation {
+                        property: "x"
+                        from: 0
+                        to: stackView.width
+                        duration: 170
+                        easing.type: Easing.OutCubic
+                    }
+                    NumberAnimation {
+                        property: "opacity"
+                        from: 1
+                        to: 0
+                        duration: 120
+                    }
                 }
 
                 onCurrentItemChanged: {

@@ -86,17 +86,23 @@ Item {
 
     Connections {
         target: volumeSource
-        function onAvailableChanged(): void { root.updateCurrentSource(); }
+        function onAvailableChanged(): void {
+            root.updateCurrentSource();
+        }
     }
 
     Connections {
         target: brightnessSource
-        function onAvailableChanged(): void { root.updateCurrentSource(); }
+        function onAvailableChanged(): void {
+            root.updateCurrentSource();
+        }
     }
 
     Connections {
         target: musicSource
-        function onAvailableChanged(): void { root.updateCurrentSource(); }
+        function onAvailableChanged(): void {
+            root.updateCurrentSource();
+        }
     }
 
     Timer {

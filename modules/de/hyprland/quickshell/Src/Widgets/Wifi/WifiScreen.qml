@@ -95,7 +95,10 @@ Item {
                     color: Ui.Theme.textPrimary
 
                     Behavior on x {
-                        NumberAnimation { duration: 140; easing.type: Easing.OutCubic }
+                        NumberAnimation {
+                            duration: 140
+                            easing.type: Easing.OutCubic
+                        }
                     }
                 }
 

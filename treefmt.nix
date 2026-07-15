@@ -26,7 +26,16 @@
     enable = true;
     lineLength = 100;
   };
+  programs.qmlformat = {
+    enable = true;
+    package = pkgs.qt6Packages.qtdeclarative;
+  };
   programs.shfmt.enable = true;
   programs.stylua.enable = true;
   programs.taplo.enable = true;
+
+  settings.formatter.qmlformat.options = [
+    "--indent-width"
+    "4"
+  ];
 }

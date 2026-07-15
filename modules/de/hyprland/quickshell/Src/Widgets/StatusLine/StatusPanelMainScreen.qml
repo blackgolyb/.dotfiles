@@ -71,7 +71,10 @@ ColumnLayout {
             Layout.fillWidth: true
             spacing: 10
 
-            Ui.UiIcon { text: root.status.volumeControl.icon; font.pixelSize: 18 }
+            Ui.UiIcon {
+                text: root.status.volumeControl.icon
+                font.pixelSize: 18
+            }
             Ui.Progress {
                 id: volumeProgress
                 Layout.fillWidth: true
@@ -88,14 +91,28 @@ ColumnLayout {
                     }
                 }
             }
-            Ui.UiText { text: `${root.status.volume}%`; color: Ui.Theme.textMuted; font.pixelSize: Ui.Theme.textSm; Layout.preferredWidth: 42 }
+            Ui.UiText {
+                text: `${root.status.volume}%`
+                color: Ui.Theme.textMuted
+                font.pixelSize: Ui.Theme.textSm
+                Layout.preferredWidth: 42
+            }
             Rectangle {
                 Layout.preferredWidth: 34
                 Layout.preferredHeight: 26
                 radius: Ui.Theme.radiusSm
                 color: muteMouse.containsMouse ? Ui.Theme.border : Ui.Theme.surfaceActive
-                Ui.UiIcon { anchors.centerIn: parent; text: root.status.muted ? "󰝟" : "󰕾"; font.pixelSize: 14 }
-                MouseArea { id: muteMouse; anchors.fill: parent; hoverEnabled: true; onClicked: root.status.volumeControl.toggleMute() }
+                Ui.UiIcon {
+                    anchors.centerIn: parent
+                    text: root.status.muted ? "󰝟" : "󰕾"
+                    font.pixelSize: 14
+                }
+                MouseArea {
+                    id: muteMouse
+                    anchors.fill: parent
+                    hoverEnabled: true
+                    onClicked: root.status.volumeControl.toggleMute()
+                }
             }
         }
 
@@ -103,7 +120,10 @@ ColumnLayout {
             Layout.fillWidth: true
             spacing: 10
 
-            Ui.UiIcon { text: "󰃠"; font.pixelSize: 18 }
+            Ui.UiIcon {
+                text: "󰃠"
+                font.pixelSize: 18
+            }
             Ui.Progress {
                 id: brightnessProgress
                 Layout.fillWidth: true
@@ -120,7 +140,12 @@ ColumnLayout {
                     }
                 }
             }
-            Ui.UiText { text: `${root.status.brightness}%`; color: Ui.Theme.textMuted; font.pixelSize: Ui.Theme.textSm; Layout.preferredWidth: 42 }
+            Ui.UiText {
+                text: `${root.status.brightness}%`
+                color: Ui.Theme.textMuted
+                font.pixelSize: Ui.Theme.textSm
+                Layout.preferredWidth: 42
+            }
         }
     }
 
@@ -139,11 +164,25 @@ ColumnLayout {
                 anchors.fill: parent
                 anchors.margins: 10
                 spacing: 8
-                Ui.UiIcon { text: root.wifiService.wifiEnabled ? "󰤨" : "󰤭"; font.pixelSize: 18 }
-                Ui.UiText { Layout.fillWidth: true; text: root.wifiService.activeSsid.length > 0 ? root.wifiService.activeSsid : root.wifiService.wifiEnabled ? "Wi-Fi on" : "Wi-Fi off"; elide: Text.ElideRight; font.pixelSize: Ui.Theme.textSm }
-                Ui.UiIcon { text: "󰐥"; font.pixelSize: 14 }
+                Ui.UiIcon {
+                    text: root.wifiService.wifiEnabled ? "󰤨" : "󰤭"
+                    font.pixelSize: 18
+                }
+                Ui.UiText {
+                    Layout.fillWidth: true
+                    text: root.wifiService.activeSsid.length > 0 ? root.wifiService.activeSsid : root.wifiService.wifiEnabled ? "Wi-Fi on" : "Wi-Fi off"
+                    elide: Text.ElideRight
+                    font.pixelSize: Ui.Theme.textSm
+                }
+                Ui.UiIcon {
+                    text: "󰐥"
+                    font.pixelSize: 14
+                }
             }
-            MouseArea { anchors.fill: parent; onClicked: root.wifiRequested() }
+            MouseArea {
+                anchors.fill: parent
+                onClicked: root.wifiRequested()
+            }
         }
 
         Rectangle {
@@ -155,11 +194,26 @@ ColumnLayout {
                 anchors.fill: parent
                 anchors.margins: 10
                 spacing: 8
-                Ui.UiIcon { text: "󰂯"; font.pixelSize: 18 }
-                Ui.UiText { Layout.fillWidth: true; text: root.bluetoothPowered ? "Bluetooth on" : root.bluetoothReady ? "Bluetooth off" : "Bluetooth unavailable"; elide: Text.ElideRight; font.pixelSize: Ui.Theme.textSm }
-                Ui.UiIcon { text: "󰐥"; font.pixelSize: 14 }
+                Ui.UiIcon {
+                    text: "󰂯"
+                    font.pixelSize: 18
+                }
+                Ui.UiText {
+                    Layout.fillWidth: true
+                    text: root.bluetoothPowered ? "Bluetooth on" : root.bluetoothReady ? "Bluetooth off" : "Bluetooth unavailable"
+                    elide: Text.ElideRight
+                    font.pixelSize: Ui.Theme.textSm
+                }
+                Ui.UiIcon {
+                    text: "󰐥"
+                    font.pixelSize: 14
+                }
             }
-            MouseArea { anchors.fill: parent; enabled: root.bluetoothReady; onClicked: root.bluetoothRequested() }
+            MouseArea {
+                anchors.fill: parent
+                enabled: root.bluetoothReady
+                onClicked: root.bluetoothRequested()
+            }
         }
     }
 
@@ -169,9 +223,18 @@ ColumnLayout {
 
         Repeater {
             model: [
-                { label: "Lock", command: "lock" },
-                { label: "Suspend", command: "systemctl suspend" },
-                { label: "Power", command: "systemctl poweroff" }
+                {
+                    label: "Lock",
+                    command: "lock"
+                },
+                {
+                    label: "Suspend",
+                    command: "systemctl suspend"
+                },
+                {
+                    label: "Power",
+                    command: "systemctl poweroff"
+                }
             ]
 
             Rectangle {

@@ -17,7 +17,7 @@ make pre-commit-all
 ```
 
 `nix develop` installs the generated pre-commit hooks. Formatting is handled by
-treefmt-nix; pre-commit checks also run Nix, Python, and shell linters.
+treefmt-nix; pre-commit checks also run Nix, Python, shell, QML, and spelling linters.
 
 Install from a directory containing `keys.txt`:
 

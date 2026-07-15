@@ -30,13 +30,38 @@ let
       !(lib.any (prefix: rel == prefix || lib.hasPrefix prefix rel) excluded);
   };
   treefmtEval = treefmt-nix.lib.evalModule pkgs ../treefmt.nix;
+  qmlPackages = [
+    pkgs.qt6Packages.qtdeclarative
+    pkgs.quickshell
+  ];
+  qmlImportPath = lib.makeSearchPath "lib/qt-6/qml" qmlPackages;
+  qtPluginPath = lib.makeSearchPath "lib/qt-6/plugins" qmlPackages;
+  qmlLint = pkgs.writeShellScriptBin "qmllint-dotfiles" ''
+    set -eu
+
+    export QML_IMPORT_PATH="${qmlImportPath}:''${QML_IMPORT_PATH:-}"
+    export QML2_IMPORT_PATH="${qmlImportPath}:''${QML2_IMPORT_PATH:-}"
+    export QT_PLUGIN_PATH="${qtPluginPath}:''${QT_PLUGIN_PATH:-}"
+
+    exec ${pkgs.qt6Packages.qtdeclarative}/bin/qmllint \
+      -E \
+      -I modules/de/hyprland/quickshell \
+      --import disable \
+      --missing-property disable \
+      --signal-handler-parameters disable \
+      --uncreatable-type disable \
+      --unqualified disable \
+      --unresolved-type disable \
+      --unused-imports disable \
+      "$@"
+  '';
   preCommitCheck = git-hooks.lib.${system}.run {
     src = cleanSrc;
     hooks = {
       treefmt = {
         enable = true;
         name = "treefmt";
-        entry = "${treefmtEval.config.build.wrapper}/bin/treefmt";
+        entry = "${treefmtEval.config.build.wrapper}/bin/treefmt --no-cache";
       };
       deadnix = {
         enable = true;
@@ -50,6 +75,12 @@ let
         name = "shellcheck";
         entry = "${pkgs.shellcheck}/bin/shellcheck --severity=error";
         files = "\\.sh$";
+      };
+      qmllint = {
+        enable = true;
+        name = "qmllint";
+        entry = "${qmlLint}/bin/qmllint-dotfiles";
+        files = "^modules/de/hyprland/quickshell/.*\\.qml$";
       };
       typos = {
         enable = true;
@@ -70,12 +101,19 @@ in
   };
 
   shell = pkgs.mkShell {
-    shellHook = preCommitCheck.shellHook;
+    shellHook = ''
+      ${preCommitCheck.shellHook}
+      export QML_IMPORT_PATH="${qmlImportPath}:''${QML_IMPORT_PATH:-}"
+      export QML2_IMPORT_PATH="${qmlImportPath}:''${QML2_IMPORT_PATH:-}"
+      export QT_PLUGIN_PATH="${qtPluginPath}:''${QT_PLUGIN_PATH:-}"
+    '';
     packages = [
       treefmtEval.config.build.wrapper
+      qmlLint
       pkgs.python3Packages.pytest
       pkgs.typos
     ]
+    ++ qmlPackages
     ++ preCommitCheck.enabledPackages;
   };
 }

@@ -9,20 +9,17 @@ Item {
     readonly property int itemWidth: 32
     readonly property int itemHeight: 24
     readonly property int animationDuration: 190
-    readonly property var keys:   [ "f", "d", "s", "a", "v", "c", "x", "z" ]
-    readonly property var labels: [ "󰈹", "", "", "", "󱞁", "", "󰋋", "" ]
-    readonly property var groups: Utils.FP.range(root.keys.length)
-        .map(i => ({
-            key: root.keys[i],
-            label: root.labels[i],
-        }))
-    readonly property var activeGroups: root.groups
-        .map(group => ({
-            key: group.key,
-            label: group.label,
-            workspace: root.workspaceFor(group.key),
-        }))
-        .filter(group => root.isShown(group.workspace))
+    readonly property var keys: ["f", "d", "s", "a", "v", "c", "x", "z"]
+    readonly property var labels: ["󰈹", "", "", "", "󱞁", "", "󰋋", ""]
+    readonly property var groups: Utils.FP.range(root.keys.length).map(i => ({
+                key: root.keys[i],
+                label: root.labels[i]
+            }))
+    readonly property var activeGroups: root.groups.map(group => ({
+                key: group.key,
+                label: group.label,
+                workspace: root.workspaceFor(group.key)
+            })).filter(group => root.isShown(group.workspace))
     readonly property int activeIndex: root.activeGroups.findIndex(group => root.isActive(group.key))
 
     implicitWidth: root.activeGroups.length * root.itemWidth

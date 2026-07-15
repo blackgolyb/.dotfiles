@@ -27,8 +27,7 @@ Ui.UiPopup {
         if (visible) {
             viewDate = firstOfMonth(clockDate);
             selectedDate = startOfDay(clockDate);
-        }
-        else {
+        } else {
             clearSelectorFocus();
         }
     }
@@ -173,7 +172,7 @@ Ui.UiPopup {
                                 Layout.preferredHeight: 30
                                 model: root.monthNames
                                 currentIndex: root.viewDate.getMonth()
-                                onActivated: function(index) {
+                                onActivated: function (index) {
                                     root.setViewMonth(index);
                                 }
                                 onAccepted: {
@@ -196,7 +195,7 @@ Ui.UiPopup {
                                     bottom: 1
                                     top: 9999
                                 }
-                                onActivated: function(index) {
+                                onActivated: function (index) {
                                     root.setViewYear(root.yearOptions[index]);
                                 }
                                 onAccepted: {
@@ -236,7 +235,6 @@ Ui.UiPopup {
                         font.pixelSize: Ui.Theme.textLg
                     }
                 }
-
             }
 
             GridLayout {

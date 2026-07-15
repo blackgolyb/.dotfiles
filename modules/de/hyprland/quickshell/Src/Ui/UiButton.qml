@@ -4,15 +4,36 @@ Rectangle {
     id: root
 
     readonly property var sizes: ({
-        sm: { width: 34, height: 28 },
-        md: { width: 34, height: 28 },
-        lg: { width: 42, height: 32 }
-    })
+            sm: {
+                width: 34,
+                height: 28
+            },
+            md: {
+                width: 34,
+                height: 28
+            },
+            lg: {
+                width: 42,
+                height: 32
+            }
+        })
     readonly property var variants: ({
-        default: { normal: Theme.surfaceSunken, hover: Theme.surfaceActive, text: Theme.textSecondary },
-        surface: { normal: Theme.surfaceActive, hover: Theme.border, text: Theme.textPrimary },
-        accent: { normal: Theme.accent, hover: Theme.accentHover, text: Theme.textPrimary }
-    })
+            default: {
+                normal: Theme.surfaceSunken,
+                hover: Theme.surfaceActive,
+                text: Theme.textSecondary
+            },
+            surface: {
+                normal: Theme.surfaceActive,
+                hover: Theme.border,
+                text: Theme.textPrimary
+            },
+            accent: {
+                normal: Theme.accent,
+                hover: Theme.accentHover,
+                text: Theme.textPrimary
+            }
+        })
 
     property string text: ""
     property string size: "md"

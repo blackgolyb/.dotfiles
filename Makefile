@@ -5,7 +5,7 @@ help:
 	@printf '  %-16s %s\n' 'dev' 'Enter the dotfiles dev shell'
 	@printf '  %-16s %s\n' 'fmt' 'Format the repository with treefmt-nix'
 	@printf '  %-16s %s\n' 'format' 'Alias for fmt'
-	@printf '  %-16s %s\n' 'check' 'Run all flake checks'
+	@printf '  %-16s %s\n' 'check' 'Run all flake checks, including QML lint'
 	@printf '  %-16s %s\n' 'test' 'Run Python tests'
 	@printf '  %-16s %s\n' 'update' 'Update flake inputs'
 	@printf '  %-16s %s\n' 'switch' 'Switch the NixOS configuration'

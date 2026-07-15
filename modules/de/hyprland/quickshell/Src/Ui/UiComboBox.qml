@@ -171,9 +171,9 @@ Controls.ComboBox {
 
         function toggle() {
             if (root.popup.visible) {
-                root.popup.close()
+                root.popup.close();
             } else {
-                root.popup.open()
+                root.popup.open();
             }
         }
 
