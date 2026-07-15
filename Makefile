@@ -1,4 +1,4 @@
-.PHONY: help dev fmt format check test update switch pre-commit pre-commit-all hooks
+.PHONY: help dev fmt format check test ci update switch pre-commit pre-commit-all hooks
 
 help:
 	@printf '%s\n' 'Available targets:'
@@ -7,6 +7,7 @@ help:
 	@printf '  %-16s %s\n' 'format' 'Alias for fmt'
 	@printf '  %-16s %s\n' 'check' 'Run all flake checks, including QML lint'
 	@printf '  %-16s %s\n' 'test' 'Run Python tests'
+	@printf '  %-16s %s\n' 'ci' 'Run checks and tests'
 	@printf '  %-16s %s\n' 'update' 'Update flake inputs'
 	@printf '  %-16s %s\n' 'switch' 'Switch the NixOS configuration'
 	@printf '  %-16s %s\n' 'pre-commit' 'Run hooks for staged files'
@@ -26,6 +27,8 @@ check:
 
 test:
 	nix develop .#dotfiles -c pytest modules/apps/tmux
+
+ci: check test
 
 update:
 	nix flake update

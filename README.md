@@ -11,6 +11,7 @@ make dev
 make fmt
 make check
 make test
+make ci
 make update
 make switch
 make pre-commit-all
