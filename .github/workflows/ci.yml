@@ -17,8 +17,5 @@ jobs:
       - name: Install Nix
         uses: DeterminateSystems/nix-installer-action@v17
 
-      - name: Enable Nix cache
-        uses: DeterminateSystems/magic-nix-cache-action@v9
-
       - name: Run CI
         run: make ci
