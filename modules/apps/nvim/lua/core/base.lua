@@ -31,10 +31,10 @@ vim.opt.autowrite = false
 vim.fn.mkdir(vim.opt.undodir:get()[1], "p")
 
 vim.opt.guicursor = {
-	"n-v-c:block-Cursor",
-	"i-ci-ve:ver25-Cursor",
-	"r-cr:hor20-Cursor",
-	"a:blinkon500-blinkoff500",
+    "n-v-c:block-Cursor",
+    "i-ci-ve:ver25-Cursor",
+    "r-cr:hor20-Cursor",
+    "a:blinkon500-blinkoff500",
 }
 
 vim.opt.fillchars:append({ eob = " " })
@@ -42,12 +42,12 @@ vim.opt.fillchars:append({ eob = " " })
 vim.o.winborder = "single"
 
 vim.api.nvim_create_autocmd("TextYankPost", {
-	desc = "Highlight when yanking (copying) text",
-	group = vim.api.nvim_create_augroup("highlight-yank", { clear = true }),
-	callback = function()
-		vim.highlight.on_yank({
-			higroup = "IncSearch",
-			timeout = 150,
-		})
-	end,
+    desc = "Highlight when yanking (copying) text",
+    group = vim.api.nvim_create_augroup("highlight-yank", { clear = true }),
+    callback = function()
+        vim.highlight.on_yank({
+            higroup = "IncSearch",
+            timeout = 150,
+        })
+    end,
 })

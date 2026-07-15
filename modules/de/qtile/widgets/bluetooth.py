@@ -14,7 +14,7 @@ class Bluetooth(base.InLoopPollText):
         (
             "format",
             "{icon} {status}%",
-            "format of data displaing",
+            "format of data displaying",
         ),
         (
             "script_path",

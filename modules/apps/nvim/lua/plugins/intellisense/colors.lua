@@ -9,6 +9,6 @@ vim.pack.add({ util.gh("brenoprata10/nvim-highlight-colors") })
 
 -- setup
 require("nvim-highlight-colors").setup({
-	render = "virtual",
-	virtual_symbol = "",
+    render = "virtual",
+    virtual_symbol = "",
 })

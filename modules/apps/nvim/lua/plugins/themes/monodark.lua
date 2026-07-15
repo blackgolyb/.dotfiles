@@ -7,14 +7,14 @@ local monodark_dir = vim.fn.expand("~/nixos/monodark.nvim")
 
 -- pre
 if vim.uv.fs_stat(monodark_dir) then
-	vim.opt.runtimepath:prepend(monodark_dir)
+    vim.opt.runtimepath:prepend(monodark_dir)
 else
-	-- install
-	vim.pack.add({ util.gh("blackgolyb/monodark.nvim") })
+    -- install
+    vim.pack.add({ util.gh("blackgolyb/monodark.nvim") })
 end
 
 -- setup
 require("monodark").setup({
-	transparent_background = true,
+    transparent_background = true,
 })
 require("monodark").load()

@@ -8,8 +8,8 @@ local util = require("plugins.util")
 
 -- install
 vim.pack.add({
-	util.gh("nvim-lua/plenary.nvim"),
-	{ src = util.gh("ThePrimeagen/harpoon"), version = "harpoon2" },
+    util.gh("nvim-lua/plenary.nvim"),
+    { src = util.gh("ThePrimeagen/harpoon"), version = "harpoon2" },
 })
 
 -- setup
@@ -18,30 +18,30 @@ harpoon:setup()
 
 -- keymaps
 vim.keymap.set("n", "<leader>t", function()
-	harpoon.ui:toggle_quick_menu(harpoon:list(), { title_pos = "center" })
+    harpoon.ui:toggle_quick_menu(harpoon:list(), { title_pos = "center" })
 end, { desc = "Harpoon Menu" })
 
 vim.keymap.set("n", "<leader>a", function()
-	harpoon:list():add()
+    harpoon:list():add()
 end, { desc = "Harpoon Add File" })
 
 vim.keymap.set("n", "<leader>d", function()
-	harpoon:list():remove()
+    harpoon:list():remove()
 end, { desc = "Harpoon Remove File" })
 
 vim.keymap.set("n", "<leader>C", function()
-	require("harpoon"):list():clear()
+    require("harpoon"):list():clear()
 end, { desc = "Harpoon Clear List" })
 
 vim.keymap.set("n", "<C-M-f>", function()
-	harpoon:list():select(1)
+    harpoon:list():select(1)
 end)
 vim.keymap.set("n", "<C-M-d>", function()
-	harpoon:list():select(2)
+    harpoon:list():select(2)
 end)
 vim.keymap.set("n", "<C-M-s>", function()
-	harpoon:list():select(3)
+    harpoon:list():select(3)
 end)
 vim.keymap.set("n", "<C-M-a>", function()
-	harpoon:list():select(4)
+    harpoon:list():select(4)
 end)

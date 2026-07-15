@@ -90,6 +90,7 @@ function s() {
     esac
 }
 
+# spellchecker:ignore-next-line
 function nd() {
   if [ -z "$1" ]; then
     nix develop --command zsh

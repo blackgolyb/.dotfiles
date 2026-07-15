@@ -6,7 +6,7 @@
 (include defaults.kbd)
 (include layer.kbd)
 
-;; Inclued modules
+;; Included modules
 ;; NOTE: if you change this you should re-run build script
 (include modules/base.kbd)
 (include modules/split.kbd)

@@ -20,7 +20,7 @@ vim.keymap.set("n", "O", "O<Space><BS>", { remap = false })
 
 vim.keymap.set("x", "<leader>p", [["_dP]], { desc = "Paste over selection" })
 vim.keymap.set("t", "<C-g>", [[<C-\><C-n>]], {
-	desc = "Exit terminal mode",
+    desc = "Exit terminal mode",
 })
 
 vim.keymap.set("n", "<C-S-h>", "<C-w>H", { desc = "Move to left window" })
@@ -30,13 +30,13 @@ vim.keymap.set("n", "<C-S-l>", "<C-w>L", { desc = "Move to right window" })
 
 -- Statusbar
 local function toggle_status_bar()
-	vim.opt.laststatus = vim.opt.laststatus:get() > 0 and 0 or 3
+    vim.opt.laststatus = vim.opt.laststatus:get() > 0 and 0 or 3
 end
 vim.keymap.set("n", "<leader>s", toggle_status_bar, { desc = "Toggle Statusline" })
 
 -- Commands
 local cabbrev = function(expanded, original)
-	vim.cmd("cnoreabbrev " .. expanded .. " " .. original)
+    vim.cmd("cnoreabbrev " .. expanded .. " " .. original)
 end
 
 cabbrev("W", "w")

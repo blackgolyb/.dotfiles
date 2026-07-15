@@ -9,5 +9,5 @@ vim.pack.add({ util.gh("karb94/neoscroll.nvim") })
 
 -- setup
 require("neoscroll").setup({
-	duration_multiplier = 0.5,
+    duration_multiplier = 0.5,
 })

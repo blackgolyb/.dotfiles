@@ -10,7 +10,7 @@ local util = require("plugins.util")
 local ui = require("core.ui")
 
 if vim.v.servername == "" then
-	vim.fn.serverstart()
+    vim.fn.serverstart()
 end
 
 vim.g.lazygit_use_neovim_remote = 1
@@ -20,8 +20,8 @@ vim.env.GIT_EDITOR = "nvr --remote-wait-silent +'set bufhidden=wipe'"
 
 -- install
 vim.pack.add({
-	util.gh("nvim-lua/plenary.nvim"),
-	util.gh("kdheepak/lazygit.nvim"),
+    util.gh("nvim-lua/plenary.nvim"),
+    util.gh("kdheepak/lazygit.nvim"),
 })
 
 -- keymaps

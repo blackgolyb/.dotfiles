@@ -8,42 +8,42 @@ local util = require("plugins.util")
 
 -- install
 vim.pack.add({
-	util.gh("rmagatti/alternate-toggler"),
-	util.gh("Wansmer/treesj"),
+    util.gh("rmagatti/alternate-toggler"),
+    util.gh("Wansmer/treesj"),
 })
 
 -- setup
 require("alternate-toggler").setup({
-	alternates = {
-		{ "true", "false" },
-		{ "True", "False" },
-		{ "TRUE", "FALSE" },
-		{ "Yes", "No" },
-		{ "YES", "NO" },
-		{ "1", "0" },
-		{ "<", ">" },
-		{ ">=", "<=" },
-		{ "+", "-" },
-		{ "===", "!==" },
-		{ "==", "!=" },
-		{ "&&", "||" },
-		{ "and", "or" },
-		{ "public", "private", "protected" },
-	},
+    alternates = {
+        { "true", "false" },
+        { "True", "False" },
+        { "TRUE", "FALSE" },
+        { "Yes", "No" },
+        { "YES", "NO" },
+        { "1", "0" },
+        { "<", ">" },
+        { ">=", "<=" },
+        { "+", "-" },
+        { "===", "!==" },
+        { "==", "!=" },
+        { "&&", "||" },
+        { "and", "or" },
+        { "public", "private", "protected" },
+    },
 })
 
 require("treesj").setup({
-	use_default_keymaps = false,
+    use_default_keymaps = false,
 })
 
 -- keymaps
 vim.keymap.set("n", "<leader>m", function()
-	local changedtick = vim.b.changedtick
-	vim.cmd.ToggleAlternate()
+    local changedtick = vim.b.changedtick
+    vim.cmd.ToggleAlternate()
 
-	if vim.b.changedtick ~= changedtick then
-		return
-	end
+    if vim.b.changedtick ~= changedtick then
+        return
+    end
 
-	require("treesj").toggle()
+    require("treesj").toggle()
 end, { desc = "Toggle alternate or split/join" })

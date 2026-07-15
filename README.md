@@ -10,6 +10,9 @@ See [INSTALL.md](./INSTALL.md) for fresh-machine bootstrap details.
 make dev
 make fmt
 make check
+make test
+make update
+make switch
 make pre-commit-all
 ```
 

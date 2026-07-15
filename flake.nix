@@ -54,7 +54,6 @@
       };
       dotfilesDevShell = import ./dev-shells/dotfiles.nix {
         inherit
-          self
           pkgs
           system
           treefmt-nix

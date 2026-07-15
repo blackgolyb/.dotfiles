@@ -4,10 +4,10 @@ from settings import *
 
 from .theme_parser import parse_theme_file
 
-default_theme = parse_theme_file(themes_path / "base_themes/default_thme.json")
+default_theme = parse_theme_file(themes_path / "base_themes/default_theme.json")
 
 themes = {
-    "default": themes_path / "base_themes/default_thme.json",
+    "default": themes_path / "base_themes/default_theme.json",
 }
 
 

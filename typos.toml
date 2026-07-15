@@ -1,0 +1,22 @@
+[files]
+extend-exclude = [
+  ".git/",
+  ".direnv/",
+  ".pre-commit-config.yaml",
+  "flake.lock",
+  "public/",
+  "resources/",
+  "secrets/",
+  "modules/hardware/kanata/poetry.lock",
+  "**/*.qsb",
+]
+
+[default]
+extend-ignore-re = [
+  "(?Rm)^.*(#|//|--)\\s*spellchecker:disable-line$",
+  "(#|//|--)\\s*spellchecker:ignore-next-line\\n.*",
+  "\"prefix\": \"fo\"",
+]
+
+[default.extend-words]
+noice = "noice"

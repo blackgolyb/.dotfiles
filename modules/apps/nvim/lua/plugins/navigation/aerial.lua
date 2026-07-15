@@ -10,17 +10,17 @@ local util = require("plugins.util")
 
 -- install
 vim.pack.add({
-	util.gh("nvim-treesitter/nvim-treesitter"),
-	util.gh("nvim-tree/nvim-web-devicons"),
-	util.gh("stevearc/aerial.nvim"),
+    util.gh("nvim-treesitter/nvim-treesitter"),
+    util.gh("nvim-tree/nvim-web-devicons"),
+    util.gh("stevearc/aerial.nvim"),
 })
 
 -- setup
 require("aerial").setup({
-	layout = {
-		min_width = 30,
-	},
-	manage_folds = false,
+    layout = {
+        min_width = 30,
+    },
+    manage_folds = false,
 })
 
 require("telescope").load_extension("aerial")
