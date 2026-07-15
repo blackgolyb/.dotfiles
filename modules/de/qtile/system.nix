@@ -12,23 +12,29 @@ in
   options.my.de.qtile.enable = lib.mkEnableOption "Qtile desktop";
 
   config = lib.mkIf cfg.enable {
-    services.xserver.enable = true;
-    services.xserver.updateDbusEnvironment = true;
-    services.xserver.desktopManager.runXdgAutostartIfNone = true;
-    services.xserver.windowManager.qtile = {
-      enable = true;
-      extraPackages =
-        python3Packages: with python3Packages; [
-          qtile-extras
-          requests
-        ];
+    services = {
+      xserver = {
+        enable = true;
+        updateDbusEnvironment = true;
+        desktopManager.runXdgAutostartIfNone = true;
+        windowManager.qtile = {
+          enable = true;
+          extraPackages =
+            python3Packages: with python3Packages; [
+              qtile-extras
+              requests
+            ];
+        };
+
+        displayManager.lightdm.greeters = {
+          slick.enable = true;
+          mini.enable = false;
+        };
+      };
+
+      udev.extraRules = ''
+        SUBSYSTEM=="leds", KERNEL=="platform::micmute", RUN+="${pkgs.coreutils}/bin/chmod 0666 /sys/class/leds/platform::micmute/brightness"
+      '';
     };
-
-    services.xserver.displayManager.lightdm.greeters.slick.enable = true;
-    services.xserver.displayManager.lightdm.greeters.mini.enable = false;
-
-    services.udev.extraRules = ''
-      SUBSYSTEM=="leds", KERNEL=="platform::micmute", RUN+="${pkgs.coreutils}/bin/chmod 0666 /sys/class/leds/platform::micmute/brightness"
-    '';
   };
 }

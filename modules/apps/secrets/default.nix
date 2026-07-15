@@ -38,7 +38,7 @@ in
 
     sops = {
       age.keyFile = cfg.ageKeyFile;
-      secrets = cfg.secrets;
+      inherit (cfg) secrets;
     };
   };
 }

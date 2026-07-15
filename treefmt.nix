@@ -18,21 +18,23 @@
     "**/*.qsb"
   ];
 
-  programs.nixfmt = {
-    enable = true;
-    package = pkgs.nixfmt;
+  programs = {
+    nixfmt = {
+      enable = true;
+      package = pkgs.nixfmt;
+    };
+    ruff-format = {
+      enable = true;
+      lineLength = 100;
+    };
+    qmlformat = {
+      enable = true;
+      package = pkgs.qt6Packages.qtdeclarative;
+    };
+    shfmt.enable = true;
+    stylua.enable = true;
+    taplo.enable = true;
   };
-  programs.ruff-format = {
-    enable = true;
-    lineLength = 100;
-  };
-  programs.qmlformat = {
-    enable = true;
-    package = pkgs.qt6Packages.qtdeclarative;
-  };
-  programs.shfmt.enable = true;
-  programs.stylua.enable = true;
-  programs.taplo.enable = true;
 
   settings.formatter.qmlformat.options = [
     "--indent-width"

@@ -45,7 +45,7 @@
       ...
     }@inputs:
     let
-      lib = nixpkgs.lib;
+      inherit (nixpkgs) lib;
       system = "x86_64-linux";
       enabled = import ./enabled.nix { inherit lib; };
       pkgs = import nixpkgs {

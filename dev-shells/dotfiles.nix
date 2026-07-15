@@ -7,7 +7,7 @@
 }:
 
 let
-  lib = pkgs.lib;
+  inherit (pkgs) lib;
   root = ../.;
   cleanSrc = lib.cleanSourceWith {
     src = root;
@@ -68,6 +68,12 @@ let
         name = "deadnix";
         entry = "${pkgs.deadnix}/bin/deadnix --fail --no-lambda-pattern-names";
         files = "\\.nix$";
+      };
+      statix = {
+        enable = true;
+        name = "statix";
+        entry = "${pkgs.statix}/bin/statix check";
+        pass_filenames = false;
       };
       ruff.enable = true;
       shellcheck = {

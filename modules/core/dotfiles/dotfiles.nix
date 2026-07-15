@@ -52,7 +52,7 @@ let
     entry:
     entry.attrs
     // {
-      source = entry.source;
+      inherit (entry) source;
     }
     // lib.optionalAttrs entry.recursive { recursive = true; }
     // lib.optionalAttrs entry.executable { executable = true; }
@@ -200,18 +200,18 @@ in
   };
 
   config = {
-    home.packages = [ dotfilesCli ];
+    home = {
+      packages = [ dotfilesCli ];
+      file = lib.mkIf cfg.pure (lib.mapAttrs (_: pureAttrs) cfg.file);
+      activation = {
+        dotfilesPreClean = lib.mkIf (!cfg.pure) (
+          lib.hm.dag.entryBefore [ "linkGeneration" ] preCleanScript
+        );
+        dotfiles = lib.mkIf (!cfg.pure) (lib.hm.dag.entryAfter [ "linkGeneration" ] activationScript);
+      };
+    };
 
     xdg.configFile = lib.mkIf cfg.pure (lib.mapAttrs (_: pureAttrs) cfg.config);
     xdg.dataFile = lib.mkIf cfg.pure (lib.mapAttrs (_: pureAttrs) cfg.data);
-    home.file = lib.mkIf cfg.pure (lib.mapAttrs (_: pureAttrs) cfg.file);
-
-    home.activation.dotfilesPreClean = lib.mkIf (!cfg.pure) (
-      lib.hm.dag.entryBefore [ "linkGeneration" ] preCleanScript
-    );
-
-    home.activation.dotfiles = lib.mkIf (!cfg.pure) (
-      lib.hm.dag.entryAfter [ "linkGeneration" ] activationScript
-    );
   };
 }

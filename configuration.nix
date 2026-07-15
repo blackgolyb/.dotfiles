@@ -22,14 +22,26 @@
     ./modules/system/qemu/qemu.nix
   ];
 
-  nix.settings.experimental-features = [
-    "nix-command"
-    "flakes"
-  ];
+  nix = {
+    settings.experimental-features = [
+      "nix-command"
+      "flakes"
+    ];
 
-  # Bootloader.
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
+    gc = {
+      automatic = true;
+      dates = "weekly";
+      options = "--delete-older-than 7d";
+    };
+  };
+
+  boot.loader = {
+    efi.canTouchEfiVariables = true;
+    systemd-boot = {
+      enable = true;
+      configurationLimit = 5;
+    };
+  };
 
   networking.hostName = "nixos"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
@@ -64,26 +76,31 @@
     LC_TIME = "uk_UA.UTF-8";
   };
 
-  # Configure keymap in X11
-  services.xserver.xkb = {
-    layout = "us";
-    variant = "";
+  services = {
+    xserver.xkb = {
+      layout = "us";
+      variant = "";
+    };
+
+    gnome.gnome-keyring.enable = true;
+    dbus.enable = true;
   };
-  my.apps.thunar = enabled.apps.thunar;
-  my.de = enabled.de;
-  my.hardware = enabled.hardware;
-  my.system = enabled.system;
 
-  services.gnome.gnome-keyring.enable = true;
+  my = {
+    apps.thunar = enabled.apps.thunar;
+    inherit (enabled) de hardware system;
+  };
 
-  security.pam.services.login.enableGnomeKeyring = true;
-  security.pam.services.lightdm.enableGnomeKeyring = true;
-
-  services.dbus.enable = true;
+  security.pam.services = {
+    login.enableGnomeKeyring = true;
+    lightdm.enableGnomeKeyring = true;
+  };
 
   # Bluetooth
-  hardware.bluetooth.enable = true;
-  hardware.bluetooth.powerOnBoot = true;
+  hardware.bluetooth = {
+    enable = true;
+    powerOnBoot = true;
+  };
 
   stylix = {
     enable = true;
@@ -110,7 +127,6 @@
     };
   };
 
-  programs.zsh.enable = true;
   virtualisation.docker.enable = true;
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
@@ -147,11 +163,15 @@
     nordzy-cursor-theme
   ];
 
-  programs.steam = {
-    enable = true;
-    remotePlay.openFirewall = true; # Open ports in the firewall for Steam Remote Play
-    dedicatedServer.openFirewall = true; # Open ports in the firewall for Source Dedicated Server
-    localNetworkGameTransfers.openFirewall = true; # Open ports in the firewall for Steam Local Network Game Transfers
+  programs = {
+    zsh.enable = true;
+
+    steam = {
+      enable = true;
+      remotePlay.openFirewall = true; # Open ports in the firewall for Steam Remote Play
+      dedicatedServer.openFirewall = true; # Open ports in the firewall for Source Dedicated Server
+      localNetworkGameTransfers.openFirewall = true; # Open ports in the firewall for Steam Local Network Game Transfers
+    };
   };
 
   home-manager = {
@@ -164,14 +184,6 @@
       "blackgolyb" = import ./home.nix;
     };
   };
-
-  nix.gc = {
-    automatic = true;
-    dates = "weekly";
-    options = "--delete-older-than 7d";
-  };
-
-  boot.loader.systemd-boot.configurationLimit = 5;
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
