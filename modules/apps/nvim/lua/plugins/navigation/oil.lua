@@ -49,6 +49,6 @@ require("oil").setup({
 })
 
 -- keymaps
-vim.keymap.set("n", "<leader>E", "<cmd>Oil --float<cr>", {
+vim.keymap.set("n", "<leader>e", "<cmd>Oil --float<cr>", {
 	desc = "Open oil at the current file",
 })

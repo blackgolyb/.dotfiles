@@ -74,7 +74,7 @@ local function oil_node(state)
 	end)
 end
 
-vim.keymap.set("n", "<leader>e", function()
+vim.keymap.set("n", "<leader>E", function()
 	_G.sidebar("neotree")
 end, { desc = "Toggle Filetree", silent = true })
 
@@ -92,7 +92,7 @@ require("neo-tree").setup({
 			["a"] = "none",
 			["A"] = "none",
 			["<leader>g"] = lazygit_filter_node,
-			["<leader>E"] = oil_node,
+			["<leader>e"] = oil_node,
 			["l"] = function(state)
 				local node = state.tree:get_node()
 				if node.type == "directory" then
