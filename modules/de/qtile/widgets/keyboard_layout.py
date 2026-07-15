@@ -1,11 +1,9 @@
 import subprocess
 
-from libqtile.widget import base
-from libqtile.lazy import lazy
 from libqtile import hook
+from libqtile.lazy import lazy
 from libqtile.log_utils import logger
-
-import settings
+from libqtile.widget import base
 
 
 class KeyboardLayout(base.InLoopPollText):
@@ -13,8 +11,7 @@ class KeyboardLayout(base.InLoopPollText):
         (
             "update_interval",
             1,
-            "Update interval in seconds, if none, the "
-            "widget updates whenever it's done.",
+            "Update interval in seconds, if none, the widget updates whenever it's done.",
         ),
         (
             "configured_keyboards",
@@ -46,9 +43,7 @@ class KeyboardLayout(base.InLoopPollText):
 
     def get_next_layout(self):
         if self.keyboard_layout in self.configured_keyboards:
-            current_keyboard_layout_id = self.configured_keyboards.index(
-                self.keyboard_layout
-            )
+            current_keyboard_layout_id = self.configured_keyboards.index(self.keyboard_layout)
         else:
             current_keyboard_layout_id = 0
 

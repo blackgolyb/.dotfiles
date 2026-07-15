@@ -1,12 +1,12 @@
 import subprocess
 
-from libqtile.widget import base
-from libqtile.log_utils import logger
-
 import settings
-from .base import WidgetGroup
+from libqtile.log_utils import logger
+from libqtile.widget import base
 from services.callbacks import Callbacks
 from services.utils import copy_to_clipboard
+
+from .base import WidgetGroup
 
 
 class ColorPickerDropper(base._TextBox):
@@ -84,8 +84,7 @@ class ColorPickerPalette(base._TextBox):
     def copy_color(self):
         copy_to_clipboard(self._picked_color)
 
-    def open_palette(self):
-        ...
+    def open_palette(self): ...
 
     def update_color(self, color):
         self._picked_color = color

@@ -1,7 +1,5 @@
 from pathlib import Path
 
-from libqtile.utils import guess_terminal
-
 # from themes import default_theme, themes
 
 

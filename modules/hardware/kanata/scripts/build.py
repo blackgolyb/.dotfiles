@@ -3,7 +3,6 @@ from pathlib import Path
 
 from pyparsing import OneOrMore, nestedExpr
 
-
 CONFIG_DIR = Path(__file__).parent.parent / "config"
 CONFIG = CONFIG_DIR / "config.kbd"
 KEYS_SRC = CONFIG_DIR / "src.kbd"
@@ -88,10 +87,12 @@ def build_base_layer(src: str, excluded_keys: list[str], base_layer_name: str = 
     if defsrc is None:
         raise RuntimeError("Cannot find defsrc to build base deflayer")
 
-    defsrc.pop(0) # pop defsrc item
+    defsrc.pop(0)  # pop defsrc item
 
-    result = ";; THIS FILE GENERATES build.py, PLEASE DO NOT MANUALLY CHANGE IT\n" + \
-        ";; IF YOU DON'T WANT TO ADD SOMETHING, CREATE A NEW MODULE\n\n"
+    result = (
+        ";; THIS FILE GENERATES build.py, PLEASE DO NOT MANUALLY CHANGE IT\n"
+        + ";; IF YOU DON'T WANT TO ADD SOMETHING, CREATE A NEW MODULE\n\n"
+    )
     deflayer_base = src.replace("defsrc", f"deflayer {base_layer_name}")
     aliases = "(defalias\n"
 
@@ -99,7 +100,7 @@ def build_base_layer(src: str, excluded_keys: list[str], base_layer_name: str = 
         if key not in excluded_keys:
             aliases += f"  {key}  {key}\n"
         key = protect_key(key)
-        deflayer_base = re.sub(fr"(\(|\s+)({key})(\s+)", r"\1@\2\3", deflayer_base)
+        deflayer_base = re.sub(rf"(\(|\s+)({key})(\s+)", r"\1@\2\3", deflayer_base)
 
     aliases += ")"
     result += deflayer_base + "\n\n" + aliases

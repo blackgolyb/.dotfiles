@@ -14,8 +14,7 @@ in
   config = lib.mkIf cfg.enable {
     services.kanata = {
       enable = true;
-      keyboards.default.configFile =
-        "${kanataConfigDir}/config.kbd";
+      keyboards.default.configFile = "${kanataConfigDir}/config.kbd";
     };
 
     boot.kernelModules = [ "uinput" ];

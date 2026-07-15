@@ -1,8 +1,6 @@
-from libqtile.config import Screen
-
-from settings import *
 from bars import main_bars, second_bars
-
+from libqtile.config import Screen
+from settings import *
 
 default_screens = [
     Screen(

@@ -1,17 +1,15 @@
-import time
 import threading
+import time
+
 import psutil
 
 from .callbacks import Callbacks
-
 
 DEFAULT_OBSERVER_TIMEOUT = 1
 
 
 class ProcessObserver(threading.Thread):
-    def __init__(
-        self, process_name, timeout=DEFAULT_OBSERVER_TIMEOUT, soft_waiting=False
-    ):
+    def __init__(self, process_name, timeout=DEFAULT_OBSERVER_TIMEOUT, soft_waiting=False):
         threading.Thread.__init__(self)
 
         self.process_name = process_name

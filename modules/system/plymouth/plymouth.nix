@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.my.system.plymouth;
@@ -31,36 +36,36 @@ in
   options.my.system.plymouth.enable = lib.mkEnableOption "Plymouth";
 
   config = lib.mkIf cfg.enable {
-  environment.systemPackages = [
-    mythemes
-    pkgs.plymouth
-  ];
-
-  boot = {
-    plymouth = {
-      enable = true;
-      theme = "loader";
-      themePackages = with pkgs; [
-        # By default we would install all themes
-        (adi1090x-plymouth-themes.override {
-          selected_themes = [ "loader" ];
-        })
-      ];
-    };
-
-    consoleLogLevel = 3;
-    initrd.verbose = false;
-    kernelParams = [
-      "quiet"
-      "splash"
-      "boot.shell_on_fail"
-      "udev.log_priority=3"
-      "rd.systemd.show_status=auto"
+    environment.systemPackages = [
+      mythemes
+      pkgs.plymouth
     ];
-    # Hide the OS choice for bootloaders.
-    # It's still possible to open the bootloader list by pressing any key
-    # It will just not appear on screen unless a key is pressed
-    loader.timeout = 0;
-  };
+
+    boot = {
+      plymouth = {
+        enable = true;
+        theme = "loader";
+        themePackages = with pkgs; [
+          # By default we would install all themes
+          (adi1090x-plymouth-themes.override {
+            selected_themes = [ "loader" ];
+          })
+        ];
+      };
+
+      consoleLogLevel = 3;
+      initrd.verbose = false;
+      kernelParams = [
+        "quiet"
+        "splash"
+        "boot.shell_on_fail"
+        "udev.log_priority=3"
+        "rd.systemd.show_status=auto"
+      ];
+      # Hide the OS choice for bootloaders.
+      # It's still possible to open the bootloader list by pressing any key
+      # It will just not appear on screen unless a key is pressed
+      loader.timeout = 0;
+    };
   };
 }

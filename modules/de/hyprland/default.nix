@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.my.de.hyprland;
@@ -69,71 +74,71 @@ in
     '';
 
     dotfiles.config = {
-    "hypr/hyprland.lua" = {
-      source = ./hyprland.lua;
-    };
+      "hypr/hyprland.lua" = {
+        source = ./hyprland.lua;
+      };
 
-    "quickshell/shell.qml" = {
-      source = ./quickshell/shell.qml;
-    };
+      "quickshell/shell.qml" = {
+        source = ./quickshell/shell.qml;
+      };
 
-    "quickshell/Src" = {
-      source = ./quickshell/Src;
-    };
+      "quickshell/Src" = {
+        source = ./quickshell/Src;
+      };
 
-    "quickshell/battery_icons" = {
-      source = ../../../resources/battery_icons;
-    };
+      "quickshell/battery_icons" = {
+        source = ../../../resources/battery_icons;
+      };
 
-    "hypr/wallpapers" = {
-      source = ../../../resources/wallpapers;
-    };
+      "hypr/wallpapers" = {
+        source = ../../../resources/wallpapers;
+      };
 
-    "hypr/scripts/autostart.sh" = {
-      source = ./scripts/autostart.sh;
-      executable = true;
-    };
+      "hypr/scripts/autostart.sh" = {
+        source = ./scripts/autostart.sh;
+        executable = true;
+      };
 
-    "hypr/scripts/brightness_control" = {
-      source = ./scripts/brightness_control;
-      executable = true;
-    };
+      "hypr/scripts/brightness_control" = {
+        source = ./scripts/brightness_control;
+        executable = true;
+      };
 
-    "hypr/scripts/device_manager" = {
-      source = ./scripts/device_manager;
-      executable = true;
-    };
+      "hypr/scripts/device_manager" = {
+        source = ./scripts/device_manager;
+        executable = true;
+      };
 
-    "hypr/scripts/multi_monitor" = {
-      source = ./scripts/multi_monitor;
-      executable = true;
-    };
+      "hypr/scripts/multi_monitor" = {
+        source = ./scripts/multi_monitor;
+        executable = true;
+      };
 
-    "hypr/scripts/pick_color" = {
-      source = ./scripts/pick_color;
-      executable = true;
-    };
+      "hypr/scripts/pick_color" = {
+        source = ./scripts/pick_color;
+        executable = true;
+      };
 
-    "hypr/scripts/screenshot" = {
-      source = ./scripts/screenshot;
-      executable = true;
-    };
+      "hypr/scripts/screenshot" = {
+        source = ./scripts/screenshot;
+        executable = true;
+      };
 
-    "hypr/scripts/video_wallpaper" = {
-      source = ./scripts/video_wallpaper;
-      executable = true;
-    };
+      "hypr/scripts/video_wallpaper" = {
+        source = ./scripts/video_wallpaper;
+        executable = true;
+      };
 
-    "hypr/scripts/volume_control" = {
-      source = ./scripts/volume_control;
-      executable = true;
-    };
+      "hypr/scripts/volume_control" = {
+        source = ./scripts/volume_control;
+        executable = true;
+      };
 
-    "hypr/scripts/wallpaper_control" = {
-      source = ./scripts/wallpaper_control;
-      executable = true;
+      "hypr/scripts/wallpaper_control" = {
+        source = ./scripts/wallpaper_control;
+        executable = true;
+      };
     };
-  };
 
     dotfiles.data."icons/qtile-cursors/cursors" = {
       source = ../../../resources/cursors;

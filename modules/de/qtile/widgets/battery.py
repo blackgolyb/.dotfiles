@@ -1,12 +1,11 @@
 from typing import Any
 
 from libqtile import bar, images
-from libqtile.log_utils import logger
 from libqtile.command.base import expose_command
 from libqtile.images import Img
 from libqtile.utils import send_notification
 from libqtile.widget import base
-from libqtile.widget.battery import BatteryState, BatteryStatus, load_battery, default_icon_path
+from libqtile.widget.battery import BatteryState, BatteryStatus, default_icon_path, load_battery
 
 
 def marge_statuses(statuses: list[BatteryStatus]) -> BatteryStatus:
@@ -15,13 +14,13 @@ def marge_statuses(statuses: list[BatteryStatus]) -> BatteryStatus:
     percent = sum((s.percent for s in statuses)) / n
     res_id = 0
 
-    if (states.count(BatteryState.FULL) == n):
+    if states.count(BatteryState.FULL) == n:
         res_id = 0
 
-    if (states.count(BatteryState.EMPTY) == n):
+    if states.count(BatteryState.EMPTY) == n:
         res_id = 0
 
-    if (states.count(BatteryState.CHARGING) > 0):
+    if states.count(BatteryState.CHARGING) > 0:
         i = states.index(BatteryState.CHARGING)
         res_id = i
 
@@ -64,7 +63,13 @@ class Batteries(base.BackgroundPoll):
         ("low_foreground", "FF0000", "Font color on low battery"),
         ("low_background", None, "Background color on low battery"),
         ("update_interval", 60, "Seconds between status updates"),
-        ("batteries", [0, ], "Which battery should be monitored (battery number or name)"),
+        (
+            "batteries",
+            [
+                0,
+            ],
+            "Which battery should be monitored (battery number or name)",
+        ),
         ("notify_below", None, "Send a notification below this battery level."),
         ("notification_timeout", 10, "Time in seconds to display notification. 0 for no expiry."),
     ]
@@ -102,7 +107,7 @@ class Batteries(base.BackgroundPoll):
         class.
         """
         res = []
-        for bat in config.get("batteries", (0, )):
+        for bat in config.get("batteries", (0,)):
             res.append(load_battery(**config, battery=bat))
         return res
 
@@ -112,7 +117,6 @@ class Batteries(base.BackgroundPoll):
             statuses.append(bat.update_status())
 
         return marge_statuses(statuses)
-
 
     def poll(self) -> str:
         """Determine the text to display
@@ -198,10 +202,16 @@ class BatteriesIcon(base._Widget):
 
     orientations = base.ORIENTATION_HORIZONTAL
     defaults: list[tuple[str, Any, str]] = [
-        ("batteries", [0, ], "Which battery should be monitored (battery number or name)"),
+        (
+            "batteries",
+            [
+                0,
+            ],
+            "Which battery should be monitored (battery number or name)",
+        ),
         ("update_interval", 60, "Seconds between status updates"),
         ("theme_path", default_icon_path(), "Path of the icons"),
-        ("scale", 1, "Scale factor relative to the bar height.  " "Defaults to 1"),
+        ("scale", 1, "Scale factor relative to the bar height.  Defaults to 1"),
         ("padding", 0, "Additional padding either side of the icon"),
     ]
 
@@ -237,7 +247,12 @@ class BatteriesIcon(base._Widget):
         class.
         """
         res = []
-        for bat in config.get("batteries", [0, ]):
+        for bat in config.get(
+            "batteries",
+            [
+                0,
+            ],
+        ):
             res.append(load_battery(**config, battery=bat))
         return res
 

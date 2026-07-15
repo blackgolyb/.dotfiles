@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.my.de.qtile;
@@ -8,13 +13,13 @@ in
 
   config = lib.mkIf cfg.enable {
     home.packages = with pkgs; [
-        xgamma
-        haskellPackages.greenclip
-        librsvg
-        adwaita-icon-theme
-        dunst
-        picom
-        unclutter-xfixes
+      xgamma
+      haskellPackages.greenclip
+      librsvg
+      adwaita-icon-theme
+      dunst
+      picom
+      unclutter-xfixes
     ];
 
     home.sessionVariables = {

@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.my.apps.nvim;
@@ -29,15 +34,15 @@ in
       # lsp
       gopls
       nixd
-      lua-language-server     # lua_ls
+      lua-language-server # lua_ls
       vtsls
-      vue-language-server      # vue_ls
+      vue-language-server # vue_ls
       vscode-langservers-extracted # html, cssls, jsonls, eslint
       tailwindcss-language-server
       emmet-ls
       basedpyright
       ruff
-      clang-tools             # clangd
+      clang-tools # clangd
       rust-analyzer
       elixir-ls
       bash-language-server
@@ -45,7 +50,7 @@ in
       hadolint
       sqls
       texlab
-      taplo                   # toml
+      taplo # toml
       yaml-language-server
       typos-lsp
       marksman

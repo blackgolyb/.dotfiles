@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.my.apps.zed;
@@ -25,7 +30,7 @@ in
     home.file.".local/share/zed/node/${zedNodeVersion}".source = zedNodeShim;
 
     home.packages = with pkgs; [
-    	zed-editor
+      zed-editor
     ];
 
     dotfiles.config."zed" = {

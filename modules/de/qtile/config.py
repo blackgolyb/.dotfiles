@@ -1,16 +1,15 @@
-from settings import is_bar_rounded
-from layouts import default_layouts, default_floating_layout
-from keys import default_keys
-from groups import default_groups
-from screens import default_screens
-from bars import main_bar
-from mouse import default_mouse
-from widgets import widget_defaults
-from wallpaper_managers import wallpaper_managers #noqa
-import hooks
-
 import locale
 
+import hooks
+from bars import main_bar
+from groups import default_groups
+from keys import default_keys
+from layouts import default_floating_layout, default_layouts
+from mouse import default_mouse
+from screens import default_screens
+from settings import is_bar_rounded
+from wallpaper_managers import wallpaper_managers  # noqa
+from widgets import widget_defaults
 
 locale.setlocale(locale.LC_TIME, "uk_UA.UTF-8")
 

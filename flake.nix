@@ -15,6 +15,14 @@
       url = "github:Mic92/sops-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    treefmt-nix = {
+      url = "github:numtide/treefmt-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    git-hooks = {
+      url = "github:cachix/git-hooks.nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     openwhispr = {
       url = "github:OpenWhispr/openwhispr";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -26,7 +34,16 @@
     };
   };
 
-  outputs = { self, nixpkgs, home-manager, stylix, ... }@inputs:
+  outputs =
+    {
+      self,
+      nixpkgs,
+      home-manager,
+      stylix,
+      treefmt-nix,
+      git-hooks,
+      ...
+    }@inputs:
     let
       lib = nixpkgs.lib;
       system = "x86_64-linux";
@@ -35,7 +52,17 @@
         inherit system;
         config.allowUnfree = true;
       };
-    in {
+      dotfilesDevShell = import ./dev-shells/dotfiles.nix {
+        inherit
+          self
+          pkgs
+          system
+          treefmt-nix
+          git-hooks
+          ;
+      };
+    in
+    {
       nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
         specialArgs = { inherit enabled inputs system; };
         modules = [
@@ -45,7 +72,13 @@
         ];
       };
 
+      formatter.${system} = dotfilesDevShell.formatter;
+
+      checks.${system} = dotfilesDevShell.checks;
+
       devShells.${system} = {
+        default = dotfilesDevShell.shell;
+        dotfiles = dotfilesDevShell.shell;
         node = import ./dev-shells/node.nix { inherit pkgs; };
         python = import ./dev-shells/python.nix { inherit pkgs; };
       };

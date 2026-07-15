@@ -2,21 +2,30 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, pkgs, enabled, inputs, ... }:
+{
+  config,
+  pkgs,
+  enabled,
+  inputs,
+  ...
+}:
 
 {
-  imports =
-    [ # Include the results of the hardware scan.
-      ./hardware-configuration.nix
-      ./modules/apps/thunar/system.nix
-      ./modules/de/hyprland/system.nix
-      ./modules/de/qtile/system.nix
-      ./modules/hardware/kanata/kanata.nix
-      ./modules/system/plymouth/plymouth.nix
-      ./modules/system/qemu/qemu.nix
-    ];
+  imports = [
+    # Include the results of the hardware scan.
+    ./hardware-configuration.nix
+    ./modules/apps/thunar/system.nix
+    ./modules/de/hyprland/system.nix
+    ./modules/de/qtile/system.nix
+    ./modules/hardware/kanata/kanata.nix
+    ./modules/system/plymouth/plymouth.nix
+    ./modules/system/qemu/qemu.nix
+  ];
 
-  nix.settings.experimental-features = ["nix-command" "flakes"];
+  nix.settings.experimental-features = [
+    "nix-command"
+    "flakes"
+  ];
 
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
@@ -89,15 +98,15 @@
     };
 
     cursor = {
-        name = "Nordzy-cursors";
-        package = pkgs.nordzy-cursor-theme;
-        size = 24;
-      };
+      name = "Nordzy-cursors";
+      package = pkgs.nordzy-cursor-theme;
+      size = 24;
+    };
 
     polarity = "dark";
 
     targets = {
-	    plymouth.enable = false;
+      plymouth.enable = false;
     };
   };
 
@@ -109,8 +118,12 @@
     isNormalUser = true;
     shell = pkgs.zsh;
     description = "blackgolyb";
-    extraGroups = [ "networkmanager" "wheel" "docker" ];
-    packages = with pkgs; [];
+    extraGroups = [
+      "networkmanager"
+      "wheel"
+      "docker"
+    ];
+    packages = with pkgs; [ ];
   };
 
   nixpkgs.config = {
@@ -123,15 +136,15 @@
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-     gnome-keyring
-     libsecret
-     #
-     vim
-     git
-     zsh
-     wget
-     dracula-icon-theme
-     nordzy-cursor-theme
+    gnome-keyring
+    libsecret
+    #
+    vim
+    git
+    zsh
+    wget
+    dracula-icon-theme
+    nordzy-cursor-theme
   ];
 
   programs.steam = {
@@ -140,7 +153,6 @@
     dedicatedServer.openFirewall = true; # Open ports in the firewall for Source Dedicated Server
     localNetworkGameTransfers.openFirewall = true; # Open ports in the firewall for Steam Local Network Game Transfers
   };
-
 
   home-manager = {
     # also pass inputs to home-manager modules
@@ -160,7 +172,6 @@
   };
 
   boot.loader.systemd-boot.configurationLimit = 5;
-
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.

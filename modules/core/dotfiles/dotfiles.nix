@@ -1,4 +1,10 @@
-{ config, inputs, lib, pkgs, ... }:
+{
+  config,
+  inputs,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.dotfiles;
@@ -42,14 +48,18 @@ let
     };
   };
 
-  pureAttrs = entry:
+  pureAttrs =
+    entry:
     entry.attrs
-    // { source = entry.source; }
+    // {
+      source = entry.source;
+    }
     // lib.optionalAttrs entry.recursive { recursive = true; }
     // lib.optionalAttrs entry.executable { executable = true; }
     // lib.optionalAttrs entry.force { force = true; };
 
-  renderActivationEntry = homeTarget: entry:
+  renderActivationEntry =
+    homeTarget: entry:
     let
       inferredPath =
         let
@@ -94,7 +104,8 @@ let
       run ln -s "$source" "$target"
     '';
 
-  renderPreCleanEntry = homeTarget: entry:
+  renderPreCleanEntry =
+    homeTarget: entry:
     let
       force = if entry.force then "1" else "0";
     in
@@ -109,23 +120,17 @@ let
       fi
     '';
 
-  renderConfigEntry = name: entry:
-    renderActivationEntry ".config/${name}" entry;
+  renderConfigEntry = name: entry: renderActivationEntry ".config/${name}" entry;
 
-  renderPreCleanConfigEntry = name: entry:
-    renderPreCleanEntry ".config/${name}" entry;
+  renderPreCleanConfigEntry = name: entry: renderPreCleanEntry ".config/${name}" entry;
 
-  renderDataEntry = name: entry:
-    renderActivationEntry ".local/share/${name}" entry;
+  renderDataEntry = name: entry: renderActivationEntry ".local/share/${name}" entry;
 
-  renderPreCleanDataEntry = name: entry:
-    renderPreCleanEntry ".local/share/${name}" entry;
+  renderPreCleanDataEntry = name: entry: renderPreCleanEntry ".local/share/${name}" entry;
 
-  renderFileEntry = name: entry:
-    renderActivationEntry name entry;
+  renderFileEntry = name: entry: renderActivationEntry name entry;
 
-  renderPreCleanFileEntry = name: entry:
-    renderPreCleanEntry name entry;
+  renderPreCleanFileEntry = name: entry: renderPreCleanEntry name entry;
 
   preCleanScript = lib.concatStringsSep "\n" (
     lib.mapAttrsToList renderPreCleanConfigEntry cfg.config

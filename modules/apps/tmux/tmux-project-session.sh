@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 set -u
 
 session_prefix='@sessionPrefix@'
@@ -28,7 +30,7 @@ list_project_sessions() {
   tmux list-sessions -F '#S' 2>/dev/null |
     while IFS= read -r session; do
       case "$session" in
-        "$session_prefix"*) printf '%s\n' "$session" ;;
+      "$session_prefix"*) printf '%s\n' "$session" ;;
       esac
     done
 }
@@ -87,14 +89,14 @@ pick_project() {
 }
 
 case "${1:---pick}" in
-  -l|--list)
-    require_tmux_client
-    list_project_sessions
-    ;;
-  -p|--pick)
-    pick_project
-    ;;
-  *)
-    open_project "$1"
-    ;;
+-l | --list)
+  require_tmux_client
+  list_project_sessions
+  ;;
+-p | --pick)
+  pick_project
+  ;;
+*)
+  open_project "$1"
+  ;;
 esac

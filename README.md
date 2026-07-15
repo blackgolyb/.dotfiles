@@ -4,6 +4,18 @@
 
 See [INSTALL.md](./INSTALL.md) for fresh-machine bootstrap details.
 
+## Development
+
+```sh
+make dev
+make fmt
+make check
+make pre-commit-all
+```
+
+`nix develop` installs the generated pre-commit hooks. Formatting is handled by
+treefmt-nix; pre-commit checks also run Nix, Python, and shell linters.
+
 Install from a directory containing `keys.txt`:
 
 ```sh

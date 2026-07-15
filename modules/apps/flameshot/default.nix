@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.my.apps.flameshot;
@@ -27,7 +32,6 @@ in
       useX11LegacyScreenshot=true
     '';
 
-    xdg.configFile."flameshot-wayland/flameshot/flameshot.ini".text = ''
-    '';
+    xdg.configFile."flameshot-wayland/flameshot/flameshot.ini".text = "";
   };
 }

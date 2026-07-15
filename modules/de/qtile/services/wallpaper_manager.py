@@ -2,7 +2,6 @@ import random
 from pathlib import Path
 
 from libqtile import hook
-from libqtile.log_utils import logger
 
 
 class WallpaperManager:

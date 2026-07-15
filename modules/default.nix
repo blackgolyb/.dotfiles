@@ -1,11 +1,13 @@
 {
-  nixosModules.default = {
-    lib,
-    username,
-    ...
-    }: {
+  nixosModules.default =
+    {
+      lib,
+      username,
+      ...
+    }:
+    {
       imports = [
-       ./hardware/kanata/kanata.nix
+        ./hardware/kanata/kanata.nix
       ];
     };
 }

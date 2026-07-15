@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.my.apps.ssh;
@@ -27,7 +32,8 @@ let
   sshKeysDir = ../../../secrets/ssh/user;
   runtimeDir = ''"''${XDG_RUNTIME_DIR:-/run/user/$(${pkgs.coreutils}/bin/id -u)}/dotfiles-ssh"'';
 
-  keysFromDir = dir:
+  keysFromDir =
+    dir:
     let
       entries = builtins.readDir dir;
       keyFiles = lib.filter (name: lib.hasSuffix ".key" name) (lib.attrNames entries);
@@ -38,9 +44,13 @@ let
       publicKeyFile = if builtins.pathExists (dir + "/${name}.pub") then dir + "/${name}.pub" else null;
     });
 
-  defaultUserKeys = lib.mapAttrs (_: key: key // {
-    target = "${config.home.homeDirectory}/.ssh/${_}";
-  }) (keysFromDir sshKeysDir);
+  defaultUserKeys = lib.mapAttrs (
+    _: key:
+    key
+    // {
+      target = "${config.home.homeDirectory}/.ssh/${_}";
+    }
+  ) (keysFromDir sshKeysDir);
 
   renderKey = name: key: ''
     decrypt_key ${lib.escapeShellArg key.privateKeyFile} "$runtime_dir/user/${name}"

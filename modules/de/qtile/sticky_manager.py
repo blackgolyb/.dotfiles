@@ -1,5 +1,4 @@
 from libqtile.config import Match
-
 from services.sticky_window_manager import StickyWindowManager
 
 sticky_manager = StickyWindowManager(

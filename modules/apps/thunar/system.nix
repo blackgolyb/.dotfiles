@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.my.apps.thunar;
@@ -8,17 +13,17 @@ in
 
   config = lib.mkIf cfg.enable {
     programs = {
-        thunar = {
-            enable = true;
-            plugins = with pkgs; [
-                thunar-archive-plugin
-                thunar-volman
-            ];
-        };
+      thunar = {
+        enable = true;
+        plugins = with pkgs; [
+          thunar-archive-plugin
+          thunar-volman
+        ];
+      };
     };
 
     environment.systemPackages = with pkgs; [
-        file-roller
+      file-roller
     ];
 
     services.gvfs.enable = true;

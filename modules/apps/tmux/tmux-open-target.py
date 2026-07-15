@@ -52,7 +52,9 @@ def capture_line(pane: str, y: int) -> str:
 
 
 def pane_cwd(pane: str) -> Path:
-    return Path(tmux("display-message", "-p", "-t", pane, "#{pane_current_path}").stdout.rstrip("\n"))
+    return Path(
+        tmux("display-message", "-p", "-t", pane, "#{pane_current_path}").stdout.rstrip("\n")
+    )
 
 
 def selection_is_active(pane: str) -> bool:
@@ -92,7 +94,7 @@ def selected_text(pane: str) -> str:
 
 
 def is_delimiter(char: str) -> bool:
-    return char.isspace() or char in '<>"\'`()[]{}'
+    return char.isspace() or char in "<>\"'`()[]{}"
 
 
 def token_at(line: str, x: int) -> str:
@@ -120,7 +122,7 @@ def token_at(line: str, x: int) -> str:
 
 
 def clean_token(token: str) -> str:
-    token = token.strip().strip('"\'`<>')
+    token = token.strip().strip("\"'`<>")
     while token and token[0] in "([{":
         token = token[1:]
     while token and token[-1] in ".,;)]}":
@@ -271,7 +273,9 @@ def open_target(target: str, cwd: Path, pane: str | None, source: str = "cursor"
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="Open URL or file target from tmux cursor/mouse coordinates.")
+    parser = argparse.ArgumentParser(
+        description="Open URL or file target from tmux cursor/mouse coordinates."
+    )
     parser.add_argument("--pane", default=None)
     parser.add_argument("--x", type=int, default=None)
     parser.add_argument("--y", type=int, default=None)

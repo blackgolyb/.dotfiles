@@ -1,14 +1,12 @@
 from libqtile import bar, widget
-
-from settings import bar_gaps, bar_orientation, outer_gaps, group_gaps
 from services import utils
+from settings import bar_gaps, bar_orientation, group_gaps, outer_gaps
+from themes import color_theme
 from widgets import (
-    default_widgets,
     base_groupbox,
+    default_widgets,
     kb_layout_widget,
 )
-from themes import color_theme
-
 
 background_color = color_theme["bar_background_color"]
 border_color = color_theme["bar_border_color"]
@@ -48,6 +46,7 @@ second_bar = bar.Bar(
 
 # main_bar = None
 # second_bar = None
+
 
 def init_bars(bar, bar_orientation="top"):
     bars = utils.configure_bars(outer_gaps, group_gaps, bar)

@@ -1,13 +1,11 @@
-from libqtile.widget import base, Systray
-from libqtile.lazy import lazy
-from libqtile.log_utils import logger
-from libqtile import widget
 from libqtile import hook
+from libqtile.lazy import lazy
+from libqtile.widget import base
+
+from widgets.base import HoveringWidgetTabGroup, WidgetBox, WidgetGroup
 
 # from pathlib import Path
-
 from .api import YTMusicAPI
-from widgets.base import WidgetBox, WidgetGroup, HoveringWidgetTabGroup
 
 
 class YTMusicAPIInitMixin:
@@ -60,14 +58,12 @@ class YTMusicTitleWidget(YTMusicAPIInitMixin, base.InLoopPollText):
         (
             "update_interval",
             1,
-            "Update interval in seconds, if none, the "
-            "widget updates whenever it's done.",
+            "Update interval in seconds, if none, the widget updates whenever it's done.",
         ),
         (
             "fmt",
             "{}",
-            "Update interval in seconds, if none, the "
-            "widget updates whenever it's done.",
+            "Update interval in seconds, if none, the widget updates whenever it's done.",
         ),
         ("max_chars", 12, "Maximum number of characters to display in widget."),
         (
@@ -210,16 +206,8 @@ class YTMusicControlWidget(WidgetGroup):
 class YTMusicWidget(YTMusicAPIInitMixin, WidgetBox):
     defaults = [
         ("foreground", "#ffffff", "Foreground color."),
-        (
-            "yt_music_on_icon",
-            "󰝚 ",
-            ""
-        ),
-        (
-            "yt_music_off_icon",
-            "󰝛 ",
-            ""
-        ),
+        ("yt_music_on_icon", "󰝚 ", ""),
+        ("yt_music_off_icon", "󰝛 ", ""),
     ]
 
     def __init__(self, api: YTMusicAPI | None = None, **config):

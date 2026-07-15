@@ -1,20 +1,18 @@
+import datetime
 import re
-import json
 import threading
 import time
-import typing
-import requests
-import datetime
-from pathlib import Path
 from dataclasses import dataclass
 
+import requests
 from libqtile.log_utils import logger
-
 from services.callbacks import Callbacks
 
-CAMEL_CASE_TO_SNAKE_CASE_PATTERN = re.compile(r'(?<!^)(?=[A-Z])')
+CAMEL_CASE_TO_SNAKE_CASE_PATTERN = re.compile(r"(?<!^)(?=[A-Z])")
+
+
 def camel_case_to_snake_case(name: str) -> str:
-    return CAMEL_CASE_TO_SNAKE_CASE_PATTERN.sub('_', name).lower()
+    return CAMEL_CASE_TO_SNAKE_CASE_PATTERN.sub("_", name).lower()
 
 
 @dataclass
@@ -69,6 +67,7 @@ class LoopThread(threading.Thread):
     def stop(self):
         self._stop_event.set()
 
+
 class YTMusicAPI:
     song_info_file = "/tmp/yt_music_song_info.json"
     check_timeout = 10
@@ -95,7 +94,9 @@ class YTMusicAPI:
     def _format_url(self, url: str, **params) -> str:
         defaults = {
             "base": self.api["base"].format(host=self.api_host, port=self.api_port),
-            "api": self.api["api"].format(host=self.api_host, port=self.api_port, api_version=self.api_version),
+            "api": self.api["api"].format(
+                host=self.api_host, port=self.api_port, api_version=self.api_version
+            ),
             "host": self.api_host,
             "port": self.api_port,
             "api_version": self.api_version,

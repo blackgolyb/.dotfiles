@@ -1,9 +1,8 @@
 import subprocess
 
-from libqtile.widget import base
-from libqtile.lazy import lazy
-
 import settings
+from libqtile.lazy import lazy
+from libqtile.widget import base
 
 
 class Brightness(base.InLoopPollText):
@@ -11,8 +10,7 @@ class Brightness(base.InLoopPollText):
         (
             "update_interval",
             5,
-            "Update interval in seconds, if none, the "
-            "widget updates whenever it's done.",
+            "Update interval in seconds, if none, the widget updates whenever it's done.",
         ),
         (
             "script_path",

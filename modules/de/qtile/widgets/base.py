@@ -1,9 +1,7 @@
-from libqtile import widget, bar
-from libqtile.widget import base
-from libqtile.log_utils import logger
-from libqtile.widget import Systray
-
+from libqtile import bar, widget
 from libqtile.command.base import expose_command
+from libqtile.log_utils import logger
+from libqtile.widget import Systray, base
 
 
 class WidgetGroup(base._Widget):
@@ -288,7 +286,7 @@ class WidgetBoxTest(WidgetGroup):
             val = self.close_button_location
             logger.warning("Invalid value for 'close_button_location': %s", val)
             self.close_button_location = "left"
-            
+
         self.button_idx = 0 if self.close_button_location == "left" else 1
         self.widgets[self.button_idx] = self.widget_button
         self.widgets[not self.button_idx] = group
@@ -303,11 +301,10 @@ class WidgetBoxTest(WidgetGroup):
             callback(*args, **kwargs)
 
         self.widget_button.add_callbacks({self.open_button_type: wrapped_callback})
-        
+
     def _configure(self, qtile, bar):
         WidgetGroup._configure(self, qtile, bar)
         # self.toggle_widgets(False)
-
 
     def toggle_widgets(self, state):
         if state:

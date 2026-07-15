@@ -5,7 +5,6 @@ from pathlib import Path
 import settings
 from libqtile import hook, qtile
 from libqtile.lazy import lazy
-from libqtile.log_utils import logger
 from libqtile.widget import base
 
 

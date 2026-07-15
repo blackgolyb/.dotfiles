@@ -22,7 +22,9 @@ def run(command: Sequence[str]) -> None:
     except FileNotFoundError as error:
         raise click.ClickException(f"Required command not found: {command[0]}") from error
     except subprocess.CalledProcessError as error:
-        raise click.ClickException(f"Command failed with exit code {error.returncode}: {' '.join(command)}") from error
+        raise click.ClickException(
+            f"Command failed with exit code {error.returncode}: {' '.join(command)}"
+        ) from error
 
 
 def repo_root() -> Path:
@@ -41,7 +43,9 @@ def resolve_ssh_store(root: Path, store: str) -> Path:
 
 def ensure_key_name(name: str) -> None:
     if not KEY_NAME_RE.match(name):
-        raise click.ClickException("SSH key name may contain only letters, numbers, dot, underscore, and dash")
+        raise click.ClickException(
+            "SSH key name may contain only letters, numbers, dot, underscore, and dash"
+        )
 
 
 def ssh_key_paths(store_dir: Path, name: str) -> tuple[Path, Path]:
@@ -57,47 +61,55 @@ def ensure_output_paths(private_key: Path, public_key: Path, force: bool) -> Non
     public_key.parent.mkdir(parents=True, exist_ok=True)
 
 
-def generate_plain_ssh_key(output_dir: Path, name: str, key_type: str, comment: str) -> tuple[Path, Path]:
+def generate_plain_ssh_key(
+    output_dir: Path, name: str, key_type: str, comment: str
+) -> tuple[Path, Path]:
     priv = output_dir / name
     pub = output_dir / f"{name}.pub"
-    run([
-        "ssh-keygen",
-        "-q",
-        "-t",
-        key_type,
-        "-N",
-        "",
-        "-C",
-        comment,
-        "-f",
-        str(priv),
-    ])
+    run(
+        [
+            "ssh-keygen",
+            "-q",
+            "-t",
+            key_type,
+            "-N",
+            "",
+            "-C",
+            comment,
+            "-f",
+            str(priv),
+        ]
+    )
     return priv, pub
 
 
 def encrypt_private_key(root: Path, plain_key: Path, encrypted_key: Path) -> None:
-    run([
-        "sops",
-        "--config",
-        str(root / ".sops.yaml"),
-        "--encrypt",
-        "--input-type",
-        "binary",
-        "--output-type",
-        "binary",
-        "--filename-override",
-        str(encrypted_key),
-        "--output",
-        str(encrypted_key),
-        str(plain_key),
-    ])
+    run(
+        [
+            "sops",
+            "--config",
+            str(root / ".sops.yaml"),
+            "--encrypt",
+            "--input-type",
+            "binary",
+            "--output-type",
+            "binary",
+            "--filename-override",
+            str(encrypted_key),
+            "--output",
+            str(encrypted_key),
+            str(plain_key),
+        ]
+    )
 
 
 def relative_to_root(root: Path, path: Path) -> Path:
     return path.relative_to(root) if path.is_relative_to(root) else path
 
 
-def print_ssh_key_summary(root: Path, store: str, name: str, private_key: Path, public_key: Path) -> None:
+def print_ssh_key_summary(
+    root: Path, store: str, name: str, private_key: Path, public_key: Path
+) -> None:
     rel_private_key = relative_to_root(root, private_key)
     rel_public_key = relative_to_root(root, public_key)
 
@@ -117,7 +129,9 @@ def print_ssh_key_summary(root: Path, store: str, name: str, private_key: Path, 
         click.echo(f"  ~/.ssh/{name}")
 
 
-def generate_ssh_key(store: str, name: str, key_type: str, comment: str | None, force: bool) -> None:
+def generate_ssh_key(
+    store: str, name: str, key_type: str, comment: str | None, force: bool
+) -> None:
     ensure_key_name(name)
 
     root = repo_root()
@@ -141,10 +155,14 @@ def cli() -> None:
 @cli.command("ssh-keygen")
 @click.argument("store")
 @click.argument("name")
-@click.option("--type", "key_type", default="ed25519", show_default=True, help="ssh-keygen key type.")
+@click.option(
+    "--type", "key_type", default="ed25519", show_default=True, help="ssh-keygen key type."
+)
 @click.option("--comment", help="SSH public key comment.")
 @click.option("--force", is_flag=True, help="Replace an existing ssh.<name> secret.")
-def ssh_keygen_command(store: str, name: str, key_type: str, comment: str | None, force: bool) -> None:
+def ssh_keygen_command(
+    store: str, name: str, key_type: str, comment: str | None, force: bool
+) -> None:
     """Generate an SSH key as a separate SOPS-encrypted file.
 
     STORE must be 'system' or 'user'.

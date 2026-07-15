@@ -1,9 +1,7 @@
 import typing
 
-import libqtile
 from libqtile.config import Group, Key
 from libqtile.lazy import lazy
-
 from settings import *
 
 
@@ -22,9 +20,7 @@ class GroupCreator:
     is_description = False
     is_subscript_or_superscript = True
     fmt = "{label} {description}"
-    error_text = (
-        "Subscript for key:[{key}] not found. Try to set the subscript yourself."
-    )
+    error_text = "Subscript for key:[{key}] not found. Try to set the subscript yourself."
 
     def format_description(self, label: str, description: str) -> str:
         return self.fmt.format(label=label, description=description)
@@ -96,9 +92,7 @@ def extend_keys(keys: list[Key], groups: list[Group]) -> typing.NoReturn:
                     group.name,
                     # lazy.window.togroup(group.name, switch_group=True),
                     lazy.function(move_to_group(group)),
-                    desc="Switch to & move focused window to group {}".format(
-                        group.name
-                    ),
+                    desc="Switch to & move focused window to group {}".format(group.name),
                 ),
             ]
         )

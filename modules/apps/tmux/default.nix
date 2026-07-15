@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.my.apps.tmux;
@@ -191,11 +196,11 @@ in
       tmuxThumbsPick
       pkgs.thumbs
     ]
-      ++ lib.optionals cfg.autoSaveAndRestore [
-        tmuxAutostart
-        tmuxAutosave
-        tmuxFilterResurrectSave
-      ];
+    ++ lib.optionals cfg.autoSaveAndRestore [
+      tmuxAutostart
+      tmuxAutosave
+      tmuxFilterResurrectSave
+    ];
 
     programs.tmux = {
       enable = true;

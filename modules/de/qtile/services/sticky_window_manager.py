@@ -2,7 +2,6 @@ import typing
 
 import libqtile
 from libqtile import hook, qtile
-from libqtile.log_utils import logger
 from libqtile.config import Match
 
 
@@ -40,9 +39,7 @@ class StickyWindowManager:
     def _unpin_window(self, window: libqtile.backend.base.Window) -> typing.NoReturn:
         self.window_list.remove(window)
 
-    def toggle_sticky_window(
-        self, qtile
-    ) -> typing.NoReturn:
+    def toggle_sticky_window(self, qtile) -> typing.NoReturn:
         """Реализует интерфейс для закрепления/открепления окна
         с рабочих поверхностей из qtile.
         Вызывать можно с помощью lazy.function(instance.toggle_sticky_window) в

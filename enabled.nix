@@ -34,52 +34,58 @@ let
     system = ./modules/system;
   };
 
-  kebabToCamel = name:
+  kebabToCamel =
+    name:
     let
       parts = lib.splitString "-" name;
-      capitalize = part:
+      capitalize =
+        part:
         let
           chars = lib.stringToCharacters part;
         in
-        if chars == [ ] then "" else lib.concatStrings ([ (lib.toUpper (lib.head chars)) ] ++ lib.tail chars);
+        if chars == [ ] then
+          ""
+        else
+          lib.concatStrings ([ (lib.toUpper (lib.head chars)) ] ++ lib.tail chars);
     in
     lib.concatStrings ([ (lib.head parts) ] ++ map capitalize (lib.tail parts));
 
-  depsForRoot = kind: root:
+  depsForRoot =
+    kind: root:
     lib.flatten (
-      lib.mapAttrsToList
-        (name: type:
-          let
-            dir = root + "/${name}";
-            depsFile = dir + "/deps.nix";
-          in
-          if type == "directory" && builtins.pathExists depsFile then [
+      lib.mapAttrsToList (
+        name: type:
+        let
+          dir = root + "/${name}";
+          depsFile = dir + "/deps.nix";
+        in
+        if type == "directory" && builtins.pathExists depsFile then
+          [
             {
-              path = [ kind (kebabToCamel name) ];
+              path = [
+                kind
+                (kebabToCamel name)
+              ];
               deps = import depsFile;
             }
-          ] else [ ])
-        (builtins.readDir root)
+          ]
+        else
+          [ ]
+      ) (builtins.readDir root)
     );
 
-  dependencyModules = lib.flatten (
-    lib.mapAttrsToList depsForRoot moduleRoots
-  );
+  dependencyModules = lib.flatten (lib.mapAttrsToList depsForRoot moduleRoots);
 
-  isEnabled = enabledSet: path:
-    lib.attrByPath (path ++ [ "enable" ]) false enabledSet;
+  isEnabled = enabledSet: path: lib.attrByPath (path ++ [ "enable" ]) false enabledSet;
 
-  depsFor = enabledSet:
-    lib.foldl'
-      (acc: module:
-        if isEnabled enabledSet module.path then
-          lib.recursiveUpdate acc module.deps
-        else
-          acc)
-      { }
-      dependencyModules;
+  depsFor =
+    enabledSet:
+    lib.foldl' (
+      acc: module: if isEnabled enabledSet module.path then lib.recursiveUpdate acc module.deps else acc
+    ) { } dependencyModules;
 
-  resolveEnabled = enabledSet:
+  resolveEnabled =
+    enabledSet:
     let
       next = lib.recursiveUpdate (depsFor enabledSet) enabledSet;
     in

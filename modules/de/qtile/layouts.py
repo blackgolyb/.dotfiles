@@ -1,8 +1,7 @@
 from libqtile import layout
 from libqtile.config import Match
-
 from services import utils
-from settings import outer_gaps, group_gaps, bar_orientation
+from settings import bar_orientation, group_gaps, outer_gaps
 
 layout_margins = utils.configure_layout_margins(outer_gaps, group_gaps)
 layout_margins = utils.rotate_matrix_by_bar_orientation(layout_margins, bar_orientation)

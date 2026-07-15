@@ -1,7 +1,7 @@
 import subprocess
 
-from libqtile.widget import base
 import settings
+from libqtile.widget import base
 
 
 class Bluetooth(base.InLoopPollText):
@@ -9,8 +9,7 @@ class Bluetooth(base.InLoopPollText):
         (
             "update_interval",
             30,
-            "Update interval in seconds, if none, the "
-            "widget updates whenever it's done.",
+            "Update interval in seconds, if none, the widget updates whenever it's done.",
         ),
         (
             "format",

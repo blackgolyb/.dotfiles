@@ -1,4 +1,8 @@
-{ writeShellApplication, wl-clipboard, xclip }:
+{
+  writeShellApplication,
+  wl-clipboard,
+  xclip,
+}:
 
 writeShellApplication {
   name = "copy-to-clipboard";
