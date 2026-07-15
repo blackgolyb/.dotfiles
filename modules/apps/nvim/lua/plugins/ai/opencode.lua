@@ -236,8 +236,6 @@ vim.api.nvim_create_autocmd("User", {
 	end,
 })
 
-vim.o.autoread = true
-
 function M.open_fullscreen()
 	if M.win and vim.api.nvim_win_is_valid(M.win) then
 		vim.api.nvim_set_current_win(M.win)

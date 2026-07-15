@@ -19,7 +19,16 @@ vim.opt.ignorecase = true
 vim.opt.smartcase = true
 vim.opt.cursorline = true
 vim.opt.scrolloff = 8
-vim.opt.updatetime = 50
+
+vim.opt.backup = false
+vim.opt.writebackup = false
+vim.opt.swapfile = false
+vim.opt.undofile = true
+vim.opt.undodir = vim.fn.expand("~/.vim/undodir")
+vim.opt.autoread = true
+vim.opt.autowrite = false
+
+vim.fn.mkdir(vim.opt.undodir:get()[1], "p")
 
 vim.opt.guicursor = {
 	"n-v-c:block-Cursor",
