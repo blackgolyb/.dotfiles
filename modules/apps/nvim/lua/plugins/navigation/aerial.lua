@@ -1,20 +1,29 @@
--- Code outline and symbol navigation
-return {
-  "stevearc/aerial.nvim",
-  dependencies = {
-     "nvim-treesitter/nvim-treesitter",
-     "nvim-tree/nvim-web-devicons"
-  },
-  config = function()
-    require("aerial").setup({
-      layout = {
-        min_width = 30,
-      },
-      manage_folds = false,
-    })
+-- Plugins:
+-- - aerial.nvim: https://github.com/stevearc/aerial.nvim
+--   Provides code outline and symbol navigation.
+-- - nvim-treesitter: https://github.com/nvim-treesitter/nvim-treesitter
+--   Provides Treesitter symbols used by Aerial.
+-- - nvim-web-devicons: https://github.com/nvim-tree/nvim-web-devicons
+--   Provides icons for outline entries.
 
-    require("telescope").load_extension("aerial")
+local util = require("plugins.util")
 
-    vim.keymap.set("n", "gs", "<cmd>Telescope aerial<CR>", { desc = "Search Symbols (Aerial)" })
-  end,
-}
+-- install
+vim.pack.add({
+	util.gh("nvim-treesitter/nvim-treesitter"),
+	util.gh("nvim-tree/nvim-web-devicons"),
+	util.gh("stevearc/aerial.nvim"),
+})
+
+-- setup
+require("aerial").setup({
+	layout = {
+		min_width = 30,
+	},
+	manage_folds = false,
+})
+
+require("telescope").load_extension("aerial")
+
+-- keymaps
+vim.keymap.set("n", "gs", "<cmd>Telescope aerial<CR>", { desc = "Search Symbols (Aerial)" })

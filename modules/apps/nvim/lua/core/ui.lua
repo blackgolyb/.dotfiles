@@ -1,3 +1,3 @@
 return {
-    surface_border = { " ", " ", " ", " ", " ", " ", " ", " " },
+	surface_border = { " ", " ", " ", " ", " ", " ", " ", " " },
 }

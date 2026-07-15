@@ -1,17 +1,23 @@
--- Push Neovim statusline into tmux status bar
-return {
-    'vimpostor/vim-tpipeline',
-    lazy = false,
-    priority = 800,
-    dependencies = { 'nvim-lualine/lualine.nvim' },
-    init = function()
-        require('core.tmux_lualine').setup()
+-- Plugins:
+-- - vim-tpipeline: https://github.com/vimpostor/vim-tpipeline
+--   Pushes the Neovim statusline into the tmux status bar.
+-- - lualine.nvim: https://github.com/nvim-lualine/lualine.nvim
+--   Provides the statusline data rendered by the tmux integration.
 
-        function _G.tmux_lualine_statusline()
-            return require('core.tmux_lualine').statusline()
-        end
+local util = require("plugins.util")
 
-        vim.g.tpipeline_clearstl = 1
-        vim.g.tpipeline_statusline = '%!v:lua.tmux_lualine_statusline()'
-    end,
-}
+-- pre
+require("core.tmux_lualine").setup()
+
+function _G.tmux_lualine_statusline()
+	return require("core.tmux_lualine").statusline()
+end
+
+vim.g.tpipeline_clearstl = 1
+vim.g.tpipeline_statusline = "%!v:lua.tmux_lualine_statusline()"
+
+-- install
+vim.pack.add({
+	util.gh("nvim-lualine/lualine.nvim"),
+	util.gh("vimpostor/vim-tpipeline"),
+})

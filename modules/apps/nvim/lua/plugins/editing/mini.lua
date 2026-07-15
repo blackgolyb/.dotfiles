@@ -1,154 +1,108 @@
--- Text objects, surround, move, pairs, toggle, split/join
+-- Plugins:
+-- - mini.ai: https://github.com/nvim-mini/mini.ai
+--   Provides configurable textobjects.
+-- - mini.move: https://github.com/nvim-mini/mini.move
+--   Moves lines and selections.
+-- - mini.surround: https://github.com/nvim-mini/mini.surround
+--   Adds, deletes, and replaces surrounding characters.
+-- - mini.pairs: https://github.com/nvim-mini/mini.pairs
+--   Inserts matching pairs while typing.
+-- - nvim-treesitter-textobjects: https://github.com/nvim-treesitter/nvim-treesitter-textobjects
+--   Provides Treesitter textobject queries used by mini.ai.
+
+local util = require("plugins.util")
+
+-- install
+vim.pack.add({
+	util.gh("nvim-treesitter/nvim-treesitter-textobjects"),
+	util.gh("nvim-mini/mini.ai"),
+	util.gh("nvim-mini/mini.move"),
+	util.gh("nvim-mini/mini.surround"),
+	util.gh("nvim-mini/mini.pairs"),
+})
+
 function buffer_boundary()
-    local n_lines = vim.api.nvim_buf_line_count(0)
-    local last_line = vim.api.nvim_buf_get_lines(0, n_lines - 1, n_lines, true)[1]
-    return {
-        from = { line = 1, col = 1 },
-        to = { line = n_lines, col = #last_line + 1 },
-    }
+	local n_lines = vim.api.nvim_buf_line_count(0)
+	local last_line = vim.api.nvim_buf_get_lines(0, n_lines - 1, n_lines, true)[1]
+	return {
+		from = { line = 1, col = 1 },
+		to = { line = n_lines, col = #last_line + 1 },
+	}
 end
 
 function indent_boundary()
-    local from_line = vim.fn.line('.')
-    local indent = vim.fn.indent(from_line)
+	local from_line = vim.fn.line(".")
+	local indent = vim.fn.indent(from_line)
 
-    local function get_boundary(dir)
-        local cur = from_line
-        local last = cur
-        while true do
-            cur = cur + dir
-            if cur < 1 or cur > vim.fn.line('$') then break end
-            if vim.fn.getline(cur):match('^%s*$') then
-                last = cur
-            elseif vim.fn.indent(cur) >= indent then
-                last = cur
-            else
-                break
-            end
-        end
-        return last
-    end
+	local function get_boundary(dir)
+		local cur = from_line
+		local last = cur
+		while true do
+			cur = cur + dir
+			if cur < 1 or cur > vim.fn.line("$") then
+				break
+			end
+			if vim.fn.getline(cur):match("^%s*$") then
+				last = cur
+			elseif vim.fn.indent(cur) >= indent then
+				last = cur
+			else
+				break
+			end
+		end
+		return last
+	end
 
-    return {
-        from = { line = get_boundary(-1), col = 1 },
-        to   = { line = get_boundary(1), col = 10000 },
-    }
+	return {
+		from = { line = get_boundary(-1), col = 1 },
+		to = { line = get_boundary(1), col = 10000 },
+	}
 end
 
-return {
-    {
-        'rmagatti/alternate-toggler',
-        opts = {
-            alternates = {
-                { 'true', 'false' },
-                { 'True', 'False' },
-                { 'TRUE', 'FALSE' },
-                { 'Yes', 'No' },
-                { 'YES', 'NO' },
-                { '1', '0' },
-                { '<', '>' },
-                { '>=', '<=' },
-                { '+', '-' },
-                { '===', '!==' },
-                { '==', '!=' },
-                { '&&', '||' },
-                { 'and', 'or' },
-                { 'public', 'private', 'protected' },
-            },
-        },
-        config = function(_, opts)
-            require('alternate-toggler').setup(opts)
-        end,
-    },
-    {
-        'Wansmer/treesj',
-        keys = {
-            {
-                '<leader>m',
-                function()
-                    local changedtick = vim.b.changedtick
-                    vim.cmd.ToggleAlternate()
+-- setup
+local ai = require("mini.ai")
+ai.setup({
+	custom_textobjects = {
+		e = buffer_boundary,
+		i = indent_boundary,
+		b = ai.gen_spec.pair("(", ")"),
+		B = ai.gen_spec.pair("{", "}"),
+		f = ai.gen_spec.treesitter({
+			a = "@function.outer",
+			i = "@function.inner",
+		}),
+	},
+})
 
-                    if vim.b.changedtick ~= changedtick then
-                        return
-                    end
+require("mini.move").setup()
 
-                    require('treesj').toggle()
-                end,
-                desc = 'Toggle alternate or split/join',
-            },
-        },
-        config = function()
-            require('treesj').setup({
-                use_default_keymaps = false,
-            })
-        end,
-    },
-    {
-        "nvim-mini/mini.ai",
-        version = false,
-        dependencies = {
-            "nvim-treesitter/nvim-treesitter-textobjects",
-        },
-        config = function()
-            local ai = require("mini.ai")
-            ai.setup({
-                custom_textobjects = {
-                    e = buffer_boundary,
-                    i = indent_boundary,
-                    b = ai.gen_spec.pair("(", ")"),
-                    B = ai.gen_spec.pair("{", "}"),
-                    f = ai.gen_spec.treesitter({
-                        a = "@function.outer",
-                        i = "@function.inner",
-                    }),
-                },
-            })
-        end,
-    },
-    { 'nvim-mini/mini.move', version = false, config = true },
-    {
-        'nvim-mini/mini.surround',
-        version = false,
-        config = function()
-            local surround = require("mini.surround")
-            surround.setup({
-                mappings = {
-                    add = 'Sa',
-                    delete = 'Sd',
-                    find = 'Sf',
-                    find_left = 'SF',
-                    highlight = 'Sh',
-                    replace = 'Sr',
-                },
-            })
-        end,
-    },
-    {
-        'nvim-mini/mini.pairs',
-        version = false,
-        config = function()
-            local pairs = require("mini.pairs")
-            pairs.setup({
-                modes = { insert = true, command = false, terminal = false },
+require("mini.surround").setup({
+	mappings = {
+		add = "Sa",
+		delete = "Sd",
+		find = "Sf",
+		find_left = "SF",
+		highlight = "Sh",
+		replace = "Sr",
+	},
+})
 
-                -- Do not auto-pair opening brackets next to the same opener,
-                -- e.g. typing `(` before `(` inserts only `(`.
-                mappings = {
-                    ['('] = { action = 'open', pair = '()', neigh_pattern = '^[^\\%(][^%(]' },
-                    ['['] = { action = 'open', pair = '[]', neigh_pattern = '^[^\\%[][^%[]' },
-                    ['{'] = { action = 'open', pair = '{}', neigh_pattern = '^[^\\%{][^%{]' },
+require("mini.pairs").setup({
+	modes = { insert = true, command = false, terminal = false },
 
-                    [')'] = { action = 'close', pair = '()', neigh_pattern = '^[^\\]' },
-                    [']'] = { action = 'close', pair = '[]', neigh_pattern = '^[^\\]' },
-                    ['}'] = { action = 'close', pair = '{}', neigh_pattern = '^[^\\]' },
+	-- Do not auto-pair opening brackets next to the same opener,
+	-- e.g. typing `(` before `(` inserts only `(`.
+	mappings = {
+		["("] = { action = "open", pair = "()", neigh_pattern = "^[^\\%(][^%(]" },
+		["["] = { action = "open", pair = "[]", neigh_pattern = "^[^\\%[][^%[]" },
+		["{"] = { action = "open", pair = "{}", neigh_pattern = "^[^\\%{][^%{]" },
 
-                    ['"'] = { action = 'closeopen', pair = '""', neigh_pattern = '^[^\\]',   register = { cr = false } },
-                    ["'"] = { action = 'closeopen', pair = "''", neigh_pattern = '^[^%a\\]', register = { cr = false } },
-                    ['`'] = { action = 'closeopen', pair = '``', neigh_pattern = '^[^\\]',   register = { cr = false } },
-                },
-            }
-            )
-        end,
-    },
-}
+		[")"] = { action = "close", pair = "()", neigh_pattern = "^[^\\]" },
+		["]"] = { action = "close", pair = "[]", neigh_pattern = "^[^\\]" },
+		["}"] = { action = "close", pair = "{}", neigh_pattern = "^[^\\]" },
+
+		['"'] = { action = "closeopen", pair = '""', neigh_pattern = "^[^\\]", register = { cr = false } },
+		["'"] = { action = "closeopen", pair = "''", neigh_pattern = "^[^%a\\]", register = { cr = false } },
+		["`"] = { action = "closeopen", pair = "``", neigh_pattern = "^[^\\]", register = { cr = false } },
+	},
+})

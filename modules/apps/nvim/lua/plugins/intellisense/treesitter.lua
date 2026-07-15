@@ -1,51 +1,65 @@
--- Syntax highlighting and code parsing
+-- Plugins:
+-- - nvim-treesitter: https://github.com/nvim-treesitter/nvim-treesitter
+--   Provides Treesitter parser installation, highlighting, folding, and indentation.
+-- - nvim-treesitter-textobjects: https://github.com/nvim-treesitter/nvim-treesitter-textobjects
+--   Provides Treesitter textobject queries for other plugins.
+
+local util = require("plugins.util")
+
 local ensure_installed = {
-    'bash',
-    'c',
-    'diff',
-    'html',
-    'javascript',
-    'jsdoc',
-    'json',
-    'lua',
-    'luadoc',
-    'luap',
-    'markdown',
-    'markdown_inline',
-    'nix',
-    'printf',
-    'python',
-    'query',
-    'regex',
-    'rust',
-    'toml',
-    'tsx',
-    'typescript',
-    'vim',
-    'vimdoc',
-    'wgsl',
-    'xml',
-    'yaml',
+	"bash",
+	"c",
+	"diff",
+	"html",
+	"javascript",
+	"jsdoc",
+	"json",
+	"lua",
+	"luadoc",
+	"luap",
+	"markdown",
+	"markdown_inline",
+	"nix",
+	"printf",
+	"python",
+	"query",
+	"regex",
+	"rust",
+	"toml",
+	"tsx",
+	"typescript",
+	"vim",
+	"vimdoc",
+	"wgsl",
+	"xml",
+	"yaml",
 }
 
-return {
-    'nvim-treesitter/nvim-treesitter',
-    lazy = false,
-    build = ':TSUpdate',
-    config = function()
-        local treesitter = require('nvim-treesitter')
-        treesitter.setup()
-        vim.treesitter.language.register('json', 'jsonc')
-        treesitter.install(ensure_installed)
+-- build
+util.build("nvim-treesitter", function()
+	vim.schedule(function()
+		pcall(vim.cmd.TSUpdate)
+	end)
+end)
 
-        vim.api.nvim_create_autocmd('FileType', {
-            pattern = ensure_installed,
-            callback = function()
-                pcall(vim.treesitter.start)
-                vim.wo.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
-                vim.wo.foldmethod = 'expr'
-                vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
-            end,
-        })
-    end,
-}
+-- install
+vim.pack.add({
+	util.gh("nvim-treesitter/nvim-treesitter"),
+	util.gh("nvim-treesitter/nvim-treesitter-textobjects"),
+})
+
+-- setup
+local treesitter = require("nvim-treesitter")
+treesitter.setup()
+vim.treesitter.language.register("json", "jsonc")
+treesitter.install(ensure_installed)
+
+vim.api.nvim_create_autocmd("FileType", {
+	pattern = ensure_installed,
+	callback = function()
+		pcall(vim.treesitter.start)
+		vim.wo.foldexpr = "v:lua.vim.treesitter.foldexpr()"
+		vim.wo.foldmethod = "expr"
+		vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+	end,
+})
