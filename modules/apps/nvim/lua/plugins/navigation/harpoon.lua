@@ -14,7 +14,12 @@ vim.pack.add({
 
 -- setup
 local harpoon = require("harpoon")
-harpoon:setup()
+harpoon:setup({
+    settings = {
+        save_on_toggle = true,
+        sync_on_ui_close = true,
+    },
+})
 
 -- keymaps
 vim.keymap.set("n", "<leader>t", function()
