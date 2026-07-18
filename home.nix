@@ -11,6 +11,7 @@
     ./modules/core/dotfiles/dotfiles.nix
     ./modules/apps/copy-to-clipboard
     ./modules/apps/flameshot
+    ./modules/apps/glide
     ./modules/apps/lazygit
     ./modules/apps/nvim
     ./modules/apps/opencode
@@ -25,11 +26,11 @@
     ./modules/apps/tmux
     ./modules/apps/wezterm
     ./modules/apps/zed
+    ./modules/apps/zen
     ./modules/apps/zsh
     ./modules/de/hyprland
     ./modules/de/qtile
     inputs.sops-nix.homeManagerModules.sops
-    inputs.zen-browser.homeModules.twilight
   ];
   home = {
     # Home Manager needs a bit of information about you and the paths it should
@@ -154,11 +155,6 @@
       GPG_TTY = "$(tty)";
       EDITOR = "nvim";
       VISUAL = "nvim";
-      BROWSER = "zen-twilight";
-    };
-
-    shellAliases = {
-      zen = "zen-twilight";
     };
   };
 
@@ -196,27 +192,12 @@
     # Let Home Manager install and manage itself.
     home-manager.enable = true;
     gpg.enable = true;
-
-    zen-browser = {
-      enable = true;
-    };
-  };
-
-  stylix.targets = {
-    zen-browser.enable = false;
   };
 
   # XDG MIME types configuration
   xdg.mimeApps = {
     enable = true;
     defaultApplications = {
-      # Browsers / links
-      "x-scheme-handler/http" = "zen-twilight.desktop";
-      "x-scheme-handler/https" = "zen-twilight.desktop";
-      "x-scheme-handler/chrome" = "zen-twilight.desktop";
-      "text/html" = "zen-twilight.desktop";
-      "application/xhtml+xml" = "zen-twilight.desktop";
-
       # PDF
       "application/pdf" = "sioyek.desktop";
 

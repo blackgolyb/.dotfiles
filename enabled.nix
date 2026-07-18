@@ -4,6 +4,10 @@ let
   requested = {
     apps = {
       nvim.enable = true;
+      glide = {
+        enable = true;
+        default = false;
+      };
       opencode.enable = true;
       openwhispr.enable = true;
       pass.enable = true;
@@ -11,6 +15,10 @@ let
       ssh.enable = true;
       tmux.enable = true;
       zed.enable = true;
+      zen = {
+        enable = true;
+        default = true;
+      };
       zsh.enable = true;
     };
 
