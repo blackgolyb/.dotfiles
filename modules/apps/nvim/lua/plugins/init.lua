@@ -6,7 +6,6 @@ require("plugins.intellisense.colors")
 require("plugins.intellisense.treesitter")
 require("plugins.intellisense.lsp")
 
-require("plugins.editing.vim_sleuth")
 require("plugins.editing.toggle")
 require("plugins.editing.mini")
 require("plugins.editing.ufo")
