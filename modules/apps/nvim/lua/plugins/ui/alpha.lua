@@ -163,7 +163,15 @@ local nix = {
     [[         ▝▀▀▀    ▀▀▀▀▘         ▀▀▀▘        ]],
 }
 
-local art = nix_133
+local nvim = {
+    [[│ ╲ ││]],
+    [[││╲╲││]],
+    [[││ ╲ │]],
+}
+
+local no_art = ""
+
+local art = nvim
 
 -- setup
 local alpha = require("alpha")
