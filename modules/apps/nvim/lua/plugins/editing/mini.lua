@@ -67,9 +67,17 @@ ai.setup({
         i = indent_boundary,
         b = ai.gen_spec.pair("(", ")"),
         B = ai.gen_spec.pair("{", "}"),
+        c = ai.gen_spec.treesitter({
+            a = "@class.outer",
+            i = "@class.inner",
+        }),
         f = ai.gen_spec.treesitter({
             a = "@function.outer",
             i = "@function.inner",
+        }),
+        k = ai.gen_spec.treesitter({
+            a = "@comment.outer",
+            i = "@comment.inner",
         }),
     },
 })
