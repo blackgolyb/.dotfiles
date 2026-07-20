@@ -32,6 +32,20 @@
     ./modules/de/qtile
     inputs.sops-nix.homeManagerModules.sops
   ];
+
+  # TODO: remove this after fix on mongodb-compass side
+  nixpkgs.overlays = [
+    (_: prev: {
+      mongodb-compass = prev.mongodb-compass.overrideAttrs (old: {
+        buildCommand =
+          builtins.replaceStrings
+            [ "wrapGAppsHook $out/bin/mongodb-compass" ]
+            [ "wrapGApp $out/bin/mongodb-compass" ]
+            old.buildCommand;
+      });
+    })
+  ];
+
   home = {
     # Home Manager needs a bit of information about you and the paths it should
     # manage.
