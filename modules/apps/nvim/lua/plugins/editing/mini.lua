@@ -96,21 +96,50 @@ require("mini.surround").setup({
 })
 
 require("mini.pairs").setup({
-    modes = { insert = true, command = false, terminal = false },
+    modes = {
+        insert = true,
+        command = false,
+        terminal = false,
+    },
 
-    -- Do not auto-pair opening brackets next to the same opener,
-    -- e.g. typing `(` before `(` inserts only `(`.
     mappings = {
-        ["("] = { action = "open", pair = "()", neigh_pattern = "^[^\\%(][^%(]" },
-        ["["] = { action = "open", pair = "[]", neigh_pattern = "^[^\\%[][^%[]" },
-        ["{"] = { action = "open", pair = "{}", neigh_pattern = "^[^\\%{][^%{]" },
+        ["("] = {
+            action = "open",
+            pair = "()",
+            neigh_pattern = "[^\\][^%(]",
+        },
+        ["["] = {
+            action = "open",
+            pair = "[]",
+            neigh_pattern = "[^\\][^%[]",
+        },
+        ["{"] = {
+            action = "open",
+            pair = "{}",
+            neigh_pattern = "[^\\][^%{]",
+        },
 
-        [")"] = { action = "close", pair = "()", neigh_pattern = "^[^\\]" },
-        ["]"] = { action = "close", pair = "[]", neigh_pattern = "^[^\\]" },
-        ["}"] = { action = "close", pair = "{}", neigh_pattern = "^[^\\]" },
+        [")"] = { action = "close", pair = "()" },
+        ["]"] = { action = "close", pair = "[]" },
+        ["}"] = { action = "close", pair = "{}" },
 
-        ['"'] = { action = "closeopen", pair = '""', neigh_pattern = "^[^\\]", register = { cr = false } },
-        ["'"] = { action = "closeopen", pair = "''", neigh_pattern = "^[^%a\\]", register = { cr = false } },
-        ["`"] = { action = "closeopen", pair = "``", neigh_pattern = "^[^\\]", register = { cr = false } },
+        ['"'] = {
+            action = "closeopen",
+            pair = '""',
+            neigh_pattern = "[^\\].",
+            register = { cr = false },
+        },
+        ["'"] = {
+            action = "closeopen",
+            pair = "''",
+            neigh_pattern = "[^%a\\].",
+            register = { cr = false },
+        },
+        ["`"] = {
+            action = "closeopen",
+            pair = "``",
+            neigh_pattern = "[^\\].",
+            register = { cr = false },
+        },
     },
 })
