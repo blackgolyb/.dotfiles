@@ -65,8 +65,10 @@ ai.setup({
     custom_textobjects = {
         e = buffer_boundary,
         i = indent_boundary,
-        b = ai.gen_spec.pair("(", ")"),
-        B = ai.gen_spec.pair("{", "}"),
+
+        b = ai.gen_spec.pair("(", ")", { type = "balanced" }),
+        B = ai.gen_spec.pair("{", "}", { type = "balanced" }),
+
         c = ai.gen_spec.treesitter({
             a = "@class.outer",
             i = "@class.inner",
