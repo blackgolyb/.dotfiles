@@ -40,6 +40,7 @@ local servers = {
     "ruff",
     "clangd",
     "rust_analyzer",
+    "kotlin_lsp",
     "elixirls",
     "bashls",
     "docker_language_server",
@@ -117,6 +118,20 @@ vim.lsp.config("basedpyright", {
         python = {
             pythonPath = ".venv/bin/python",
         },
+    },
+})
+
+vim.lsp.config("kotlin_lsp", {
+    capabilities = capabilities,
+    cmd = { "kotlin-lsp", "--stdio" },
+    filetypes = { "kotlin" },
+    root_markers = {
+        "settings.gradle.kts",
+        "settings.gradle",
+        "build.gradle.kts",
+        "build.gradle",
+        "pom.xml",
+        ".git",
     },
 })
 

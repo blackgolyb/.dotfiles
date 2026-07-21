@@ -1,10 +1,13 @@
 require("plugins.themes.monodark")
 
 require("plugins.ui.dev_icons")
+
 require("plugins.intellisense.blink")
 require("plugins.intellisense.colors")
 require("plugins.intellisense.treesitter")
 require("plugins.intellisense.lsp")
+
+require("plugins.languages.java")
 
 require("plugins.editing.toggle")
 require("plugins.editing.mini")

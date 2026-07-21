@@ -33,8 +33,12 @@
     inputs.sops-nix.homeManagerModules.sops
   ];
 
-  # TODO: remove this after fix on mongodb-compass side
   nixpkgs.overlays = [
+    # TODO: remove this after official kotlin-lsp release for nixos
+    (_: prev: {
+      kotlin-lsp = inputs.kotlin-lsp.packages.${prev.stdenv.hostPlatform.system}.default;
+    })
+    # TODO: remove this after fix on mongodb-compass side
     (_: prev: {
       mongodb-compass = prev.mongodb-compass.overrideAttrs (old: {
         buildCommand =

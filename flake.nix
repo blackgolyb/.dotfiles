@@ -27,6 +27,10 @@
       url = "github:OpenWhispr/openwhispr";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    kotlin-lsp = {
+      url = "git+https://tangled.org/bpavuk.neocities.org/kotlin-lsp-flake";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     zen-browser = {
       url = "github:0xc000022070/zen-browser-flake";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -77,6 +81,8 @@
       };
 
       formatter.${system} = dotfilesDevShell.formatter;
+
+      packages.${system}.kotlin-lsp = inputs.kotlin-lsp.packages.${system}.default;
 
       checks.${system} = dotfilesDevShell.checks;
 

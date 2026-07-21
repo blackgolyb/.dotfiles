@@ -28,6 +28,10 @@ in
       python3
       rustc
       cargo
+      jdk
+      maven
+      gradle
+      kotlin
       wget
       curl
 
@@ -44,6 +48,8 @@ in
       ruff
       clang-tools # clangd
       rust-analyzer
+      jdt-language-server # jdtls
+      kotlin-lsp
       elixir-ls
       bash-language-server
       docker-language-server
@@ -55,7 +61,13 @@ in
       typos-lsp
       marksman
       wgsl-analyzer
+
+      # jvm formatting/linting
+      google-java-format
+      ktlint
     ];
+
+    home.sessionVariables.JAVA_HOME = "${pkgs.jdk}";
 
     dotfiles.config."nvim" = {
       source = ./.;
