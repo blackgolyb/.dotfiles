@@ -25,117 +25,101 @@ local capabilities = vim.tbl_deep_extend(
 )
 
 local servers = {
-    "gopls",
-    "nixd",
-    "lua_ls",
-    "vtsls",
-    "vue_ls",
-    "html",
-    "cssls",
-    "jsonls",
-    "eslint",
-    "tailwindcss",
-    "emmet_ls",
-    "basedpyright",
-    "ruff",
-    "clangd",
-    "rust_analyzer",
-    "kotlin_lsp",
-    "elixirls",
-    "bashls",
-    "docker_language_server",
-    "sqls",
-    "texlab",
-    "taplo",
-    "yamlls",
-    "typos_lsp",
-    "marksman",
-    "wgsl_analyzer",
-}
-
-for _, server_name in ipairs(servers) do
-    vim.lsp.config(server_name, {
-        capabilities = capabilities,
-    })
-end
-
--- LSP scpecific settings
-vim.lsp.config("lua_ls", {
-    capabilities = capabilities,
-    settings = {
-        Lua = {
-            diagnostics = { globals = { "vim" } },
+    gopls = {},
+    nixd = {},
+    lua_ls = {
+        settings = {
+            Lua = {
+                diagnostics = { globals = { "vim" } },
+            },
         },
     },
-})
-
-vim.lsp.config("vtsls", {
-    capabilities = capabilities,
-    filetypes = {
-        "javascript",
-        "javascriptreact",
-        "typescript",
-        "typescriptreact",
-        "vue",
-    },
-    settings = {
-        vtsls = {
-            tsserver = {
-                globalPlugins = {
-                    {
-                        name = "@vue/typescript-plugin",
-                        location = vim.fn.fnamemodify(vim.fn.exepath("vue-language-server"), ":h:h")
-                            .. "/lib/node_modules/@vue/language-server",
-                        languages = { "vue" },
-                        configNamespace = "typescript",
+    vtsls = {
+        filetypes = {
+            "javascript",
+            "javascriptreact",
+            "typescript",
+            "typescriptreact",
+            "vue",
+        },
+        settings = {
+            vtsls = {
+                tsserver = {
+                    globalPlugins = {
+                        {
+                            name = "@vue/typescript-plugin",
+                            location = vim.fn.fnamemodify(vim.fn.exepath("vue-language-server"), ":h:h")
+                                .. "/lib/node_modules/@vue/language-server",
+                            languages = { "vue" },
+                            configNamespace = "typescript",
+                        },
                     },
                 },
             },
         },
     },
-})
-
-vim.lsp.config("ruff", {
-    capabilities = capabilities,
-    init_options = {
+    vue_ls = {},
+    html = {},
+    cssls = {},
+    jsonls = {},
+    eslint = {},
+    tailwindcss = {},
+    emmet_ls = {},
+    basedpyright = {
         settings = {
-            lineLength = 100,
-            lint = {
-                extendSelect = { "I" },
+            basedpyright = {
+                analysis = {
+                    typeCheckingMode = "basic",
+                },
+            },
+            python = {
+                pythonPath = ".venv/bin/python",
             },
         },
     },
-})
-
-vim.lsp.config("basedpyright", {
-    capabilities = capabilities,
-    settings = {
-        basedpyright = {
-            analysis = {
-                typeCheckingMode = "basic",
+    ruff = {
+        init_options = {
+            settings = {
+                lineLength = 100,
+                lint = {
+                    extendSelect = { "I" },
+                },
             },
         },
-        python = {
-            pythonPath = ".venv/bin/python",
+    },
+    clangd = {},
+    rust_analyzer = {},
+    kotlin_lsp = {
+        cmd = { "kotlin-lsp", "--stdio" },
+        filetypes = { "kotlin" },
+        root_markers = {
+            "settings.gradle.kts",
+            "settings.gradle",
+            "build.gradle.kts",
+            "build.gradle",
+            "pom.xml",
+            ".git",
         },
     },
-})
+    elixirls = {},
+    bashls = {},
+    docker_language_server = {},
+    sqls = {},
+    texlab = {},
+    taplo = {},
+    yamlls = {},
+    typos_lsp = {},
+    marksman = {},
+    wgsl_analyzer = {},
+}
 
-vim.lsp.config("kotlin_lsp", {
-    capabilities = capabilities,
-    cmd = { "kotlin-lsp", "--stdio" },
-    filetypes = { "kotlin" },
-    root_markers = {
-        "settings.gradle.kts",
-        "settings.gradle",
-        "build.gradle.kts",
-        "build.gradle",
-        "pom.xml",
-        ".git",
-    },
-})
-
-for _, server_name in ipairs(servers) do
+for server_name, server_config in pairs(servers) do
+    vim.lsp.config(
+        server_name,
+        vim.tbl_deep_extend("force", {
+            capabilities = capabilities,
+        }, server_config)
+    )
     vim.lsp.enable(server_name)
 end
 
