@@ -113,6 +113,7 @@
 
       # Programs
       xcolor
+      ffmpeg
       telegram-desktop
       blueman # qtile
       pavucontrol # qtile
