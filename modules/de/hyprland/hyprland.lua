@@ -38,10 +38,6 @@ local function workspace(key)
     bind(main_mod .. " + SHIFT + " .. key, hl.dsp.window.move({ workspace = name }))
 end
 
-local function shell_quote(value)
-    return "'" .. tostring(value):gsub("'", "'\\''") .. "'"
-end
-
 hl.monitor({
     output = internal_monitor,
     mode = "preferred",
@@ -69,11 +65,6 @@ hl.env("XCURSOR_SIZE", cursor_size)
 hl.on("hyprland.start", function()
     hl.dispatch(hl.dsp.exec_cmd("hyprctl setcursor " .. xcursor_theme .. " " .. cursor_size))
     hl.dispatch(hl.dsp.exec_cmd(scripts .. "/autostart.sh"))
-    hl.dispatch(
-        hl.dsp.exec_cmd(
-            "sh -c " .. shell_quote("sleep 1; " .. shell_quote(scripts .. "/wallpaper_control") .. " set_random")
-        )
-    )
 end)
 
 hl.config({
@@ -211,7 +202,7 @@ exec(main_mod .. " + " .. alt_mod .. " + f", browser)
 exec(main_mod .. " + " .. alt_mod .. " + c", editor)
 exec(main_mod .. " + " .. alt_mod .. " + e", file_explorer)
 exec(main_mod .. " + " .. alt_mod .. " + t", "Telegram")
-exec(main_mod .. " + " .. alt_mod .. " + w", scripts .. "/video_wallpaper start")
+exec(main_mod .. " + " .. alt_mod .. " + w", "qs ipc call wallpaper open")
 exec(main_mod .. " + " .. alt_mod .. " + s", scripts .. "/multi_monitor menu")
 exec(main_mod .. " + t", scripts .. "/device_manager touchpad")
 exec(main_mod .. " + SHIFT + t", scripts .. "/device_manager touchscreen")

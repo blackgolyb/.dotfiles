@@ -28,6 +28,21 @@ in
       qrencode
       quickshell
       wl-clipboard
+      (writeShellApplication {
+        name = "wallpaper_manager";
+        runtimeInputs = [
+          hyprland
+          hyprpaper
+          libnotify
+          mpvpaper
+          procps
+          python3
+          yt-dlp
+        ];
+        text = ''
+          exec python3 ${./scripts/wallpaper_manager.py} "$@"
+        '';
+      })
       (writeShellScriptBin "qsm" ''
         set -eu
 
@@ -53,8 +68,12 @@ in
 
         rm -rf "$HOME/.cache/quickshell/qmlcache/"
 
-        export QML2_IMPORT_PATH="$config_path''${QML2_IMPORT_PATH:+:$QML2_IMPORT_PATH}"
-        export QML_IMPORT_PATH="$config_path''${QML_IMPORT_PATH:+:$QML_IMPORT_PATH}"
+        qtmultimedia_path="${pkgs.qt6Packages.qtmultimedia}/lib/qt-6/qml"
+        qt_plugin_path="${pkgs.qt6Packages.qtmultimedia}/lib/qt-6/plugins"
+
+        export QML2_IMPORT_PATH="$config_path:$qtmultimedia_path''${QML2_IMPORT_PATH:+:$QML2_IMPORT_PATH}"
+        export QML_IMPORT_PATH="$config_path:$qtmultimedia_path''${QML_IMPORT_PATH:+:$QML_IMPORT_PATH}"
+        export QT_PLUGIN_PATH="$qt_plugin_path''${QT_PLUGIN_PATH:+:$QT_PLUGIN_PATH}"
 
         exec qs -p "$config_path" "''${qs_args[@]}"
       '')
@@ -94,6 +113,10 @@ in
         source = ../../../resources/wallpapers;
       };
 
+      "hypr/wallpapers.defaults.json" = {
+        source = ./wallpapers.json;
+      };
+
       "hypr/scripts/autostart.sh" = {
         source = ./scripts/autostart.sh;
         executable = true;
@@ -124,18 +147,8 @@ in
         executable = true;
       };
 
-      "hypr/scripts/video_wallpaper" = {
-        source = ./scripts/video_wallpaper;
-        executable = true;
-      };
-
       "hypr/scripts/volume_control" = {
         source = ./scripts/volume_control;
-        executable = true;
-      };
-
-      "hypr/scripts/wallpaper_control" = {
-        source = ./scripts/wallpaper_control;
         executable = true;
       };
     };

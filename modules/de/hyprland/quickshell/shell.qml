@@ -78,6 +78,10 @@ ShellRoot {
         anchorWindow: bar
     }
 
+    WallpaperManager {
+        anchorWindow: bar
+    }
+
     LockScreen {}
 
     ReloadPopup {}

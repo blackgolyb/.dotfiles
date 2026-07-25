@@ -4,6 +4,7 @@ import Quickshell
 import Quickshell.Io
 import Quickshell.Services.Pam
 import Quickshell.Wayland
+import QtMultimedia
 import Src.Ui as Ui
 
 Item {
@@ -12,6 +13,15 @@ Item {
     property string password: ""
     property string statusText: ""
     property bool authenticating: false
+    property bool lockVideoActive: false
+    property bool lockVideoLoop: false
+    property bool lockVideoAudio: false
+    property bool lockVideoStarted: false
+    property int lockVideoPosition: 0
+    property int lockVideoPlaybackPosition: 0
+    property string lockVideoSource: ""
+    property string lockVideoAudioSource: ""
+    property string wallpaperFit: "cover"
     readonly property string cacheHome: Quickshell.env("XDG_CACHE_HOME") ?? `${Quickshell.env("HOME")}/.cache`
     readonly property string currentWallpaper: `${cacheHome}/hypr/current-wallpaper`
 
@@ -21,6 +31,11 @@ Item {
         password = "";
         statusText = "";
         authenticating = false;
+        lockVideoActive = false;
+        lockVideoStarted = false;
+        lockVideoAudioSource = "";
+        wallpaperFit = "cover";
+        lockStateProcess.exec(["wallpaper_manager", "lock-state"]);
         sessionLock.locked = true;
     }
 
@@ -41,6 +56,12 @@ Item {
     }
 
     function unlockSession(): void {
+        if (lockVideoActive) {
+            const resumePosition = lockVideoStarted ? lockVideoPlaybackPosition : lockVideoPosition;
+            resumeProcess.exec(["wallpaper_manager", "resume", "--position-ms", String(resumePosition)]);
+            lockVideoActive = false;
+            lockVideoStarted = false;
+        }
         password = "";
         statusText = "";
         authenticating = false;
@@ -55,6 +76,56 @@ Item {
 
     function runPower(command): void {
         Quickshell.execDetached(command);
+    }
+
+    function videoUrl(source): string {
+        return source.startsWith("/") ? `file://${source}` : source;
+    }
+
+    function imageFillMode(): int {
+        if (wallpaperFit === "contain")
+            return Image.PreserveAspectFit;
+        if (wallpaperFit === "fill")
+            return Image.Stretch;
+        return Image.PreserveAspectCrop;
+    }
+
+    function videoFillMode(): int {
+        if (wallpaperFit === "contain")
+            return VideoOutput.PreserveAspectFit;
+        if (wallpaperFit === "fill")
+            return VideoOutput.Stretch;
+        return VideoOutput.PreserveAspectCrop;
+    }
+
+    Process {
+        id: lockStateProcess
+
+        stdout: StdioCollector {
+            onStreamFinished: {
+                if (!sessionLock.locked)
+                    return;
+                try {
+                    const state = JSON.parse(text);
+                    root.wallpaperFit = state.fit ?? "cover";
+                    if (state.type !== "video" || !state.handoff)
+                        return;
+                    root.lockVideoPosition = state.positionMs ?? 0;
+                    root.lockVideoPlaybackPosition = root.lockVideoPosition;
+                    root.lockVideoLoop = state.loop ?? false;
+                    root.lockVideoAudio = state.audio ?? false;
+                    root.lockVideoSource = root.videoUrl(state.source ?? "");
+                    root.lockVideoAudioSource = root.videoUrl(state.audioSource ?? "");
+                    root.lockVideoActive = root.lockVideoSource.length > 0;
+                } catch (error) {
+                    root.lockVideoActive = false;
+                }
+            }
+        }
+    }
+
+    Process {
+        id: resumeProcess
     }
 
     IpcHandler {
@@ -94,6 +165,10 @@ Item {
         WlSessionLockSurface {
             id: surface
             color: Ui.Theme.background
+            property bool videoStarted: false
+            property bool videoReady: false
+            property bool audioReady: false
+            property bool audioFailed: false
 
             readonly property var powerActions: [
                 {
@@ -125,17 +200,101 @@ Item {
                 passwordInput.text = "";
             }
 
+            function startVideo(): void {
+                if (!root.lockVideoActive || videoStarted || !videoReady)
+                    return;
+
+                const separateAudio = root.lockVideoAudio && root.lockVideoAudioSource.length > 0 && screen === Quickshell.screens[0] && !audioFailed;
+                if (separateAudio && (!audioReady || (root.lockVideoPosition > 0 && !lockAudioPlayer.seekable)))
+                    return;
+                if (root.lockVideoPosition > 0 && !lockVideoPlayer.seekable)
+                    return;
+
+                lockVideoPlayer.position = root.lockVideoPosition;
+                if (separateAudio) {
+                    lockAudioPlayer.position = root.lockVideoPosition;
+                    lockAudioPlayer.play();
+                }
+                root.lockVideoPlaybackPosition = lockVideoPlayer.position;
+                videoStarted = true;
+                root.lockVideoStarted = true;
+                lockVideoPlayer.play();
+            }
+
             SystemClock {
                 id: clock
                 precision: SystemClock.Seconds
             }
 
+            MediaPlayer {
+                id: lockVideoPlayer
+
+                source: root.lockVideoActive ? root.lockVideoSource : ""
+                videoOutput: lockVideoOutput
+                audioOutput: AudioOutput {
+                    muted: !root.lockVideoAudio || root.lockVideoAudioSource.length > 0 || surface.screen !== Quickshell.screens[0]
+                }
+                loops: root.lockVideoLoop ? MediaPlayer.Infinite : 1
+
+                onSourceChanged: {
+                    surface.videoReady = false;
+                    surface.videoStarted = false;
+                }
+                onMediaStatusChanged: {
+                    if (mediaStatus === MediaPlayer.LoadedMedia || mediaStatus === MediaPlayer.BufferedMedia) {
+                        surface.videoReady = true;
+                        surface.startVideo();
+                    }
+                }
+                onSeekableChanged: surface.startVideo()
+                onPositionChanged: root.lockVideoPlaybackPosition = position
+                onErrorOccurred: {
+                    root.lockVideoActive = false;
+                    root.lockVideoStarted = false;
+                    resumeProcess.exec(["wallpaper_manager", "resume", "--position-ms", String(root.lockVideoPosition)]);
+                }
+            }
+
+            MediaPlayer {
+                id: lockAudioPlayer
+
+                source: root.lockVideoActive && root.lockVideoAudio && surface.screen === Quickshell.screens[0] ? root.lockVideoAudioSource : ""
+                audioOutput: AudioOutput {}
+                loops: root.lockVideoLoop ? MediaPlayer.Infinite : 1
+
+                onSourceChanged: {
+                    surface.audioReady = false;
+                    surface.audioFailed = false;
+                }
+                onMediaStatusChanged: {
+                    if (mediaStatus === MediaPlayer.LoadedMedia || mediaStatus === MediaPlayer.BufferedMedia) {
+                        surface.audioReady = true;
+                        surface.startVideo();
+                    }
+                }
+                onSeekableChanged: surface.startVideo()
+                onErrorOccurred: {
+                    surface.audioFailed = true;
+                    surface.audioReady = true;
+                    surface.startVideo();
+                }
+            }
+
             Image {
                 anchors.fill: parent
+                visible: !root.lockVideoActive
                 source: `file://${root.currentWallpaper}`
                 cache: false
-                fillMode: Image.PreserveAspectCrop
+                fillMode: root.imageFillMode()
                 asynchronous: true
+            }
+
+            VideoOutput {
+                id: lockVideoOutput
+
+                anchors.fill: parent
+                visible: root.lockVideoActive
+                fillMode: root.videoFillMode()
             }
 
             Rectangle {

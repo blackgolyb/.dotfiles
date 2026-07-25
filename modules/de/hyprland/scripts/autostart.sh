@@ -9,6 +9,7 @@ wl-paste --type image --watch cliphist store &
 
 "$HOME/.config/hypr/scripts/volume_control" init &
 "$HOME/.config/hypr/scripts/multi_monitor" autoconfigure &
+wallpaper_manager random --type image &
 
 zen-twilight &
 Telegram &
