@@ -56,6 +56,7 @@ vim.keymap.set("x", "ga", function()
 end, { silent = true })
 
 local group = vim.api.nvim_create_augroup("visual_multi_custom_esc", { clear = true })
+local custom_normal_maps = { "x", "X", "<Del>", "s" }
 
 -- Drop highlights via "noh" after go to a Insert mode
 vim.api.nvim_create_autocmd("ModeChanged", {
@@ -143,5 +144,8 @@ vim.api.nvim_create_autocmd("User", {
     pattern = "visual_multi_exit",
     callback = function(args)
         pcall(vim.keymap.del, "n", "<Esc>", { buffer = args.buf })
+        for _, key in ipairs(custom_normal_maps) do
+            pcall(vim.keymap.del, "n", key, { buffer = args.buf })
+        end
     end,
 })
