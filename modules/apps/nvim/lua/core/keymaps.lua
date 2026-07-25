@@ -5,11 +5,11 @@ vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>", { desc = "Clear search highl
 
 vim.keymap.set("n", "Q", "<nop>")
 
--- При гортанні сторінок
+-- Center view after scroll up/down
 vim.keymap.set("n", "<C-d>", "<C-d>zz")
 vim.keymap.set("n", "<C-u>", "<C-u>zz")
 
--- При пошуку (наступне/попереднє співпадіння)
+-- Center view after search next/prev
 vim.keymap.set("n", "n", "nzzzv")
 vim.keymap.set("n", "N", "Nzzzv")
 
