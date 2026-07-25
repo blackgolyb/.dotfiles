@@ -5,6 +5,9 @@ vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>", { desc = "Clear search highl
 
 vim.keymap.set("n", "Q", "<nop>")
 
+-- Remap line jump of bookmarks to a line and col jump
+vim.keymap.set({ "n", "x", "o" }, "'", "`")
+
 -- Center view after scroll up/down
 vim.keymap.set("n", "<C-d>", "<C-d>zz")
 vim.keymap.set("n", "<C-u>", "<C-u>zz")
