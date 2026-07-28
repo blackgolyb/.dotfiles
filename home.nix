@@ -21,6 +21,7 @@
     ./modules/apps/rofi-network-manager
     ./modules/apps/secrets
     ./modules/apps/starship
+    ./modules/apps/sunsetr
     ./modules/apps/ssh
     ./modules/apps/thunar
     ./modules/apps/tmux

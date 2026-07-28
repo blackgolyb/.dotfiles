@@ -27,7 +27,6 @@ in
       hyprpaper
       qrencode
       quickshell
-      sunsetr
       wl-clipboard
       (writeShellApplication {
         name = "wallpaper_manager";
@@ -96,11 +95,6 @@ in
     dotfiles.config = {
       "hypr/hyprland.lua" = {
         source = ./hyprland.lua;
-      };
-
-      "sunsetr/sunsetr.toml" = {
-        source = ./sunsetr.toml;
-        force = true;
       };
 
       "quickshell/shell.qml" = {

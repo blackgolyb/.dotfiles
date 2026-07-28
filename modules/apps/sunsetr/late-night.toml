@@ -1,0 +1,4 @@
+# Keep the display consistently warm and dim throughout the late-night window.
+transition_mode = "static"
+static_temp = 3300
+static_gamma = 90
