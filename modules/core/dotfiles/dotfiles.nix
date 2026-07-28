@@ -101,7 +101,16 @@ let
         fi
         run rm -rf "$target"
       fi
-      run ln -s "$source" "$target"
+      if [ "$force" = 1 ]; then
+        # A running application may recreate its config between rm and ln.
+        # Build the link beside the target, then atomically rename it into place.
+        replacement="$target.home-manager-new"
+        run rm -rf "$replacement"
+        run ln -s "$source" "$replacement"
+        run mv -Tf "$replacement" "$target"
+      else
+        run ln -s "$source" "$target"
+      fi
     '';
 
   renderPreCleanEntry =
