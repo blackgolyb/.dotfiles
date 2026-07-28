@@ -30,6 +30,7 @@ let
     hardware.kanata.enable = true;
 
     system = {
+      ollama.enable = true;
       plymouth.enable = true;
       qemu.enable = true;
     };
