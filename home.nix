@@ -108,6 +108,7 @@
       zellij
       lazydocker
       btop
+      nvtopPackages.amd
       wezterm
       codex
 
