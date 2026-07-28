@@ -320,11 +320,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1784509734,
-        "narHash": "sha256-9X0wplzp7ufjDsoiTTOKh/CBY12c6761IyUsjguve/0=",
+        "lastModified": 1785215578,
+        "narHash": "sha256-069+WheOKgM1o0RjCNqtZo5dxeDwF4baa6hSQsqYnRY=",
         "owner": "OpenWhispr",
         "repo": "openwhispr",
-        "rev": "a4d654e4b431c0a298536e88801953daacd8f881",
+        "rev": "6f9c7f8c62e4b36ee287be5647f961607da55f39",
         "type": "github"
       },
       "original": {

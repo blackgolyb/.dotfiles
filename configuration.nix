@@ -15,6 +15,7 @@
     # Include the results of the hardware scan.
     ./hardware-configuration.nix
     ./modules/apps/thunar/system.nix
+    ./modules/apps/openwhispr/system.nix
     ./modules/de/hyprland/system.nix
     ./modules/de/qtile/system.nix
     ./modules/hardware/kanata/kanata.nix
@@ -87,7 +88,9 @@
   };
 
   my = {
-    apps.thunar = enabled.apps.thunar;
+    apps = {
+      inherit (enabled.apps) openwhispr thunar;
+    };
     inherit (enabled) de hardware system;
   };
 
