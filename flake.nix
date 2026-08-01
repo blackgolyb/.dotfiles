@@ -27,6 +27,10 @@
       url = "github:OpenWhispr/openwhispr";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    pineconemc = {
+      url = "github:ElyPrismLauncher/Launcher";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     kotlin-lsp = {
       url = "git+https://tangled.org/bpavuk.neocities.org/kotlin-lsp-flake";
       inputs.nixpkgs.follows = "nixpkgs";

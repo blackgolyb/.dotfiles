@@ -35,6 +35,9 @@
   ];
 
   nixpkgs.overlays = [
+    (_: prev: {
+      pineconemc = inputs.pineconemc.packages.${prev.stdenv.hostPlatform.system}.default;
+    })
     # TODO: remove this after official kotlin-lsp release for nixos
     (_: prev: {
       kotlin-lsp = inputs.kotlin-lsp.packages.${prev.stdenv.hostPlatform.system}.default;
@@ -136,7 +139,7 @@
 
       # Games
       heroic
-      prismlauncher
+      pineconemc
     ];
 
     # Home Manager is pretty good at managing dotfiles. The primary way to manage
