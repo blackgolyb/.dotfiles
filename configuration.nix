@@ -22,6 +22,7 @@
     ./modules/system/ollama/ollama.nix
     ./modules/system/plymouth/plymouth.nix
     ./modules/system/qemu/qemu.nix
+    ./modules/system/tailscale/tailscale.nix
   ];
 
   nix = {

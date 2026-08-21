@@ -33,6 +33,7 @@ let
       ollama.enable = true;
       plymouth.enable = true;
       qemu.enable = true;
+      tailscale.enable = true;
     };
   };
 
