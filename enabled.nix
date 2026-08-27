@@ -24,7 +24,7 @@ let
 
     de = {
       hyprland.enable = true;
-      qtile.enable = true;
+      qtile.enable = false;
     };
 
     hardware.kanata.enable = true;
