@@ -30,6 +30,7 @@ let
     hardware.kanata.enable = true;
 
     system = {
+      displayManager.dm = "lightdm";
       ollama.enable = true;
       plymouth.enable = true;
       qemu.enable = true;

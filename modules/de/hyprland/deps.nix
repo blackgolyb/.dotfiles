@@ -5,4 +5,5 @@
     thunar.enable = true;
     wezterm.enable = true;
   };
+  system.displayManager.enable = true;
 }

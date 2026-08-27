@@ -19,6 +19,7 @@
     ./modules/de/hyprland/system.nix
     ./modules/de/qtile/system.nix
     ./modules/hardware/kanata/kanata.nix
+    ./modules/system/display-manager/display-manager.nix
     ./modules/system/ollama/ollama.nix
     ./modules/system/plymouth/plymouth.nix
     ./modules/system/qemu/qemu.nix

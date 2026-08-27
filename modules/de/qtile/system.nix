@@ -13,23 +13,13 @@ in
 
   config = lib.mkIf cfg.enable {
     services = {
-      xserver = {
+      xserver.windowManager.qtile = {
         enable = true;
-        updateDbusEnvironment = true;
-        desktopManager.runXdgAutostartIfNone = true;
-        windowManager.qtile = {
-          enable = true;
-          extraPackages =
-            python3Packages: with python3Packages; [
-              qtile-extras
-              requests
-            ];
-        };
-
-        displayManager.lightdm.greeters = {
-          slick.enable = true;
-          mini.enable = false;
-        };
+        extraPackages =
+          python3Packages: with python3Packages; [
+            qtile-extras
+            requests
+          ];
       };
 
       udev.extraRules = ''
