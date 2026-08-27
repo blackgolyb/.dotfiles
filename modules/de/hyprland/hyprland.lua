@@ -87,6 +87,9 @@ hl.config({
         no_focus_fallback = true,
         layout = "dwindle",
     },
+    ecosystem = {
+        no_donation_nag = true,
+    },
     decoration = {
         rounding = 8,
         rounding_power = 2,
