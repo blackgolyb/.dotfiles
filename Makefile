@@ -1,4 +1,4 @@
-.PHONY: help dev fmt format check test ci update switch pre-commit pre-commit-all hooks
+.PHONY: help dev fmt format check test ci update switch openclaw-secrets pre-commit pre-commit-all hooks
 
 help:
 	@printf '%s\n' 'Available targets:'
@@ -35,6 +35,9 @@ update:
 
 switch:
 	sudo nixos-rebuild switch --flake .#nixos
+
+openclaw-secrets:
+	sops --input-type dotenv --output-type dotenv secrets/openclaw.yaml
 
 pre-commit:
 	nix develop .#dotfiles -c pre-commit run

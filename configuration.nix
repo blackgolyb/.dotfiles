@@ -21,6 +21,7 @@
     ./modules/hardware/kanata/kanata.nix
     ./modules/system/display-manager/display-manager.nix
     ./modules/system/ollama/ollama.nix
+    ./modules/system/openclaw/openclaw.nix
     ./modules/system/plymouth/plymouth.nix
     ./modules/system/qemu/qemu.nix
     ./modules/system/tailscale/tailscale.nix

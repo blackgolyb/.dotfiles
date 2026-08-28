@@ -1,6 +1,13 @@
 {
   description = "Nixos config flake";
 
+  nixConfig = {
+    extra-substituters = [ "https://cache.garnix.io" ];
+    extra-trusted-public-keys = [
+      "cache.garnix.io:CTFPyKSLcx5RMJKfLo5EEPUObbA78b0YQ2DTCJXqr9g="
+    ];
+  };
+
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     home-manager = {
@@ -45,6 +52,9 @@
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.home-manager.follows = "home-manager";
     };
+    nix-openclaw = {
+      url = "github:openclaw/nix-openclaw";
+    };
   };
 
   outputs =
@@ -53,6 +63,7 @@
       nixpkgs,
       home-manager,
       stylix,
+      sops-nix,
       treefmt-nix,
       git-hooks,
       ...
@@ -78,6 +89,7 @@
       nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
         specialArgs = { inherit enabled inputs system; };
         modules = [
+          sops-nix.nixosModules.sops
           stylix.nixosModules.stylix
           home-manager.nixosModules.home-manager
           ./configuration.nix

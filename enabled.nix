@@ -32,6 +32,7 @@ let
     system = {
       displayManager.dm = "lightdm";
       ollama.enable = true;
+      openclaw.enable = true;
       plymouth.enable = true;
       qemu.enable = true;
       tailscale.enable = true;
