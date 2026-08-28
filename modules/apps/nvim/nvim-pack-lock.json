@@ -54,6 +54,10 @@
       "rev": "c30ec60393b256427512c6996a2b37d9cbcbb66a",
       "src": "https://github.com/nvim-mini/mini.surround"
     },
+    "monodark.nvim": {
+      "rev": "4053354dc4de07eccbb486c9b1b49a484097ffd9",
+      "src": "https://github.com/blackgolyb/monodark.nvim"
+    },
     "neo-tree.nvim": {
       "rev": "ebd66767191714e008ce73b769518a763ff31bdc",
       "src": "https://github.com/nvim-neo-tree/neo-tree.nvim",
