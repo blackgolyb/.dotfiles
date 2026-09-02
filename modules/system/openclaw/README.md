@@ -89,6 +89,11 @@ sudo systemctl status openclaw-workspace-repo   # clone / ff-pull workspace
   Skill Workshop changes land in the workspace repo; the agent (sandbox) can
   commit and push them itself. To make something baseline, commit it in the
   workspace repo (or bump it here if it ever becomes config).
-- Voice/Talk mode and messaging channels are not enabled yet (see task.md
-  phase 3 requirements): controllable later from `talk.*` and channel plugins
-  without touching this module.
+- Free text-to-speech (Microsoft Edge, no API key) is enabled in `tts`
+  (`openclaw-config.nix`): every reply is also spoken as audio. This is speech
+  OUTPUT only. For live two-way voice, pair a macOS/iOS/Android app as a node
+  (`oci qr --public-url https://nixos.tail94df59.ts.net`, then approve with
+  `openclaw devices approve`) and turn on native Talk; the node's on-device
+  speech recognition is free and the reply voice uses the `tts` provider above.
+  Realtime browser Talk (OpenAI Realtime / Gemini Live) stays off: it needs a
+  paid provider. Messaging channels are separate (see task.md phase 3).

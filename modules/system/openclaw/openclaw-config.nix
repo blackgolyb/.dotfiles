@@ -70,6 +70,22 @@ in
           publicUrl = envVar "OPENCLAW_PUBLIC_URL";
         };
       };
+      # Talk STT provider config lives under the voice-call streaming section
+      voice-call = {
+        config = {
+          streaming = {
+            provider = "deepgram";
+            providers.deepgram = {
+              apiKey = envVar "DEEPGRAM_API_KEY";
+              language = "en-US";
+              encoding = "mulaw";
+              sampleRate = 8000;
+              endpointingMs = 800;
+              interimResults = true;
+            };
+          };
+        };
+      };
     };
   };
 
@@ -174,6 +190,31 @@ in
 
   logging = {
     level = "info";
+  };
+
+  # Talk-mode client voice for the web/mobile UIs. Two halves under stt-tts:
+  #   - TTS: Microsoft Edge neural voices (keyless, free, best-effort — see
+  #     MODEL_POLICY cost posture).
+  #   - STT: Deepgram realtime transcription (generous free credit), configured
+  #     under the voice-call plugin streaming section (that is where the Talk
+  #     transcription relay reads provider config from).
+  talk = {
+    provider = "microsoft";
+    providers.microsoft = {
+      lang = "en-US";
+      outputFormat = "audio-24khz-48kbitrate-mono-mp3";
+      rate = "+0%";
+      pitch = "+0%";
+      speakerVoice = "en-US-MichelleNeural";
+    };
+    realtime = {
+      mode = "stt-tts";
+      transport = "managed-room";
+      brain = "agent-consult";
+    };
+    speechLocale = "en-US";
+    interruptOnSpeech = true;
+    silenceTimeoutMs = 1200;
   };
 
   # TZ: no silent self-updates; systemd Restart=always keeps it supervised.
