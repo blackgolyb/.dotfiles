@@ -55,6 +55,45 @@ in
     };
   };
 
+  # Telegram: built-in channel (long-polling, no exposed webhook/port needed —
+  # fits the loopback-only posture). Single-operator bot: only the owner's
+  # numeric Telegram user id may DM; groups are disabled entirely.
+  channels = {
+    telegram = {
+      enabled = true;
+      # Secret via env (sops -> /run/secrets/openclaw.env), never inlined.
+      botToken = envVar "TELEGRAM_BOT_TOKEN";
+      # Only the owner: explicit numeric id allowlist. First approved DM pairing
+      # also bootstraps commands.ownerAllowFrom (owner-only commands/approvals).
+      dmPolicy = "allowlist";
+      # Resolved from env/sops at runtime (never inlined here). You'll add
+      # TELEGRAM_USER_ID=numeric-user-id to secrets/openclaw.yaml.
+      allowFrom = [
+        (envVar "TELEGRAM_USER_ID")
+      ];
+      # No groups: this is the operator's personal bot.
+      groupPolicy = "disabled";
+    };
+  };
+
+  # Global TTS for outbound voice replies. Microsoft Edge neural voices need no
+  # API key (free, best-effort — see MODEL_POLICY cost posture). Telegram
+  # delivers these as native voice notes. `off` = never auto-speak; TTS only on
+  # explicit intent (/tts audio, "say it as voice", audio directives).
+  messages = {
+    tts = {
+      auto = "tagged";
+      provider = "microsoft";
+      providers.microsoft = {
+        lang = "en-US";
+        outputFormat = "audio-24khz-48kbitrate-mono-mp3";
+        rate = "+0%";
+        pitch = "+0%";
+        speakerVoice = "en-US-MichelleNeural";
+      };
+    };
+  };
+
   # Mobile pairing: the gateway never leaves loopback (bind + tailscale.mode
   # above), so the device-pair plugin must be told the public URL to mint
   # reachable setup codes. The value comes from the environment (encrypted at
