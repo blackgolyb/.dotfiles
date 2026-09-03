@@ -15,8 +15,34 @@ RowLayout {
     readonly property string percentText: root.batteryReady ? `${root.batteryPercentValue}%` : ""
     readonly property bool discharging: root.batteryReady && root.batteryDevice.state === UPowerDeviceState.Discharging
 
-    property bool notifiedTenPercent: false
-    property bool notifiedFivePercent: false
+    readonly property int notificationTimeoutMs: 6000
+    readonly property string notificationTag: "battery"
+    readonly property var batteryLevels: [
+        {
+            threshold: 5,
+            state: "critical",
+            urgency: "critical",
+            title: "Battery critical"
+        },
+        {
+            threshold: 10,
+            state: "low",
+            urgency: "critical",
+            title: "Battery low"
+        }
+    ]
+
+    property string batteryWarningState: "none"
+
+    readonly property var activeLevel: {
+        if (!root.discharging)
+            return null;
+        for (let i = 0; i < root.batteryLevels.length; ++i) {
+            if (root.batteryPercentValue <= root.batteryLevels[i].threshold)
+                return root.batteryLevels[i];
+        }
+        return null;
+    }
 
     spacing: 4
 
@@ -37,28 +63,24 @@ RowLayout {
     }
 
     function checkLowBattery() {
-        if (!root.discharging || root.batteryPercentValue > 10) {
-            root.notifiedTenPercent = false;
-            root.notifiedFivePercent = false;
-            return;
-        }
+        const level = root.activeLevel;
+        const targetState = level ? level.state : "none";
 
-        if (root.batteryPercentValue <= 5) {
-            if (!root.notifiedFivePercent) {
-                root.notifiedFivePercent = true;
-                root.sendNotification("critical", "Battery critical", `Battery is at ${root.batteryPercentValue}%`);
-            }
+        if (root.batteryWarningState === targetState)
             return;
-        }
 
-        if (!root.notifiedTenPercent) {
-            root.notifiedTenPercent = true;
-            root.sendNotification("critical", "Battery low", `Battery is at ${root.batteryPercentValue}%`);
-        }
+        root.batteryWarningState = targetState;
+
+        if (targetState === "none")
+            root.sendNotification("normal", "Charger connected", "Battery is charging", true);
+        else
+            root.sendNotification(level.urgency, level.title, `Battery is at ${root.batteryPercentValue}%`, false);
     }
 
-    function sendNotification(urgency, title, body) {
-        notifyProcess.exec(["notify-send", "-a", "battery", "-u", urgency, "-t", "6000", title, body]);
+    function sendNotification(urgency, title, body, charging) {
+        const icon = charging ? "battery-050-charging.svg" : "battery-050.svg";
+        const iconPath = Qt.resolvedUrl(`../../battery_icons/${icon}`);
+        notifyProcess.exec(["notify-send", "-a", root.notificationTag, "-i", iconPath, "-u", urgency, "-t", root.notificationTimeoutMs, "-h", `string:x-quickshell-stack-tag:${root.notificationTag}`, title, body]);
     }
 
     Component.onCompleted: root.checkLowBattery()
