@@ -34,16 +34,6 @@ RowLayout {
 
     property string batteryWarningState: "none"
 
-    readonly property var activeLevel: {
-        if (!root.discharging)
-            return null;
-        for (let i = 0; i < root.batteryLevels.length; ++i) {
-            if (root.batteryPercentValue <= root.batteryLevels[i].threshold)
-                return root.batteryLevels[i];
-        }
-        return null;
-    }
-
     spacing: 4
 
     onBatteryPercentValueChanged: root.checkLowBattery()
@@ -62,8 +52,18 @@ RowLayout {
         return `battery-${levelName}`;
     }
 
+    function activeLevel() {
+        if (!root.batteryReady || !root.discharging)
+            return null;
+        for (let i = 0; i < root.batteryLevels.length; ++i) {
+            if (root.batteryPercentValue <= root.batteryLevels[i].threshold)
+                return root.batteryLevels[i];
+        }
+        return null;
+    }
+
     function checkLowBattery() {
-        const level = root.activeLevel;
+        const level = root.activeLevel();
         const targetState = level ? level.state : "none";
 
         if (root.batteryWarningState === targetState)
