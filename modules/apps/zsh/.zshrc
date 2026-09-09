@@ -90,6 +90,26 @@ function s() {
     esac
 }
 
+unalias gg
+# Open the current Git repository in the browser
+function gg() {
+  if ! git rev-parse --is-inside-work-tree &>/dev/null; then
+    echo "Not a git repository."
+    return 1
+  fi
+
+  if ! git remote get-url origin &>/dev/null; then
+    echo "Git remote 'origin' is not configured."
+    return 1
+  fi
+
+  local url
+  url=$(git remote get-url origin)
+  url=$(echo "$url" | sed -E 's#git@([^:]+):#https://\1/#; s#\.git$##')
+
+  xdg-open "$url"
+}
+
 # spellchecker:ignore-next-line
 function nd() {
   if [ -z "$1" ]; then
