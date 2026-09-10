@@ -35,4 +35,9 @@ require("plugins.ui.alpha")
 require("plugins.tmux.tmux_navigator")
 require("plugins.tmux.tpipeline")
 
+-- require("plugins.notebook.image")
+-- require("plugins.notebook.jupytext")
+-- require("plugins.notebook.quarto")
+-- require("plugins.notebook.molten")
+
 require("plugins.ai.opencode")

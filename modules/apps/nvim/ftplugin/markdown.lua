@@ -1,0 +1,2 @@
+-- for python notebooks
+-- require("quarto").activate()

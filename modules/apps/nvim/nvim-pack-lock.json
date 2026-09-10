@@ -30,6 +30,15 @@
       "src": "https://github.com/ThePrimeagen/harpoon",
       "version": "'harpoon2'"
     },
+    "image.nvim": {
+      "rev": "c40215d7d7d1d8c823ee9a77be1a894d5c8df41b",
+      "src": "https://github.com/3rd/image.nvim",
+      "version": "'v1.1.0'"
+    },
+    "jupytext.nvim": {
+      "rev": "c8baf3ad344c59b3abd461ecc17fc16ec44d0f7b",
+      "src": "https://github.com/GCBallesteros/jupytext.nvim"
+    },
     "lazygit.nvim": {
       "rev": "a04ad0dbc725134edbee3a5eea29290976695357",
       "src": "https://github.com/kdheepak/lazygit.nvim"
@@ -53,6 +62,11 @@
     "mini.surround": {
       "rev": "8d5d0c5aa92449368ac251e85451d79d8f69d296",
       "src": "https://github.com/nvim-mini/mini.surround"
+    },
+    "molten-nvim": {
+      "rev": "a286aa914d9a154bc359131aab788b5a077a5a99",
+      "src": "https://github.com/benlubas/molten-nvim",
+      "version": "'v1.9.2'"
     },
     "monodark.nvim": {
       "rev": "4053354dc4de07eccbb486c9b1b49a484097ffd9",
@@ -123,6 +137,10 @@
       "rev": "2ddeebd3212596b51bf078e6ff52862655b80419",
       "src": "https://github.com/nickjvandyke/opencode.nvim"
     },
+    "otter.nvim": {
+      "rev": "1e43f95639c4317acec587d9329d1b29a0fd786d",
+      "src": "https://github.com/jmbuhr/otter.nvim"
+    },
     "plenary.nvim": {
       "rev": "74b06c6c75e4eeb3108ec01852001636d85a932b",
       "src": "https://github.com/nvim-lua/plenary.nvim"
@@ -130,6 +148,10 @@
     "promise-async": {
       "rev": "119e8961014c9bfaf1487bf3c2a393d254f337e2",
       "src": "https://github.com/kevinhwang91/promise-async"
+    },
+    "quarto-nvim": {
+      "rev": "17f1e5d664bc615478230dc0240666329efacf9b",
+      "src": "https://github.com/quarto-dev/quarto-nvim"
     },
     "quicker.nvim": {
       "rev": "4a6883cb13fe097a20a046eb55f6dffd239276e3",

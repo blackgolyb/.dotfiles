@@ -7,6 +7,35 @@
 
 let
   cfg = config.my.apps.nvim;
+
+  magickPath = "${pkgs.luajitPackages.magick}/share/lua/5.1";
+
+  neovimWrapped = pkgs.symlinkJoin {
+    name = "neovim-wrapped";
+    paths = [ pkgs.neovim ];
+    buildInputs = [ pkgs.makeWrapper ];
+    postBuild = ''
+      wrapProgram $out/bin/nvim \
+        --set LUA_PATH '${magickPath}/?.lua;${magickPath}/?/init.lua;;'
+    '';
+  };
+
+  pythonEnv = pkgs.python3.withPackages (
+    ps: with ps; [
+      pynvim
+      jupyter-client
+      ipykernel
+      cairosvg
+      pyperclip
+      nbformat
+      pillow
+      pnglatex
+    ]
+  );
+
+  texliveEnv = pkgs.texlive.combine {
+    inherit (pkgs.texlive) scheme-small pdfcrop;
+  };
 in
 {
   options.my.apps.nvim.enable = lib.mkEnableOption "Neovim";
@@ -15,7 +44,7 @@ in
     stylix.targets.neovim.enable = false;
 
     home.packages = with pkgs; [
-      neovim
+      neovimWrapped
       neovim-remote
       xclip
       unzip
@@ -25,7 +54,7 @@ in
       gcc
       gnumake
       tree-sitter
-      python3
+      pythonEnv
       rustc
       cargo
       jdk
@@ -65,9 +94,15 @@ in
       # jvm formatting/linting
       google-java-format
       ktlint
-    ];
 
-    home.sessionVariables.JAVA_HOME = "${pkgs.jdk}";
+      # molten-nvim / notebook
+      imagemagick
+      ghostscript # pdfcrop
+      netpbm # pdftopnm / pnmtopng for pnglatex
+      quarto # quarto rendering
+      python3Packages.jupytext
+      texliveEnv # pdflatex, pdfcrop for pnglatex formula rendering
+    ];
 
     dotfiles.config."nvim" = {
       source = ./.;
