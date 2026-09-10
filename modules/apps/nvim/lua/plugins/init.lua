@@ -22,6 +22,7 @@ require("plugins.navigation.harpoon")
 require("plugins.navigation.aerial")
 require("plugins.navigation.quicker")
 require("plugins.navigation.buffer_manager")
+require("plugins.navigation.undotree")
 
 require("plugins.git.lazygit")
 require("plugins.git.gitsigns")
