@@ -58,6 +58,9 @@
   # Enable networking
   networking.networkmanager.enable = true;
 
+  environment.variables = {
+    XDG_MUSIC_DIR = "$HOME/Music";
+  };
   fonts.packages = with pkgs; [
     nerd-fonts.fira-code
     nerd-fonts.jetbrains-mono
@@ -168,6 +171,8 @@
     wget
     dracula-icon-theme
     nordzy-cursor-theme
+    strawberry
+    cmus
   ];
 
   programs = {
