@@ -3,6 +3,7 @@
 let
   requested = {
     apps = {
+      musicDownloader.enable = true;
       nvim.enable = true;
       glide = {
         enable = true;

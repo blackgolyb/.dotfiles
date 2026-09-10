@@ -13,6 +13,7 @@
     ./modules/apps/flameshot
     ./modules/apps/glide
     ./modules/apps/lazygit
+    ./modules/apps/music-downloader
     ./modules/apps/nvim
     ./modules/apps/opencode
     ./modules/apps/openwhispr
