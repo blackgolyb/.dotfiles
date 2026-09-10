@@ -3,7 +3,7 @@ from enum import Enum
 from pathlib import Path
 
 from config import UNKNOWN_ARTIST
-from youtube import TrackResult
+from providers.base import TrackResult
 
 
 class Layout(Enum):

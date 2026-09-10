@@ -1,21 +1,13 @@
 import tempfile
 from pathlib import Path
 
+from providers import get_provider
+from providers.base import Format, TrackResult
 from save import Layout, resolve_dir, sanitize, save_all
-from youtube import (
-    ArtistResult,
-    PlaylistResult,
-    TrackResult,
-    download,
-    get_artist,
-    get_playlist,
-    is_artist,
-    is_playlist,
-)
 
 
 def _download_tracks(
-    tracks: list[TrackResult], out_dir: Path, fmt: str
+    tracks: list[TrackResult], out_dir: Path, fmt: Format
 ) -> tuple[list[TrackResult], list[TrackResult]]:
     done, failed = [], []
     total = len(tracks)
@@ -23,7 +15,11 @@ def _download_tracks(
         tmp_dir = Path(tmp)
         for i, track in enumerate(tracks, 1):
             print(f"[{i}/{total}] {track.title}")
-            result = download(track.url, track.title, tmp_dir, fmt)
+            provider = get_provider(track.url)
+            if provider is None:
+                result = TrackResult(title=track.title, url=track.url, error="No provider found")
+            else:
+                result = provider.download(track.url, track.title, tmp_dir, fmt)
             if result.error:
                 print(f"  ERROR: {track.title} [{track.url}] — {result.error}")
                 failed.append(result)
@@ -34,8 +30,11 @@ def _download_tracks(
     return done, failed
 
 
-def run_single(url: str, base_dir: Path, fmt: str, layout: Layout) -> TrackResult:
-    playlist = get_playlist(url)
+def run_single(url: str, base_dir: Path, fmt: Format, layout: Layout) -> TrackResult:
+    provider = get_provider(url)
+    if provider is None:
+        raise ValueError(f"No provider found for URL: {url}")
+    playlist = provider.get_playlist(url)
     track = playlist.tracks[0]
     out_dir = resolve_dir(layout, base_dir, artist=track.artist)
     print("Single track detected\n")
@@ -47,8 +46,11 @@ def run_single(url: str, base_dir: Path, fmt: str, layout: Layout) -> TrackResul
     return done[0]
 
 
-def run_playlist(url: str, base_dir: Path, fmt: str, layout: Layout) -> PlaylistResult:
-    playlist = get_playlist(url)
+def run_playlist(url: str, base_dir: Path, fmt: Format, layout: Layout) -> PlaylistResult:
+    provider = get_provider(url)
+    if provider is None:
+        raise ValueError(f"No provider found for URL: {url}")
+    playlist = provider.get_playlist(url)
     out_dir = resolve_dir(layout, base_dir, artist=playlist.artist, playlist=playlist.title)
     out_dir.mkdir(parents=True, exist_ok=True)
 
@@ -69,8 +71,11 @@ def run_playlist(url: str, base_dir: Path, fmt: str, layout: Layout) -> Playlist
     return playlist
 
 
-def run_artist(url: str, base_dir: Path, fmt: str, layout: Layout) -> ArtistResult:
-    artist = get_artist(url)
+def run_artist(url: str, base_dir: Path, fmt: Format, layout: Layout) -> ArtistResult:
+    provider = get_provider(url)
+    if provider is None:
+        raise ValueError(f"No provider found for URL: {url}")
+    artist = provider.get_artist(url)
 
     if not artist.albums:
         print(f"No albums found for {artist.name}")
@@ -83,11 +88,7 @@ def run_artist(url: str, base_dir: Path, fmt: str, layout: Layout) -> ArtistResu
 
     all_failed = []
     for album in artist.albums:
-        is_single = len(album.tracks) == 1 and album.tracks[0].title == album.title
-        if is_single:
-            album_dir = resolve_dir(layout, base_dir, artist=artist.name)
-        else:
-            album_dir = resolve_dir(layout, base_dir, artist=artist.name, playlist=album.title)
+        album_dir = resolve_dir(layout, base_dir, artist=artist.name, playlist=album.title)
         album_dir.mkdir(parents=True, exist_ok=True)
 
         print(f"Album: {album.title}")
@@ -108,12 +109,15 @@ def run_artist(url: str, base_dir: Path, fmt: str, layout: Layout) -> ArtistResu
     return artist
 
 
-def run(url: str, base_dir: Path, fmt: str, is_external_dir: bool):
-    if is_artist(url):
+def run(url: str, base_dir: Path, fmt: Format, is_external_dir: bool):
+    provider = get_provider(url)
+    if provider is None:
+        raise ValueError(f"No provider found for URL: {url}")
+    if provider.is_artist(url):
         # For artist downloads, determine layout based on whether output directory was specified
         layout = Layout.PLAYLIST if is_external_dir else Layout.ARTIST_AND_PLAYLIST
         run_artist(url, base_dir, fmt, layout)
-    elif is_playlist(url):
+    elif provider.is_playlist(url):
         run_playlist(
             url, base_dir, fmt, Layout.FLAT if is_external_dir else Layout.ARTIST_AND_PLAYLIST
         )
