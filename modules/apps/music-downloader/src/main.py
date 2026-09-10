@@ -12,7 +12,10 @@ def main():
     config = Config.load()
 
     parser = argparse.ArgumentParser(description="Download music from YouTube Music")
-    parser.add_argument("url", help="YouTube Music URL (track or playlist)")
+    parser.add_argument(
+        "url",
+        help="YouTube Music URL (track, playlist, or artist channel)",
+    )
     parser.add_argument("-o", "--output", help="Output directory (default: config music_dir)")
     parser.add_argument(
         "-f",
@@ -24,9 +27,8 @@ def main():
     args = parser.parse_args()
 
     out_dir = Path(args.output) if args.output else config.music_dir
-    layout = Layout.FLAT if args.output else Layout.ORGANIZED
 
-    run(args.url, out_dir, args.format, layout)
+    run(args.url, out_dir, args.format, bool(args.output))
 
 
 if __name__ == "__main__":

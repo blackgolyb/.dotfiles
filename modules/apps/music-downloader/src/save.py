@@ -8,7 +8,8 @@ from youtube import TrackResult
 
 class Layout(Enum):
     FLAT = "flat"  # everything in one folder
-    ORGANIZED = "organized"  # artist[/playlist] subfolders
+    PLAYLIST = "playlist"  # [/playlist] subfolders
+    ARTIST_AND_PLAYLIST = "artist_and_playlist"  # artist[/playlist] subfolders
 
 
 def sanitize(name: str) -> str:
@@ -20,7 +21,12 @@ def sanitize(name: str) -> str:
 def resolve_dir(layout: Layout, base_dir: Path, artist: str = "", playlist: str = "") -> Path:
     if layout is Layout.FLAT:
         return base_dir
-    folder = base_dir / sanitize(artist or UNKNOWN_ARTIST)
+
+    folder = base_dir
+    add_artist = layout is Layout.ARTIST_AND_PLAYLIST
+
+    if add_artist:
+        folder = folder / sanitize(artist or UNKNOWN_ARTIST)
     if playlist:
         folder = folder / sanitize(playlist)
     return folder

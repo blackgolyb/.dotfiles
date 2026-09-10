@@ -1,12 +1,15 @@
 import tempfile
 from pathlib import Path
 
-from save import Layout, resolve_dir, save_all
+from save import Layout, resolve_dir, sanitize, save_all
 from youtube import (
+    ArtistResult,
     PlaylistResult,
     TrackResult,
     download,
+    get_artist,
     get_playlist,
+    is_artist,
     is_playlist,
 )
 
@@ -66,8 +69,55 @@ def run_playlist(url: str, base_dir: Path, fmt: str, layout: Layout) -> Playlist
     return playlist
 
 
-def run(url: str, base_dir: Path, fmt: str, layout: Layout):
-    if is_playlist(url):
-        run_playlist(url, base_dir, fmt, layout)
+def run_artist(url: str, base_dir: Path, fmt: str, layout: Layout) -> ArtistResult:
+    artist = get_artist(url)
+
+    if not artist.albums:
+        print(f"No albums found for {artist.name}")
+        return artist
+
+    print(f"Artist: {artist.name}")
+    print(f"Albums: {len(artist.albums)}")
+    total_tracks = sum(len(album.tracks) for album in artist.albums)
+    print(f"Tracks: {total_tracks}\n")
+
+    all_failed = []
+    for album in artist.albums:
+        is_single = len(album.tracks) == 1 and album.tracks[0].title == album.title
+        if is_single:
+            album_dir = resolve_dir(layout, base_dir, artist=artist.name)
+        else:
+            album_dir = resolve_dir(layout, base_dir, artist=artist.name, playlist=album.title)
+        album_dir.mkdir(parents=True, exist_ok=True)
+
+        print(f"Album: {album.title}")
+        print(f"Folder: {album_dir}")
+        print(f"Tracks: {len(album.tracks)}\n")
+
+        _, failed = _download_tracks(album.tracks, album_dir, fmt)
+        all_failed.extend(failed)
+
+    if all_failed:
+        print(f"\n--- Failed ({len(all_failed)}) ---")
+        for r in all_failed:
+            print(f"  {r.title}")
+            print(f"  {r.url}")
+            print(f"  {r.error}")
+
+    print("\nDone!")
+    return artist
+
+
+def run(url: str, base_dir: Path, fmt: str, is_external_dir: bool):
+    if is_artist(url):
+        # For artist downloads, determine layout based on whether output directory was specified
+        layout = Layout.PLAYLIST if is_external_dir else Layout.ARTIST_AND_PLAYLIST
+        run_artist(url, base_dir, fmt, layout)
+    elif is_playlist(url):
+        run_playlist(
+            url, base_dir, fmt, Layout.FLAT if is_external_dir else Layout.ARTIST_AND_PLAYLIST
+        )
     else:
-        run_single(url, base_dir, fmt, layout)
+        run_single(
+            url, base_dir, fmt, Layout.FLAT if is_external_dir else Layout.ARTIST_AND_PLAYLIST
+        )

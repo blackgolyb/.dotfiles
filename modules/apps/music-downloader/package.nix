@@ -26,7 +26,7 @@ stdenv.mkDerivation {
       $out/lib/music-downloader/
     makeWrapper \
       ${python3.withPackages (ps: [ ps.yt-dlp ])}/bin/python3 \
-      $out/bin/music-dl \
+      $out/bin/mdl \
       --add-flags "$out/lib/music-downloader/main.py" \
       --prefix PATH : ${
         lib.makeBinPath [
