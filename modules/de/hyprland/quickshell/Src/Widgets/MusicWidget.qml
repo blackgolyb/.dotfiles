@@ -181,7 +181,7 @@ Item {
                     }
 
                     Ui.UiButton {
-                        enabled: root.player != null && root.player.canTogglePlaying
+                        enabled: root.player != null
                         text: root.playing ? "" : ""
                         size: "sm"
                         variant: "accent"

@@ -1,6 +1,7 @@
 pragma Singleton
 
 import QtQuick
+import Quickshell
 import Quickshell.Io
 import Quickshell.Services.Mpris
 
@@ -10,6 +11,7 @@ Item {
     readonly property var allowedPlayerNames: ["pear-desktop", "com.github.th_ch.youtube_music", "youtube_music"]
     readonly property var blockedPlayerNames: ["firefox", "zen", "chromium", "google-chrome", "google chrome", "brave", "vivaldi", "opera", "microsoft-edge", "microsoft edge", "librewolf", "waterfox", "floorp"]
     readonly property var blockedPlayerDbusPrefixes: ["firefox", "zen", "librewolf", "waterfox", "floorp"]
+    readonly property var brokenPlayPlayers: ["strawberry"]
     readonly property var players: Mpris.players.values.filter(player => !isBlockedPlayer(player))
     readonly property bool hasPlayers: players.length > 0
     readonly property var player: players.find(player => player.isPlaying) ?? players[0] ?? null
@@ -91,13 +93,30 @@ Item {
             root.player.position = Math.max(0, Math.min(root.length, root.length * mouseX / width));
     }
 
+    function isBrokenPlayPlayer(): bool {
+        return root.player != null && brokenPlayPlayers.some(name => root.playerDbusName(root.player) === name);
+    }
+
     function togglePlaying(): void {
-        if (root.player != null && root.player.canTogglePlaying)
-            root.player.togglePlaying();
+        if (root.player == null)
+            return;
+        if (root.isBrokenPlayPlayer()) {
+            const name = root.playerDbusName(root.player);
+            Quickshell.execDetached(["playerctl", "--player", name, "play-pause"]);
+            return;
+        }
+        root.player.togglePlaying();
     }
 
     function play(): void {
-        if (root.player != null && root.player.canPlay)
+        if (root.player == null)
+            return;
+        if (root.isBrokenPlayPlayer()) {
+            const name = root.playerDbusName(root.player);
+            Quickshell.execDetached(["playerctl", "--player", name, "play-pause"]);
+            return;
+        }
+        if (root.player.canPlay)
             root.player.play();
     }
 
