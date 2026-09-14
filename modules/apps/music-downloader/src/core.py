@@ -1,33 +1,46 @@
 import tempfile
+from itertools import groupby
+from operator import attrgetter
 from pathlib import Path
 
-from providers import get_provider
-from providers.base import Format, TrackResult
-from save import Layout, resolve_dir, sanitize, save_all
+from providers import MusicProvider, get_provider
+from providers.base import ArtistResult, DownloadProgress, Format, PlaylistResult, TrackResult
+from save import Layout, resolve_dir, save_all
+from tqdm import tqdm
 
 
-def _download_tracks(
-    tracks: list[TrackResult], out_dir: Path, fmt: Format
+def _advance_bar(bar, progress: DownloadProgress, label: str) -> None:
+    if progress.total and bar.total != progress.total:
+        bar.total = progress.total
+        bar.refresh()
+    if label:
+        bar.set_postfix_str(label, refresh=False)
+    bar.update(1)
+
+
+def download_tracks(
+    tracks: list[TrackResult],
+    work_dir: Path,
+    fmt: Format,
+    providers: dict[str, MusicProvider],
 ) -> tuple[list[TrackResult], list[TrackResult]]:
-    done, failed = [], []
-    total = len(tracks)
-    with tempfile.TemporaryDirectory() as tmp:
-        tmp_dir = Path(tmp)
-        for i, track in enumerate(tracks, 1):
-            print(f"[{i}/{total}] {track.title}")
-            provider = get_provider(track.url)
-            if provider is None:
-                result = TrackResult(title=track.title, url=track.url, error="No provider found")
-            else:
-                result = provider.download(track.url, track.title, tmp_dir, fmt)
-            if result.error:
-                print(f"  ERROR: {track.title} [{track.url}] — {result.error}")
-                failed.append(result)
-            else:
-                print(f"  Downloaded: {result.title}")
-                done.append(result)
-        save_all(done, out_dir)
-    return done, failed
+    downloaded = []
+    failed = []
+
+    for provider_name, group in groupby(tracks, attrgetter("provider")):
+        group_list = list(group)
+        provider = providers[provider_name]
+
+        with tqdm(total=len(group_list), desc=provider_name, unit="track") as bar:
+            progress = DownloadProgress(
+                total=len(group_list), on_advance=lambda label: _advance_bar(bar, progress, label)
+            )
+            done, fail = provider.download_tracks(group_list, work_dir, fmt, progress)
+
+        downloaded.extend(done)
+        failed.extend(fail)
+
+    return (downloaded, failed)
 
 
 def run_single(url: str, base_dir: Path, fmt: Format, layout: Layout) -> TrackResult:
@@ -38,7 +51,9 @@ def run_single(url: str, base_dir: Path, fmt: Format, layout: Layout) -> TrackRe
     track = playlist.tracks[0]
     out_dir = resolve_dir(layout, base_dir, artist=track.artist)
     print("Single track detected\n")
-    done, failed = _download_tracks([track], out_dir, fmt)
+    with tempfile.TemporaryDirectory() as tmp:
+        done, failed = download_tracks([track], Path(tmp), fmt, {provider.name: provider})
+        save_all(done, out_dir)
     if failed:
         print(f"\nFAILED: {failed[0].title} [{failed[0].url}] - {failed[0].error}")
         raise SystemExit(1)
@@ -58,7 +73,9 @@ def run_playlist(url: str, base_dir: Path, fmt: Format, layout: Layout) -> Playl
     print(f"Folder:   {out_dir}")
     print(f"Tracks:   {len(playlist.tracks)}\n")
 
-    done, failed = _download_tracks(playlist.tracks, out_dir, fmt)
+    with tempfile.TemporaryDirectory() as tmp:
+        done, failed = download_tracks(playlist.tracks, Path(tmp), fmt, {provider.name: provider})
+        save_all(done, out_dir)
 
     if failed:
         print(f"\n--- Failed ({len(failed)}) ---")
@@ -75,7 +92,9 @@ def run_artist(url: str, base_dir: Path, fmt: Format, layout: Layout) -> ArtistR
     provider = get_provider(url)
     if provider is None:
         raise ValueError(f"No provider found for URL: {url}")
-    artist = provider.get_artist(url)
+    with tqdm(unit="track", desc=f"Fetching {provider.name}") as bar:
+        progress = DownloadProgress(on_advance=lambda label: _advance_bar(bar, progress, label))
+        artist = provider.get_artist(url, progress)
 
     if not artist.albums:
         print(f"No albums found for {artist.name}")
@@ -87,16 +106,21 @@ def run_artist(url: str, base_dir: Path, fmt: Format, layout: Layout) -> ArtistR
     print(f"Tracks: {total_tracks}\n")
 
     all_failed = []
-    for album in artist.albums:
-        album_dir = resolve_dir(layout, base_dir, artist=artist.name, playlist=album.title)
-        album_dir.mkdir(parents=True, exist_ok=True)
+    with tempfile.TemporaryDirectory() as tmp:
+        tmp_root = Path(tmp)
+        for i, album in enumerate(artist.albums):
+            album_dir = resolve_dir(layout, base_dir, artist=artist.name, playlist=album.title)
+            album_dir.mkdir(parents=True, exist_ok=True)
 
-        print(f"Album: {album.title}")
-        print(f"Folder: {album_dir}")
-        print(f"Tracks: {len(album.tracks)}\n")
+            print(f"Album: {album.title}")
+            print(f"Folder: {album_dir}")
+            print(f"Tracks: {len(album.tracks)}\n")
 
-        _, failed = _download_tracks(album.tracks, album_dir, fmt)
-        all_failed.extend(failed)
+            work_dir = tmp_root / str(i)
+            work_dir.mkdir(parents=True, exist_ok=True)
+            done, failed = download_tracks(album.tracks, work_dir, fmt, {provider.name: provider})
+            save_all(done, album_dir)
+            all_failed.extend(failed)
 
     if all_failed:
         print(f"\n--- Failed ({len(all_failed)}) ---")

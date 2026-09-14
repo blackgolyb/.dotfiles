@@ -1,7 +1,8 @@
 from dataclasses import dataclass, field
 from enum import Enum, auto
 from pathlib import Path
-from typing import Protocol, runtime_checkable
+from threading import Lock
+from typing import Callable, Protocol, runtime_checkable
 
 
 class Format(Enum):
@@ -24,10 +25,34 @@ class Format(Enum):
             raise ValueError(f"Invalid format: {value}")
 
 
+class DownloadProgress:
+    def __init__(self, total: int = 0, on_advance: Callable[[str], None] | None = None):
+        self.total = total
+        self.completed = 0
+        self.failed = 0
+        self.on_advance = on_advance
+        self.lock = Lock()
+
+    def done(self, label: str = ""):
+        with self.lock:
+            self.completed += 1
+            self._advance(label)
+
+    def fail(self, label: str = ""):
+        with self.lock:
+            self.failed += 1
+            self._advance(label)
+
+    def _advance(self, label: str):
+        if self.on_advance is not None:
+            self.on_advance(label)
+
+
 @dataclass
 class TrackResult:
     title: str
     url: str
+    provider: str = ""
     artist: str = ""
     file: Path | None = None
     error: str | None = None
@@ -55,10 +80,19 @@ class ArtistResult:
 
 @runtime_checkable
 class MusicProvider(Protocol):
+    name: str
+
     def matches(self, url: str) -> bool: ...
     def is_artist(self, url: str) -> bool: ...
     def is_playlist(self, url: str) -> bool: ...
-    def get_artist(self, url: str) -> ArtistResult: ...
+    def get_artist(self, url: str, progress: DownloadProgress | None = None) -> ArtistResult: ...
     def get_playlist(self, url: str) -> PlaylistResult: ...
     def get_track(self, url: str) -> TrackResult: ...
     def download(self, url: str, title: str, tmp_dir: Path, fmt: Format) -> TrackResult: ...
+    def download_tracks(
+        self,
+        tracks: list[TrackResult],
+        work_dir: Path,
+        fmt: Format,
+        progress: DownloadProgress,
+    ) -> tuple[list[TrackResult], list[TrackResult]]: ...
