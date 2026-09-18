@@ -137,6 +137,7 @@
       vlc
       baobab
       krita
+      blanket
 
       # Games
       heroic
