@@ -74,9 +74,25 @@ local function oil_node(state)
     end)
 end
 
+_G.sidebar_on_open("neotree_git", function()
+    vim.cmd("Neotree git_status")
+end)
+
+_G.sidebar_on_focus("neotree_git", function()
+    vim.cmd("Neotree git_status focus")
+end)
+
+_G.sidebar_on_close("neotree_git", function()
+    require("neo-tree.command").execute({ action = "close" })
+end)
+
 vim.keymap.set("n", "<leader>E", function()
     _G.sidebar("neotree")
 end, { desc = "Toggle Filetree", silent = true })
+
+vim.keymap.set("n", "<leader>G", function()
+    _G.sidebar("neotree_git")
+end, { desc = "Toggle Git Tree", silent = true })
 
 require("neo-tree").setup({
     window = {
@@ -116,6 +132,9 @@ require("neo-tree").setup({
             hide_dotfiles = false,
             hide_gitignored = false,
         },
+    },
+    git_status = {
+        group_empty_dirs = true,
     },
     event_handlers = {
         {
