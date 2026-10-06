@@ -39,7 +39,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     kotlin-lsp = {
-      url = "git+https://tangled.org/bpavuk.neocities.org/kotlin-lsp-flake";
+      url = "path:./external/kotlin-lsp";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     zen-browser = {
