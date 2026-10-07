@@ -16,12 +16,19 @@ in
       opencode
     ];
 
-    dotfiles.config."opencode/tui.json" = {
-      source = ./tui.json;
-    };
+    dotfiles.config = {
+      "opencode/opencode.jsonc" = {
+        source = ./opencode.jsonc;
+        force = true;
+      };
 
-    dotfiles.config."opencode/themes/monodark.json" = {
-      source = ./themes/monodark.json;
+      "opencode/tui.json" = {
+        source = ./tui.json;
+      };
+
+      "opencode/themes/monodark.json" = {
+        source = ./themes/monodark.json;
+      };
     };
   };
 }
