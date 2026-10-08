@@ -33,6 +33,10 @@ in
       "opencode/skills/gh" = {
         source = ./skills/gh;
       };
+
+      "opencode/skills/new-task" = {
+        source = ./skills/new-task;
+      };
     };
   };
 }
