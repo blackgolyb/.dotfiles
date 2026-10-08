@@ -29,6 +29,10 @@ in
       "opencode/themes/monodark.json" = {
         source = ./themes/monodark.json;
       };
+
+      "opencode/skills/gh" = {
+        source = ./skills/gh;
+      };
     };
   };
 }
